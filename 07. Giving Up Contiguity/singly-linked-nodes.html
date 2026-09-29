@@ -1,0 +1,151 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ffffff">
+  <title>Singly Linked Nodes | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+    .node-board{min-width:760px;padding:1.25rem;background:var(--surface-050);border:1px solid var(--line-200)}.name-row{display:flex;align-items:center;justify-content:center;gap:.6rem;margin-bottom:1rem}.ref-pill{padding:.45rem .8rem;border:2px solid var(--pnu-blue);border-radius:999px;background:var(--white);color:var(--pnu-blue-dark);font-weight:850}.arrow{color:var(--pnu-green);font-size:1.45rem;font-weight:900}
+    .chain{display:flex;align-items:center;justify-content:center;gap:.6rem}.node{display:grid;grid-template-columns:82px 96px;border:2px solid var(--pnu-blue);border-radius:.65rem;overflow:hidden;background:var(--white)}.node span{padding:.9rem .55rem;text-align:center;font:750 .9rem/1.35 var(--mono)}.node .next{border-left:1px solid var(--line-200)}.node.is-node{border-color:var(--pnu-green);box-shadow:0 0 0 4px color-mix(in srgb,var(--pnu-green) 18%,transparent)}.node .is-part{background:var(--callout-bg);box-shadow:inset 0 -4px var(--pnu-green)}.nil{padding:.55rem .8rem;border:1px dashed var(--ink-500);border-radius:.5rem;background:var(--white)}
+    .list-board{min-width:800px;padding:1rem;background:var(--surface-050);border:1px solid var(--line-200)}.list-register{display:grid;grid-template-columns:repeat(3,1fr);gap:.75rem;margin-bottom:1rem}.register{padding:.75rem;border:1px solid var(--line-200);background:var(--white)}.register span,.register strong{display:block}.register strong{margin-top:.25rem;color:var(--pnu-blue-dark);font:850 1rem/1.4 var(--mono)}
+    .heap{position:relative;width:760px;margin:0 auto;height:280px;border:1px dashed var(--line-300);background:var(--white);overflow:hidden}.heap-link{stroke:var(--pnu-green);stroke-width:4}.heap-svg{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}.heap-node{position:absolute;z-index:1;left:var(--x);top:var(--y);width:138px;border:2px solid var(--pnu-blue);border-radius:.65rem;background:var(--white)}.heap-node strong,.heap-node span{display:block;padding:.55rem .65rem}.heap-node strong{color:var(--pnu-blue-dark)}.heap-node span{border-top:1px solid var(--line-200);font:750 .82rem/1.3 var(--mono)}.empty-state{display:grid;place-items:center;height:100%;color:var(--ink-600);font-weight:750}
+    .rep-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem;min-width:760px}.rep{padding:1rem;border:1px solid var(--line-200);background:var(--white)}.rep h3{margin:0 0 .8rem;color:var(--pnu-blue-dark);font-size:1rem}.cells{display:grid;grid-template-columns:repeat(4,1fr);gap:0}.cell{display:block;padding:.7rem .3rem;border:2px solid var(--pnu-blue);margin-left:-2px;text-align:center;font:750 .9rem var(--mono);background:var(--pnu-blue-tint)}.cell small{display:block;color:var(--ink-600);font:600 .72rem var(--font-sans)}.cell.free{border-style:dashed;background:var(--white);color:var(--ink-600)}.cell.new,.lnode.new{background:var(--callout-bg);box-shadow:inset 0 0 0 2px var(--pnu-green)}.lchain{display:flex;flex-wrap:wrap;align-items:center;gap:.35rem}.lnode{padding:.55rem .6rem;border:2px solid var(--pnu-blue);border-radius:.5rem;background:var(--pnu-blue-tint);font:750 .85rem var(--mono)}.warn{margin:.6rem 0 0;color:var(--pnu-red);font-weight:750}
+
+  </style>
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Giving Up Contiguity</span><span class="nav-tag is-current" aria-current="page">Singly Linked Nodes</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Giving Up Contiguity</p><h1 class="page-title">Singly Linked Nodes</h1><hr class="accent-rule"><p class="page-subtitle">연결리스트(linked list, 링크 리스트)는 값 하나와 다음 노드를 가리키는 참조를 함께 담은 노드(node)를 이어 놓은 자료구조다. 칸이 메모리에서 이어져 있을 필요가 없고, 노드가 놓인 위치가 아니라 참조가 원소의 순서를 정한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>노드(node)</strong><span>값과 다음 노드의 참조를 함께 저장한다.</span></article><article class="summary-card"><strong>머리(head)</strong><span>목록 객체가 첫 노드를 가리키는 참조다. 첫 원소 자체가 아니다.</span></article><article class="summary-card"><strong>꼬리(tail)</strong><span>목록 객체가 마지막 노드를 가리키는 참조다. 그 노드의 next는 None이다.</span></article></div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">배열은 옆 칸이, 연결리스트는 next가 순서를 정한다</h2><p class="lead">같은 원소 A, B, C를 두 표현에 담고 끝에 추가하는 원소 수를 바꾼다. 배열은 만들 때 용량 4칸을 한 번에 확보하고, 연결리스트는 추가할 때마다 노드를 하나 만든다.</p></header><div class="visual-lab">
+    <div class="visual-controls visual-controls--single"><div class="control-field"><label for="rep-add">끝에 추가한 원소 수 <output id="rep-add-out" class="control-value" for="rep-add">0</output></label><input id="rep-add" type="range" min="0" max="2" step="1" value="0"></div></div>
+    <figure class="visual-figure"><div class="visual-frame"><div class="rep-grid"><article class="rep"><h3>배열 · 연속한 칸</h3><div id="rep-array" class="cells" role="img" aria-label="배열 칸"></div><p id="rep-array-note"></p><p id="rep-warn" class="warn" hidden></p></article><article class="rep"><h3>연결리스트 · next 참조</h3><div id="rep-linked" class="lchain" role="img" aria-label="연결리스트 노드"></div><p id="rep-linked-note"></p></article></div></div><figcaption class="visual-caption">초록 칸과 노드는 방금 추가한 원소다. 점선 칸은 확보했지만 아직 쓰지 않은 배열 칸이다.</figcaption></figure>
+    <div id="rep-live" class="visual-readouts" aria-live="polite"></div><p id="rep-note" class="visual-note"></p>
+  </div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">값과 다음 참조를 구분한다</h2><p class="lead"><code>u</code>, <code>u.data</code>, <code>u.next</code>는 각각 노드 객체, 저장값, 다음 노드의 참조를 뜻한다.</p></header><div class="visual-lab">
+    <div class="visual-controls visual-controls--single"><div class="control-field"><label for="focus">강조할 표현식</label><select id="focus"><option value="node">u</option><option value="data">u.data</option><option value="next">u.next</option></select></div></div>
+    <figure class="visual-figure"><div class="visual-frame"><div class="node-board"><div class="name-row"><span class="ref-pill">u</span><span class="arrow">→</span><span>노드 A</span></div><div class="chain" id="node-chain" role="img" aria-label="u가 노드 A를 가리키고 A의 next가 노드 B를 가리킨다"><div class="node" id="node-a"><span id="data-a">data 7</span><span class="next" id="next-a">next → B</span></div><span class="arrow">→</span><div class="node" id="node-b"><span>data 12</span><span class="next">next → None</span></div><span class="arrow">→</span><span class="nil">None</span></div></div></div><figcaption class="visual-caption">마지막 노드의 next가 None이면 연결이 끝난다. Python에서는 <code>first = Node(7)</code>, <code>second = Node(12)</code> 뒤 <code>first.next = second</code>가 이 순서를 만든다.</figcaption></figure>
+    <div id="focus-live" class="visual-readouts" aria-live="polite"></div><p id="focus-note" class="visual-note"></p>
+  </div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">head, tail, n이 목록의 경계를 나타낸다</h2><p class="lead">빈 목록, 원소 하나, 원소 세 개의 상태를 바꾸고 노드의 물리적 배치를 달리해도 next가 만든 논리 순서는 유지된다.</p></header><div class="visual-lab">
+    <div class="visual-controls visual-controls--double"><div class="control-field"><label for="list-state">목록 상태</label><select id="list-state"><option value="empty">빈 목록</option><option value="one">원소 하나</option><option value="three" selected>원소 세 개</option></select></div><div class="control-field"><label for="placement">노드 배치</label><select id="placement"><option value="row">나란히 배치</option><option value="scatter">흩어 배치</option></select></div></div><p id="placement-note" class="control-reason" hidden></p>
+    <figure class="visual-figure"><div class="visual-frame"><div class="list-board"><div class="list-register"><div class="register"><span>head</span><strong id="head-value"></strong></div><div class="register"><span>tail</span><strong id="tail-value"></strong></div><div class="register"><span>n</span><strong id="n-value"></strong></div></div><div id="heap" class="heap" role="img" aria-labelledby="heap-title heap-desc"></div></div></div><figcaption class="visual-caption">선은 next 참조를 나타낸다. 화면에서 가까운 노드가 다음 원소라는 뜻은 아니다.</figcaption></figure>
+    <div id="list-live" class="visual-readouts" aria-live="polite"></div><p id="list-note" class="visual-note"></p>
+  </div></section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../06. When the Array Fills Up/circular-arrays.html">이전 · Circular Arrays</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="references-and-aliasing.html">다음 · References And Aliasing</a></nav>
+</main><footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const readout = (label, value) => '<div class="visual-readout"><span class="visual-readout-label">' + label + '</span><strong class="visual-readout-value">' + value + '</strong></div>';
+  const focusData = {
+    node: ['노드 A', '객체 전체', 'u는 data와 next를 함께 가진 노드 A를 가리킨다.'],
+    data: ['7', '저장값', 'u.data는 노드 A 안의 값 7을 읽는다.'],
+    next: ['노드 B', '참조', 'u.next는 다음 노드 B를 가리키는 참조다.']
+  };
+  function renderFocus() {
+    const key = $('focus').value, data = focusData[key];
+    $('node-a').classList.toggle('is-node', key === 'node');
+    $('data-a').classList.toggle('is-part', key === 'data');
+    $('next-a').classList.toggle('is-part', key === 'next');
+    $('node-b').classList.toggle('is-node', key === 'next');
+    $('focus-live').innerHTML = readout('표현식', key === 'node' ? 'u' : 'u.' + key) + readout('가리키는 대상', data[0]) + readout('종류', data[1]);
+    $('focus-note').textContent = data[2];
+    $('node-chain').setAttribute('aria-label', data[2] + ' 노드 A의 next는 노드 B를 가리키고 B의 next는 None이다.');
+  }
+  $('focus').addEventListener('change', renderFocus);
+
+  const states = { empty: [], one: ['A'], three: ['A', 'B', 'C'] };
+  const positions = {
+    row: [[70, 95], [310, 95], [550, 95]],
+    scatter: [[70, 35], [535, 165], [300, 75]]
+  };
+  function renderList() {
+    const names = states[$('list-state').value], placement = $('placement').value;
+    const activePlacement = names.length > 1;
+    $('placement').disabled = !activePlacement;
+    $('placement-note').textContent = activePlacement ? '' : '노드가 하나 이하라 배치를 바꿔도 연결 모양이 같으므로 배치 선택을 막았다.';
+    $('placement-note').hidden = activePlacement;
+    const head = names[0] || 'None', tail = names.at(-1) || 'None';
+    $('head-value').textContent = head;
+    $('tail-value').textContent = tail;
+    $('n-value').textContent = String(names.length);
+    const heap = $('heap');
+    heap.replaceChildren();
+    const svg = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+    svg.setAttribute('class', 'heap-svg');
+    svg.setAttribute('viewBox', '0 0 760 280');
+    svg.setAttribute('aria-hidden', 'true');
+    heap.append(svg);
+    if (!names.length) {
+      const empty = document.createElement('div');
+      empty.className = 'empty-state';
+      empty.textContent = '할당된 노드 없음';
+      heap.append(empty);
+    } else {
+      const pos = positions[placement];
+      names.forEach((name, index) => {
+        const node = document.createElement('div');
+        node.className = 'heap-node';
+        node.style.setProperty('--x', pos[index][0] + 'px');
+        node.style.setProperty('--y', pos[index][1] + 'px');
+        node.innerHTML = '<strong>노드 ' + name + ' · data ' + (index + 1) * 10 + '</strong><span>next → ' + (names[index + 1] || 'None') + '</span>';
+        heap.append(node);
+        if (index < names.length - 1) {
+          const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+          line.setAttribute('x1', pos[index][0] + 138);
+          line.setAttribute('y1', pos[index][1] + 43);
+          line.setAttribute('x2', pos[index + 1][0]);
+          line.setAttribute('y2', pos[index + 1][1] + 43);
+          line.setAttribute('class', 'heap-link');
+          line.setAttribute('marker-end', 'url(#arrowhead)');
+          svg.append(line);
+        }
+      });
+      const defs = document.createElementNS('http://www.w3.org/2000/svg', 'defs');
+      defs.innerHTML = '<marker id="arrowhead" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0,0 L8,4 L0,8 Z" fill="#00a651"/></marker>';
+      svg.prepend(defs);
+    }
+    const order = names.length ? names.join(' → ') + ' → None' : 'None';
+    $('heap').setAttribute('aria-label', 'head ' + head + ', tail ' + tail + ', 원소 수 ' + names.length + ', 연결 순서 ' + order);
+    $('list-live').innerHTML = readout('head', head) + readout('tail', tail) + readout('n', names.length) + readout('논리 순서', order);
+    const listTail = ' 목록 객체는 head·tail·n으로 전체 상태를 관리하고 각 노드는 data와 next만 저장한다. tail이 없으면 끝에 붙일 때 head부터 next를 n−1번 따라가야 하고, n을 저장하지 않으면 원소 수를 물을 때마다 Θ(n)이 든다.';
+    $('list-note').textContent = (!names.length ? '빈 목록에서는 head와 tail이 모두 None이고 n은 0이다.' : names.length === 1 ? '원소가 하나이면 head와 tail이 같은 노드를 가리키고 그 노드의 next는 None이다.' : (placement === 'row' ? '노드를 나란히 놓아도 순서는 next 참조가 정한다.' : '노드를 흩어 놓아도 A.next가 B를, B.next가 C를 가리키므로 논리 순서는 A → B → C다.')) + listTail;
+  }
+  ['list-state', 'placement'].forEach(id => $(id).addEventListener('change', renderList));
+
+  const letters = ['A', 'B', 'C', 'D', 'E', 'F'];
+  function renderRep() {
+    const added = Number($('rep-add').value), n = 3 + added, cap = 4, full = n > cap, rep = { last: added > 0 };
+    $('rep-add-out').textContent = added;
+    $('rep-array').replaceChildren(...Array.from({ length: cap }, (_, i) => { const e = document.createElement('span'); e.className = 'cell' + (i >= Math.min(n, cap) ? ' free' : '') + (rep.last && i === n - 1 && !full ? ' new' : ''); e.innerHTML = '<small>a[' + i + ']</small>' + (i < Math.min(n, cap) ? letters[i] : '빈 칸'); return e; }));
+    $('rep-array').setAttribute('aria-label', '배열 칸 4개 중 ' + Math.min(n, cap) + '개 사용');
+    $('rep-warn').hidden = !full;
+    $('rep-warn').textContent = full ? '용량 4를 넘었다. 연속한 칸을 유지하려면 더 큰 배열로 재할당하고 기존 원소를 옮겨야 한다.' : '';
+    const nodes = [];
+    for (let i = 0; i < n; i++) { const e = document.createElement('span'); e.className = 'lnode' + (rep.last && i === n - 1 ? ' new' : ''); e.textContent = letters[i] + ' | next'; nodes.push(e); const a = document.createElement('span'); a.textContent = '→'; nodes.push(a); }
+    const none = document.createElement('span'); none.textContent = 'None'; nodes.push(none);
+    $('rep-linked').replaceChildren(...nodes);
+    $('rep-linked').setAttribute('aria-label', '노드 ' + n + '개, 순서 ' + letters.slice(0, n).join(' → ') + ' → None');
+    $('rep-array-note').textContent = '다음 원소는 바로 옆 칸이다. a[i]의 주소는 계산 한 번으로 구한다.';
+    $('rep-linked-note').textContent = '다음 원소는 next가 가리키는 노드다. i번째 노드에 가려면 head부터 next를 따라간다.';
+    $('rep-live').innerHTML = readout('원소 수', n) + readout('배열이 확보한 칸', full ? '4칸, 재할당 필요' : '4칸') + readout('연결리스트 노드', n + '개');
+    $('rep-note').textContent = rep.last ? (full ? '연결리스트는 노드 ' + letters[n - 1] + '를 하나 더 만들어 이전 노드의 next에 이었다. 배열은 빈 칸이 없어 옮기는 작업이 필요하다.' : '배열은 미리 확보한 빈 칸 a[' + (n - 1) + ']에 값을 썼고, 연결리스트는 새 노드 ' + letters[n - 1] + '를 만들어 이전 노드의 next에 이었다.') : '빠른 인덱스 접근과 원소 이동 비용은 모두 연속 저장에서 나온다. 연결리스트는 연속 저장을 포기하는 대신 참조로 순서를 표현한다.';
+  }
+  $('rep-add').addEventListener('input', renderRep);
+  renderRep();
+  renderFocus();
+  renderList();
+})();
+</script>
+</body>
+</html>
