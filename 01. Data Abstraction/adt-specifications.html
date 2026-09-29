@@ -39,7 +39,7 @@
   <section class="topic-example"><header class="example-header"><h2 class="section-title">같은 반환값도 호출 뒤 상태가 다르면 다른 연산이다</h2><p class="lead"><code>peek()</code>과 <code>pop()</code>은 같은 맨 위 값을 돌려주지만 한쪽만 상태를 바꾼다.</p></header>
     <div class="visual-lab"><div class="comparison">
       <article class="compare"><strong>peek()</strong><p class="state">[4, "dog"] → 반환 "dog"<br>[4, "dog"]</p><p>상태를 읽고 그대로 둔다.</p></article>
-      <article class="compare"><strong>pop()</strong><p class="state">[4, "dog"] → 반환 "dog"<br>[4]</p><p>맨 위 값을 읽고 상태에서 제거한다.</p></article>
+      <article class="compare"><strong>pop()</strong><p class="state">[4, "dog"] → 반환 "dog"<br>[4]</p><p>맨 위 값을 읽고 상태에서 삭제한다.</p></article>
     </div><p class="visual-note">반환값과 상태 변화를 함께 보아야 연산의 의미를 구분할 수 있다.</p></div>
   </section>
   <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="operations-and-semantics.html">이전 · Operations And Semantics</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="choosing-an-adt.html">다음 · Choosing An ADT</a></nav>
@@ -56,9 +56,9 @@
 (() => {
   const $=id=>document.getElementById(id), data={
     push:{pre:'[4, "dog"]',call:'push(True)',condition:'모든 스택 상태에서 적용',ret:'없음',post:'[4, "dog", True]',valid:true,cause:'True를 맨 위에 추가하므로 상태가 바뀌고 반환값은 없다.'},
-    peek:{pre:'[4, "dog"]',call:'peek()',condition:'스택이 비어 있지 않음',ret:'"dog"',post:'[4, "dog"]',valid:true,cause:'맨 위 값을 읽지만 제거하지 않아 상태가 유지된다. 상태를 읽기만 하는 조회 연산이다.'},
+    peek:{pre:'[4, "dog"]',call:'peek()',condition:'스택이 비어 있지 않음',ret:'"dog"',post:'[4, "dog"]',valid:true,cause:'맨 위 값을 읽지만 삭제하지 않아 상태가 유지된다. 상태를 읽기만 하는 조회 연산이다.'},
     size:{pre:'[4, "dog"]',call:'size()',condition:'모든 스택 상태에서 적용',ret:'2',post:'[4, "dog"]',valid:true,cause:'원소 수만 반환하고 상태는 그대로다. peek()과 같은 조회 연산이다.'},
-    pop:{pre:'[4, "dog"]',call:'pop()',condition:'스택이 비어 있지 않음',ret:'"dog"',post:'[4]',valid:true,cause:'맨 위 값을 반환하고 같은 값을 상태에서 제거한다.'},
+    pop:{pre:'[4, "dog"]',call:'pop()',condition:'스택이 비어 있지 않음',ret:'"dog"',post:'[4]',valid:true,cause:'맨 위 값을 반환하고 같은 값을 상태에서 삭제한다.'},
     empty:{pre:'[]',call:'pop()',condition:'스택이 비어 있지 않음',ret:'명세가 정하지 않음',post:'명세가 정하지 않음',valid:false,cause:'빈 스택은 적용 조건을 만족하지 않으므로 명세는 반환값과 호출 뒤 상태를 정하지 않는다. 어떤 오류를 낼지는 구현이 정하더라도, 호출할 수 있는 조건은 명세에 적어야 한다.'},
     check:{pre:'[]',call:'is_empty()',condition:'모든 스택 상태에서 적용',ret:'True',post:'[]',valid:true,cause:'비어 있는지만 읽는 연산이므로 빈 상태에서도 적용되고 상태는 그대로다.'}
   };
