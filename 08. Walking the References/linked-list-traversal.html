@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Linked List Traversal | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-linked-lists.css">
+  <style>
+
+  </style>
+</head>
+<body class="visual-topic topic-linked-list-traversal">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Walking the References</span><span class="nav-tag is-current" aria-current="page">Linked List Traversal</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Walking the References</p><h1 class="page-title">Linked List Traversal</h1><hr class="accent-rule"><p class="page-subtitle">연결리스트의 다음 원소는 인덱스로 계산하지 않는다. <code>head</code>에서 시작해 <code>next</code>를 한 번씩 따라가며 현재 노드를 옮긴다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>current</strong><span>지금 방문하는 노드를 가리키는 참조다.</span></article><article class="summary-card"><strong>종료 조건</strong><span>current is None이면 목록의 끝에 도달한 것이다.</span></article><article class="summary-card"><strong>i번째 노드</strong><span>head부터 next를 i번 따라가므로 Θ(1+i)다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">current가 None이 될 때까지 노드를 하나씩 방문한다</h2><p class="lead"><code>current</code>가 한 노드 옮겨 갈 때마다 센 노드가 하나 늘고, <code>current</code>가 <code>None</code>이 되면 반복이 끝난다. 빈 리스트에서는 처음부터 <code>current is None</code>이다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="listCase">리스트 상태</label><select id="listCase"><option value="4">노드 4개</option><option value="1">노드 1개</option><option value="0">빈 리스트</option></select></div><div class="control-field"><label for="step">current 이동 횟수 <output id="stepValue" class="control-value" for="step"></output></label><input id="step" type="range" min="0" max="4" value="0"></div><div class="action-row"><button id="prev" class="btn btn-outline" type="button">이전</button><button id="next" class="btn" type="button">다음</button></div></div>
+      <p id="reason-1" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ll-diagram"><svg id="traceSvg" viewBox="0 0 720 230" role="img" aria-labelledby="traceTitle traceDesc"><title id="traceTitle">연결리스트 순회 상태</title><desc id="traceDesc">head에서 next를 따라 current가 이동하는 과정</desc></svg></div><div class="code"><span id="code0">current = head · count = 0</span><span id="code1">while current is not None</span><span id="code2">count += 1 · current = current.next</span><span id="code3">return count</span></div></div><figcaption class="visual-caption">원은 노드, 회색 화살표는 next 참조다. 옅은 파란 원은 이미 센 노드, 초록 테두리 원은 current가 가리키는 노드다. 아래 코드 칸에서 짙은 칸이 지금 실행하는 줄이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"><div class="visual-readout"><span class="visual-readout-label">현재 상태</span><strong id="traceState" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">current 이동 횟수</span><strong id="stepValue-echo" class="visual-readout-value"></strong></div></div>
+      <p id="note-1" class="visual-note"><span id="traceText"></span> 배열은 인덱스가 n에 도달하면 멈추지만, 연결리스트는 <code>current</code>가 <code>None</code>인지 확인한다. 반복 한 번이 노드 하나를 방문하므로 <code>size(head)</code>의 비용은 <code>Θ(n)</code>이다.</p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">i번째 노드에 가려면 head부터 next를 i번 따라간다</h2><p class="lead"><code>head</code>는 바로 참조할 수 있지만, 중간 위치에는 앞선 연결을 차례로 통과해야 하므로 i가 클수록 <code>next</code> 이동 횟수가 늘어난다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="position">도달할 위치 <output id="positionValue" class="control-value" for="position"></output></label><input id="position" type="range" min="0" max="6" value="3"></div></div>
+      <p id="reason-2" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div id="costLine" class="cost-line"></div><div id="formula" class="formula"></div></div><figcaption class="visual-caption">칸 하나가 노드 위치다. 파란 칸은 head부터 거쳐 간 노드, 초록 테두리 칸은 도달할 위치 i다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"><div class="visual-readout"><span class="visual-readout-label">next 이동 횟수</span><strong id="costState" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">도달할 위치</span><strong id="positionValue-echo" class="visual-readout-value"></strong></div></div>
+      <p id="note-2" class="visual-note"><span id="costText"></span> 노드의 주소가 연속적이지 않으므로 위치를 주소 계산으로 건너뛸 수 없다. <code>head</code>나 <code>tail</code>이 직접 가리키는 첫 노드와 마지막 노드에는 <code>Θ(1)</code>로 접근하지만, 가운데 i번째 노드는 <code>head</code>부터 따라가므로 <code>Θ(1+i)</code>다.</p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../07. Giving Up Contiguity/references-and-aliasing.html">이전 · References And Aliasing</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="linked-list-search.html">다음 · Linked List Search</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+  const q=s=>document.querySelector(s),svg=q('#traceSvg'),NS='http://www.w3.org/2000/svg';function E(t,a={},x=''){const e=document.createElementNS(NS,t);Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v));e.textContent=x;svg.append(e);return e}
+function trace(){const n=+q('#listCase').value;q('#step').max=n;if(+q('#step').value>n)q('#step').value=n;const s=+q('#step').value;svg.replaceChildren();const d=E('defs');d.innerHTML='<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#5c6c7c"/></marker><marker id="arrow-warm" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#00a651"/></marker>';E('title',{id:'traceTitle'},'연결리스트 순회 상태');E('desc',{id:'traceDesc'},n?n+'개 노드에서 current를 '+s+'회 옮긴 상태':'빈 리스트');
+if(!n){E('text',{x:360,y:100,'text-anchor':'middle','font-size':22,fill:'#5c6c7c'},'head = None');E('text',{x:360,y:145,'text-anchor':'middle','font-size':20,fill:'#00a651'},'current = None')}else{const st=n===1?360:120,g=n===1?0:160;for(let i=0;i<n-1;i++)E('line',{x1:st+i*g+44,y1:125,x2:st+(i+1)*g-44,y2:125,class:'link'});for(let i=0;i<n;i++){const x=st+i*g;E('circle',{cx:x,cy:125,r:40,class:'node '+(i<s?'visited ':'')+(i===s?'current':'')});E('text',{x,y:132,'text-anchor':'middle','font-size':22,'font-weight':800,fill:'#003e74'},String.fromCharCode(65+i));E('text',{x,y:184,'text-anchor':'middle','font-size':13,fill:'#5c6c7c'},i===n-1?'next = None':'next → '+String.fromCharCode(66+i))}E('text',{x:st,y:27,'text-anchor':'middle','font-weight':700,fill:'#003e74'},'head');E('line',{x1:st,y1:38,x2:st,y2:78,class:'link'});if(s<n){const x=st+s*g;E('text',{x,y:57,'text-anchor':'middle','font-weight':800,fill:'#00a651'},'current');E('line',{x1:x,y1:65,x2:x,y2:79,class:'warm'})}else E('text',{x:630,y:57,'text-anchor':'middle','font-weight':800,fill:'#00a651'},'current = None')}
+q('#stepValue').textContent=s+'회';q('#prev').disabled=!s;q('#next').disabled=s===n;const state=q('#traceState'),text=q('#traceText');if(!n){state.textContent='current = None';text.textContent='처리할 노드가 없으므로 반복 본문을 실행하지 않는다.'}else if(!s){state.textContent='current = head';text.textContent='첫 노드를 가리키며 순회를 시작한다.'}else if(s<n){state.textContent='current = '+String.fromCharCode(65+s);text.textContent='앞의 '+s+'개 노드를 처리하고 next를 따라 현재 노드로 이동했다.'}else{state.textContent='current = None · count = '+n;text.textContent=n+'개 노드를 모두 세고 리스트의 끝에 도달했다. 반환값은 count의 최종값 '+n+'이다.'}if(n&&s>0&&s<n){state.textContent+=' · count = '+s}if(n&&!s){state.textContent+=' · count = 0'}['#code0','#code1','#code2','#code3'].forEach(x=>q(x).classList.remove('active'));q(!n||s===n?'#code3':!s?'#code0':'#code2').classList.add('active')}
+function cost(){const i=+q('#position').value,l=q('#costLine');l.replaceChildren();for(let j=0;j<7;j++){const b=document.createElement('span');b.className='hop '+(j<=i?'used ':'')+(j===i?'target':'');b.textContent=j;l.append(b);if(j<6){const a=document.createElement('span');a.className='arrow-text';a.textContent='→';l.append(a)}}q('#positionValue').textContent='i = '+i;q('#costState').textContent=i+'회';q('#costText').textContent=i?'0번 노드에서 '+i+'개의 연결을 따라가야 '+i+'번 노드에 도달한다.':'head가 이미 0번 노드를 가리키므로 next를 따라갈 필요가 없다.';q('#formula').textContent='위치 i를 찾는 비용: Θ(1+i) · i = '+i+'이면 next를 '+i+'회 따라간다.'}
+q('#listCase').onchange=()=>{q('#step').value=0;trace()};q('#step').oninput=trace;q('#prev').onclick=()=>{q('#step').value=Math.max(0,+q('#step').value-1);trace()};q('#next').onclick=()=>{q('#step').value=Math.min(+q('#step').max,+q('#step').value+1);trace()};q('#position').oninput=cost;trace();cost();
+
+  (function () {
+    var mirrors = ["stepValue", "positionValue"];
+    function sync() {
+      mirrors.forEach(function (m) { var a = document.getElementById(m), b = document.getElementById(m + "-echo"); if (a && b) b.textContent = a.textContent; });
+      Array.prototype.forEach.call(document.querySelectorAll(".topic-example"), function (sec) {
+        var r = sec.querySelector(".control-reason"); if (!r) return;
+        var msgs = [];
+        Array.prototype.forEach.call(sec.querySelectorAll(".visual-controls button:disabled"), function (b) {
+          var t = b.textContent.trim();
+          msgs.push(t === "이전" ? "첫 단계라 이전 단계가 없다." : t === "다음" ? "마지막 단계라 다음 단계가 없다." : "현재 조건에서는 이 조작을 할 수 없다.");
+        });
+        Array.prototype.forEach.call(sec.querySelectorAll('.visual-controls input[type="range"]'), function (i) { if (Number(i.max) === 0) msgs.push("이 조건에서는 옮길 단계가 없다."); });
+        r.textContent = msgs.filter(function (m, k) { return msgs.indexOf(m) === k; }).join(" "); r.hidden = !msgs.length;
+      });
+    }
+    ["input", "change", "click"].forEach(function (ev) { document.addEventListener(ev, function () { setTimeout(sync, 0); }); });
+    sync();
+  }());
+}());
+</script>
+</body>
+</html>

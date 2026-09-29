@@ -1,0 +1,117 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Linked List Updates | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-linked-lists.css">
+  <style>
+    .topic-linked-list-updates #removeCode{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
+  </style>
+</head>
+<body class="visual-topic topic-linked-list-updates">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Walking the References</span><span class="nav-tag is-current" aria-current="page">Linked List Updates</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Walking the References</p><h1 class="page-title">Linked List Updates</h1><hr class="accent-rule"><p class="page-subtitle">노드 자체를 옮기지 않고 연결만 바꾸는 것이 핵심이다. 다만 위치를 찾는 비용과 참조를 바꾸는 비용은 구분해야 한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>연결만 바꾸기</strong><span>노드를 옮기지 않고 next 참조를 바꾼다.</span></article><article class="summary-card"><strong>대입 순서</strong><span>맨 앞 삽입은 X.next = head를 먼저 해야 기존 노드를 잃지 않는다.</span></article><article class="summary-card"><strong>비용 나누기</strong><span>위치를 찾는 Θ(1+i)와 참조를 바꾸는 Θ(1)을 구분한다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">맨 앞 삽입에서는 새 노드의 next를 먼저 연결해야 한다</h2><p class="lead">삽입은 자리를 찾는 일(<code>Θ(1+i)</code>)과 참조 두 개를 고치는 일(<code>Θ(1)</code>)로 나뉜다. 두 대입의 순서를 바꾸면 맨 앞 삽입에서만 기존 노드로 가는 참조가 사라진다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="order">삽입 위치와 순서</label><select id="order"><option value="mid-safe">가운데 · X.next 먼저</option><option value="mid-swap">가운데 · previous.next 먼저</option><option value="head-safe">맨 앞 · X.next 먼저</option><option value="head-wrong">맨 앞 · head 먼저</option></select></div><div class="control-field"><label for="insertStep">실행 단계 <output id="insertStepValue" class="control-value" for="insertStep"></output></label><input id="insertStep" type="range" min="0" max="2" value="0"></div><div class="action-row"><button id="insertPrev" class="btn btn-outline" type="button">이전</button><button id="insertNext" class="btn" type="button">다음</button></div></div>
+      <p id="reason-1" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ll-diagram"><svg id="insertSvg" viewBox="0 0 780 230" role="img" aria-labelledby="insertTitle insertDesc"><title id="insertTitle">연결리스트 삽입</title><desc id="insertDesc">새 노드 X를 삽입하며 참조를 바꾸는 과정</desc></svg></div><div class="code"><span id="insertCode0"></span><span id="insertCode1"></span></div></div><figcaption class="visual-caption">원은 노드, 회색 화살표는 기존 next, 초록 화살표는 이번에 바꾼 참조다. 초록 원 X는 새 노드이며, 빨간 글자는 도달할 수 없게 된 노드를 알린다. 아래 코드 칸에서 짙은 칸이 방금 실행한 줄이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"><div class="visual-readout" id="insertReadout"><span class="visual-readout-label">현재 상태</span><strong id="insertState" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">실행 단계</span><strong id="insertStepValue-echo" class="visual-readout-value"></strong></div></div>
+      <p id="note-1" class="visual-note"><span id="insertText"></span> 기존 노드를 가리키는 참조가 하나뿐이면 그 참조를 바꾸기 전에 새 노드의 <code>next</code>를 먼저 연결한다.</p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">삭제는 앞 노드의 next를 삭제할 노드의 다음 노드로 바꾼다</h2><p class="lead">중간 노드를 삭제할 때는 앞 노드의 <code>next</code>가 삭제할 노드의 다음 노드를 가리키게 한다. 첫 노드는 앞 노드가 없으므로 <code>head</code>를 직접 바꾼다. 끝 노드를 지우면 <code>tail</code>도 앞 노드로 옮기고, 어느 경우든 <code>n</code>을 1 줄인다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="removeCase">삭제할 위치</label><select id="removeCase"><option value="middle">가운데 B 삭제</option><option value="head">첫 노드 A 삭제</option><option value="tail">마지막 C 삭제</option><option value="only">하나뿐인 노드 A 삭제</option><option value="empty">빈 리스트에서 삭제</option></select></div><div class="control-field"><label for="removeStep">실행 단계 <output id="removeStepValue" class="control-value" for="removeStep"></output></label><input id="removeStep" type="range" min="0" max="2" value="0"></div><div class="action-row"><button id="removePrev" class="btn btn-outline" type="button">이전</button><button id="removeNext" class="btn" type="button">다음</button></div></div>
+      <p id="reason-2" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ll-diagram"><svg id="removeSvg" viewBox="0 0 780 230" role="img" aria-labelledby="removeTitle removeDesc"><title id="removeTitle">연결리스트 삭제</title><desc id="removeDesc">삭제 위치를 찾고 앞뒤 연결을 잇는 과정</desc></svg></div><div id="removeCode" class="code"></div></div><figcaption class="visual-caption">초록 화살표와 글자는 바뀐 연결, 빨간 점선 원은 목록에서 빠진 노드다. 노드 아래 <code>tail</code>은 마지막 노드를 가리키는 참조다. 아래 코드 칸에서 짙은 칸이 실행한 줄이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"><div class="visual-readout"><span class="visual-readout-label">현재 상태</span><strong id="removeState" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">삭제 위치 찾기</span><strong id="locateCost" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">참조 변경</span><strong id="relinkCost" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">원소 수</span><strong id="removeCount" class="visual-readout-value"></strong></div></div>
+      <p id="note-2" class="visual-note"><span id="removeText"></span> 참조와 <code>n</code>을 고치는 일은 <code>Θ(1)</code>이지만, i번째 노드를 삭제하려면 그 위치까지 순회해야 하므로 전체 비용은 <code>Θ(1+i)</code>이다. 정리하면 순회 <code>Θ(n)</code>, 탐색 최악 <code>Θ(n)</code>, 맨 앞 삽입 <code>Θ(1)</code>, i에 삽입과 i에서 삭제는 <code>Θ(1+i)</code>다.</p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="linked-list-search.html">이전 · Linked List Search</a><a class="pager-link is-all" href="../index.html">전체</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+  const q=s=>document.querySelector(s),NS='http://www.w3.org/2000/svg';function E(svg,t,a={},x=''){const e=document.createElementNS(NS,t);Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v));e.textContent=x;svg.append(e);return e}function base(svg,title,desc,ids){svg.replaceChildren();const d=E(svg,'defs');d.innerHTML='<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#5c6c7c"/></marker><marker id="arrow-warm" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#00a651"/></marker>';E(svg,'title',{id:ids[0]},title);E(svg,'desc',{id:ids[1]},desc)}function node(svg,x,y,t,c='node'){E(svg,'circle',{cx:x,cy:y,r:38,class:c});E(svg,'text',{x,y:y+7,'text-anchor':'middle','font-size':22,'font-weight':800,fill:'#003e74'},t)}function line(svg,a,b,c,d,k='link'){E(svg,'line',{x1:a,y1:b,x2:c,y2:d,class:k})}
+function insert(){const svg=q('#insertSvg'),mode=q('#order').value,s=+q('#insertStep').value,head=mode.startsWith('head');base(svg,'연결리스트 삽입',(head?'맨 앞':'가운데')+' 삽입 '+s+'단계',['insertTitle','insertDesc']);
+const code=mode==='mid-safe'?['X.next = current','previous.next = X']:mode==='mid-swap'?['previous.next = X','X.next = current']:mode==='head-safe'?['X.next = head','head = X']:['head = X','X.next = head'];q('#insertCode0').textContent='1  '+code[0];q('#insertCode1').textContent='2  '+code[1];
+const lab=(x,y,t,c='#003e74')=>E(svg,'text',{x,y,'text-anchor':'middle','font-weight':800,fill:c},t);let lost=false;
+if(!head){node(svg,130,95,'A');node(svg,390,95,'B');node(svg,620,95,'C');node(svg,260,190,'X','node new');line(svg,428,95,582,95);lab(130,22,'previous');line(svg,130,30,130,55);lab(390,22,'current','#00a651');line(svg,390,30,390,55,'warm');
+ const aToX=(mode==='mid-safe'&&s===2)||(mode==='mid-swap'&&s>=1),xToB=(mode==='mid-safe'&&s>=1)||(mode==='mid-swap'&&s===2);
+ if(aToX)line(svg,168,95,226,166,'warm');else line(svg,168,95,352,95);if(xToB)line(svg,298,178,358,123,'warm');
+ if(mode==='mid-swap'&&s===1)E(svg,'text',{x:560,y:175,'text-anchor':'middle',fill:'#00a651','font-weight':700},'B는 current가 계속 가리킨다');}
+else{node(svg,270,95,'A');node(svg,480,95,'B');node(svg,690,95,'C');node(svg,110,190,'X','node new');line(svg,308,95,442,95);line(svg,518,95,652,95);
+ const headToX=(mode==='head-safe'&&s===2)||(mode==='head-wrong'&&s>=1),xNext=(mode==='head-safe'&&s>=1)?'A':(mode==='head-wrong'&&s===2)?'X':null;
+ if(headToX){lab(110,40,'head','#00a651');line(svg,110,48,110,148,'warm')}else{lab(270,40,'head');line(svg,270,48,270,55)}
+ if(xNext==='A')line(svg,148,178,238,118,'warm');if(xNext==='X')E(svg,'path',{d:'M148 190C210 190 200 130 135 156',fill:'none',class:'warm'});
+ lost=mode==='head-wrong'&&s>=1;if(lost)E(svg,'text',{x:480,y:175,'text-anchor':'middle',fill:'#b3261e','font-weight':700},s===1?'A, B, C로 가는 참조가 없다':'X.next도 X를 가리킨다');}
+q('#insertStepValue').textContent=s+' / 2';q('#insertPrev').disabled=!s;q('#insertNext').disabled=s===2;q('#insertReadout').classList.toggle('warn',lost);
+const txt={
+ 'mid-safe':['A.next가 B를 가리키고 X는 아직 연결되지 않았다. previous는 A, current는 B다.','X.next = current로 X가 B를 가리킨다.','previous.next = X로 A → X → B → C가 완성된다. current가 B를 가리키고 있어 순서를 바꿔도 뒤쪽을 잃지 않는다.'],
+ 'mid-swap':['같은 상태에서 대입 순서만 바꾼다.','previous.next = X로 A가 X를 가리킨다. A에서 B로 가는 연결은 사라졌지만 current가 여전히 B를 가리킨다.','X.next = current로 X가 B를 가리켜 A → X → B → C가 완성된다. 가운데 삽입에서는 순서를 바꿔도 뒤쪽을 잃지 않는다.'],
+ 'head-safe':['head가 A를 가리키고 X는 아직 연결되지 않았다.','X.next = head로 X가 기존 첫 노드 A를 가리킨다.','head = X로 X → A → B → C가 완성된다. X.next가 먼저 A를 가리켰으므로 기존 노드를 잃지 않는다.'],
+ 'head-wrong':['같은 상태에서 head를 먼저 바꾼다.','head = X로 head가 X를 가리킨다. 기존 첫 노드 A를 가리키던 참조는 head뿐이었으므로 A, B, C에 도달할 수 없다.','X.next = head를 실행하면 head가 이미 X이므로 X.next도 X가 된다. 기존 노드는 복구되지 않는다.']}[mode];
+q('#insertState').textContent=s?code[s-1]:'삽입 전';q('#insertText').textContent=txt[s];q('#insertCode0').classList.toggle('active',s===1);q('#insertCode1').classList.toggle('active',s===2)}
+function remove(){const svg=q('#removeSvg'),mode=q('#removeCase').value,empty=mode==='empty',only=mode==='only';q('#removeStep').max=empty?0:2;if(empty)q('#removeStep').value=0;const s=+q('#removeStep').value,done=s===2;const who={middle:'가운데 B',head:'첫 노드 A',tail:'마지막 C',only:'하나뿐인 노드 A'}[mode];base(svg,'연결리스트 삭제',empty?'빈 리스트':who+' 삭제 '+s+'단계',['removeTitle','removeDesc']);const lab=(x,y,t,c='#003e74')=>E(svg,'text',{x,y,'text-anchor':'middle','font-weight':800,fill:c},t);
+if(empty){E(svg,'text',{x:390,y:105,'text-anchor':'middle','font-size':24,'font-weight':800,fill:'#003e74'},'head = None, tail = None');E(svg,'text',{x:390,y:150,'text-anchor':'middle',fill:'#5c6c7c'},'삭제할 노드가 없다')}
+else if(only){node(svg,390,110,'A',done?'node removed':'node');if(done){lab(390,42,'head = None','#00a651');lab(390,204,'tail = None','#00a651')}else{lab(390,42,'head');line(svg,390,52,390,70);lab(390,204,'tail');line(svg,390,186,390,150)}}
+else{const xs=[160,390,620],ri=mode==='head'?0:mode==='middle'?1:2;['A','B','C'].forEach((x,i)=>node(svg,xs[i],110,x,done&&i===ri?'node removed':'node'));if(!done){line(svg,198,110,352,110);line(svg,428,110,582,110)}else if(mode==='head'){line(svg,428,110,582,110);lab(390,42,'head','#00a651');line(svg,390,52,390,70,'warm')}else if(mode==='middle')E(svg,'path',{d:'M198 110C280 18 500 18 582 110',fill:'none',class:'warm'});else{line(svg,198,110,352,110);E(svg,'text',{x:505,y:104,'text-anchor':'middle','font-weight':700,fill:'#00a651'},'B.next = None')}
+ const tailMoved=done&&mode==='tail',tx=tailMoved?390:620;lab(tx,204,'tail',tailMoved?'#00a651':'#003e74');line(svg,tx,186,tx,150,tailMoved?'warm':'link');
+ if(s===1){if(mode!=='head')lab(xs[ri-1],48,'previous');lab(xs[ri],48,'current','#00a651')}}
+const code=empty?['# No node to remove.']:{middle:['previous.next = current.next','n -= 1'],tail:['previous.next = current.next','tail = previous','n -= 1'],head:['head = head.next','n -= 1'],only:['head = head.next','n -= 1','tail = None']}[mode];q('#removeCode').replaceChildren(...code.map(c=>{const e=document.createElement('span');e.textContent=c;if(done)e.className='active';return e}));
+q('#removeStepValue').textContent=s+' / '+(empty?0:2);q('#removePrev').disabled=!s;q('#removeNext').disabled=empty||done;
+const T={middle:['head에서 출발해 삭제할 노드와 그 앞 노드를 찾는다.','current는 B, previous는 A를 가리킨다.','A.next를 C로 바꾸면 B가 리스트에서 제외되고 n은 2가 된다. B는 끝 노드가 아니므로 tail은 그대로 C다.'],
+ tail:['head에서 출발해 삭제할 노드와 그 앞 노드를 찾는다.','current는 C, previous는 B를 가리킨다. C는 tail이 가리키는 끝 노드다.','B.next를 None으로 바꾸면 C가 리스트에서 제외된다. C가 끝 노드였으므로 tail을 B로 옮기고 n은 2가 된다.'],
+ head:['첫 노드는 head가 직접 가리킨다.','head가 A를, A.next가 B를 가리킨다.','head를 B로 옮기면 A가 리스트에서 제외되고 n은 2가 된다. 남은 노드가 있으므로 tail은 그대로 C다.'],
+ only:['노드가 하나뿐이면 head와 tail이 같은 노드 A를 가리킨다.','head와 tail이 모두 A를 가리키고 A.next는 None이다.','head = head.next로 head가 None이 되므로 tail도 None으로 바꾼다. n은 0이 되어 빈 리스트가 된다.']};
+const S={middle:['previous와 current 찾기','삭제할 노드 확인','previous.next = current.next'],tail:['previous와 current 찾기','삭제할 노드 확인','B.next = None, tail = B'],head:['head가 삭제 위치','삭제할 노드 확인','head = head.next'],only:['head가 삭제 위치','삭제할 노드 확인','head = None, tail = None']};
+if(empty){q('#removeState').textContent='head = None';q('#removeText').textContent='빈 리스트에는 삭제할 노드가 없으므로 연결을 바꾸지 않는다.'}else{q('#removeState').textContent=S[mode][s];q('#removeText').textContent=T[mode][s]}
+q('#locateCost').textContent=empty||mode==='head'||only?'Θ(1)':'Θ(1+i)';q('#relinkCost').textContent=empty?'변경 없음':'Θ(1)';const n0=only?1:3;q('#removeCount').textContent='n = '+(empty?0:done?n0-1:n0)}
+q('#order').onchange=()=>{q('#insertStep').value=0;insert()};q('#insertStep').oninput=insert;q('#insertPrev').onclick=()=>{q('#insertStep').value=Math.max(0,+q('#insertStep').value-1);insert()};q('#insertNext').onclick=()=>{q('#insertStep').value=Math.min(2,+q('#insertStep').value+1);insert()};q('#removeCase').onchange=()=>{q('#removeStep').value=0;remove()};q('#removeStep').oninput=remove;q('#removePrev').onclick=()=>{q('#removeStep').value=Math.max(0,+q('#removeStep').value-1);remove()};q('#removeNext').onclick=()=>{q('#removeStep').value=Math.min(+q('#removeStep').max,+q('#removeStep').value+1);remove()};insert();remove();
+
+  (function () {
+    var mirrors = ["insertStepValue"];
+    function sync() {
+      mirrors.forEach(function (m) { var a = document.getElementById(m), b = document.getElementById(m + "-echo"); if (a && b) b.textContent = a.textContent; });
+      Array.prototype.forEach.call(document.querySelectorAll(".topic-example"), function (sec) {
+        var r = sec.querySelector(".control-reason"); if (!r) return;
+        var msgs = [];
+        Array.prototype.forEach.call(sec.querySelectorAll(".visual-controls button:disabled"), function (b) {
+          var t = b.textContent.trim();
+          msgs.push(t === "이전" ? "첫 단계라 이전 단계가 없다." : t === "다음" ? "마지막 단계라 다음 단계가 없다." : "현재 조건에서는 이 조작을 할 수 없다.");
+        });
+        Array.prototype.forEach.call(sec.querySelectorAll('.visual-controls input[type="range"]'), function (i) { if (Number(i.max) === 0) msgs.push("이 조건에서는 옮길 단계가 없다."); });
+        r.textContent = msgs.filter(function (m, k) { return msgs.indexOf(m) === k; }).join(" "); r.hidden = !msgs.length;
+      });
+    }
+    ["input", "change", "click"].forEach(function (ev) { document.addEventListener(ev, function () { setTimeout(sync, 0); }); });
+    sync();
+  }());
+}());
+</script>
+</body>
+</html>

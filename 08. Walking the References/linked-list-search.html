@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Linked List Search | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-linked-lists.css">
+  <style>
+
+  </style>
+</head>
+<body class="visual-topic topic-linked-list-search">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Walking the References</span><span class="nav-tag is-current" aria-current="page">Linked List Search</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Walking the References</p><h1 class="page-title">Linked List Search</h1><hr class="accent-rule"><p class="page-subtitle">탐색은 현재 노드의 값과 목표값을 비교한 뒤, 일치하지 않으면 <code>next</code>로 이동한다. 목표를 찾거나 <code>None</code>에 도달하면 멈춘다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>비교와 이동</strong><span>current.data를 목표값과 비교하고 다르면 next로 옮긴다.</span></article><article class="summary-card"><strong>멈추는 두 경우</strong><span>목표를 찾거나 current가 None이 되면 멈춘다.</span></article><article class="summary-card"><strong>비교 횟수</strong><span>최선은 Θ(1), 마지막 노드나 없는 값은 Θ(n)이다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">탐색은 목표를 찾거나 None에 닿을 때까지 비교하고 이동한다</h2><p class="lead">목표값이 리스트의 어디에 있는지에 따라 멈추는 위치와 비교 횟수가 달라진다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="target">목표값</label><select id="target"><option value="A">A · 첫 노드</option><option value="C" selected>C · 가운데 노드</option><option value="E">E · 마지막 노드</option><option value="X">X · 리스트에 없음</option></select></div><div class="control-field"><label for="step">완료한 비교 횟수 <output id="stepValue" class="control-value" for="step"></output></label><input id="step" type="range" min="0" max="3" value="0"></div><div class="action-row"><button id="prev" class="btn btn-outline" type="button">이전</button><button id="next" class="btn" type="button">다음</button></div></div>
+      <p id="reason-1" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ll-diagram"><svg id="searchSvg" viewBox="0 0 780 230" role="img" aria-labelledby="svgTitle svgDesc"><title id="svgTitle">연결리스트 탐색 상태</title><desc id="svgDesc">현재 비교하는 노드와 이미 확인한 노드</desc></svg></div><div class="code search-code"><span id="scode0">current = head</span><span id="scode1">while current is not None</span><span id="scode2">if current.data == target: return True</span><span id="scode3">current = current.next</span><span id="scode4">return False</span></div></div><figcaption class="visual-caption">옅은 파란 원은 비교를 마친 노드, 초록 테두리 원은 다음에 비교할 current, 초록으로 채운 원은 목표와 일치한 노드다. 아래 코드 칸에서 짙은 칸이 지금 실행하는 줄이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"><div class="visual-readout"><span class="visual-readout-label">현재 상태</span><strong id="resultState" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">목표값</span><strong id="targetOut" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">비교 횟수</span><strong id="compareOut" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">현재 결과</span><strong id="statusOut" class="visual-readout-value"></strong></div></div>
+      <p id="note-1" class="visual-note"><span id="resultText"></span></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">목표가 뒤에 있을수록 비교 횟수가 늘고 없으면 항상 n회다</h2><p class="lead">노드 수를 바꾸면 각 위치를 찾는 데 필요한 비교 횟수도 함께 바뀐다. 평균은 목표가 리스트 안의 각 위치에 같은 확률로 있다고 가정한 값이다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="length">노드 수 <output id="lengthValue" class="control-value" for="length"></output></label><input id="length" type="range" min="3" max="9" value="6"></div></div>
+      <p id="reason-2" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div id="bars" class="bars" aria-label="목표 위치별 비교 횟수"></div><div id="costFormula" class="formula"></div></div><figcaption class="visual-caption">막대 높이는 목표가 그 위치에 있을 때의 비교 횟수이며, 오른쪽 회색 막대는 목표가 없을 때다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"><div class="visual-readout"><span class="visual-readout-label">목표가 있을 때 평균 비교 횟수</span><strong id="averageState" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">노드 수</span><strong id="lengthValue-echo" class="visual-readout-value"></strong></div></div>
+      <p id="note-2" class="visual-note">목표가 있는 경우의 평균 비교 횟수는 <code>(n + 1) / 2</code>이다. 목표가 없으면 항상 n회 비교한다. 첫 노드에서 찾는 최선의 경우는 <code>Θ(1)</code>이다. 마지막 노드나 없는 값을 확인하는 최악의 경우는 <code>Θ(n)</code>이다.</p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="linked-list-traversal.html">이전 · Linked List Traversal</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="linked-list-updates.html">다음 · Linked List Updates</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+  const q=s=>document.querySelector(s),vals=['A','B','C','D','E'],svg=q('#searchSvg'),NS='http://www.w3.org/2000/svg';function E(t,a={},x=''){const e=document.createElementNS(NS,t);Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v));e.textContent=x;svg.append(e);return e}function max(){const i=vals.indexOf(q('#target').value);return i<0?5:i+1}
+function draw(){const goal=q('#target').value,m=max();q('#step').max=m;if(+q('#step').value>m)q('#step').value=m;const s=+q('#step').value,idx=vals.indexOf(goal),found=idx>=0&&s>=idx+1,done=s===m;svg.replaceChildren();const d=E('defs');d.innerHTML='<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#5c6c7c"/></marker>';E('title',{id:'svgTitle'},'연결리스트 탐색 상태');E('desc',{id:'svgDesc'},goal+'를 찾기 위해 '+s+'회 비교한 상태');for(let i=0;i<4;i++)E('line',{x1:90+i*150+40,y1:120,x2:90+(i+1)*150-40,y2:120,class:'link'});for(let i=0;i<5;i++){let c='node';if(i<s)c+=' visited';if(!done&&i===s)c+=' current';if(found&&i===idx)c+=' found';E('circle',{cx:90+i*150,cy:120,r:40,class:c});E('text',{x:90+i*150,y:127,'text-anchor':'middle','font-size':22,'font-weight':800,fill:'#003e74'},vals[i]);if(i<s)E('text',{x:90+i*150,y:182,'text-anchor':'middle','font-size':13,fill:i===idx&&found?'#00a651':'#5c6c7c'},i===idx&&found?'일치':'불일치')}if(!done)E('text',{x:90+s*150,y:58,'text-anchor':'middle','font-weight':800,fill:'#00a651'},'current');else if(!found)E('text',{x:720,y:58,'text-anchor':'middle','font-weight':800,fill:'#00a651'},'current = None');
+['#scode0','#scode1','#scode2','#scode3','#scode4'].forEach(x=>q(x).classList.remove('active'));q(found&&s===idx+1?'#scode2':done&&!found?'#scode4':s?'#scode3':'#scode0').classList.add('active');q('#stepValue').textContent=s+'회';q('#prev').disabled=!s;q('#next').disabled=done;q('#targetOut').textContent=goal;q('#compareOut').textContent=s+'회';if(found){q('#resultState').textContent=goal+'를 찾음';q('#resultText').textContent=s+'번째 비교에서 일치해 탐색을 멈춘다. 뒤쪽 노드는 비교하지 않는다.';q('#statusOut').textContent='찾음'}else if(done){q('#resultState').textContent='current = None';q('#resultText').textContent=s+'개 노드를 모두 비교한 뒤에야 '+goal+'가 없다는 것을 알 수 있다. 없는 값의 비교 횟수는 노드 수와 같다.';q('#statusOut').textContent='없음'}else{q('#resultState').textContent='current = '+vals[s];q('#resultText').textContent=vals[s]+'와 목표값 '+goal+'를 비교할 차례다.';q('#statusOut').textContent='탐색 중'}}
+function bars(){const n=+q('#length').value,b=q('#bars');b.style.setProperty('--count',n+1);b.replaceChildren();for(let i=1;i<=n;i++){const x=document.createElement('div');x.className='bar';x.style.setProperty('--h',(28+i/n*125)+'px');x.innerHTML='<span>'+i+'</span><small>'+(i-1)+'번</small>';b.append(x)}const a=document.createElement('div');a.className='bar absent';a.style.setProperty('--h','153px');a.innerHTML='<span>'+n+'</span><small>없음</small>';b.append(a);q('#lengthValue').textContent='n = '+n;q('#averageState').textContent=((n+1)/2)+'회';q('#costFormula').textContent='첫 노드 1회 · 마지막 노드 '+n+'회 · 없음 '+n+'회'}
+q('#target').onchange=()=>{q('#step').value=0;draw()};q('#step').oninput=draw;q('#prev').onclick=()=>{q('#step').value=Math.max(0,+q('#step').value-1);draw()};q('#next').onclick=()=>{q('#step').value=Math.min(+q('#step').max,+q('#step').value+1);draw()};q('#length').oninput=bars;draw();bars();
+
+  (function () {
+    var mirrors = ["lengthValue"];
+    function sync() {
+      mirrors.forEach(function (m) { var a = document.getElementById(m), b = document.getElementById(m + "-echo"); if (a && b) b.textContent = a.textContent; });
+      Array.prototype.forEach.call(document.querySelectorAll(".topic-example"), function (sec) {
+        var r = sec.querySelector(".control-reason"); if (!r) return;
+        var msgs = [];
+        Array.prototype.forEach.call(sec.querySelectorAll(".visual-controls button:disabled"), function (b) {
+          var t = b.textContent.trim();
+          msgs.push(t === "이전" ? "첫 단계라 이전 단계가 없다." : t === "다음" ? "마지막 단계라 다음 단계가 없다." : "현재 조건에서는 이 조작을 할 수 없다.");
+        });
+        Array.prototype.forEach.call(sec.querySelectorAll('.visual-controls input[type="range"]'), function (i) { if (Number(i.max) === 0) msgs.push("이 조건에서는 옮길 단계가 없다."); });
+        r.textContent = msgs.filter(function (m, k) { return msgs.indexOf(m) === k; }).join(" "); r.hidden = !msgs.length;
+      });
+    }
+    ["input", "change", "click"].forEach(function (ev) { document.addEventListener(ev, function () { setTimeout(sync, 0); }); });
+    sync();
+  }());
+}());
+</script>
+</body>
+</html>

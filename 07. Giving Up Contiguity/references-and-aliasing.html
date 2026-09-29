@@ -1,0 +1,87 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ffffff">
+  <title>References And Aliasing | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+    .alias-board{min-width:760px;display:grid;grid-template-columns:260px 1fr;gap:1rem;padding:1.25rem;background:var(--surface-050);border:1px solid var(--line-200)}.code{margin:0;padding:1rem;background:var(--pnu-blue-dark);color:var(--white);counter-reset:line}.code-line{display:block;padding:.55rem .7rem;border-left:4px solid transparent;font:650 .88rem/1.45 var(--mono);white-space:pre}.code-line::before{counter-increment:line;content:counter(line);display:inline-block;width:1.8rem;color:var(--line-200)}.code-line.active{border-color:var(--pnu-green);background:var(--pnu-blue);color:var(--white)}
+    .object-space{position:relative;min-height:260px;border:1px dashed var(--line-300);background:var(--white)}.name{position:absolute;left:24px;width:100px;padding:.6rem;border:2px solid var(--pnu-blue);border-radius:999px;background:var(--white);text-align:center;font-weight:850}.name.u{top:42px}.name.v{top:148px}.name.is-undefined{opacity:.3;border-style:dashed}.object{position:absolute;right:34px;width:210px;border:2px solid var(--pnu-blue);border-radius:.65rem;background:var(--white)}.object.a{top:32px}.object.b{top:154px}.object.is-shared{border-color:var(--pnu-green);box-shadow:0 0 0 4px color-mix(in srgb,var(--pnu-green) 18%,transparent)}.object.is-unused{opacity:.28}.object strong,.object span{display:block;padding:.65rem .8rem}.object span{border-top:1px solid var(--line-200);font:750 .85rem/1.35 var(--mono)}.ref-line{position:absolute;height:4px;background:var(--pnu-green);transform-origin:left center}.ref-line::after{content:"";position:absolute;right:-1px;top:-5px;border-left:10px solid var(--pnu-green);border-top:7px solid transparent;border-bottom:7px solid transparent}.u-line{left:126px;top:72px;width:142px}.v-line{left:126px;top:178px;width:142px}.v-line.to-a{width:145px;transform:rotate(-24deg)}.v-line.hidden{display:none}
+    .compare-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.language-card{padding:1rem;border:1px solid var(--line-200);background:var(--white)}.language-card h3{margin-top:0;color:var(--pnu-blue-dark)}.snippet{min-height:3.2rem;padding:.75rem;background:var(--pnu-blue-dark);color:var(--white);font:650 .88rem/1.5 var(--mono);white-space:pre-wrap}.language-card p{margin-bottom:0}.compare-grid{min-width:560px}
+
+  </style>
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Giving Up Contiguity</span><span class="nav-tag is-current" aria-current="page">References And Aliasing</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Giving Up Contiguity</p><h1 class="page-title">References And Aliasing</h1><hr class="accent-rule"><p class="page-subtitle">참조(reference)를 복사하면 객체가 복제되지 않는다. 두 이름이 같은 객체를 가리키는 별칭(alias) 상태에서는 한 이름을 통한 객체 변경이 다른 이름에서도 보인다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>참조 복사</strong><span><code>v = u</code>는 u가 가리키는 객체를 v도 가리키게 한다.</span></article><article class="summary-card"><strong>객체 변경</strong><span><code>v.data = 99</code>는 공유 객체의 값을 바꾼다.</span></article><article class="summary-card"><strong>이름 재지정</strong><span><code>v = Node(26)</code>은 v의 화살표만 새 객체로 옮긴다.</span></article></div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">변경과 재지정은 서로 다른 대상을 바꾼다</h2><p class="lead">같은 <code>v = u</code>에서 시작해 세 번째 줄이 공유 객체를 바꾸는지 v의 참조만 옮기는지 단계별로 구분한다.</p></header><div class="visual-lab">
+    <div class="visual-controls visual-controls--double"><div class="control-field"><label for="scenario">세 번째 줄</label><select id="scenario"><option value="mutate">v.data = 99</option><option value="reassign">v = Node(26)</option></select></div><div class="control-field"><label for="alias-step">코드 단계 <output id="step-out" class="control-value" for="alias-step">1 / 3</output></label><input id="alias-step" type="range" min="0" max="2" value="0"></div></div>
+    <figure class="visual-figure"><div class="visual-frame"><div class="alias-board"><pre class="code" aria-label="참조 코드"><code id="line-0" class="code-line">u = Node(54)</code><code id="line-1" class="code-line">v = u</code><code id="line-2" class="code-line">v.data = 99</code></pre><div id="object-space" class="object-space" role="img" aria-label="u와 v의 참조 상태"><div class="name u">u</div><div id="name-v" class="name v is-undefined">v · 정의 전</div><div class="ref-line u-line"></div><div id="v-line" class="ref-line v-line hidden"></div><div id="object-a" class="object a"><strong>노드 A</strong><span id="a-value">data 54</span></div><div id="object-b" class="object b is-unused"><strong>노드 B</strong><span>data 26</span></div></div></div></div><figcaption class="visual-caption">짙은 줄은 지금 실행한 코드다. 이름에서 노드로 이어진 선은 참조이고, 초록 테두리 노드는 두 이름이 함께 가리키는 객체, 흐린 노드는 아직 어떤 이름도 가리키지 않는 객체다.</figcaption></figure>
+    <div id="alias-live" class="visual-readouts" aria-live="polite"></div><p id="alias-note" class="visual-note"></p>
+  </div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">Python 참조와 C 포인터의 공통점과 차이를 구분한다</h2><p class="lead">두 언어 모두 다음 노드를 가리키는 정보를 저장하지만 빈 값, 주소 연산과 메모리 회수 방식은 다르다.</p></header><div class="visual-lab">
+    <div class="visual-controls visual-controls--single"><div class="control-field"><label for="comparison">비교 항목</label><select id="comparison"><option value="declare">노드 선언</option><option value="link">다음 노드 연결</option><option value="empty">연결 없음</option><option value="arithmetic">주소 연산</option><option value="lifetime">메모리 회수</option></select></div></div>
+    <figure class="visual-figure"><div class="visual-frame"><div class="compare-grid"><article class="language-card"><h3>Python 참조</h3><pre id="python-code" class="snippet"></pre><p id="python-meaning"></p></article><article class="language-card"><h3>C 포인터(pointer)</h3><pre id="c-code" class="snippet"></pre><p id="c-meaning"></p></article></div></div><figcaption class="visual-caption">왼쪽은 Python, 오른쪽은 C에서 같은 항목을 쓰는 코드와 그 뜻이다.</figcaption></figure>
+    <div id="comparison-live" class="visual-readouts" aria-live="polite"></div><p id="relation" class="visual-note"></p>
+  </div></section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="singly-linked-nodes.html">이전 · Singly Linked Nodes</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../08. Walking the References/linked-list-traversal.html">다음 · Linked List Traversal</a></nav>
+</main><footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const readout = (label, value) => '<div class="visual-readout"><span class="visual-readout-label">' + label + '</span><strong class="visual-readout-value">' + value + '</strong></div>';
+  function renderAlias() {
+    const scenario = $('scenario').value, step = Number($('alias-step').value);
+    $('step-out').value = (step + 1) + ' / 3';
+    $('line-2').textContent = scenario === 'mutate' ? 'v.data = 99' : 'v = Node(26)';
+    [0, 1, 2].forEach(i => $('line-' + i).classList.toggle('active', i === step));
+    $('v-line').className = 'ref-line v-line ' + (step === 0 ? 'hidden' : step === 2 && scenario === 'reassign' ? '' : 'to-a');
+    $('name-v').className = 'name v' + (step === 0 ? ' is-undefined' : '');
+    $('name-v').textContent = step === 0 ? 'v · 정의 전' : 'v';
+    $('object-a').classList.toggle('is-shared', step >= 1 && !(step === 2 && scenario === 'reassign'));
+    $('object-b').classList.toggle('is-unused', !(step === 2 && scenario === 'reassign'));
+    $('a-value').textContent = 'data ' + (step === 2 && scenario === 'mutate' ? '99' : '54');
+    let u = '54', v = '정의 전', same = '비교 전', note = 'u는 새 노드 A를 가리킨다.';
+    if (step === 1) { v = '54'; same = 'True'; note = 'v = u 뒤에는 두 이름이 같은 노드 A를 가리킨다. 노드는 새로 만들어지지 않는다.'; }
+    if (step === 2 && scenario === 'mutate') { u = v = '99'; same = 'True'; note = 'v가 가리키는 공유 객체 A의 data를 바꿨으므로 u와 v에서 모두 99가 보인다.'; }
+    if (step === 2 && scenario === 'reassign') { v = '26'; same = 'False'; note = '새 노드 B를 만든 뒤 v만 B를 가리킨다. u는 여전히 A를 가리킨다.'; }
+    $('alias-live').innerHTML = readout('u.data', u) + readout('v.data', v) + readout('u is v', same);
+    $('alias-note').textContent = note;
+    $('object-space').setAttribute('aria-label', note + ' u.data ' + u + ', v.data ' + v + ', u is v ' + same + '.');
+  }
+  $('scenario').addEventListener('change', () => { $('alias-step').value = 0; renderAlias(); });
+  $('alias-step').addEventListener('input', renderAlias);
+
+  const comparisons = {
+    declare: {py:'class Node:\n    def __init__(self, data):\n        self.data = data\n        self.next = None',c:'struct Node {\n    int data;\n    struct Node *next;\n};',pm:'data와 next 두 속성을 가진 객체를 만든다. next는 처음에 None이다.',cm:'data와 다음 노드를 가리키는 포인터 next를 가진 구조체를 선언한다.',kind:'같은 구성',note:'두 코드에서 next는 다음 노드를 가리키지만 Python 참조에는 포인터 산술이 없다.'},
+    link: {py:'self.next = other',c:'u->next = v;',pm:'next에 다음 노드의 참조를 저장한다.',cm:'next 포인터에 다음 노드의 주소를 저장한다.',kind:'공통 역할',note:'두 표현 모두 next를 따라 다음 노드에 도달한다. Python 참조와 C 포인터를 같은 개념으로 부르는 것은 아니다.'},
+    empty: {py:'self.next = None',c:'u->next = NULL;',pm:'None은 다음 객체가 없음을 나타낸다.',cm:'NULL은 유효한 다음 노드 주소가 없음을 나타낸다.',kind:'같은 경계',note:'표현은 다르지만 둘 다 연결의 끝을 나타낸다.'},
+    arithmetic: {py:'self.next + 1  # 불가',c:'p + 1  /* 가능 */',pm:'참조를 숫자 주소처럼 더하거나 뺄 수 없다.',cm:'포인터 산술 자체는 가능하다.',kind:'언어 차이',note:'연결리스트에서 다음 노드로 이동할 때는 두 언어 모두 next에 저장된 연결 정보를 사용한다. C 포인터 산술을 연결 이동으로 대신하지 않는다.'},
+    lifetime: {py:'u = None\n# 다른 참조가 없을 때',c:'free(u);\nu = NULL;',pm:'다른 참조에서도 도달할 수 없게 된 객체는 Python 실행 환경이 회수한다.',cm:'동적으로 할당한 메모리는 프로그래머가 명시적으로 해제한다.',kind:'관리 차이',note:'같은 연결 구조를 표현해도 객체 수명을 관리하는 책임은 언어마다 다르다.'}
+  };
+  function renderComparison() {
+    const item = comparisons[$('comparison').value];
+    $('python-code').textContent = item.py;
+    $('c-code').textContent = item.c;
+    $('python-meaning').textContent = item.pm;
+    $('c-meaning').textContent = item.cm;
+    $('comparison-live').innerHTML = readout('두 언어의 관계', item.kind) + readout('연결 필드', 'next');
+    $('relation').textContent = item.note;
+  }
+  $('comparison').addEventListener('change', renderComparison);
+  renderAlias();
+  renderComparison();
+})();
+</script>
+</body>
+</html>
