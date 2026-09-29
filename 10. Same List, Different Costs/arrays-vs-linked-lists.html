@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Arrays Vs Linked Lists | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+
+  </style>
+</head>
+<body class="visual-topic topic-arrays-vs-linked-lists">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Same List, Different Costs</span><span class="nav-tag is-current" aria-current="page">Arrays Vs Linked Lists</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Same List, Different Costs</p><h1 class="page-title">Arrays Vs Linked Lists</h1><hr class="accent-rule"><p class="page-subtitle">같은 List 인터페이스의 get, add, remove도 내부 표현이 배열인지 연결리스트인지에 따라 실행하는 일과 연산 비용(operation cost)이 달라진다. 배열은 원소 이동이, 연결리스트는 위치를 찾는 순회가 비용을 지배한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>ArrayStack</strong><span>내부 배열에 원소를 연속으로 두고 n과 용량을 따로 센다.</span></article><article class="summary-card"><strong>SLList · DLList</strong><span>노드마다 next, 또는 prev와 next를 두어 순서를 연결한다.</span></article><article class="summary-card"><strong>비용을 읽는 순서</strong><span>어떤 연산인지, 내부에서 무엇을 하는지, 몇 번 반복하는지 센다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">get(i)는 배열에서 계산 한 번, 연결리스트에서 순회다</h2><p class="lead">표현과 위치 i를 바꾸면 i번째 값에 닿기 위해 거치는 칸과 반복 횟수가 바뀐다. 원소는 n = 8개다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="rep">내부 표현</label><select id="rep"><option value="array">ArrayStack</option><option value="sl">SLList</option><option value="dl">DLList</option></select></div><div class="control-field"><label for="gi">위치 i <output id="gi-out" class="control-value" for="gi">5</output></label><input id="gi" type="range" min="0" max="7" step="1" value="5"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div id="get-board" class="ds-board" role="img" aria-label="get(i) 접근 경로"></div></div><figcaption class="visual-caption">칸 하나가 원소 하나다. 파란 칸은 접근하면서 거친 원소, 초록 테두리 칸은 목표 i번째 원소다. 연결리스트의 화살표는 따라간 참조의 방향이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">add(i, x)는 배열에서 원소 이동이, 연결리스트에서 순회가 비용을 정한다</h2><p class="lead">삽입 위치 i를 바꾸면 ArrayStack이 옮기는 원소 수와 SLList·DLList가 위치를 찾기 위해 지나는 노드 수가 바뀐다. 원소는 n = 8개이고 용량은 충분하다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="ai">삽입 위치 i <output id="ai-out" class="control-value" for="ai">2</output></label><input id="ai" type="range" min="0" max="8" step="1" value="2"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div id="add-bars" class="ds-bars" role="img" aria-label="표현별 삽입 작업량"></div></div><figcaption class="visual-caption">막대 길이는 표현별 주된 반복 횟수다. ArrayStack은 옮기는 원소 수, SLList는 i − 1번째까지 따라가는 노드 수, DLList는 가까운 끝에서 따라가는 노드 수이며, 초록 막대가 가장 적다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../09. Links Both Ways/sentinel-nodes.html">이전 · Sentinel Nodes</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="operation-mix.html">다음 · Operation Mix</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  var JONG = { "0": 1, "1": 2, "2": 0, "3": 1, "4": 0, "5": 0, "6": 1, "7": 2, "8": 2, "9": 0 };
+  function kj(v, a, b) { var t = String(v).replace(/[^0-9]+$/, ""), k = JONG[t.charAt(t.length - 1)]; return String(v) + (k ? a : b); }
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+
+  function cell(t, cls, lab) { return '<span class="ds-cell ' + (cls || "") + '">' + (lab !== undefined ? "<small>" + lab + "</small>" : "") + t + "</span>"; }
+  function arrow(t) { return '<span class="ds-arrow" aria-hidden="true">' + (t || "→") + "</span>"; }
+  function stepper(sid, n, getMax, render) {
+    var st = { i: 0 };
+    function go(v) {
+      var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
+      $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
+      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
+      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
+    }
+    $(sid + "-first").addEventListener("click", function () { go(0); });
+    $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });
+    $(sid + "-next").addEventListener("click", function () { go(st.i + 1); });
+    return { go: go, reset: function () { go(0); }, now: function () { return st.i; } };
+  }
+
+  var N = 8, vals = [12, 18, 25, 31, 44, 50, 63, 77];
+  function renderGet() {
+    var r = $("rep").value, i = Number($("gi").value), h = "", work, how, cost;
+    $("gi-out").textContent = i;
+    if (r === "array") {
+      h = '<div class="ds-row has-labels"><span class="ds-row-label">base + i</span>' + vals.map(function (v, k) { return cell(v, k === i ? "is-on" : "", "a[" + k + "]"); }).join("") + "</div>";
+      work = "주소 계산 1회"; how = "base(a) + " + i + " × size"; cost = "Θ(1)";
+    } else if (r === "sl") {
+      h = '<div class="ds-row has-labels"><span class="ds-row-label">head →</span>' + vals.map(function (v, k) { return cell(v, (k < i ? "is-x" : "") + (k === i ? " is-on" : ""), "노드 " + k) + (k < N - 1 ? arrow() : ""); }).join("") + "</div>";
+      work = "next " + i + "회"; how = "head에서 next를 " + i + "번"; cost = "Θ(i + 1)";
+    } else {
+      var front = i < N - i, steps_ = front ? i : N - i;
+      h = '<div class="ds-row has-labels"><span class="ds-row-label">' + (front ? "dummy.next →" : "← dummy") + "</span>" + vals.map(function (v, k) { var on = front ? k < i : k > i; return cell(v, (on ? "is-x" : "") + (k === i ? " is-on" : ""), "노드 " + k) + (k < N - 1 ? arrow(front ? "→" : "←") : ""); }).join("") + "</div>";
+      work = (front ? "next " : "prev ") + steps_ + "회"; how = (front ? "앞" : "뒤") + "의 가까운 끝에서 " + steps_ + "번"; cost = "Θ(1 + min{i, n − i})";
+    }
+    $("get-board").innerHTML = h;
+    $("get-board").setAttribute("aria-label", "get(" + i + "): " + how);
+    show(1, [["get(" + i + ")의 내부 작업", work], ["어떻게", how], ["비용", cost]],
+      r === "array" ? "배열은 시작 주소에서 떨어진 위치를 곱셈과 덧셈으로 계산하므로 i와 n이 달라져도 한 번에 닿는다. i = " + i + "여도 거치는 칸이 없다."
+        : r === "sl" ? "SLList는 노드의 주소를 계산할 수 없어 head부터 next를 따라가며 앞의 " + i + "개 노드를 지난다. 뒤쪽 원소일수록 비용이 커진다."
+        : "DLList는 prev가 있어 앞과 뒤 중 가까운 끝에서 출발한다. i = " + kj(i, "은", "는") + " " + (i < N - i ? "앞쪽" : "뒤쪽") + "에 가까워 " + work + "만 따라간다.");
+  }
+  function renderAdd() {
+    var i = Number($("ai").value), a = N - i, s = Math.max(0, i - 1), d = Math.min(i, N - i), best = Math.min(a, s, d);
+    $("ai-out").textContent = i;
+    var rows = [["ArrayStack", a, "원소 " + a + "개 이동"], ["SLList", s, "노드 " + s + "개 순회"], ["DLList", d, "노드 " + d + "개 순회"]];
+    $("add-bars").innerHTML = rows.map(function (r) { return '<div class="ds-bar' + (r[1] === best ? " is-best" : "") + '"><b>' + r[0] + '</b><span class="track"><span class="fill" style="--w:' + (r[1] / N * 100) + '%"></span></span><span>' + r[2] + "</span></div>"; }).join("");
+    show(2, [["ArrayStack", "Θ(n − i + 1) · 이동 " + a], ["SLList", "Θ(i + 1) · 순회 " + s], ["DLList", "Θ(1 + min{i, n − i}) · 순회 " + d]],
+      i === 0 ? "i = 0이면 SLList와 DLList는 위치를 찾지 않고 참조만 바꾸지만, ArrayStack은 원소 8개를 모두 한 칸씩 옮긴다."
+        : i === N ? "i = n이면 ArrayStack은 옮길 원소가 없어 끝에 저장만 한다. SLList는 앞에서 끝까지 따라가야 하고, DLList는 뒤쪽 센티널에서 바로 붙인다."
+        : "i = " + i + "에서 ArrayStack은 i부터 n − 1까지 " + a + "개를 옮기고, SLList는 앞 노드를 찾으려고 " + s + "개를, DLList는 가까운 끝에서 " + d + "개를 지난다. 연결 자체는 참조 몇 개만 바꾸므로 Θ(1)이다.");
+  }
+  on("rep", renderGet); on("gi", renderGet); on("ai", renderAdd);
+  renderGet(); renderAdd();
+}());
+</script>
+</body>
+</html>

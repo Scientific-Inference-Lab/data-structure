@@ -63,13 +63,14 @@
   border-color: var(--pnu-green);
   background: var(--pnu-green-tint);
 }
-.publication-check span {
+.publication-check-icon {
   flex: 0 0 auto;
-  padding: 4px 9px;
-  border-radius: 999px;
+  width: 32px;
+  height: 32px;
+  padding: 5px;
+  border-radius: 50%;
   background: var(--pnu-blue-dark);
   color: var(--white);
-  font-size: .78rem;
 }
 .publication-index a:focus-visible { outline: 3px solid var(--pnu-green); outline-offset: 3px; }
 .publication-index .site-footer { margin-top: 0; background: var(--white); }

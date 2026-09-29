@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Doubly Linked Lists | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-linked-lists.css">
+  <style>
+
+  </style>
+</head>
+<body class="visual-topic topic-doubly-linked-lists">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Links Both Ways</span><span class="nav-tag is-current" aria-current="page">Doubly Linked Lists</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Links Both Ways</p><h1 class="page-title">Doubly Linked Lists</h1><hr class="accent-rule"><p class="page-subtitle">이중 연결리스트(doubly linked list)는 각 노드에 다음 노드(next)와 이전 노드(prev)의 참조를 함께 둔다. 뒤로 이동할 수 있는 대신 노드마다 참조 하나를 더 저장한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>prev와 next</strong><span>각 노드가 앞 노드와 뒤 노드의 참조를 함께 저장한다.</span></article><article class="summary-card"><strong>공간 비용</strong><span>노드마다 참조 하나를 더 저장한다.</span></article><article class="summary-card"><strong>참조를 알 때</strong><span>삽입은 참조 네 개, 삭제는 두 개를 바꾸므로 Θ(1)이다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">next와 prev로 이동하기</h2><p class="lead">출발 노드와 이동 방향을 바꾸면 current가 따라가는 참조가 달라진다. <code>prev</code>가 없으면 현재 노드에서 바로 뒤로 갈 수 없다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--wrap"><div class="control-field"><label for="links">노드가 가진 참조</label><select id="links"><option value="double">next와 prev</option><option value="single">next만</option></select></div><div class="control-field"><label for="start">출발 노드</label><select id="start"><option value="1">B</option><option value="2" selected>C</option></select></div><div class="control-field"><label for="direction">이동 방향</label><select id="direction"><option value="next">next · 뒤따르는 노드</option><option value="prev">prev · 앞서는 노드</option></select></div><div class="control-field"><label for="moveStep">참조 이동 횟수 <output id="moveValue" class="control-value" for="moveStep"></output></label><input id="moveStep" type="range" min="0" max="1" value="0"></div></div>
+      <p id="reason-1" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ll-diagram"><svg id="moveSvg" viewBox="0 0 780 230" role="img" aria-labelledby="moveTitle moveDesc"><title id="moveTitle">이중 연결리스트 이동</title><desc id="moveDesc">next와 prev를 따라 current가 이동하는 과정</desc></svg></div></div><figcaption class="visual-caption">위쪽 화살표는 next, 아래쪽 화살표는 prev이며 초록 테두리 원이 current다. next만 있으면 아래쪽 화살표가 없다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"><div class="visual-readout"><span class="visual-readout-label">현재 상태</span><strong id="moveState" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">노드당 참조</span><strong id="fieldCount" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">역방향 이동</span><strong id="backwardState" class="visual-readout-value"></strong></div></div>
+      <p id="note-1" class="visual-note"><span id="moveText"></span> <code>prev</code> 하나를 더 저장하면 현재 노드에서 앞선 노드로 직접 이동할 수 있다. 단일 연결리스트에서는 앞 노드를 따로 기억하거나 head에서 다시 찾아야 한다.</p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">노드 참조를 알고 있을 때 연결 바꾸기</h2><p class="lead">B와 C 사이에 X를 삽입하거나 C를 삭제한다. 단계를 옮기면 바뀐 필드와 아직 보존된 기존 참조를 함께 볼 수 있다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="operation">연산</label><select id="operation"><option value="insert">C 앞에 X 삽입</option><option value="remove">C 삭제</option></select></div><div class="control-field"><label for="updateStep">참조 변경 단계 <output id="updateValue" class="control-value" for="updateStep"></output></label><input id="updateStep" type="range" min="0" max="4" value="0"></div><div class="action-row"><button id="updatePrev" class="btn btn-outline" type="button">이전</button><button id="updateNext" class="btn" type="button">다음</button></div></div>
+      <p id="reason-2" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ll-diagram"><svg id="updateSvg" viewBox="0 0 780 230" role="img" aria-labelledby="updateTitle updateDesc"><title id="updateTitle">이중 연결리스트의 삽입과 삭제</title><desc id="updateDesc">노드 참조를 알고 있을 때 prev와 next를 바꾸는 과정</desc></svg></div><div id="refs" class="ref-grid"></div></div><figcaption class="visual-caption">초록 화살표는 이미 바꾼 참조, 초록 원 X는 새 노드, 빨간 점선 원은 빠진 노드다. 아래 칸은 바꾸는 필드의 현재 값이며 초록 칸이 방금 바꾼 필드다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"><div class="visual-readout"><span class="visual-readout-label">현재 상태</span><strong id="updateState" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">노드 위치 찾기</span><strong class="visual-readout-value">비용에서 제외</strong></div><div class="visual-readout"><span class="visual-readout-label">참조 변경</span><strong class="visual-readout-value">Θ(1)</strong></div></div>
+      <p id="note-2" class="visual-note"><span id="updateText"></span> 인덱스로 요청하면 먼저 노드를 찾아야 한다. 노드 참조가 이미 주어졌다면 삽입은 참조 네 개, 삭제는 참조 두 개만 바꾸므로 입력 크기와 관계없이 <code>Θ(1)</code>이다.</p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../08. Walking the References/linked-list-updates.html">이전 · Linked List Updates</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="sentinel-nodes.html">다음 · Sentinel Nodes</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+  const q=s=>document.querySelector(s),NS='http://www.w3.org/2000/svg';function E(svg,t,a={},x=''){const e=document.createElementNS(NS,t);Object.entries(a).forEach(([k,v])=>e.setAttribute(k,v));e.textContent=x;svg.append(e);return e}function defs(svg,title,desc,ids){svg.replaceChildren();const d=E(svg,'defs');d.innerHTML='<marker id="arrow" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#5c6c7c"/></marker><marker id="arrow-warm" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto"><path d="M0 0L8 4L0 8Z" fill="#00a651"/></marker>';E(svg,'title',{id:ids[0]},title);E(svg,'desc',{id:ids[1]},desc)}function node(svg,x,y,t,c='node'){E(svg,'circle',{cx:x,cy:y,r:38,class:c});E(svg,'text',{x,y:y+7,'text-anchor':'middle','font-size':22,'font-weight':800,fill:'#003e74'},t)}function line(svg,a,b,c,d,k='link'){E(svg,'line',{x1:a,y1:b,x2:c,y2:d,class:k})}
+function move(){const svg=q('#moveSvg'),kind=q('#links').value,dir=q('#direction').value,start=+q('#start').value,possible=kind==='double'||dir==='next';let max=possible?(dir==='next'?3-start:start):0;q('#moveStep').max=max;if(+q('#moveStep').value>max)q('#moveStep').value=max;const s=+q('#moveStep').value,current=dir==='next'?start+s:start-s;defs(svg,'이중 연결리스트 이동',possible?dir+'를 '+s+'회 따라간 상태':'prev가 없어 역방향으로 이동할 수 없는 상태',['moveTitle','moveDesc']);const xs=[100,290,480,670];for(let i=0;i<4;i++){node(svg,xs[i],115,String.fromCharCode(65+i),i===current?'node current':'node');if(i<3){line(svg,xs[i]+38,95,xs[i+1]-38,95);if(kind==='double')line(svg,xs[i+1]-38,138,xs[i]+38,138,'link')}}if(!possible)E(svg,'text',{x:390,y:202,'text-anchor':'middle','font-weight':800,fill:'#b3261e'},'prev 필드가 없다');
+q('#moveValue').textContent=s+'회';q('#fieldCount').textContent=kind==='double'?'2개 · next, prev':'1개 · next';q('#backwardState').textContent=kind==='double'?'현재 노드에서 가능':'head에서 다시 탐색';q('#moveState').textContent='current = '+String.fromCharCode(65+current);if(!possible){q('#moveText').textContent='현재 노드 '+String.fromCharCode(65+start)+'에는 앞 노드를 가리키는 참조가 없어 '+String.fromCharCode(64+start)+'로 바로 이동할 수 없다.'}else{q('#moveText').textContent=s?dir+'를 '+s+'회 따라 '+String.fromCharCode(65+current)+'에 도달했다.':'출발 노드 '+String.fromCharCode(65+start)+'를 가리킨다.'}}
+function refCard(name,value,changed){return '<div'+(changed?' class="is-changed"':'')+'><small>'+name+'</small><strong>'+value+'</strong></div>'}
+function update(){const svg=q('#updateSvg'),op=q('#operation').value,max=op==='insert'?4:2;q('#updateStep').max=max;if(+q('#updateStep').value>max)q('#updateStep').value=max;const s=+q('#updateStep').value;defs(svg,'이중 연결리스트의 삽입과 삭제',op+' '+s+'단계',['updateTitle','updateDesc']);const xs=[130,360,590];node(svg,xs[0],100,'B');node(svg,xs[1],100,'C',op==='remove'&&s===2?'node removed':'node');node(svg,xs[2],100,'D');if(op==='insert'){node(svg,360,195,'X','node new');if(s<4)line(svg,168,82,322,82);line(svg,398,82,552,82);if(s<3)line(svg,322,125,168,125);line(svg,552,125,398,125);if(s>=1)line(svg,322,183,168,125,'warm');if(s>=2)line(svg,398,183,322,125,'warm');if(s>=3)line(svg,322,125,398,183,'warm');if(s>=4)line(svg,168,82,322,183,'warm')}else{if(s<2){if(s<1)line(svg,168,82,322,82);line(svg,398,82,552,82);line(svg,322,125,168,125);line(svg,552,125,398,125)}if(s>=1)line(svg,168,82,552,82,'warm');if(s>=2)line(svg,552,125,168,125,'warm')}
+const states=op==='insert'?['변경 전','X.prev = B','X.next = C','C.prev = X','B.next = X']:['변경 전','B.next = D','D.prev = B'];const texts=op==='insert'?['B.next와 C.prev가 서로를 가리킨다.','X가 왼쪽 노드 B를 먼저 기억한다.','X가 오른쪽 노드 C도 기억한다.','C의 prev를 X로 바꾼다.','B의 next를 X로 바꾸면 삽입이 끝난다.']:['B와 D 사이에 C가 연결되어 있다.','B가 C를 건너뛰고 D를 가리킨다.','D도 C를 건너뛰고 B를 가리키면 삭제가 끝난다.'];q('#updateValue').textContent=s+' / '+max;q('#updatePrev').disabled=!s;q('#updateNext').disabled=s===max;q('#updateState').textContent=states[s];q('#updateText').textContent=texts[s];q('#refs').innerHTML=op==='insert'?refCard('X.prev',s>=1?'B':'미정',s===1)+refCard('X.next',s>=2?'C':'미정',s===2)+refCard('C.prev',s>=3?'X':'B',s===3)+refCard('B.next',s>=4?'X':'C',s===4):refCard('B.next',s>=1?'D':'C',s===1)+refCard('D.prev',s>=2?'B':'C',s===2)+refCard('C.prev','B',false)+refCard('C.next','D',false)}
+['#links','#start','#direction'].forEach(x=>q(x).onchange=()=>{q('#moveStep').value=0;move()});q('#moveStep').oninput=move;q('#operation').onchange=()=>{q('#updateStep').value=0;update()};q('#updateStep').oninput=update;q('#updatePrev').onclick=()=>{q('#updateStep').value=Math.max(0,+q('#updateStep').value-1);update()};q('#updateNext').onclick=()=>{q('#updateStep').value=Math.min(+q('#updateStep').max,+q('#updateStep').value+1);update()};move();update();
+
+  (function () {
+    var mirrors = [];
+    function sync() {
+      mirrors.forEach(function (m) { var a = document.getElementById(m), b = document.getElementById(m + "-echo"); if (a && b) b.textContent = a.textContent; });
+      Array.prototype.forEach.call(document.querySelectorAll(".topic-example"), function (sec) {
+        var r = sec.querySelector(".control-reason"); if (!r) return;
+        var msgs = [];
+        Array.prototype.forEach.call(sec.querySelectorAll(".visual-controls button:disabled"), function (b) {
+          var t = b.textContent.trim();
+          msgs.push(t === "이전" ? "첫 단계라 이전 단계가 없다." : t === "다음" ? "마지막 단계라 다음 단계가 없다." : "현재 조건에서는 이 조작을 할 수 없다.");
+        });
+        Array.prototype.forEach.call(sec.querySelectorAll('.visual-controls input[type="range"]'), function (i) { if (Number(i.max) === 0) msgs.push("이 조건에서는 옮길 단계가 없다."); });
+        r.textContent = msgs.filter(function (m, k) { return msgs.indexOf(m) === k; }).join(" "); r.hidden = !msgs.length;
+      });
+    }
+    ["input", "change", "click"].forEach(function (ev) { document.addEventListener(ev, function () { setTimeout(sync, 0); }); });
+    sync();
+  }());
+}());
+</script>
+</body>
+</html>
