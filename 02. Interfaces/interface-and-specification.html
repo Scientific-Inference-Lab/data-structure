@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Interface And Specification | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+    .layers{display:grid;grid-template-columns:1fr auto 1.15fr auto 1.35fr auto 1.2fr;gap:.55rem;align-items:stretch;min-width:980px}.layer{padding:1rem;border:2px solid var(--line-200);background:var(--white)}.layer strong{display:block;color:var(--pnu-blue-dark)}.layer code,.layer span{display:block;margin-top:.55rem}.layer.active{border-color:var(--pnu-green);background:var(--callout-bg)}.arrow{display:grid;place-items:center;color:var(--pnu-green);font-size:1.4rem;font-weight:900}.impl-pair{display:grid;grid-template-columns:1fr 1fr;gap:.5rem}.impl{padding:.65rem;border:1px dashed var(--pnu-blue);background:var(--pnu-blue-tint)}.swap-row{display:flex;gap:.4rem;justify-content:center}.swap-cell{display:grid;place-items:center;width:58px;height:58px;border:2px solid var(--pnu-blue);background:var(--pnu-blue-tint);font:800 1rem var(--mono)}.swap-cell small{display:block;color:var(--ink-600);font:600 .7rem var(--font-sans)}.swap-cell.touched{border-color:var(--pnu-green);background:var(--callout-bg)}.swap-code{margin:1rem auto 0;max-width:420px;padding:.6rem;background:var(--surface-050)}.swap-code span{display:block;padding:.3rem .5rem;font:700 .88rem var(--mono);white-space:pre}.swap-code span.active{background:var(--callout-bg);box-shadow:inset 4px 0 0 var(--pnu-green)}.private-field{margin-top:.7rem;padding:.55rem;border:1px dashed var(--ink-400);color:var(--ink-600);font-size:.82rem}
+    .range-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.range-card{padding:1rem;border:1px solid var(--line-200);background:var(--white)}.index-row{display:flex;gap:.4rem;margin:.8rem 0}.index{display:grid;place-items:center;width:52px;height:52px;border:2px solid var(--pnu-blue);font:800 .9rem var(--mono)}.index.extra{border-style:dashed}.range-card.current{border:2px solid var(--pnu-green);background:var(--callout-bg)}
+    @media(max-width:720px){.range-grid{grid-template-columns:1fr}}
+    .example-header{max-width:100%}.example-header .lead{max-width:82ch}@media(max-width:760px){.example-header .lead{max-width:none}}
+  </style>
+
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Interfaces</span><span class="nav-tag is-current" aria-current="page">Interface And Specification</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Interfaces</p><h1 class="page-title">Interface And Specification</h1><hr class="accent-rule"><p class="page-subtitle">인터페이스(interface)는 제공하는 연산과 그 의미를 정하며 ADT라고도 부른다. 명세(specification)는 각 연산의 입력, 반환값, 적용 조건, 상태 변화를 정한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 구분"><div class="summary-grid"><article class="summary-card"><strong>클라이언트 코드(client code)</strong><span>자료구조를 호출하는 코드이며, 공개된 연산의 결과에만 의존해야 한다.</span></article><article class="summary-card"><strong>인터페이스와 명세</strong><span>호출 형식과 의미를 고정한다.</span></article><article class="summary-card"><strong>구현(implementation)</strong><span>경계 안에서 값을 저장하고 연산을 실행하는 코드다.</span></article></div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">한 연산이 네 계층을 관통한다</h2><p class="lead">길이 3인 리스트 [3, 5, 8]에서 한 연산은 클라이언트 코드의 호출부터 배열 구현까지 같은 경로를 지난다. 내부 필드는 인터페이스 밖에서 보이지 않는다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><span class="control-label">리스트 연산</span><div class="choice-row" role="group" aria-label="리스트 연산"><button class="btn" type="button" data-op="get">get(1)</button><button class="btn btn-outline" type="button" data-op="set">set(1, 7)</button><button class="btn btn-outline" type="button" data-op="add">add(1, 7)</button><button class="btn btn-outline" type="button" data-op="remove">remove(1)</button></div></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="layers" role="img" aria-label="클라이언트에서 구현까지의 계층">
+        <article class="layer active"><strong>클라이언트</strong><code id="client"></code><span>외부 결과만 사용</span></article><div class="arrow">→</div>
+        <article class="layer active"><strong>인터페이스 시그니처</strong><code id="signature"></code><span>호출 경계</span></article><div class="arrow">→</div>
+        <article class="layer active"><strong>연산 명세</strong><span id="spec"></span></article><div class="arrow">→</div>
+        <article class="layer active"><strong>구현 예 · 배열</strong><div class="impl" id="array-impl"></div><div class="private-field">내부 배열 a와 원소 수 n은 경계 안에 남는다.</div></article>
+      </div></div><figcaption class="visual-caption">클라이언트는 시그니처와 명세에 의존하며 내부 필드 이름에는 의존하지 않는다.</figcaption></figure>
+      <div id="live" class="visual-readouts" aria-live="polite"></div><p id="cause" class="visual-note"></p>
+    </div>
+  </section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">읽기와 삽입의 인덱스 경계는 다르다</h2><p class="lead">길이 3인 List에서 조회와 삽입에 허용되는 인덱스 범위는 서로 다르다.</p></header>
+    <div class="visual-lab"><div class="visual-controls visual-controls--single"><div class="control-field"><label for="boundary-case">호출</label><select id="boundary-case"><option value="get2">get(2)</option><option value="get3">get(3)</option><option value="add3">add(3, 9)</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="range-grid"><article id="read-card" class="range-card"><strong>get, set, remove</strong><div class="index-row"><span class="index">0</span><span class="index">1</span><span class="index">2</span></div><p>0 ≤ i &lt; n</p></article><article id="add-card" class="range-card"><strong>add</strong><div class="index-row"><span class="index">0</span><span class="index">1</span><span class="index">2</span><span class="index extra">3</span></div><p>0 ≤ i ≤ n</p></article></div></div><figcaption class="visual-caption">길이 n = 3인 리스트 [3, 5, 8]의 인덱스다. 점선 칸 3은 삽입에만 허용되는 끝 위치이고, 초록 테두리 카드가 고른 호출에 적용되는 범위다.</figcaption></figure>
+      <div id="boundary-live" class="visual-readouts" aria-live="polite"></div><p id="boundary-cause" class="visual-note"></p>
+    </div>
+  </section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">클라이언트 코드는 공개된 연산만으로 일을 한다</h2><p class="lead"><code>swap_first_two(seq)</code>는 get과 set만 호출해 앞의 두 값을 바꾼다.</p></header>
+    <div class="visual-lab"><div class="visual-controls visual-controls--single"><div class="action-row"><button id="swap-prev" class="btn btn-outline" type="button">이전</button><button id="swap-next" class="btn" type="button">다음</button><button id="swap-reset" class="btn btn-outline" type="button">처음으로</button></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div id="swap-row" class="swap-row" role="img" aria-label="리스트 상태"></div><div id="swap-code" class="swap-code"></div></div><figcaption class="visual-caption">초록 칸은 방금 호출이 읽거나 바꾼 위치다.</figcaption></figure>
+      <div id="swap-live" class="visual-readouts" aria-live="polite"></div><p id="swap-note" class="visual-note"></p>
+    </div>
+  </section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../01. Data Abstraction/choosing-an-adt.html">이전 · Choosing An ADT</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="representation-and-work.html">다음 · Representation And Work</a></nav>
+</main><footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(() => {
+  const $=id=>document.getElementById(id), ops={
+    get:{client:'value = seq.get(1)',sig:'get(i) → value',spec:'위치 i의 값을 반환하고 상태를 유지한다.',ret:'5',state:'[3, 5, 8]',array:'칸 a[1]을 읽는다',cond:'0 ≤ 1 < 3'},
+    set:{client:'old = seq.set(1, 7)',sig:'set(i, x) → old',spec:'기존 값을 반환하고 위치 i를 x로 바꾼다.',ret:'5',state:'[3, 7, 8]',array:'a[1]의 기존 값을 보관하고 7을 쓴다',cond:'0 ≤ 1 < 3'},
+    add:{client:'seq.add(1, 7)',sig:'add(i, x) → 없음',spec:'위치 i에 x를 넣고 뒤 원소의 인덱스를 늘린다.',ret:'없음',state:'[3, 7, 5, 8]',array:'a[1]부터 끝까지의 원소를 뒤에서부터 한 칸씩 오른쪽으로 옮긴 뒤 a[1]에 7을 쓴다',cond:'0 ≤ 1 ≤ 3'},
+    remove:{client:'old = seq.remove(1)',sig:'remove(i) → old',spec:'위치 i의 값을 제거해 반환하고 뒤 인덱스를 줄인다.',ret:'5',state:'[3, 8]',array:'a[1]을 보관하고 뒤 원소를 한 칸씩 왼쪽으로 당긴다',cond:'0 ≤ 1 < 3'}
+  };
+  const read=(l,v)=>'<div class="visual-readout"><span class="visual-readout-label">'+l+'</span><strong class="visual-readout-value">'+v+'</strong></div>';
+  function showOp(key){const x=ops[key];document.querySelectorAll('[data-op]').forEach(b=>b.className='btn '+(b.dataset.op===key?'':'btn-outline'));$('client').textContent=x.client;$('signature').textContent=x.sig;$('spec').textContent=x.spec;$('array-impl').textContent=x.array;$('live').innerHTML=read('적용 조건',x.cond)+read('반환값',x.ret)+read('호출 뒤 상태',x.state);$('cause').innerHTML='클라이언트 코드는 '+x.sig+'의 명세가 정한 반환값('+x.ret+')과 호출 뒤 상태 '+x.state+'에만 의존한다. 구현이 내부 배열을 어떻게 다루는지는 이 결과에 드러나지 않는다.'}
+  document.querySelectorAll('[data-op]').forEach(b=>b.addEventListener('click',()=>showOp(b.dataset.op)));
+  function showBoundary(){const k=$('boundary-case').value,add=k==='add3',valid=k!=='get3';$('read-card').classList.toggle('current',!add);$('add-card').classList.toggle('current',add);$('boundary-live').innerHTML=read('호출',k==='get2'?'get(2)':k==='get3'?'get(3)':'add(3, 9)')+read('적용 조건',valid?'만족':'불만족')+read('결과',k==='get2'?'8 반환':k==='add3'?'[3, 5, 8, 9]':'경계에서 중단');$('boundary-cause').innerHTML=''+(add?'삽입은 마지막 원소 뒤의 새 위치 i = n도 허용한다.':valid?'읽기는 기존 위치 0, 1, 2 가운데 하나를 사용한다.':'get(3)은 기존 원소가 없는 i = n 위치를 읽으려 한다.')}
+  $('boundary-case').addEventListener('change',showBoundary);showOp('get');showBoundary();
+  const code=['def swap_first_two(seq):','    first = seq.get(0)','    second = seq.get(1)','    seq.set(0, second)','    seq.set(1, first)'];
+  const swap=[{v:['a','b','c','d','e'],t:-1,first:'-',second:'-',ret:'-',note:'리스트 [a, b, c, d, e]에서 시작한다.'},{v:['a','b','c','d','e'],t:0,first:'a',second:'-',ret:'a',note:'get(0)은 위치 0의 값 a를 반환하고 리스트를 바꾸지 않는다.'},{v:['a','b','c','d','e'],t:1,first:'a',second:'b',ret:'b',note:'get(1)로 둘째 값 b도 먼저 저장한다.'},{v:['b','b','c','d','e'],t:0,first:'a',second:'b',ret:'a',note:'set(0, second)는 기존 값 a를 반환하고 위치 0을 b로 바꾼다. a는 first에 저장해 두었으므로 잃지 않는다.'},{v:['b','a','c','d','e'],t:1,first:'a',second:'b',ret:'b',note:'set(1, first)로 앞의 두 값이 바뀌었다. 이 함수는 공개된 get과 set에만 의존하므로 내부 저장 방식이 바뀌어도 그대로 동작한다.'}];let sk=0;
+  function renderSwap(){const x=swap[sk];$('swap-row').innerHTML=x.v.map((v,i)=>'<span class="swap-cell'+(i===x.t?' touched':'')+'"><span><small>'+i+'</small>'+v+'</span></span>').join('');$('swap-row').setAttribute('aria-label','리스트 상태 ['+x.v.join(', ')+']');$('swap-code').innerHTML=code.map((c,i)=>'<span class="'+(i===sk&&sk>0?'active':'')+'">'+c+'</span>').join('');$('swap-live').innerHTML=read('first',x.first)+read('second',x.second)+read('방금 호출의 반환값',x.ret)+read('리스트 상태','['+x.v.join(', ')+']');$('swap-note').textContent=x.note;$('swap-prev').disabled=sk===0;$('swap-next').disabled=sk===swap.length-1}
+  $('swap-prev').addEventListener('click',()=>{if(sk)sk--;renderSwap()});$('swap-next').addEventListener('click',()=>{if(sk<swap.length-1)sk++;renderSwap()});$('swap-reset').addEventListener('click',()=>{sk=0;renderSwap()});renderSwap();
+})();
+</script></body></html>
