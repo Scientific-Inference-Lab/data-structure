@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Deque ADT | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+
+  </style>
+</head>
+<body class="visual-topic topic-deque-adt">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">First In, First Out</span><span class="nav-tag is-current" aria-current="page">Deque ADT</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">First In, First Out</p><h1 class="page-title">Deque ADT</h1><hr class="accent-rule"><p class="page-subtitle">덱(deque)은 앞쪽과 뒤쪽 양 끝에서 모두 값을 추가하거나 삭제하는 ADT다. 같은 끝을 쓰면 스택, 반대 끝을 쓰면 큐처럼 동작하며, Python의 collections.deque는 양 끝 연산을 O(1)로 제공한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>양 끝 연산</strong><span>add_front, remove_front, add_rear, remove_rear가 있다.</span></article><article class="summary-card"><strong>스택과 큐 표현</strong><span>넣고 빼는 끝이 같으면 LIFO, 다르면 FIFO가 된다.</span></article><article class="summary-card"><strong>collections.deque</strong><span>append와 popleft로 큐를 만들며 양 끝이 O(1)이다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">넣고 빼는 끝을 고르면 덱이 스택도 큐도 된다</h2><p class="lead">사용 방식과 단계를 바꾸면 A, B, C를 넣고 모두 꺼낼 때 쓰는 연산, 덱의 모양, 꺼낸 순서가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="dmode">사용 방식</label><select id="dmode"><option value="stack">스택처럼: add_rear · remove_rear</option><option value="queue">큐처럼: add_rear · remove_front</option></select></div><div class="action-row"><button id="dq-first" class="btn btn-outline" type="button">처음으로</button><button id="dq-prev" class="btn btn-outline" type="button">이전</button><button id="dq-next" class="btn" type="button">다음</button></div></div>
+      <p id="reason-1" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="dq-row" class="ds-row has-labels"></div><div id="dq-out" class="ds-row"></div></div></div><figcaption class="visual-caption">위 줄은 덱이며 왼쪽이 앞쪽, 오른쪽이 뒤쪽이다. 초록 테두리 칸은 방금 넣은 값이다. 아래 줄은 꺼낸 순서다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">회문 검사는 앞쪽과 뒤쪽에서 하나씩 꺼내 비교한다</h2><p class="lead">단어와 비교 횟수를 바꾸면 양 끝에서 꺼낸 문자 쌍, 덱에 남은 문자, 판정이 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="word">단어</label><select id="word"><option value="radar">radar</option><option value="level">level</option><option value="toast">toast</option><option value="noon">noon</option></select></div><div class="action-row"><button id="pal-first" class="btn btn-outline" type="button">처음으로</button><button id="pal-prev" class="btn btn-outline" type="button">이전</button><button id="pal-next" class="btn" type="button">다음</button></div></div>
+      <p id="reason-2" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="pal-row" class="ds-row has-labels"></div></div></div><figcaption class="visual-caption">칸 하나가 덱에 넣은 문자다. 회색 점선 칸은 이미 꺼낸 문자, 초록 칸은 방금 비교해 같았던 쌍, 빨간 칸은 달랐던 쌍이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../12. First In, First Out/queue-simulations.html">이전 · Queue Simulations</a><a class="pager-link is-all" href="../index.html">전체</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+
+  function cell(t, cls, lab) { return '<span class="ds-cell ' + (cls || "") + '">' + (lab !== undefined ? "<small>" + lab + "</small>" : "") + t + "</span>"; }
+  function arrow(t) { return '<span class="ds-arrow" aria-hidden="true">' + (t || "→") + "</span>"; }
+  function stepper(sid, n, getMax, render) {
+    var st = { i: 0 };
+    function go(v) {
+      var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
+      $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
+      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
+      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
+    }
+    $(sid + "-first").addEventListener("click", function () { go(0); });
+    $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });
+    $(sid + "-next").addEventListener("click", function () { go(st.i + 1); });
+    return { go: go, reset: function () { go(0); }, now: function () { return st.i; } };
+  }
+
+  var dops = function (m) { return [["add_rear", "A"], ["add_rear", "B"], ["add_rear", "C"], [m === "stack" ? "remove_rear" : "remove_front"], [m === "stack" ? "remove_rear" : "remove_front"], [m === "stack" ? "remove_rear" : "remove_front"]]; };
+  var dq = stepper("dq", 1, function () { return 6; }, function (k) {
+    var m = $("dmode").value, ops = dops(m), d = [], outs = [];
+    for (var t = 0; t < k; t++) { var o = ops[t]; if (o[0] === "add_rear") d.push(o[1]); else outs.push(o[0] === "remove_rear" ? d.pop() : d.shift()); }
+    var o2 = k ? ops[k - 1] : null;
+    $("dq-row").innerHTML = '<span class="ds-row-label">앞쪽 →</span>' + (d.length ? d.map(function (v, j) { return cell(v, o2 && o2[0] === "add_rear" && j === d.length - 1 ? "is-on" : "is-x"); }).join("") : cell("비어 있음", "is-empty")) + '<span class="ds-row-label">← 뒤쪽</span>';
+    $("dq-out").innerHTML = '<span class="ds-row-label">꺼낸 순서</span>' + (outs.length ? outs.map(function (v) { return cell(v, "is-grave"); }).join("") : cell("없음", "is-empty"));
+    show(1, [["실행한 연산", o2 ? o2[0] + "(" + (o2[1] || "") + ")" : "시작 전"], ["덱", d.length ? d.join(", ") : "비어 있음"], ["꺼낸 순서", outs.length ? outs.join(", ") : "없음"], ["순서 규칙", m === "stack" ? "LIFO" : "FIFO"]],
+      k < 4 ? "A, B, C를 모두 뒤쪽에 넣는다. 어떤 끝에서 꺼내느냐가 순서 규칙을 정한다."
+        : m === "stack" ? "넣은 뒤쪽에서 다시 꺼내므로 가장 나중에 넣은 값부터 나온다. 같은 끝을 쓰는 덱은 스택이다."
+        : "뒤쪽에 넣고 앞쪽에서 꺼내므로 먼저 넣은 값부터 나온다. 반대 끝을 쓰는 덱은 큐다. collections.deque로 큐를 만들 때는 append와 popleft를 쓴다.");
+  });
+  var pal = stepper("pal", 2, function () { return Math.floor($("word").value.length / 2); }, function (k, mx) {
+    var w = $("word").value, L = w.length, bad = -1;
+    for (var t = 0; t < k; t++) if (w[t] !== w[L - 1 - t]) { bad = t; break; }
+    var upto = bad >= 0 ? bad + 1 : k;
+    $("pal-row").innerHTML = '<span class="ds-row-label">앞쪽 →</span>' + w.split("").map(function (c, j) {
+      var pairIdx = Math.min(j, L - 1 - j), used = pairIdx < upto && j !== L - 1 - j, now = pairIdx === upto - 1 && j !== L - 1 - j;
+      return cell(c, now ? (bad === pairIdx ? "is-alert" : "is-on") : used ? "is-grave" : "is-x", j);
+    }).join("") + '<span class="ds-row-label">← 뒤쪽</span>';
+    var remain = w.slice(upto, L - upto);
+    var verdict = bad >= 0 ? "회문 아님" : k === mx ? "회문" : "비교 중";
+    show(2, [["방금 비교한 쌍", upto ? w[upto - 1] + " · " + w[L - upto] : "없음"], ["덱에 남은 문자", remain || "없음"], ["판정", verdict]],
+      bad >= 0 ? "remove_front의 " + pj(w[bad], "과") + " remove_rear의 " + pj(w[L - 1 - bad], "이") + " 달라 즉시 회문이 아니라고 판정한다."
+        : k === mx ? "양 끝에서 꺼낸 쌍이 모두 같았고 남은 문자는 " + (remain ? "가운데 " + remain + " 하나" : "없다") + ". 끝까지 같으므로 회문이다."
+        : "문자를 모두 덱에 넣은 뒤, 앞쪽과 뒤쪽에서 하나씩 꺼내 비교한다. 양 끝 삭제가 O(1)이라 한 쌍 비교가 싸다.");
+  });
+  on("dmode", function () { dq.reset(); }); on("word", function () { pal.reset(); });
+  dq.reset(); pal.reset();
+}());
+</script>
+</body>
+</html>

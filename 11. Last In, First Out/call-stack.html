@@ -1,0 +1,113 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Call Stack | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+
+  </style>
+</head>
+<body class="visual-topic topic-call-stack">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Last In, First Out</span><span class="nav-tag is-current" aria-current="page">Call Stack</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Last In, First Out</p><h1 class="page-title">Call Stack</h1><hr class="accent-rule"><p class="page-subtitle">호출 스택(call stack)은 실행 중인 함수 호출을 LIFO 순서로 관리한다. 함수를 호출하면 인자·지역 변수·돌아갈 위치를 담은 호출 프레임(stack frame)을 push하고, 반환하면 pop해 호출한 함수로 돌아간다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>호출과 반환</strong><span>호출하면 프레임을 push하고 반환하면 pop한다.</span></article><article class="summary-card"><strong>호출 프레임</strong><span>호출마다 지역 변수를 따로 저장해 재귀 호출이 섞이지 않는다.</span></article><article class="summary-card"><strong>명시적 스택</strong><span>코드가 직접 값을 쌓으면 호출 스택 없이 같은 역순을 얻는다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">호출하면 프레임을 쌓고 반환하면 가장 최근 프레임부터 걷어 낸다</h2><p class="lead">프로그램과 단계를 바꾸면 호출이나 반환 사건 하나가 실행되고, 호출 스택의 프레임과 반환값이 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="prog">프로그램</label><select id="prog"><option value="fg">main → f → g</option><option value="tostr">to_str(10, 2) 재귀 호출</option></select></div><div class="action-row"><button id="cs-first" class="btn btn-outline" type="button">처음으로</button><button id="cs-prev" class="btn btn-outline" type="button">이전</button><button id="cs-next" class="btn" type="button">다음</button></div></div>
+      <p id="reason-1" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-split"><div><div id="cs-stack" class="ds-stack" role="img" aria-label="호출 스택"></div><p class="ds-row-label">바닥</p></div><ol id="cs-log" class="ds-log"></ol></div></div><figcaption class="visual-caption">왼쪽 기둥은 호출 스택이며 칸 하나가 호출 프레임이다. 초록 칸이 지금 실행 중인 맨 위 프레임이다. 오른쪽은 사건 순서이고 짙은 줄이 방금 일어난 사건이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">나머지를 명시적 스택에 쌓으면 계산 순서의 역순으로 읽을 수 있다</h2><p class="lead">10진수를 고르면 2로 나눈 나머지를 push한 순서와 맨 위부터 pop한 순서, 그 결과인 2진수가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="dec">10진수</label><select id="dec"><option value="10">10</option><option value="233">233</option><option value="25">25</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="dv-push" class="ds-row has-labels"></div><div id="dv-pop" class="ds-row has-labels"></div></div></div><figcaption class="visual-caption">위 줄은 나머지를 계산한 순서대로 push한 스택(왼쪽이 바닥)이고, 아래 줄은 맨 위부터 pop한 순서다. 초록 칸이 처음 pop한 값이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../11. Last In, First Out/stack-expression-processing.html">이전 · Stack Expression Processing</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../12. First In, First Out/queue-adt.html">다음 · Queue ADT</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+
+  function cell(t, cls, lab) { return '<span class="ds-cell ' + (cls || "") + '">' + (lab !== undefined ? "<small>" + lab + "</small>" : "") + t + "</span>"; }
+  function arrow(t) { return '<span class="ds-arrow" aria-hidden="true">' + (t || "→") + "</span>"; }
+  function stepper(sid, n, getMax, render) {
+    var st = { i: 0 };
+    function go(v) {
+      var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
+      $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
+      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
+      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
+    }
+    $(sid + "-first").addEventListener("click", function () { go(0); });
+    $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });
+    $(sid + "-next").addEventListener("click", function () { go(st.i + 1); });
+    return { go: go, reset: function () { go(0); }, now: function () { return st.i; } };
+  }
+
+  var progs = {
+    fg: [["call", "main"], ["call", "f"], ["call", "g"], ["ret", "g", ""], ["ret", "f", ""]],
+    tostr: [["call", "to_str(10,2)", "n=10, rem=0"], ["call", "to_str(5,2)", "n=5, rem=1"], ["call", "to_str(2,2)", "n=2, rem=0"], ["call", "to_str(1,2)", "n=1"], ["ret", "to_str(1,2)", "\"1\""], ["ret", "to_str(2,2)", "\"10\""], ["ret", "to_str(5,2)", "\"101\""], ["ret", "to_str(10,2)", "\"1010\""]]
+  };
+  function qj(v, t) { var core = String(v).replace(/"/g, ""); return '"' + core + '"' + pj(core, t).slice(core.length); }
+  function retNote(v, below) {
+    var m = below && below[2] ? /rem=(\d)/.exec(below[2]) : null;
+    if (!m) return "반환값 " + qj(v, "은") + " 처음 호출한 곳이 받는 최종 결과다.";
+    var core = v.replace(/"/g, "");
+    return "반환값 " + qj(v, "은") + " 호출한 프레임으로 전달되어 그 뒤에 나머지 문자 " + qj(m[1], "을") + " 붙인다. " + v + ' + "' + m[1] + '" = "' + core + m[1] + '"' + (pj(core + m[1], "이").slice(-1) === "이" ? "이다." : "다.");
+  }
+  var cs = stepper("cs", 1, function () { return progs[$("prog").value].length; }, function (k, mx) {
+    var ev = progs[$("prog").value], s = [];
+    for (var t = 0; t < k; t++) { if (ev[t][0] === "call") s.push(ev[t]); else s.pop(); }
+    $("cs-stack").innerHTML = s.map(function (f, j) { return cell(f[1] + (f[2] ? " · " + f[2] : ""), j === s.length - 1 ? "is-on" : ""); }).join("");
+    $("cs-stack").setAttribute("aria-label", "바닥부터 " + (s.length ? s.map(function (f) { return f[1]; }).join(", ") : "비어 있음"));
+    $("cs-log").innerHTML = ev.map(function (e, j) { return '<li class="' + (j === k - 1 ? "is-now" : "") + '">' + (e[0] === "call" ? e[1] + " 호출 · push" : e[1] + " 반환" + (e[2] ? " " + e[2] : "") + " · pop") + "</li>"; }).join("");
+    var e = k ? ev[k - 1] : null;
+    show(1, [["사건", e ? (e[0] === "call" ? e[1] + " 호출" : e[1] + " 반환") : "시작 전"], ["스택 연산", e ? (e[0] === "call" ? "push" : "pop") : "없음"], ["스택 깊이", String(s.length)], ["반환값", e && e[0] === "ret" && e[2] ? e[2] : "없음"]],
+      !e ? "아직 실행 중인 호출이 없다."
+        : e[0] === "call" ? e[1] + "의 프레임을 맨 위에 쌓았다. " + ($("prog").value === "tostr" ? "같은 함수라도 호출마다 n과 rem을 따로 저장하므로 앞선 호출의 지역 변수가 그대로 남아 있다." : "호출한 함수는 아래 프레임에서 돌아갈 위치를 기억한 채 기다린다.")
+        : e[1] + "의 프레임을 걷어 내고 " + (s.length ? "바로 아래 프레임으로 돌아갔다. " : "처음 호출한 곳으로 돌아갔다. ") + (e[2] ? retNote(e[2], s[s.length - 1]) : "가장 최근에 시작한 호출이 가장 먼저 끝난다."));
+  });
+  function renderDec() {
+    var n = Number($("dec").value), rems = [], x = n;
+    while (x > 0) { rems.push(x % 2); x = Math.floor(x / 2); }
+    var popped = rems.slice().reverse();
+    $("dv-push").innerHTML = '<span class="ds-row-label">push 순서</span>' + rems.map(function (r, j) { return cell(r, j === rems.length - 1 ? "is-on" : "", j === 0 ? "바닥" : j === rems.length - 1 ? "맨 위" : ""); }).join("");
+    $("dv-pop").innerHTML = '<span class="ds-row-label">pop 순서</span>' + popped.map(function (r, j) { return cell(r, j === 0 ? "is-on" : "", j + 1); }).join("");
+    show(2, [["나머지 계산 순서", rems.join(", ")], ["pop 순서", popped.join(", ")], ["2진수", popped.join("") + "₂"]],
+      pj(n, "을") + " 2로 계속 나누면 가장 낮은 자리의 나머지부터 나온다. 그 순서대로 push한 뒤 맨 위부터 pop하면 높은 자리부터 읽혀 " + popped.join("") + "₂가 된다. 재귀 호출에서는 호출 스택이, 여기서는 코드가 직접 만든 스택이 이 역순을 맡는다.");
+  }
+  on("prog", function () { cs.reset(); }); on("dec", renderDec);
+  cs.reset(); renderDec();
+}());
+</script>
+</body>
+</html>
