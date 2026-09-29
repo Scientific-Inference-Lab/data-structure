@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Representation And Work | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+
+    .public-strip{margin:0 0 1rem;padding:.8rem;border:3px solid var(--pnu-green);background:var(--callout-bg);text-align:center;font:800 1.05rem var(--mono)}
+    .array-row{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.4rem;max-width:520px;margin:0 auto}
+    .cell{display:grid;place-items:center;min-height:4.4rem;border:2px solid var(--pnu-blue);background:var(--pnu-blue-tint);font:800 1.1rem var(--mono)}
+    .cell small{display:block;color:var(--ink-600);font:600 .72rem var(--font-sans)}
+    .cell.none{border-style:dashed;color:var(--ink-600);background:var(--white)}
+    .cell.dest{border-color:var(--pnu-green);background:var(--callout-bg);box-shadow:inset 0 0 0 2px var(--pnu-green)}
+    .cell.lost{border-color:var(--pnu-red);background:var(--alert-050)}
+    .stmt{margin:1rem 0 .3rem;text-align:center;font:800 1.05rem var(--mono);color:var(--pnu-blue-dark)}
+    .saved{text-align:center;font:700 .95rem var(--mono)}
+    .layers{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:.6rem}.layers article{padding:.9rem;border:1px solid var(--line-200);background:var(--white)}.layers strong{display:block;margin-bottom:.35rem;color:var(--pnu-blue-dark)}.layers article.focus{border:2px solid var(--pnu-green);background:var(--callout-bg)}
+    @media(max-width:760px){.layers{grid-template-columns:1fr}.cell{min-height:3.6rem;font-size:.95rem}}
+    .example-header{max-width:100%}.example-header .lead{max-width:82ch}@media(max-width:760px){.example-header .lead{max-width:none}}
+  </style>
+
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Interfaces</span><span class="nav-tag is-current" aria-current="page">Representation And Work</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Interfaces</p><h1 class="page-title">Representation And Work</h1><hr class="accent-rule"><p class="page-subtitle">같은 인터페이스라도 내부 표현(representation)에 따라 연산마다 읽고 옮기는 작업이 달라진다. 배열로 구현한 리스트에서는 연산의 결과가 배열 칸에 대한 대입문으로 만들어진다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>내부 표현(representation)</strong><span>값과 관계를 저장하는 방식이다.</span></article><article class="summary-card"><strong>구현(implementation)</strong><span>내부 표현을 사용해 연산을 실행하는 코드다.</span></article><article class="summary-card"><strong>자료구조(data structure)</strong><span>ADT의 연산을 실행할 수 있도록 값을 저장하고 처리하는 구체적인 구현이다.</span></article></div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">배열 안의 대입문이 연산의 결과를 만든다</h2><p class="lead">내부 배열 <code>a</code>는 칸 5개이고 빈 칸은 <code>None</code>이다. 대입문이 실행될 때마다 대상 칸이 바뀌고, 외부 상태는 연산이 끝날 때만 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="operation">연산과 복사 순서</label><select id="operation"><option value="safe">add(1, x) · 뒤에서부터 옮기기</option><option value="wrong">add(1, x) · 앞에서부터 옮기기</option><option value="remove">remove(1) · 반환값 먼저 보관</option></select></div><div class="action-row"><button id="first" class="btn btn-outline" type="button">처음으로</button><button id="prev" class="btn btn-outline" type="button">이전</button><button id="next" class="btn" type="button">다음</button></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div id="public" class="public-strip">외부 상태 [p, q, r, s]</div><div id="array" class="array-row" role="img" aria-label="내부 배열 상태"></div><p id="stmt" class="stmt"></p><p id="saved" class="saved"></p></div><figcaption id="caption" class="visual-caption"></figcaption></figure>
+      <div id="live" class="visual-readouts" aria-live="polite"></div><p id="cause" class="visual-note"></p>
+    </div>
+  </section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">인터페이스에서 비용까지 질문을 나눈다</h2><p class="lead">위에서 고른 연산을 기준으로, 배열로 리스트를 구현할 때 각 층이 답하는 질문을 적는다.</p></header>
+    <div class="visual-lab"><div id="layers" class="layers" role="list" aria-label="인터페이스에서 비용까지"></div><p class="visual-note">인터페이스와 명세는 결과를 정하고, 내부 표현과 내부 작업은 그 결과를 만드는 방법을 정한다. 비용은 그 작업이 입력 크기에 따라 얼마나 늘어나는지를 묻는다.</p></div>
+  </section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="interface-and-specification.html">이전 · Interface And Specification</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="python-objects.html">다음 · Python Objects</a></nav>
+</main><footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const read = (l, v) => '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>';
+  const _ = null;
+  const models = {
+    safe: { pre: '[p, q, r, s]', post: '[p, x, q, r, s]', ret: '없음', steps: [
+      { s: '시작', a: ['p', 'q', 'r', 's', _], d: -1, why: '원소 4개가 칸 0부터 3에 있고 칸 4가 비어 있다.' },
+      { s: 'a[4] = a[3]', a: ['p', 'q', 'r', 's', 's'], d: 4, why: '빈 칸 4부터 채우므로 아직 옮기지 않은 s가 칸 3에 그대로 남는다.' },
+      { s: 'a[3] = a[2]', a: ['p', 'q', 'r', 'r', 's'], d: 3, why: '칸 3의 s는 이미 칸 4로 복사했으므로 덮어써도 잃지 않는다.' },
+      { s: 'a[2] = a[1]', a: ['p', 'q', 'q', 'r', 's'], d: 2, why: 'r도 이미 옮겼으므로 칸 2를 q로 덮어쓴다.' },
+      { s: 'a[1] = "x", n = 5', a: ['p', 'x', 'q', 'r', 's'], d: 1, why: 'q를 칸 2로 옮겨 두었으므로 칸 1에 x를 쓰고 원소 수를 5로 늘린다. 이제 외부 상태가 바뀐다.' }
+    ] },
+    wrong: { pre: '[p, q, r, s]', post: '[p, x, q, q, q]', ret: '없음', steps: [
+      { s: '시작', a: ['p', 'q', 'r', 's', _], d: -1, why: '같은 상태에서 이번에는 앞쪽 칸 2부터 채우며 옮긴다. 아직 복사하지 않은 값을 덮어쓰는지가 결과를 가른다.' },
+      { s: 'a[2] = a[1]', a: ['p', 'q', 'q', 's', _], d: 2, lost: 'r', why: 'r을 옮기기 전에 칸 2를 q로 덮어써 r이 사라졌다.' },
+      { s: 'a[3] = a[2]', a: ['p', 'q', 'q', 'q', _], d: 3, lost: 's', why: '칸 2에는 이미 q가 들어 있어 칸 3도 q가 되고 s가 사라졌다.' },
+      { s: 'a[4] = a[3]', a: ['p', 'q', 'q', 'q', 'q'], d: 4, why: '같은 q가 한 칸 더 복사된다.' },
+      { s: 'a[1] = "x"', a: ['p', 'x', 'q', 'q', 'q'], d: 1, why: 'r과 s를 복사하기 전에 덮어썼기 때문에 원래 값을 잃었다. 명세가 요구한 [p, x, q, r, s]가 아니다.' }
+    ] },
+    remove: { pre: '[p, q, r, s]', post: '[p, r, s]', ret: 'q', steps: [
+      { s: '시작', a: ['p', 'q', 'r', 's', _], d: -1, why: 'remove(1)은 칸 1의 값을 돌려주고 뒤 원소를 한 칸씩 당겨야 한다.' },
+      { s: 'removed = a[1]', a: ['p', 'q', 'r', 's', _], d: -1, saved: 'q', why: '칸 1을 덮어쓰기 전에 반환할 q를 따로 보관한다.' },
+      { s: 'a[1] = a[2]', a: ['p', 'r', 'r', 's', _], d: 1, saved: 'q', why: '앞에서부터 당기므로 아직 옮기지 않은 s는 칸 3에 남는다.' },
+      { s: 'a[2] = a[3]', a: ['p', 'r', 's', 's', _], d: 2, saved: 'q', why: 's를 칸 2로 당긴다.' },
+      { s: 'n = 3, a[3] = None', a: ['p', 'r', 's', _, _], d: 3, saved: 'q', why: '중복된 마지막 칸을 비우고 원소 수를 3으로 줄인다. 보관한 q를 반환한다.' }
+    ] }
+  };
+  const layerText = {
+    safe: ['add(i, x)를 공개한다', '위치 i에 x가 들어가고 뒤 원소의 인덱스가 1씩 늘어야 한다', '값을 배열 a의 칸 0부터 n-1에 연속해서 둔다', '칸 n-1부터 i까지 뒤에서부터 한 칸씩 오른쪽으로 옮긴다', '옮기는 원소 수 n-i가 커질수록 작업이 늘어난다'],
+    wrong: ['add(i, x)를 공개한다', '위치 i에 x가 들어가고 뒤 원소의 인덱스가 1씩 늘어야 한다', '값을 배열 a의 칸 0부터 n-1에 연속해서 둔다', '앞에서부터 옮기면 복사 전 값을 덮어써 명세를 지키지 못한다', '작업 수가 같아도 결과가 틀리면 올바른 구현이 아니다'],
+    remove: ['remove(i)를 공개한다', '위치 i의 값을 반환하고 뒤 원소의 인덱스가 1씩 줄어야 한다', '값을 배열 a의 칸 0부터 n-1에 연속해서 둔다', '반환값을 보관한 뒤 칸 i+1부터 앞에서부터 한 칸씩 왼쪽으로 당긴다', '당기는 원소 수 n-i-1이 커질수록 작업이 늘어난다']
+  };
+  const state = { op: 'safe', step: 0 };
+  function render() {
+    const m = models[state.op], x = m.steps[state.step], last = state.step === m.steps.length - 1;
+    $('array').replaceChildren(...x.a.map((v, i) => { const e = document.createElement('span'); e.className = 'cell' + (v === null ? ' none' : '') + (i === x.d ? ' dest' : ''); e.innerHTML = '<span><small>a[' + i + ']</small>' + (v === null ? 'None' : v) + '</span>'; return e; }));
+    $('array').setAttribute('aria-label', '내부 배열 ' + x.a.map(v => v === null ? 'None' : v).join(', ') + (x.d >= 0 ? ', 방금 쓴 칸 a[' + x.d + ']' : ''));
+    $('stmt').textContent = x.s === '시작' ? '실행 전' : x.s;
+    $('saved').textContent = x.saved ? '보관한 반환값 removed = ' + x.saved : '';
+    $('public').textContent = '외부 상태 ' + (last ? m.post : m.pre) + (last && m.ret !== '없음' ? ' · 반환값 ' + m.ret : '');
+    $('caption').textContent = '초록 칸은 방금 대입문이 값을 쓴 칸이다. 점선 칸은 None이다.';
+    $('live').innerHTML = read('실행한 줄', state.step + ' / ' + (m.steps.length - 1)) + read('방금 쓴 칸', x.d >= 0 ? 'a[' + x.d + ']' : '없음') + read('사라진 값', state.op !== 'wrong' || state.step === 0 ? '없음' : state.step === 1 ? 'r' : 'r, s');
+    $('cause').textContent = x.why;
+    $('first').disabled = $('prev').disabled = state.step === 0;
+    $('next').disabled = last;
+    const names = ['인터페이스', '명세', '내부 표현', '내부 작업', '비용'];
+    $('layers').innerHTML = layerText[state.op].map((t, i) => '<article role="listitem" class="' + (i === 3 ? 'focus' : '') + '"><strong>' + names[i] + '</strong><span>' + t + '</span></article>').join('');
+  }
+  $('operation').addEventListener('change', e => { state.op = e.target.value; state.step = 0; render(); });
+  $('first').addEventListener('click', () => { state.step = 0; render(); });
+  $('prev').addEventListener('click', () => { state.step = Math.max(0, state.step - 1); render(); });
+  $('next').addEventListener('click', () => { state.step = Math.min(models[state.op].steps.length - 1, state.step + 1); render(); });
+  render();
+})();
+</script></body></html>

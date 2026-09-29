@@ -1,0 +1,100 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Python Objects | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+
+    .machine{display:grid;grid-template-columns:1.2fr .8fr 1.1fr .9fr;gap:.8rem;min-width:900px}.pane{padding:1rem;border:1px solid var(--line-200);background:var(--white)}.pane h3{margin:0 0 .8rem;color:var(--pnu-blue-dark);font-size:1rem}
+    .code-line{display:block;padding:.45rem .6rem;font:700 .85rem/1.4 var(--mono);white-space:pre}.code-line.active{background:var(--callout-bg);box-shadow:inset 5px 0 0 var(--pnu-green)}.code-line.pending{color:var(--ink-600)}
+    .binding,.object,.observed{margin:.5rem 0;padding:.7rem;border:2px solid var(--pnu-blue);font:700 .9rem var(--mono)}.object{border-color:var(--pnu-green)}.object.changed{background:var(--callout-bg);box-shadow:inset 0 0 0 2px var(--pnu-green)}.observed{border-color:var(--line-300);background:var(--surface-050)}
+    .comparison{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem}.compare-card{padding:1rem;border:1px solid var(--line-200);background:var(--white)}.compare-card strong{display:block;color:var(--pnu-blue-dark)}.bindings{font:700 .9rem/1.7 var(--mono)}
+    @media(max-width:760px){.comparison{grid-template-columns:1fr}}
+    .example-header{max-width:100%}.example-header .lead{max-width:82ch}@media(max-width:760px){.example-header .lead{max-width:none}}
+  </style>
+
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Interfaces</span><span class="nav-tag is-current" aria-current="page">Python Objects</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Interfaces</p><h1 class="page-title">Python Objects</h1><hr class="accent-rule"><p class="page-subtitle">변수 이름(name)은 객체(object)를 가리키고, 대입은 참조(reference)가 가리키는 대상을 정한다. 코드 한 줄마다 변수 이름, 객체, 관찰값을 함께 따라가 객체 변경과 재할당을 구분한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>별칭</strong><span>둘 이상의 변수 이름이 같은 객체를 가리키는 상태다.</span></article><article class="summary-card"><strong>객체 변경</strong><span>메서드 호출이나 속성 대입이 기존 객체의 상태를 바꾼다.</span></article><article class="summary-card"><strong>재할당</strong><span>대입이 변수 이름을 다른 객체에 연결한다.</span></article><article class="summary-card"><strong>is와 ==</strong><span>is는 같은 객체인지, ==는 리스트처럼 값을 비교하는 객체에서 값이 같은지 확인한다.</span></article></div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">코드 한 줄이 이름과 객체 중 무엇을 바꾸는지 따라간다</h2><p class="lead">프로그램을 고르고 한 줄씩 실행한다. 초록 테두리 객체는 방금 줄에서 상태가 바뀌거나 새로 만들어진 객체다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="scenario">실행할 코드</label><select id="scenario"><option value="mutate">b = a 뒤 b.append(3)</option><option value="reassign">b = a 뒤 b = [7, 8]</option><option value="copy">b = list(a) 뒤 b.append(3)</option><option value="box">Box 객체 두 개</option></select></div><div class="action-row"><button id="first" class="btn btn-outline" type="button">처음으로</button><button id="prev" class="btn btn-outline" type="button">이전</button><button id="next" class="btn" type="button">다음</button></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="machine">
+        <article class="pane"><h3>실행 코드</h3><div id="code"></div></article>
+        <article class="pane"><h3>변수 이름과 참조</h3><div id="names"></div></article>
+        <article class="pane"><h3>객체</h3><div id="heap"></div></article>
+        <article class="pane"><h3>관찰값</h3><div id="observed"></div></article>
+      </div></div><figcaption id="caption" class="visual-caption">실행 코드에서 초록 막대가 붙은 줄이 방금 실행한 줄이고, 흐린 줄은 아직 실행하지 않은 줄이다. 이름 칸의 화살표는 그 이름이 가리키는 객체이고, 색이 채워진 객체 칸은 이번 줄에서 상태가 바뀐 객체다.</figcaption></figure>
+      <div id="live" class="visual-readouts" aria-live="polite"></div><p id="cause" class="visual-note"></p>
+    </div>
+  </section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">같은 시작에서 세 번째 줄이 결과를 가른다</h2><p class="lead">세 코드 모두 <code>a = [1, 2]</code>에서 시작한다.</p></header>
+    <div class="visual-lab"><div class="comparison">
+      <article class="compare-card"><strong>객체 변경 · b = a, b.append(3)</strong><p class="bindings">a → A [1, 2, 3]<br>b → A [1, 2, 3]</p><p>같은 객체가 바뀌어 두 이름 모두에서 변화가 보인다.</p></article>
+      <article class="compare-card"><strong>재할당 · b = a, b = [7, 8]</strong><p class="bindings">a → A [1, 2]<br>b → B [7, 8]</p><p>b의 참조만 새 객체로 바뀌고 A는 그대로다.</p></article>
+      <article class="compare-card"><strong>새 리스트 · b = list(a), b.append(3)</strong><p class="bindings">a → A [1, 2]<br>b → B [1, 2, 3]</p><p>list(a)가 새 객체를 만들었으므로 b의 변경이 a에 보이지 않는다.</p></article>
+    </div><p class="visual-note">메서드 호출은 객체를 바꿀 수 있고 대입문은 변수 이름이 가리키는 객체를 정한다.</p></div>
+  </section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="representation-and-work.html">이전 · Representation And Work</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="two-implementations.html">다음 · Two Implementations</a></nav>
+</main><footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const read = (l, v) => '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>';
+  const programs = {
+    mutate: { lines: ['a = [1, 2]', 'b = a', 'b.append(3)', 'print(a, b)'], stages: [
+      { names: ['a → A'], heap: ['A · list [1, 2]'], changed: ['A'], obs: ['출력 없음'], kind: '변수 이름 a가 새 리스트 객체 A를 가리킨다.' },
+      { names: ['a → A', 'b → A'], heap: ['A · list [1, 2]'], changed: [], obs: ['a is b → True', 'a == b → True'], kind: 'b = a는 새 리스트를 만들지 않고 b도 같은 객체 A를 가리키게 한다. 두 이름은 별칭이다.' },
+      { names: ['a → A', 'b → A'], heap: ['A · list [1, 2, 3]'], changed: ['A'], obs: ['a is b → True', 'a == b → True'], kind: 'append가 객체 A의 상태를 바꿨다. 변수 이름의 참조는 그대로다.' },
+      { names: ['a → A', 'b → A'], heap: ['A · list [1, 2, 3]'], changed: [], obs: ['[1, 2, 3] [1, 2, 3]'], kind: '두 이름이 같은 객체를 읽으므로 a에서도 3이 보인다.' }
+    ] },
+    reassign: { lines: ['a = [1, 2]', 'b = a', 'b = [7, 8]', 'print(a, b)'], stages: [
+      { names: ['a → A'], heap: ['A · list [1, 2]'], changed: ['A'], obs: ['출력 없음'], kind: '변수 이름 a가 새 리스트 객체 A를 가리킨다.' },
+      { names: ['a → A', 'b → A'], heap: ['A · list [1, 2]'], changed: [], obs: ['a is b → True'], kind: 'b = a 뒤에는 두 이름이 같은 객체 A를 가리킨다.' },
+      { names: ['a → A', 'b → B'], heap: ['A · list [1, 2]', 'B · list [7, 8]'], changed: ['B'], obs: ['a is b → False', 'a == b → False'], kind: '재할당이 새 객체 B를 만들고 b의 참조만 B로 옮겼다. A는 바뀌지 않았다.' },
+      { names: ['a → A', 'b → B'], heap: ['A · list [1, 2]', 'B · list [7, 8]'], changed: [], obs: ['[1, 2] [7, 8]'], kind: '두 이름이 서로 다른 객체를 읽는다.' }
+    ] },
+    copy: { lines: ['a = [1, 2]', 'b = list(a)', 'b.append(3)', 'print(a, b, a is b)'], stages: [
+      { names: ['a → A'], heap: ['A · list [1, 2]'], changed: ['A'], obs: ['출력 없음'], kind: '변수 이름 a가 리스트 객체 A를 가리킨다.' },
+      { names: ['a → A', 'b → B'], heap: ['A · list [1, 2]', 'B · list [1, 2]'], changed: ['B'], obs: ['a is b → False', 'a == b → True'], kind: 'list(a)는 값이 같은 새 객체 B를 만든다. 값은 같지만 같은 객체는 아니다.' },
+      { names: ['a → A', 'b → B'], heap: ['A · list [1, 2]', 'B · list [1, 2, 3]'], changed: ['B'], obs: ['a is b → False', 'a == b → False'], kind: 'append는 b가 가리키는 객체 B만 바꾼다.' },
+      { names: ['a → A', 'b → B'], heap: ['A · list [1, 2]', 'B · list [1, 2, 3]'], changed: [], obs: ['[1, 2] [1, 2, 3] False'], kind: 'a는 원래 리스트를 그대로 읽는다.' }
+    ] },
+    box: { lines: ['a = Box(7)', 'b = Box(12)', 'a.value = 9', 'print(a.value, b.value)'], stages: [
+      { names: ['a → A'], heap: ['A · Box value = 7'], changed: ['A'], obs: ['출력 없음'], kind: 'Box(7)이 인스턴스 객체 A를 만들고, __init__의 self도 A를 가리켜 value를 7로 정했다.' },
+      { names: ['a → A', 'b → B'], heap: ['A · Box value = 7', 'B · Box value = 12'], changed: ['B'], obs: ['a is b → False'], kind: '같은 클래스에서 만든 두 번째 인스턴스 B는 상태를 따로 가진다.' },
+      { names: ['a → A', 'b → B'], heap: ['A · Box value = 9', 'B · Box value = 12'], changed: ['A'], obs: ['a is b → False'], kind: 'a.value 대입은 a가 가리키는 객체 A의 상태만 바꾼다.' },
+      { names: ['a → A', 'b → B'], heap: ['A · Box value = 9', 'B · Box value = 12'], changed: [], obs: ['9 12'], kind: 'b의 상태는 그대로 12다.' }
+    ] }
+  };
+  const state = { scenario: 'mutate', step: 0 };
+  const esc = v => String(v).replace(/</g, '&lt;');
+  function render() {
+    const p = programs[state.scenario], x = p.stages[state.step];
+    $('code').innerHTML = p.lines.map((v, i) => '<span class="code-line ' + (i === state.step ? 'active' : i > state.step ? 'pending' : '') + '">' + (i + 1) + '  ' + esc(v) + '</span>').join('');
+    $('names').innerHTML = x.names.map(v => '<div class="binding">' + v + '</div>').join('');
+    $('heap').innerHTML = x.heap.map(v => '<div class="object' + (x.changed.includes(v[0]) ? ' changed' : '') + '">' + esc(v) + '</div>').join('');
+    $('observed').innerHTML = x.obs.map(v => '<div class="observed">' + esc(v) + '</div>').join('');
+        $('live').innerHTML = read('실행 줄', (state.step + 1) + ' / ' + p.lines.length) + read('변수 이름', x.names.length + '개') + read('객체', x.heap.length + '개');
+    $('cause').textContent = x.kind + (state.scenario === 'box' && state.step === 0 ? ' Box는 __init__(self, value)에서 self.value = value를 저장하는 클래스다.' : '');
+    $('first').disabled = $('prev').disabled = state.step === 0;
+    $('next').disabled = state.step === p.lines.length - 1;
+  }
+  $('scenario').addEventListener('change', e => { state.scenario = e.target.value; state.step = 0; render(); });
+  $('first').addEventListener('click', () => { state.step = 0; render(); });
+  $('prev').addEventListener('click', () => { state.step = Math.max(0, state.step - 1); render(); });
+  $('next').addEventListener('click', () => { state.step = Math.min(programs[state.scenario].lines.length - 1, state.step + 1); render(); });
+  render();
+})();
+</script></body></html>
