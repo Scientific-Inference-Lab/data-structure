@@ -1,0 +1,264 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#fff">
+  <title>What Arrays Are Good For | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css">
+  <link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+
+    .persistent-stage,.ledger-card,.profile-card{padding:1rem;border:1px solid var(--line-200);background:var(--white)}
+
+
+
+    .array-strip{display:grid;grid-template-columns:repeat(10,minmax(0,1fr));gap:.3rem;margin-top:1rem}
+    .work-cell{min-width:0;min-height:5.2rem;padding:.5rem .08rem;border:2px solid var(--line-200);background:var(--white);text-align:center}
+    .work-cell small,.work-cell strong,.work-cell span{display:block;overflow-wrap:anywhere}
+    .work-cell strong{margin:.4rem 0;font-size:1.05rem}
+    .work-cell.is-live{border-color:var(--pnu-blue);background:var(--pnu-blue-tint)}
+    .work-cell.is-active{outline:3px solid var(--pnu-green);outline-offset:1px;background:var(--callout-bg)}
+    .work-cell.is-shifted{border-color:var(--pnu-green);border-style:dashed;background:var(--pnu-blue-tint)}
+    .work-cell.is-free{border-style:dashed;color:var(--ink-600)}
+    .last-operation{margin:1rem 0 0;padding:.85rem;border-left:5px solid var(--pnu-green);background:var(--callout-bg)}
+
+    .table-wrap{overflow-x:auto}
+    .ledger{width:100%;min-width:640px;border-collapse:collapse}
+    .ledger th,.ledger td{padding:.7rem;border-bottom:1px solid var(--line-200);text-align:left}
+    .ledger th{background:var(--pnu-blue-tint);color:var(--pnu-blue-dark)}
+    .ledger td.num{text-align:right;font-variant-numeric:tabular-nums}
+    .profile-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+    .profile-card{border-top:5px solid var(--pnu-blue)}
+    .profile-card.is-shift{border-top-color:var(--pnu-green)}
+    .meter{height:.75rem;margin:.75rem 0;border-radius:99px;background:var(--line-200);overflow:hidden}
+    .meter-fill{width:var(--meter);height:100%;background:var(--pnu-blue)}
+    .profile-card.is-shift .meter-fill{background:var(--pnu-green)}
+    .cost-number{font-size:1.65rem;font-weight:900;color:var(--pnu-blue-dark)}
+    @media(max-width:780px){.profile-grid{grid-template-columns:1fr}.array-strip{gap:.12rem}.work-cell{min-height:4.4rem;padding:.35rem .02rem}.work-cell strong{font-size:.82rem}.work-cell small,.work-cell span{font-size:.6rem}}
+  </style>
+</head>
+<body class="visual-topic">
+  <a class="skip-link" href="#main-content">본문으로 이동</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Storing Elements in a Row</span><span class="nav-tag is-current" aria-current="page">What Arrays Are Good For</span></nav></div></div></header>
+  <section class="hero topic-hero"><div class="container"><p class="eyebrow">Storing Elements in a Row</p><h1 class="page-title">What Arrays Are Good For</h1><hr class="accent-rule"><p class="page-subtitle">한 배열에 서로 다른 작업을 차례로 쌓으면 인덱스 접근과 끝 추가의 작은 비용, 가운데 삽입과 삭제의 이동 비용이 같은 기록에서 드러난다.</p></div></section>
+  <main id="main-content" class="page-body container">
+    <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>인덱스 접근</strong><span>주소 계산 뒤 한 칸을 읽어 Θ(1)이다.</span></article><article class="summary-card"><strong>끝 추가</strong><span>내부 배열에 빈 칸이 있으면 이동 없이 한 칸을 쓴다.</span></article><article class="summary-card"><strong>가운데 변경</strong><span>위치 i부터 뒤쪽 원소를 옮기므로 최악의 경우 Θ(n)이다.</span></article></div></section>
+
+    <section class="topic-example">
+      <header class="example-header"><h2 class="section-title">get은 한 칸에 도달하고 삽입·삭제는 뒤쪽 원소 수만큼 옮긴다</h2><p class="lead">모든 연산은 같은 배열 상태에서 이어진다. 실행 직후 바뀐 칸과 이동한 칸, 정확한 작업 수가 함께 기록된다.</p></header>
+      <div class="visual-lab">
+        <div class="visual-controls visual-controls--double">
+          <div class="control-field"><label for="work-index">인덱스 i <output id="work-index-out" class="control-value" for="work-index">2</output></label><input id="work-index" type="range" min="0" max="4" value="2"></div>
+          <div class="control-field"><label for="work-value">새 값 x</label><input id="work-value" type="text" maxlength="3" value="X"></div>
+          <div class="action-row"><button id="access-op" class="btn btn-outline" type="button">get(i)</button><button id="append-op" class="btn btn-outline" type="button">끝 추가</button><button id="insert-op" class="btn" type="button">i에 삽입</button><button id="delete-op" class="btn" type="button">i 삭제</button><button id="reset-workload" class="btn btn-outline" type="button">처음 상태</button></div>
+        </div>
+        <p id="disabled-reason" class="control-reason" hidden></p>
+        <figure class="visual-figure"><div class="visual-frame"><div class="persistent-stage">
+          <div id="work-array" class="array-strip" role="img" aria-label="현재 작업 배열"></div>
+          <div id="last-operation" class="last-operation">초기 상태는 원소 5개와 빈 칸 5개다.</div>
+        </div></div><figcaption class="visual-caption">칸 10개를 확보한 배열이다. 초록 테두리는 방금 직접 읽거나 쓴 칸, 초록 점선 칸은 한 칸씩 옮겨진 원소, 회색 점선 칸은 빈 칸이다.</figcaption></figure>
+        <div id="work-live" class="visual-readouts" aria-live="polite"></div>
+        <p class="visual-note">get은 배열 길이와 무관하게 한 칸에 도달한다. 삽입은 a[i]부터 끝까지의 원소 수, 삭제는 a[i] 뒤의 원소 수가 이동 수다.</p>
+      </div>
+    </section>
+
+    <section class="topic-example">
+      <header class="example-header"><h2 class="section-title">연산마다 작업 수가 실행 당시의 n과 i로 정해진다</h2><p class="lead">위 절의 배열 상태와 실행 기록을 그대로 쓴다. 각 행은 실행 당시 n과 i로 계산한 작업 수를 보존한다.</p></header>
+      <div class="visual-lab">
+
+        <div class="ledger-card table-wrap" role="region" aria-label="연산 기록표" tabindex="0">
+          <table class="ledger">
+            <thead><tr><th scope="col">순서</th><th scope="col">연산</th><th scope="col">계산</th><th scope="col">직접 읽기</th><th scope="col">원소 이동</th><th scope="col">배열 쓰기</th></tr></thead>
+            <tbody id="ledger-body"><tr><td>0</td><td>초기 상태</td><td>n = 5</td><td class="num">0</td><td class="num">0</td><td class="num">0</td></tr></tbody>
+          </table>
+        </div>
+        <div class="profile-grid">
+          <article class="profile-card"><strong>직접 작업</strong><div class="meter" aria-hidden="true"><div id="direct-meter" class="meter-fill" style="--meter:0%"></div></div><span id="direct-total" class="cost-number">0</span><p>원소 이동을 뺀 읽기와 쓰기를 센다. get의 읽기, 새 값 쓰기, 삭제할 값 읽기와 끝 칸 비우기가 여기에 들어간다.</p></article>
+          <article class="profile-card is-shift"><strong>구조를 바꾸는 이동</strong><div class="meter" aria-hidden="true"><div id="shift-meter" class="meter-fill" style="--meter:0%"></div></div><span id="shift-total" class="cost-number">0</span><p>가운데 삽입과 삭제에서 원소를 한 칸씩 옮긴 횟수다.</p></article>
+        </div>
+        <div id="profile-live" class="visual-readouts" aria-live="polite"></div>
+        <p id="workload-conclusion" class="visual-note">아직 실행한 연산이 없어 두 비용이 모두 0이다.</p>
+      </div>
+    </section>
+
+    <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="cost-of-shifting.html">이전 · Cost Of Shifting</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../06. When the Array Fills Up/capacity-and-resize.html">다음 · Capacity And Resize</a></nav>
+  </main>
+  <footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+  <script>
+    (() => {
+      const $ = id => document.getElementById(id);
+      const J = (w, t) => { const s = String(w), c = s.replace(/[\])\s]+$/, '').slice(-1), P = { '을': ['을', '를'], '이': ['이', '가'], '은': ['은', '는'], '과': ['과', '와'], '으로': ['으로', '로'] }; let f = false, l = false; if (/[가-힣]/.test(c)) { const k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = '013678'.includes(c); l = '178'.includes(c); } else if (/[a-z]/i.test(c)) { f = 'lmnr'.includes(c.toLowerCase()); l = 'lr'.includes(c.toLowerCase()); } const p = P[t]; return s + (t === '으로' ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); };
+      const capacity = 10;
+      const initial = ['12', '7', '25', '9', '31'];
+      const state = { values: initial.slice(), index: 2, ledger: [], active: [], shifted: [], last: '초기 상태는 원소 5개와 빈 칸 5개다.' };
+      const readout = (label, value) => '<div class="visual-readout"><span class="visual-readout-label">' + label + '</span><strong class="visual-readout-value">' + value + '</strong></div>';
+
+      function currentValue() {
+        return $('work-value').value.trim().slice(0, 3) || 'X';
+      }
+
+      function addLedger(operation, formula, reads, moves, writes) {
+        state.ledger.push({ operation, formula, reads, moves, writes });
+      }
+
+      function renderArray() {
+        const board = $('work-array');
+        board.replaceChildren();
+        for (let i = 0; i < capacity; i += 1) {
+          const cell = document.createElement('div');
+          cell.className = 'work-cell ' + (i < state.values.length ? 'is-live' : 'is-free');
+          if (state.active.includes(i)) cell.classList.add('is-active');
+          if (state.shifted.includes(i)) cell.classList.add('is-shifted');
+          const index = document.createElement('small');
+          index.textContent = '[' + i + ']';
+          const value = document.createElement('strong');
+          value.textContent = i < state.values.length ? state.values[i] : '·';
+          const status = document.createElement('span');
+          status.textContent = state.active.includes(i) ? '직접 접근' : state.shifted.includes(i) ? '이동' : i < state.values.length ? '원소' : '빈 칸';
+          cell.append(index, value, status);
+          board.append(cell);
+        }
+        board.setAttribute('aria-label', '현재 원소 ' + state.values.join(', ') + '. 원소 수 ' + state.values.length + ', 빈 칸 ' + (capacity - state.values.length));
+      }
+
+      function renderLedger() {
+        const body = $('ledger-body');
+        body.replaceChildren();
+        const initialRow = document.createElement('tr');
+        ['0', '초기 상태', 'n = 5', '0', '0', '0'].forEach((value, index) => {
+          const cell = document.createElement('td');
+          cell.textContent = value;
+          if (index > 2) cell.className = 'num';
+          initialRow.append(cell);
+        });
+        body.append(initialRow);
+        state.ledger.forEach((entry, rowIndex) => {
+          const row = document.createElement('tr');
+          [rowIndex + 1, entry.operation, entry.formula, entry.reads, entry.moves, entry.writes].forEach((value, index) => {
+            const cell = document.createElement('td');
+            cell.textContent = value;
+            if (index > 2) cell.className = 'num';
+            row.append(cell);
+          });
+          body.append(row);
+        });
+      }
+
+      function totals() {
+        return state.ledger.reduce((sum, entry) => {
+          sum.reads += entry.reads;
+          sum.moves += entry.moves;
+          sum.writes += entry.writes;
+          return sum;
+        }, { reads: 0, moves: 0, writes: 0 });
+      }
+
+      function render() {
+        const n = state.values.length;
+        state.index = Math.max(0, Math.min(state.index, Math.max(0, n - 1)));
+        $('work-index').max = Math.max(0, n - 1);
+        $('work-index').value = state.index;
+        $('work-index-out').value = state.index;
+        $('access-op').disabled = n === 0;
+        $('delete-op').disabled = n === 0;
+        $('append-op').disabled = n >= capacity;
+        $('insert-op').disabled = n >= capacity;
+        $('disabled-reason').hidden = !(n >= capacity || n === 0);
+        $('disabled-reason').textContent = n >= capacity ? '확보한 칸이 모두 차서 이 페이지 범위에서는 추가와 삽입이 멈춘다.' : n === 0 ? '빈 배열에는 읽거나 삭제할 원소가 없어 get과 삭제가 멈춘다. 끝 추가나 i = 0 삽입으로 원소를 만들 수 있다.' : '';
+        $('last-operation').textContent = state.last;
+        const total = totals();
+        const direct = total.reads + Math.max(0, total.writes - total.moves);
+        const scale = Math.max(1, direct, total.moves);
+        $('direct-total').textContent = direct;
+        $('shift-total').textContent = total.moves;
+        $('direct-meter').style.setProperty('--meter', (direct / scale * 100) + '%');
+        $('shift-meter').style.setProperty('--meter', (total.moves / scale * 100) + '%');
+        $('work-live').innerHTML = readout('현재 n', n) + readout('빈 칸', capacity - n) + readout('선택 i', state.index) + readout('최근 이동', state.ledger.length ? state.ledger[state.ledger.length - 1].moves : 0);
+        $('profile-live').innerHTML = readout('누적 직접 읽기', total.reads) + readout('누적 원소 이동', total.moves) + readout('누적 배열 쓰기', total.writes) + readout('실행 연산', state.ledger.length);
+        if (!state.ledger.length) {
+          $('workload-conclusion').innerHTML = '아직 실행한 연산이 없어 두 비용이 모두 0이다.';
+        } else if (total.moves > direct) {
+          $('workload-conclusion').innerHTML = '원소 이동 ' + total.moves + '회가 직접 작업 ' + direct + '회보다 크다. 가운데 구조 변경이 누적 비용을 지배한다.';
+        } else {
+          $('workload-conclusion').innerHTML = '직접 작업 ' + direct + '회와 원소 이동 ' + total.moves + '회다. 인덱스 접근과 끝 추가는 원소 수가 늘어도 이동을 만들지 않는다.';
+        }
+        renderArray();
+        renderLedger();
+      }
+
+      $('work-index').addEventListener('input', event => {
+        state.index = Number(event.target.value);
+        state.active = [state.index];
+        state.shifted = [];
+        state.last = 'i = ' + J(state.index, '을') + ' 선택했다. 아직 배열 내용과 기록표는 바뀌지 않았다.';
+        render();
+      });
+      $('access-op').addEventListener('click', () => {
+        if (!state.values.length) return;
+        const value = state.values[state.index];
+        state.active = [state.index];
+        state.shifted = [];
+        addLedger('get(' + state.index + ')', '주소 계산 뒤 a[' + state.index + '] 읽기', 1, 0, 0);
+        state.last = 'get(' + state.index + ') 호출이 ' + J(value, '을') + ' 반환했다. 기존 원소 이동은 0회다.';
+        render();
+      });
+      $('append-op').addEventListener('click', () => {
+        if (state.values.length >= capacity) return;
+        const oldN = state.values.length;
+        const value = currentValue();
+        state.values.push(value);
+        state.active = [oldN];
+        state.shifted = [];
+        addLedger('add(' + oldN + ', ' + value + ')', 'n − i = ' + oldN + ' − ' + oldN + ' = 0', 0, 0, 1);
+        state.last = '빈 끝 칸 a[' + oldN + ']에 ' + J(value, '을') + ' 썼다. 이동 없이 n이 ' + J(state.values.length, '이') + ' 되었다.';
+        render();
+      });
+      $('insert-op').addEventListener('click', () => {
+        if (state.values.length >= capacity) return;
+        const oldN = state.values.length;
+        const i = state.index;
+        const value = currentValue();
+        const moves = oldN - i;
+        state.values.splice(i, 0, value);
+        state.active = [i];
+        state.shifted = Array.from({ length: moves }, (_, offset) => i + 1 + offset);
+        addLedger('add(' + i + ', ' + value + ')', 'n − i = ' + oldN + ' − ' + i + ' = ' + moves, 0, moves, moves + 1);
+        state.last = moves ? 'a[' + i + ']부터 끝까지 원소 ' + moves + '개를 오른쪽으로 옮기고 ' + J(value, '을') + ' 썼다.' : '옮길 원소 없이 a[' + i + ']에 ' + J(value, '을') + ' 썼다.';
+        render();
+      });
+      $('delete-op').addEventListener('click', () => {
+        if (!state.values.length) return;
+        const oldN = state.values.length;
+        const i = state.index;
+        const moves = oldN - i - 1;
+        const removed = state.values.splice(i, 1)[0];
+        state.active = [];
+        state.shifted = Array.from({ length: moves }, (_, offset) => i + offset);
+        addLedger('remove(' + i + ')', 'n − i − 1 = ' + oldN + ' − ' + i + ' − 1 = ' + moves, 1, moves, moves + 1);
+        state.last = '값 ' + J(removed, '을') + ' 삭제하고 뒤의 원소 ' + moves + '개를 왼쪽으로 옮겼다.';
+        render();
+      });
+      $('reset-workload').addEventListener('click', () => {
+        state.values = initial.slice();
+        state.index = 2;
+        state.ledger = [];
+        state.active = [];
+        state.shifted = [];
+        state.last = '초기 상태는 원소 5개와 빈 칸 5개다.';
+        $('work-value').value = 'X';
+        render();
+      });
+      render();
+    })();
+  </script>
+</body>
+</html>

@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Amortized Cost | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css">
+  <link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+    .chart{display:flex;align-items:end;gap:.3rem;min-width:720px;height:250px}
+    .bar{flex:1;height:calc(var(--c)*10px);min-height:10px;background:var(--line-200)}
+    .bar.on{background:var(--callout-bg);border-top:4px solid var(--pnu-green)}
+    .compare{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+    .card{padding:1rem;border:1px solid var(--line-200);background:#fff}
+    @media(max-width:650px){.compare{grid-template-columns:1fr}}
+  </style>
+</head>
+<body class="visual-topic">
+  <a class="skip-link" href="#main-content">본문으로 이동</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">When the Array Fills Up</span><span class="nav-tag is-current" aria-current="page">Amortized Cost</span></nav></div></div></header>
+  <section class="hero topic-hero"><div class="container"><p class="eyebrow">When the Array Fills Up</p><h1 class="page-title">Amortized Cost</h1><hr class="accent-rule"><p class="page-subtitle">늘리는 규칙에 따라 재할당 간격과 누적 복사량이 달라진다. 연속한 추가의 쓰기와 복사를 모두 더한 뒤 호출 수로 나누어 한 번당 비용을 구한다.</p></div></section>
+  <main id="main-content" class="page-body container">
+    <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>누적 복사</strong><span>재할당이 일어날 때 기존 원소를 옮긴 횟수를 모두 더한다.</span></article><article class="summary-card"><strong>상각 비용(amortized cost)</strong><span>어떤 순서로 m번 호출해도 총비용이 m×c를 넘지 않게 하는 한 번당 비용의 상한 c다.</span></article><article class="summary-card"><strong>평균 경우와의 차이</strong><span>상각 비용은 입력 분포를 가정하지 않고, 평균 경우(average case)는 입력의 확률 분포로 기대 비용을 구한다.</span></article></div></section>
+    <section class="topic-example">
+      <header class="example-header"><h2 class="section-title">쓰기와 복사를 더한 총비용을 호출 수로 나누면 한 번당 비용이 된다</h2><p class="lead">늘리는 규칙과 호출 수 m을 바꾸면 호출마다의 비용 막대와 총비용, 한 번당 비용이 함께 바뀐다.</p></header>
+      <div class="visual-lab">
+        <div class="visual-controls visual-controls--double"><div class="control-field"><label for="strategy">늘리는 규칙</label><select id="strategy"><option value="d">두 배로 늘리기</option><option value="p">두 칸씩 늘리기</option></select></div><div class="control-field"><label for="m">현재 호출 수 m <output id="mo" class="control-value" for="m">17</output></label><input id="m" type="range" min="1" max="20" value="17"></div></div>
+        <figure class="visual-figure"><div class="visual-frame"><div id="chart" class="chart" role="img"></div></div><figcaption class="visual-caption">막대 하나가 호출 한 번의 비용(쓰기 1회와 그 호출의 복사)이다. 초록 윗선 막대는 재할당이 일어난 호출이다.</figcaption></figure>
+        <div id="totals" class="visual-readouts" aria-live="polite"></div>
+        <p id="live" class="visual-note"></p>
+      </div>
+    </section>
+    <section class="topic-example">
+      <header class="example-header"><h2 class="section-title">두 배로 늘리면 한 번당 비용이 3 아래에 머문다</h2><p class="lead">위 막대와 별도로 호출 수 m을 정해 두 규칙의 총비용과 한 번당 비용을 비교한다.</p></header>
+      <div class="visual-lab">
+        <div class="visual-controls visual-controls--single"><div class="control-field"><label for="compare-m">비교할 호출 수 m <output id="compare-mo" class="control-value" for="compare-m">17</output></label><input id="compare-m" type="range" min="1" max="20" value="17"></div></div>
+        <figure class="visual-figure"><div class="visual-frame"><div id="compare" class="compare"></div></div><figcaption class="visual-caption">두 카드는 같은 m에서 쓰기·복사·총비용과 한 번당 비용이다.</figcaption></figure>
+        <div id="compare-read" class="visual-readouts" aria-live="polite"></div>
+        <p id="compare-live" class="visual-note"></p>
+      </div>
+    </section>
+    <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="capacity-and-resize.html">이전 · Capacity And Resize</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="inside-python-lists.html">다음 · Inside Python Lists</a></nav>
+  </main>
+  <footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+  <script>
+    (() => {
+      const $ = id => document.getElementById(id);
+      const J=(w,t)=>{const s=String(w),c=s.replace(/[\])\s]+$/,'').slice(-1),P={'을':['을','를'],'이':['이','가'],'은':['은','는'],'과':['과','와'],'으로':['으로','로']};let f=false,l=false;if(/[가-힣]/.test(c)){const k=(c.charCodeAt(0)-44032)%28;f=k>0;l=k===8}else if(/[0-9]/.test(c)){f='013678'.includes(c);l='178'.includes(c)}else if(/[a-z]/i.test(c)){f='lmnr'.includes(c.toLowerCase());l='lr'.includes(c.toLowerCase())}const p=P[t];return s+(t==='으로'?(f&&!l?p[0]:p[1]):(f?p[0]:p[1]))};
+      function run(m, strategy) {
+        let n = 0;
+        let capacity = 1;
+        let total = 0;
+        const calls = [];
+        for (let i = 1; i <= m; i += 1) {
+          const copied = n === capacity ? n : 0;
+          if (copied) capacity = strategy === 'd' ? capacity * 2 : capacity + 2;
+          total += copied + 1;
+          calls.push([i, copied, copied + 1, total, total / i]);
+          n += 1;
+        }
+        return calls;
+      }
+      const RD=(l,v)=>'<div class="visual-readout"><span class="visual-readout-label">'+l+'</span><strong class="visual-readout-value">'+v+'</strong></div>';
+      const copyTotal = calls => calls.reduce((sum, call) => sum + call[1], 0);
+      function card(title, calls) {
+        const last = calls.at(-1);
+        const copied = copyTotal(calls);
+        const m = calls.length;
+        return '<article class="card"><strong>' + title + '</strong><p>쓰기 ' + m + '회 + 복사 ' + copied + '회 = 총비용 ' + last[3] + '</p><p>한 번당 비용 ' + last[3] + ' ÷ ' + m + ' = ' + last[4].toFixed(2) + '</p></article>';
+      }
+      function drawCurrent() {
+        const m = Number($('m').value);
+        const strategy = $('strategy').value;
+        const calls = run(m, strategy);
+        const last = calls.at(-1);
+        const copied = copyTotal(calls);
+        const resizeCalls = calls.filter(call => call[1]).map(call => call[0]);
+        $('mo').value = m;
+        $('chart').innerHTML = calls.map(call => '<div class="bar ' + (call[1] ? 'on' : '') + '" style="--c:' + call[2] + '" title="' + call[0] + '번 비용 ' + call[2] + '"></div>').join('');
+        $('chart').setAttribute('aria-label', m + '회 호출의 비용 막대. 재할당 호출 ' + (resizeCalls.join(', ') || '없음') + '. 총비용 ' + last[3]);
+        $('totals').innerHTML = RD('새 값 쓰기', m + '회') + RD('기존 원소 복사', copied + '회') + RD('총비용', last[3] + '회') + RD('한 번당 비용', last[3] + ' ÷ ' + m + ' = ' + last[4].toFixed(2));
+        $('live').textContent = (resizeCalls.length ? '재할당은 ' + resizeCalls.join(', ') + '번째 호출에서 일어났다. ' : '재할당은 아직 일어나지 않았다. ') + m + '회 총비용 ' + J(last[3], '을') + ' ' + J(m, '으로') + ' 나눈 한 번당 비용은 ' + last[4].toFixed(2) + '회다.';
+      }
+      function drawCompare() {
+        const m = Number($('compare-m').value);
+        const doubling = run(m, 'd');
+        const plusOne = run(m, 'p');
+        $('compare-mo').value = m;
+        $('compare').innerHTML = card('두 배로 늘리기', doubling) + card('두 칸씩 늘리기', plusOne);
+        $('compare-read').innerHTML = RD('두 배로 늘리기 한 번당 비용', doubling.at(-1)[4].toFixed(2) + '회') + RD('두 칸씩 늘리기 한 번당 비용', plusOne.at(-1)[4].toFixed(2) + '회');
+        $('compare-live').textContent = m + '회 호출에서 두 배로 늘리면 ' + copyTotal(doubling) + '개, 두 칸씩 늘리면 ' + copyTotal(plusOne) + '개를 복사한다. 같은 m에서 재할당 간격이 총비용 차이를 만든다.';
+      }
+      $('m').addEventListener('input', drawCurrent);
+      $('strategy').addEventListener('change', drawCurrent);
+      $('compare-m').addEventListener('input', drawCompare);
+      drawCurrent();
+      drawCompare();
+    })();
+  </script>
+</body>
+</html>
