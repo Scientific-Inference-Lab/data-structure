@@ -1,0 +1,127 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Stack Expression Processing | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+
+  </style>
+</head>
+<body class="visual-topic topic-stack-expression-processing">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Last In, First Out</span><span class="nav-tag is-current" aria-current="page">Stack Expression Processing</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Last In, First Out</p><h1 class="page-title">Stack Expression Processing</h1><hr class="accent-rule"><p class="page-subtitle">스택은 나중에 필요할 값을 보관했다가 필요한 순간에 맨 위부터 꺼낸다. 괄호 검사(balanced parentheses)는 짝을 찾지 못한 여는 괄호를, 후위식(postfix expression) 평가는 피연산자와 중간 결과를 스택에 둔다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>괄호 검사</strong><span>여는 괄호는 push, 닫는 괄호는 맨 위와 짝이 맞을 때 pop한다.</span></article><article class="summary-card"><strong>실패하는 세 경우</strong><span>빈 스택에서 닫는 괄호, 종류가 어긋난 짝, 입력 끝에 남은 여는 괄호다.</span></article><article class="summary-card"><strong>후위식 평가</strong><span>연산자를 만나면 오른쪽 값, 왼쪽 값 순서로 두 번 pop해 계산한다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">괄호 검사는 짝을 찾지 못한 여는 괄호만 스택에 남긴다</h2><p class="lead">입력과 읽은 기호 수를 바꾸면 현재 기호, 스택에 하는 일, 남은 여는 괄호, 판정이 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="pin">입력</label><select id="pin"><option value="(()())">(()())</option><option value=")(">)(</option><option value="(()">(()</option><option value="([)]">([)]</option><option value="{[()]}">{[()]}</option></select></div><div class="action-row"><button id="pc-first" class="btn btn-outline" type="button">처음으로</button><button id="pc-prev" class="btn btn-outline" type="button">이전</button><button id="pc-next" class="btn" type="button">다음</button></div></div>
+      <p id="reason-1" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="pc-tokens" class="ds-row has-labels"></div><div class="ds-row"><span class="ds-row-label">스택 (바닥 → 맨 위)</span><span id="pc-stack" class="ds-row"></span></div></div></div><figcaption class="visual-caption">위 줄은 입력 기호이며 파란 칸은 이미 읽은 기호, 초록 테두리 칸은 방금 읽은 기호, 빨간 칸은 실패를 일으킨 기호다. 아래 줄은 아직 짝을 찾지 못한 여는 괄호다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">후위식은 연산자를 만날 때 가장 최근 두 값을 꺼내 계산한다</h2><p class="lead">식과 읽은 토큰 수를 바꾸면 값 스택, 방금 한 계산, 중간 결과가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="pf">후위식</label><select id="pf"><option value="4 5 6 * +">4 5 6 * +</option><option value="7 8 + 3 2 + /">7 8 + 3 2 + /</option><option value="9 3 -">9 3 −</option></select></div><div class="action-row"><button id="pe-first" class="btn btn-outline" type="button">처음으로</button><button id="pe-prev" class="btn btn-outline" type="button">이전</button><button id="pe-next" class="btn" type="button">다음</button></div></div>
+      <p id="reason-2" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="pe-tokens" class="ds-row has-labels"></div><div class="ds-row"><span class="ds-row-label">값 스택 (바닥 → 맨 위)</span><span id="pe-stack" class="ds-row"></span></div></div></div><figcaption class="visual-caption">위 줄은 토큰이며 파란 칸은 읽은 토큰, 초록 테두리 칸은 방금 읽은 토큰이다. 아래 줄은 값 스택이고 초록 칸이 방금 넣은 값이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../11. Last In, First Out/stack-adt.html">이전 · Stack ADT</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../11. Last In, First Out/call-stack.html">다음 · Call Stack</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+
+  function cell(t, cls, lab) { return '<span class="ds-cell ' + (cls || "") + '">' + (lab !== undefined ? "<small>" + lab + "</small>" : "") + t + "</span>"; }
+  function arrow(t) { return '<span class="ds-arrow" aria-hidden="true">' + (t || "→") + "</span>"; }
+  function stepper(sid, n, getMax, render) {
+    var st = { i: 0 };
+    function go(v) {
+      var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
+      $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
+      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
+      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
+    }
+    $(sid + "-first").addEventListener("click", function () { go(0); });
+    $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });
+    $(sid + "-next").addEventListener("click", function () { go(st.i + 1); });
+    return { go: go, reset: function () { go(0); }, now: function () { return st.i; } };
+  }
+
+  var pairs = { ")": "(", "]": "[", "}": "{" };
+  function runPar(txt, k) {
+    var s = [], fail = -1, why = "";
+    for (var t = 0; t < k; t++) {
+      var c = txt[t];
+      if ("([{".indexOf(c) >= 0) s.push(c);
+      else if (!s.length) { fail = t; why = "빈 스택에서 닫는 괄호를 만났다"; break; }
+      else if (s[s.length - 1] !== pairs[c]) { fail = t; why = "맨 위 " + pj(s[s.length - 1], "과") + " " + c + "의 종류가 다르다"; break; }
+      else s.pop();
+    }
+    return { s: s, fail: fail, why: why };
+  }
+  var pc = stepper("pc", 1, function () { var txt = $("pin").value, full = runPar(txt, txt.length); return full.fail >= 0 ? full.fail + 1 : txt.length; }, function (k, mx) {
+    var txt = $("pin").value, r = runPar(txt, k), done = k === mx;
+    $("pc-tokens").innerHTML = '<span class="ds-row-label">입력</span>' + txt.split("").map(function (c, j) { return cell(c, (j === r.fail ? "is-alert" : j < k - 1 ? "is-x" : "") + (j === k - 1 && j !== r.fail ? " is-on" : "") + (j >= k ? " is-off" : ""), j); }).join("");
+    $("pc-stack").innerHTML = r.s.length ? r.s.map(function (c, j) { return cell(c, j === r.s.length - 1 ? "is-on" : ""); }).join("") : cell("비어 있음", "is-empty");
+    var c = k ? txt[k - 1] : "", act = !k ? "시작 전" : r.fail === k - 1 ? "실패" : "([{".indexOf(c) >= 0 ? "push" : "pop";
+    var verdict = r.fail >= 0 ? "짝이 맞지 않음" : !done ? "읽는 중" : r.s.length ? "짝이 맞지 않음" : "짝이 맞음";
+    show(1, [["읽은 기호", k ? c : "없음"], ["스택에 한 일", act], ["남은 여는 괄호", r.s.length ? r.s.join(" ") : "없음"], ["판정", verdict]],
+      r.fail >= 0 ? r.why + ". 이 순간 바로 실패로 판정하고 남은 기호는 읽지 않는다."
+        : done && r.s.length ? "입력을 모두 읽었는데 여는 괄호 " + pj(r.s.join(" "), "이") + " 남았다. 닫히지 않은 괄호가 있으므로 실패다."
+        : done ? "입력을 모두 읽었을 때 스택이 비었다. 가장 최근의 여는 괄호부터 차례로 짝을 이루었으므로 괄호가 맞는다."
+        : !k ? "여는 괄호는 push하고, 닫는 괄호는 맨 위의 여는 괄호와 짝이 맞는지 본 뒤 pop한다."
+        : "지금까지 짝을 찾지 못한 여는 괄호만 스택에 남아 있다. 다음 닫는 괄호는 맨 위의 가장 최근 여는 괄호와 짝을 맞춘다.");
+  });
+  var OPS = { "+": function (a, b) { return a + b; }, "-": function (a, b) { return a - b; }, "*": function (a, b) { return a * b; }, "/": function (a, b) { return a / b; } };
+  var SHOW = { "*": "×", "/": "/", "-": "−", "+": "+" };
+  function runPost(toks, k) {
+    var s = [], last = "";
+    for (var t = 0; t < k; t++) {
+      var x = toks[t];
+      if (OPS[x]) { var b = s.pop(), a = s.pop(), v = OPS[x](a, b); s.push(v); last = a + " " + SHOW[x] + " " + b + " = " + v; }
+      else { s.push(Number(x)); last = pj(x, "을") + " push"; }
+    }
+    return { s: s, last: last };
+  }
+  var pe = stepper("pe", 2, function () { return $("pf").value.split(" ").length; }, function (k, mx) {
+    var toks = $("pf").value.split(" "), r = runPost(toks, k), x = k ? toks[k - 1] : "";
+    $("pe-tokens").innerHTML = '<span class="ds-row-label">토큰</span>' + toks.map(function (t, j) { return cell(SHOW[t] || t, (j < k - 1 ? "is-x" : "") + (j === k - 1 ? " is-on" : "") + (j >= k ? " is-off" : ""), j); }).join("");
+    $("pe-stack").innerHTML = r.s.length ? r.s.map(function (v, j) { return cell(v, j === r.s.length - 1 && k ? "is-on" : ""); }).join("") : cell("비어 있음", "is-empty");
+    show(2, [["읽은 토큰", k ? (SHOW[x] || x) : "없음"], ["방금 한 일", k ? (OPS[x] ? "pop 두 번 · " + r.last : r.last) : "시작 전"], ["값 스택", r.s.length ? r.s.join(", ") : "비어 있음"], ["결과", k === mx && r.s.length === 1 ? String(r.s[0]) : "계산 중"]],
+      !k ? "피연산자는 값 스택에 push하고, 연산자를 만나면 두 값을 꺼내 계산한 결과를 다시 push한다."
+        : OPS[x] ? "연산자 " + SHOW[x] + "를 만나 먼저 꺼낸 값을 오른쪽, 나중에 꺼낸 값을 왼쪽에 두고 " + pj(r.last, "을") + " 계산해 다시 push했다." + (x === "-" || x === "/" ? " 뺄셈과 나눗셈은 꺼낸 순서를 바꾸면 결과가 달라진다." : "") + (k === mx ? " 입력 끝에 스택에 남은 하나 " + pj(r.s[0], "이") + " 식의 값이다." : "")
+        : "피연산자 " + pj(x, "은") + " 연산자를 만날 때까지 스택에서 기다린다.");
+  });
+  on("pin", function () { pc.reset(); }); on("pf", function () { pe.reset(); });
+  pc.reset(); pe.reset();
+}());
+</script>
+</body>
+</html>
