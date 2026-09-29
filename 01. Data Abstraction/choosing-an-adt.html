@@ -1,0 +1,67 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Choosing An ADT | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+    .task-picker{display:grid;grid-template-columns:minmax(280px,1.3fr) minmax(220px,.7fr);gap:1rem;align-items:end}.requirement{padding:1rem 1.25rem;border-left:5px solid var(--pnu-green);background:var(--callout-bg)}.matrix-wrap{overflow-x:auto}.matrix{width:100%;min-width:880px;border-collapse:collapse}.matrix th,.matrix td{padding:.8rem;border:1px solid var(--line-200);text-align:center}.matrix th:first-child,.matrix td:first-child{text-align:left}.matrix .selected{background:var(--callout-bg);box-shadow:inset 5px 0 0 var(--pnu-green)}.supports{color:var(--pnu-blue-dark);font-weight:800}.not-used{color:var(--ink-500)}.call-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}.call-card{padding:1rem;border:1px solid var(--line-200);background:var(--white)}.call-card strong{display:block;color:var(--pnu-blue-dark)}.call-card code{display:block;margin:.7rem 0;font-weight:800}.call-card.active{border:2px solid var(--pnu-green);background:var(--callout-bg)}
+    @media(max-width:780px){.task-picker,.call-grid{grid-template-columns:1fr}}
+    .example-header{max-width:100%}.example-header .lead{max-width:82ch}@media(max-width:760px){.example-header .lead{max-width:none}}
+  </style>
+
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Data Abstraction</span><span class="nav-tag is-current" aria-current="page">Choosing An ADT</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Data Abstraction</p><h1 class="page-title">Choosing An ADT</h1><hr class="accent-rule"><p class="page-subtitle">자료구조 이름보다 필요한 연산을 먼저 정한다. 요구사항이 위치, 같은 값, 순서, 제거 순서 가운데 무엇을 묻는지 먼저 가른다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="선택 기준"><div class="summary-grid"><article class="summary-card"><strong>위치</strong><span>리스트(list)는 인덱스로 조회하고 바꾼다.</span></article><article class="summary-card"><strong>값과 순서</strong><span>USet은 같은 값, SSet은 기준 이상인 가장 작은 값을 찾는다.</span></article><article class="summary-card"><strong>제거 순서</strong><span>스택은 최근 원소, 큐는 먼저 온 원소, 우선순위 큐는 우선순위가 가장 높은 원소를 제거한다.</span></article></div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">필요한 연산이 ADT 선택을 가른다</h2><p class="lead">요구사항을 고르면 필요한 연산과 그 연산을 직접 제공하는 ADT의 행이 강조된다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="task">업무 요구</label><select id="task"><option value="list">세 번째 원소를 읽고 둘째 위치에 값을 넣는다</option><option value="uset">회원 번호 7이 등록되어 있는지 확인한다</option><option value="sset">6시 이후(6시 포함) 가장 이른 일정을 찾는다</option><option value="stack">가장 최근 작업을 취소한다</option><option value="queue">가장 먼저 접수한 요청을 처리한다</option><option value="pq">가장 긴급한 요청을 먼저 처리한다</option></select></div></div>
+
+      <figure class="visual-figure"><div class="visual-frame" role="region" aria-label="ADT 연산 비교표" tabindex="0"><table class="matrix"><thead><tr><th>필요한 연산</th><th>리스트</th><th>USet</th><th>SSet</th><th>스택</th><th>큐</th><th>우선순위 큐</th></tr></thead><tbody>
+        <tr data-row="list"><th>위치 i 조회·삽입</th><td class="supports">get(i), add(i,x)</td><td>해당 없음</td><td>해당 없음</td><td>해당 없음</td><td>해당 없음</td><td>해당 없음</td></tr>
+        <tr data-row="uset"><th>같은 값 또는 없음</th><td>해당 없음</td><td class="supports">find(x)</td><td>다른 의미의 find</td><td>해당 없음</td><td>해당 없음</td><td>해당 없음</td></tr>
+        <tr data-row="sset"><th>x 이상인 가장 작은 값 또는 없음</th><td>해당 없음</td><td>다른 의미의 find</td><td class="supports">find(x)</td><td>해당 없음</td><td>해당 없음</td><td>해당 없음</td></tr>
+        <tr data-row="stack"><th>마지막 원소 제거·반환</th><td>위치 연산 필요</td><td>해당 없음</td><td>해당 없음</td><td class="supports">pop()</td><td>제거 순서가 다름</td><td>제거 기준이 다름</td></tr>
+        <tr data-row="queue"><th>첫 원소 제거·반환</th><td>위치 연산 필요</td><td>해당 없음</td><td>해당 없음</td><td>제거 순서가 다름</td><td class="supports">dequeue()</td><td>제거 기준이 다름</td></tr>
+        <tr data-row="pq"><th>우선순위가 가장 높은 원소 제거·반환</th><td>해당 없음</td><td>해당 없음</td><td>해당 없음</td><td>제거 기준이 다름</td><td>제거 기준이 다름</td><td class="supports">remove()</td></tr>
+      </tbody></table></div><figcaption class="visual-caption">초록 막대가 있는 행은 고른 요구사항이고, 굵은 글씨 칸은 그 요구를 직접 제공하는 연산이다.</figcaption></figure>
+      <div id="requirement" class="visual-readouts" aria-live="polite"></div>
+      <p id="cause" class="visual-note"></p>
+    </div>
+  </section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">같은 저장 값도 질문에 따라 호출이 달라진다</h2><p class="lead">각 카드는 해당 ADT가 돌려주는 결과를 보여 준다. 같은 값을 저장해도 자료형에 따라 답할 수 있는 질문이 다르다.</p></header>
+    <div class="visual-lab"><div id="calls" class="call-grid">
+      <article class="call-card" data-card="list"><strong>리스트 [3, 7, 10]</strong><code>get(1) → 7</code><span>위치 1의 값</span></article>
+      <article class="call-card" data-card="uset"><strong>USet {3, 7, 10}</strong><code>find(6) → None</code><span>6과 같은 값이 없음</span></article>
+      <article class="call-card" data-card="sset"><strong>SSet {3, 7, 10}</strong><code>find(6) → 7</code><span>6 이상인 가장 작은 값</span></article>
+      <article class="call-card" data-card="stack"><strong>스택 [3, 7, 10]</strong><code>pop() → 10</code><span>가장 최근 원소</span></article>
+      <article class="call-card" data-card="queue"><strong>큐 [3, 7, 10]</strong><code>dequeue() → 3</code><span>가장 먼저 들어온 원소</span></article>
+      <article class="call-card" data-card="pq"><strong>우선순위 큐 {3, 7, 10}</strong><code>remove() → 3</code><span>숫자가 작을수록 우선할 때 가장 높은 우선순위</span></article>
+    </div><p class="visual-note">저장된 값보다 필요한 반환값, 위치 조건, 순서 조건이 ADT 선택을 결정한다. Python의 <code>list</code>도 <code>pop()</code>을 부르면 스택처럼, <code>deque</code>의 <code>popleft()</code>를 부르면 큐처럼 쓰인다. 자료형 이름만으로 ADT를 단정할 수 없다.</p></div>
+  </section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="adt-specifications.html">이전 · ADT Specifications</a><a class="pager-link is-all" href="../index.html">전체</a></nav>
+</main><footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(() => {
+  const $=id=>document.getElementById(id), info={
+    list:['필요한 연산: 인덱스로 값을 읽고 지정한 위치에 삽입','리스트의 get(i)와 add(i, x)가 위치 요구를 직접 표현한다. 세 번째 원소는 get(2), 둘째 위치 삽입은 add(1, x)다.'],
+    uset:['필요한 연산: x와 같은 값 또는 None','USet의 find(x)는 x와 같은 값이 있으면 그 값을, 없으면 None을 돌려준다.'],
+    sset:['필요한 연산: x 이상인 가장 작은 값 또는 None','SSet의 find(x)는 값의 순서를 사용해 x 이상인 가장 작은 값을, 없으면 None을 돌려준다.'],
+    stack:['필요한 연산: 마지막 원소를 제거해 반환','스택의 pop()은 가장 최근에 추가한 원소를 선택한다.'],
+    queue:['필요한 연산: 첫 원소를 제거해 반환','큐의 dequeue()는 가장 먼저 추가한 원소를 선택한다.'],
+    pq:['필요한 연산: 우선순위가 가장 높은 원소를 제거해 반환','우선순위 큐의 remove()는 접수 순서와 관계없이 우선순위로 원소를 선택한다.']
+  };
+  function render(){const key=$('task').value;document.querySelectorAll('[data-row]').forEach(r=>r.classList.toggle('selected',r.dataset.row===key));document.querySelectorAll('[data-card]').forEach(r=>r.classList.toggle('active',r.dataset.card===key));const adt={list:['리스트','get(i), add(i, x)'],uset:['USet','find(x)'],sset:['SSet','find(x)'],stack:['스택','pop()'],queue:['큐','dequeue()'],pq:['우선순위 큐','remove()']}[key],rd=(l,v)=>'<div class="visual-readout"><span class="visual-readout-label">'+l+'</span><strong class="visual-readout-value">'+v+'</strong></div>';$('requirement').innerHTML=rd('필요한 연산',info[key][0].replace('필요한 연산: ',''))+rd('알맞은 ADT',adt[0])+rd('직접 제공하는 연산',adt[1]);$('cause').textContent=info[key][1]+' 자료구조 이름을 고르기 전에 요구사항이 위치, 같은 값, 순서, 제거 순서 가운데 무엇을 묻는지 먼저 나눈다.'}
+  $('task').addEventListener('change',render);render();
+})();
+</script></body></html>

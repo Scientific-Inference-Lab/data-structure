@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>ADT Specifications | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+    .case-controls{display:grid;grid-template-columns:minmax(240px,1fr) minmax(180px,.6fr);gap:1rem;align-items:end}.contract{display:grid;grid-template-columns:1.1fr .9fr 1.1fr .9fr 1.1fr;gap:.6rem;align-items:stretch;min-width:860px}.contract-card{display:flex;flex-direction:column;justify-content:center;min-height:120px;padding:1rem;border:2px solid var(--line-200);background:var(--white)}.contract-card strong{color:var(--pnu-blue-dark)}.contract-card span{margin-top:.55rem;font:700 .9rem/1.45 var(--mono)}.contract-card.boundary{border-color:var(--pnu-green);background:var(--callout-bg)}.contract-card.stop{border-color:var(--pnu-red);background:var(--alert-050)}.arrow{display:grid;place-items:center;color:var(--pnu-green);font-size:1.5rem;font-weight:900}.comparison{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.compare{padding:1rem;border:1px solid var(--line-200);background:var(--white)}.compare strong{display:block;color:var(--pnu-blue-dark)}.compare .state{font:800 1rem/1.6 var(--mono)}.seq-controls{display:flex;flex-wrap:wrap;gap:.55rem;margin-bottom:1rem}.seq-table{width:100%;min-width:560px;border-collapse:collapse}.seq-table th,.seq-table td{padding:.7rem;border:1px solid var(--line-200);text-align:left;font-family:var(--mono)}.seq-table th{background:var(--pnu-blue-tint);color:var(--pnu-blue-dark);font-family:inherit}.seq-table tr.done td{background:var(--white)}.seq-table tr.pending td{color:var(--ink-400)}.seq-table tr.current td{background:var(--callout-bg);box-shadow:inset 0 0 0 2px var(--pnu-green)}
+    @media(max-width:720px){.case-controls,.comparison{grid-template-columns:1fr}}
+    .example-header{max-width:100%}.example-header .lead{max-width:82ch}@media(max-width:760px){.example-header .lead{max-width:none}}
+  </style>
+
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Data Abstraction</span><span class="nav-tag is-current" aria-current="page">ADT Specifications</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Data Abstraction</p><h1 class="page-title">ADT Specifications</h1><hr class="accent-rule"><p class="page-subtitle">명세(specification)는 연산마다 호출 전 상태, 입력, 적용 조건, 반환값, 호출 뒤 상태를 정확히 적는다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="명세 요소"><div class="summary-grid"><article class="summary-card"><strong>호출 전 상태와 적용 조건</strong><span>연산을 시작할 수 있는 상태를 정한다.</span></article><article class="summary-card"><strong>반환값</strong><span>호출자가 받는 값을 정한다.</span></article><article class="summary-card"><strong>호출 뒤 상태</strong><span>연산이 끝난 뒤의 상태를 정한다.</span></article></div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">호출 전후를 하나의 명세로 묶는다</h2><p class="lead">사례마다 호출 전 상태, 적용 조건, 반환값과 호출 뒤 상태가 하나의 명세로 이어진다. 적용 조건을 만족하지 않으면 연산은 시작되지 않는다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="case">상태와 연산</label><select id="case"><option value="push">[4, "dog"]에서 push(True)</option><option value="peek">[4, "dog"]에서 peek()</option><option value="size">[4, "dog"]에서 size()</option><option value="pop">[4, "dog"]에서 pop()</option><option value="empty">[]에서 pop()</option><option value="check">[]에서 is_empty()</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="contract" role="img" aria-label="ADT 명세 작업대">
+        <article class="contract-card"><strong>호출 전 상태</strong><span id="pre"></span></article><div class="arrow">→</div>
+        <article class="contract-card"><strong>연산과 입력</strong><span id="call"></span></article>
+        <article id="condition-card" class="contract-card boundary"><strong>적용 조건</strong><span id="condition"></span></article><div class="arrow">→</div>
+        <article id="result-card" class="contract-card"><strong>반환값과 호출 뒤 상태</strong><span id="result"></span></article>
+      </div></div><figcaption class="visual-caption">화살표는 호출 전 상태에서 결과로 가는 순서이고, 강조한 적용 조건 카드는 그 호출이 결과까지 이어지는지 가르는 자리다.</figcaption></figure>
+      <div id="live" class="visual-readouts" aria-live="polite"></div><p id="cause" class="visual-note"></p>
+    </div>
+  </section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">연산 열을 따라 상태와 반환값을 계산한다</h2><p class="lead">빈 스택에서 네 연산을 차례로 호출한다. 각 행의 호출 뒤 상태가 다음 행의 호출 전 상태가 된다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="action-row"><button id="seq-prev" class="btn btn-outline" type="button">이전</button><button id="seq-next" class="btn" type="button">다음</button><button id="seq-reset" class="btn btn-outline" type="button">처음으로</button></div></div>
+
+      <figure class="visual-figure"><div class="visual-frame" role="region" aria-label="연산 열 추적표" tabindex="0"><table class="seq-table"><thead><tr><th scope="col">호출 전 상태</th><th scope="col">연산</th><th scope="col">반환값</th><th scope="col">호출 뒤 상태</th></tr></thead><tbody id="seq-body"></tbody></table></div><figcaption class="visual-caption">초록 행은 방금 호출한 연산이고, 흐린 행은 아직 호출하지 않은 연산이다.</figcaption></figure>
+      <div id="seq-live" class="visual-readouts" aria-live="polite"></div>
+      <p id="seq-note" class="visual-note"></p>
+    </div>
+  </section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">같은 반환값도 호출 뒤 상태가 다르면 다른 연산이다</h2><p class="lead"><code>peek()</code>과 <code>pop()</code>은 같은 맨 위 값을 돌려주지만 한쪽만 상태를 바꾼다.</p></header>
+    <div class="visual-lab"><div class="comparison">
+      <article class="compare"><strong>peek()</strong><p class="state">[4, "dog"] → 반환 "dog"<br>[4, "dog"]</p><p>상태를 읽고 그대로 둔다.</p></article>
+      <article class="compare"><strong>pop()</strong><p class="state">[4, "dog"] → 반환 "dog"<br>[4]</p><p>맨 위 값을 읽고 상태에서 제거한다.</p></article>
+    </div><p class="visual-note">반환값과 상태 변화를 함께 보아야 연산의 의미를 구분할 수 있다.</p></div>
+  </section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="operations-and-semantics.html">이전 · Operations And Semantics</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="choosing-an-adt.html">다음 · Choosing An ADT</a></nav>
+</main><footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(() => {
+  const $=id=>document.getElementById(id), data={
+    push:{pre:'[4, "dog"]',call:'push(True)',condition:'모든 스택 상태에서 적용',ret:'없음',post:'[4, "dog", True]',valid:true,cause:'True를 맨 위에 추가하므로 상태가 바뀌고 반환값은 없다.'},
+    peek:{pre:'[4, "dog"]',call:'peek()',condition:'스택이 비어 있지 않음',ret:'"dog"',post:'[4, "dog"]',valid:true,cause:'맨 위 값을 읽지만 제거하지 않아 상태가 유지된다. 상태를 읽기만 하는 조회 연산이다.'},
+    size:{pre:'[4, "dog"]',call:'size()',condition:'모든 스택 상태에서 적용',ret:'2',post:'[4, "dog"]',valid:true,cause:'원소 수만 반환하고 상태는 그대로다. peek()과 같은 조회 연산이다.'},
+    pop:{pre:'[4, "dog"]',call:'pop()',condition:'스택이 비어 있지 않음',ret:'"dog"',post:'[4]',valid:true,cause:'맨 위 값을 반환하고 같은 값을 상태에서 제거한다.'},
+    empty:{pre:'[]',call:'pop()',condition:'스택이 비어 있지 않음',ret:'명세가 정하지 않음',post:'명세가 정하지 않음',valid:false,cause:'빈 스택은 적용 조건을 만족하지 않으므로 명세는 반환값과 호출 뒤 상태를 정하지 않는다. 어떤 오류를 낼지는 구현이 정하더라도, 호출할 수 있는 조건은 명세에 적어야 한다.'},
+    check:{pre:'[]',call:'is_empty()',condition:'모든 스택 상태에서 적용',ret:'True',post:'[]',valid:true,cause:'비어 있는지만 읽는 연산이므로 빈 상태에서도 적용되고 상태는 그대로다.'}
+  };
+  const read=(l,v)=>'<div class="visual-readout"><span class="visual-readout-label">'+l+'</span><strong class="visual-readout-value">'+v+'</strong></div>';
+  function render(){const x=data[$('case').value];$('pre').textContent=x.pre;$('call').textContent=x.call;$('condition').textContent=x.condition;$('condition-card').className='contract-card '+(x.valid?'boundary':'stop');$('result-card').className='contract-card '+(x.valid?'':'stop');$('result').textContent=x.valid?'반환 '+x.ret+' · 다음 '+x.post:'적용 조건 경계에서 중단';$('live').innerHTML=read('적용 조건',x.valid?'만족함':'만족하지 않음')+read('반환값',x.ret)+read('호출 뒤 상태',x.post);$('cause').innerHTML=''+x.cause}
+  $('case').addEventListener('change',render);render();
+  const seq=[['[]','push(4)','없음','[4]'],['[4]','push(7)','없음','[4, 7]'],['[4, 7]','peek()','7','[4, 7]'],['[4, 7]','pop()','7','[4]']];let k=0;
+  function renderSeq(){$('seq-body').innerHTML=seq.map((r,i)=>'<tr class="'+(i<k-1?'done':i===k-1?'current':'pending')+'">'+r.map((c,j)=>'<td>'+(i<k||j===0&&i===k?c:j===0?'':'')+'</td>').join('')+'</tr>').join('');$('seq-prev').disabled=k===0;$('seq-next').disabled=k===seq.length;const cur=k?seq[k-1]:null;$('seq-live').innerHTML=read('호출한 연산',k+' / '+seq.length)+read('최근 반환값',cur?cur[2]:'아직 없음')+read('현재 상태',cur?cur[3]:'[]');$('seq-note').textContent=!k?'빈 스택 []에서 시작한다. 아직 호출한 연산이 없어 반환값도 없다.':k===3?'peek()은 7을 반환하지만 상태 [4, 7]을 그대로 둔다.':k===4?'pop()도 7을 반환하지만 상태가 [4]로 바뀐다. 반환값이 같아도 호출 뒤 상태가 다르면 다른 연산이다.':seq[k-1][1]+' 호출은 반환값 없이 상태를 '+seq[k-1][3]+'로 바꾸고, 이 상태가 다음 행의 호출 전 상태가 된다.'}
+  $('seq-prev').addEventListener('click',()=>{if(k)k--;renderSeq()});$('seq-next').addEventListener('click',()=>{if(k<seq.length)k++;renderSeq()});$('seq-reset').addEventListener('click',()=>{k=0;renderSeq()});renderSeq();
+})();
+</script></body></html>
