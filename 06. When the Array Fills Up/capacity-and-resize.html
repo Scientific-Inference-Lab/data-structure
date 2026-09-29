@@ -1,0 +1,135 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Capacity And Resize | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css">
+  <link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+    .row,.controls{display:flex;gap:.5rem;flex-wrap:wrap}
+    .cell{min-width:52px;padding:.8rem;border:2px solid var(--line-200);text-align:center}
+    .on{background:var(--callout-bg);border-color:var(--pnu-green)}
+    .banks,.compare{display:grid;grid-template-columns:1fr 1fr;gap:1rem}
+    .bank,.card{padding:1rem;border:1px solid var(--line-200);background:#fff}
+    .active{outline:4px solid var(--pnu-blue-dark)}.banks{margin-top:1rem}.bank .row{margin-top:.6rem}
+    .steps{display:flex;gap:.3rem;min-width:700px}
+    .step{flex:1;padding:.65rem;border:1px solid var(--line-200)}
+    .now{background:var(--callout-bg);outline:2px solid var(--pnu-green)}
+
+
+    @media(max-width:650px){.banks,.compare{grid-template-columns:1fr}}
+  </style>
+</head>
+<body class="visual-topic">
+  <a class="skip-link" href="#main-content">본문으로 이동</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">When the Array Fills Up</span><span class="nav-tag is-current" aria-current="page">Capacity And Resize</span></nav></div></div></header>
+  <section class="hero topic-hero"><div class="container"><p class="eyebrow">When the Array Fills Up</p><h1 class="page-title">Capacity And Resize</h1><hr class="accent-rule"><p class="page-subtitle">원소 수 n이 용량(capacity)과 같을 때 끝에 추가하면 더 큰 배열을 할당하고 기존 원소 n개를 같은 순서로 복사한 뒤 새 값을 쓴다.</p></div></section>
+  <main id="main-content" class="page-body container">
+    <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>원소 수 n</strong><span>현재 담긴 원소의 수다.</span></article><article class="summary-card"><strong>용량(capacity)</strong><span>내부 배열에 확보한 칸 수다.</span></article><article class="summary-card"><strong>재할당</strong><span>더 큰 배열을 할당하고 기존 원소를 옮긴 뒤 새 배열로 바꾸는 일이다.</span></article></div></section>
+    <section class="topic-example">
+      <header class="example-header"><h2 class="section-title">가득 찬 배열에 추가하면 새 배열로 원소를 모두 복사한다</h2><p class="lead">가득 찬 배열에 추가하면 새 배열 할당, 원소 복사, 새 값 쓰기, 활성 배열 전환이 차례로 일어난다.</p></header>
+      <div class="visual-lab">
+        <div class="visual-controls visual-controls--single"><div class="action-row"><button class="btn btn-outline" id="first" type="button">처음으로</button><button class="btn btn-outline" id="prev" type="button">이전</button><button class="btn" id="play" type="button">재생</button><button class="btn btn-outline" id="next" type="button">다음</button></div></div>
+        <figure class="visual-figure"><div class="visual-frame"><div class="visual-board"><div id="steps" class="steps"></div><div class="banks"><div id="ob" class="bank"><strong>기존 내부 배열(backing array)</strong><div id="old" class="row"></div></div><div id="nb" class="bank"><strong>새 내부 배열</strong><div id="new" class="row"></div></div></div></div></div><figcaption class="visual-caption">초록 칸은 값이 들어 있는 칸, 점선이 아닌 굵은 테두리 배열이 지금 활성 배열이다. 위 단계 표시에서 초록 칸이 현재 단계다.</figcaption></figure>
+        <div id="read" class="visual-readouts" aria-live="polite"></div>
+        <p id="why" class="visual-note"></p>
+      </div>
+    </section>
+    <section class="topic-example">
+      <header class="example-header"><h2 class="section-title">빈 칸이 있으면 재할당 없이 쓴다</h2><p class="lead">추가 직전에 빈 칸이 있는지에 따라 할당과 복사가 필요한지가 달라진다.</p></header>
+      <div class="visual-lab">
+        <div class="visual-controls visual-controls--single"><div class="control-field"><label for="case">끝에 추가하기 직전의 배열 상태</label><select id="case"><option value="3">n = 3, 용량 = 4</option><option value="4" selected>n = 4, 용량 = 4</option></select></div></div>
+        <figure class="visual-figure"><div class="visual-frame"><div id="compare" class="compare"></div></div><figcaption class="visual-caption">왼쪽은 추가 전 조건, 초록 카드는 E를 추가한 뒤의 원소 수와 용량이다.</figcaption></figure>
+        <div id="compare-read" class="visual-readouts" aria-live="polite"></div>
+        <p id="compare-live" class="visual-note"></p>
+      </div>
+    </section>
+    <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../05. Storing Elements in a Row/what-arrays-are-good-for.html">이전 · What Arrays Are Good For</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="amortized-cost.html">다음 · Amortized Cost</a></nav>
+  </main>
+  <footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+  <script>
+    (() => {
+      const $ = id => document.getElementById(id);
+      const phases = [
+        { title: '추가 요청', action: '가득 찬 배열에 E를 추가하려 한다.', result: '빈 칸이 없으므로 새 배열이 필요하다.' },
+        { title: '새 배열 할당', action: '용량 8인 연속 공간을 새로 확보한다.', result: '기존 배열은 아직 활성 상태이고 새 배열은 비어 있다.' },
+        { title: '첫 원소 복사', action: 'A를 새 배열의 같은 인덱스에 옮긴다.', result: '복사 1회가 끝났고 B, C, D는 기존 배열에 남아 있다.' },
+        { title: '둘째 원소 복사', action: 'B를 새 배열의 같은 인덱스에 옮긴다.', result: '복사 2회가 끝났고 다음 원소 C를 옮길 차례다.' },
+        { title: '셋째 원소 복사', action: 'C를 새 배열의 같은 인덱스에 옮긴다.', result: '복사 3회가 끝났고 마지막 기존 원소 D가 남았다.' },
+        { title: '기존 원소 복사 완료', action: 'D를 새 배열의 같은 인덱스에 옮긴다.', result: '기존 원소 n = 4개를 모두 복사했다.' },
+        { title: '새 값 쓰기', action: '빈 a[4]에 E를 쓴다.', result: '새 배열에는 원소 5개가 있지만 활성 참조는 아직 기존 배열을 가리킨다.' },
+        { title: '활성 배열 전환', action: '활성 참조를 새 배열로 바꾼다.', result: 'n = 5, 용량 = 8인 배열이 다음 연산의 기준이 된다.' }
+      ];
+      let phase = 0;
+      let timer = null;
+      const cells = (values, count) => Array.from({ length: count }, (_, i) => '<span class="cell ' + (values[i] ? 'on' : '') + '">' + (values[i] || '빈 칸') + '</span>').join('');
+      const readout = (label, value) => '<div class="visual-readout"><span class="visual-readout-label">' + label + '</span><strong class="visual-readout-value">' + value + '</strong></div>';
+      function stop() {
+        clearInterval(timer);
+        timer = null;
+        $('play').textContent = '재생';
+      }
+      function draw(announce) {
+        const copied = Math.max(0, Math.min(4, phase - 1));
+        const wrote = phase >= 6;
+        const switched = phase === 7;
+        const current = phases[phase];
+        $('steps').innerHTML = phases.map((item, i) => '<span class="step ' + (i === phase ? 'now' : '') + '">' + item.title + '</span>').join('');
+        $('old').innerHTML = cells(['A', 'B', 'C', 'D'], 4);
+        $('new').innerHTML = cells(phase ? ['A', 'B', 'C', 'D'].slice(0, copied).concat(wrote ? ['E'] : []) : [], 8);
+        $('ob').className = 'bank ' + (!switched ? 'active' : '');
+        $('nb').className = 'bank ' + (switched ? 'active' : '');
+        $('read').innerHTML = readout('활성 n / 용량', switched ? '5 / 8' : '4 / 4') + readout('할당', phase ? '1회' : '0회') + readout('복사', copied + '회') + readout('쓰기', wrote ? '1회' : '0회');
+        $('why').textContent = current.action + ' ' + current.result;
+        $('first').disabled = $('prev').disabled = phase === 0;
+        $('next').disabled = phase === 7;
+      }
+      function go(next) {
+        stop();
+        phase = Math.max(0, Math.min(7, next));
+        draw(true);
+      }
+      $('first').addEventListener('click', () => go(0));
+      $('prev').addEventListener('click', () => go(phase - 1));
+      $('next').addEventListener('click', () => go(phase + 1));
+      $('play').addEventListener('click', () => {
+        if (timer) {
+          stop();
+          return;
+        }
+        if (phase === 7) phase = 0;
+        $('play').textContent = '멈춤';
+        draw(true);
+        timer = setInterval(() => {
+          if (phase === 7) {
+            stop();
+            return;
+          }
+          phase += 1;
+          draw(true);
+          if (phase === 7) stop();
+        }, 800);
+      });
+      function drawComparison(announce) {
+        const full = Number($('case').value) === 4;
+        const capacity = full ? 8 : 4;
+        $('compare').innerHTML = '<article class="card"><strong>추가 전</strong><p>n ' + (full ? '=' : '&lt;') + ' 용량</p></article><article class="card on"><strong>추가 후</strong><p>n = ' + (full ? 5 : 4) + ', 용량 = ' + capacity + '</p><p>할당 ' + (full ? 1 : 0) + '회, 복사 ' + (full ? 4 : 0) + '회, 쓰기 1회다.</p></article>';
+        $('compare-read').innerHTML = readout('할당', (full ? 1 : 0) + '회') + readout('복사', (full ? 4 : 0) + '회') + readout('추가 후 n / 용량', (full ? 5 : 4) + ' / ' + capacity);
+        $('compare-live').textContent = full ? '가득 찬 상태라 새 배열을 할당하고 기존 원소 4개를 복사한 뒤 E를 쓴다. 이 추가 한 번의 비용은 원소 수에 비례한다.' : '빈 칸이 있어 재할당 없이 a[3]에 E를 쓴다. 복사는 일어나지 않는다.';
+      }
+      $('case').addEventListener('change', () => drawComparison(true));
+      draw(false);
+      drawComparison(false);
+    })();
+  </script>
+</body>
+</html>

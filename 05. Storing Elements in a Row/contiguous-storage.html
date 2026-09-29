@@ -1,0 +1,195 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="theme-color" content="#fff">
+  <title>Contiguous Storage | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css">
+  <link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+
+    .memory-stage{position:relative;padding:3.8rem .75rem 1rem;border:1px solid var(--line-200);background:linear-gradient(180deg,var(--surface-050) 0,#fff 72%)}
+    .address-ruler{position:relative;display:grid;grid-template-columns:repeat(8,minmax(0,1fr));gap:.35rem;touch-action:none}
+    .address-slot{min-width:0;padding:.75rem .15rem;border:1px solid var(--line-200);background:var(--white);color:var(--ink-700);text-align:center;cursor:pointer}
+    .address-slot strong,.address-slot small{display:block;overflow-wrap:anywhere}
+    .address-slot strong{font-size:1.05rem;color:var(--ink-900)}
+    .address-slot.is-selected{outline:3px solid var(--pnu-green);outline-offset:2px;background:var(--callout-bg)}
+    .address-slot.is-outside{border-style:dashed;background:var(--alert-050);color:var(--pnu-red)}
+    .index-marker{position:absolute;top:.55rem;left:var(--marker-left);z-index:2;transform:translateX(-50%);display:grid;place-items:center;width:2.7rem;height:2.7rem;border:0;border-radius:50%;background:var(--pnu-blue-dark);color:#fff;font-weight:900;box-shadow:0 .45rem 1rem rgba(14,49,92,.24);cursor:grab;touch-action:none}
+    .index-marker:active{cursor:grabbing}
+    .marker-stem{position:absolute;top:2.9rem;left:50%;width:2px;height:1rem;background:var(--pnu-blue-dark)}
+    .formula-strip{display:grid;grid-template-columns:1.2fr .8fr;gap:1rem;margin:1rem .75rem .75rem}
+    .equation-card,.boundary-card,.comparison-card{padding:1rem;border:1px solid var(--line-200);background:var(--white)}
+    .equation{margin:.35rem 0 0;color:var(--pnu-blue-dark);font-size:clamp(1.05rem,2.4vw,1.45rem);font-weight:900;overflow-wrap:anywhere}
+    .boundary-card.is-invalid{border-color:var(--pnu-red);background:var(--alert-050)}
+    .boundary-card.is-valid{border-color:var(--pnu-green);background:var(--callout-bg)}
+    .comparison-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
+    .comparison-card .counting-line{margin:.7rem 0 0;font-weight:800;color:var(--pnu-blue-dark)}
+    .eq-detail{margin:.85rem 0 0;color:var(--ink-700)}
+    @media(max-width:760px){.formula-strip,.comparison-grid{grid-template-columns:1fr}.address-ruler{gap:.18rem}.address-slot{padding:.65rem .05rem;font-size:.75rem}.address-slot strong{font-size:.85rem}.memory-stage{padding-inline:.35rem}}
+  </style>
+</head>
+<body class="visual-topic">
+  <a class="skip-link" href="#main-content">본문으로 이동</a>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Storing Elements in a Row</span><span class="nav-tag is-current" aria-current="page">Contiguous Storage</span></nav></div></div></header>
+  <section class="hero topic-hero"><div class="container"><p class="eyebrow">Storing Elements in a Row</p><h1 class="page-title">Contiguous Storage</h1><hr class="accent-rule"><p class="page-subtitle">같은 크기의 칸이 이어져 있으면 첫 주소와 칸 번호만으로 어느 원소의 주소든 계산할 수 있다. 경계를 벗어난 주소도 계산되지만 배열 원소가 되지는 않는다.</p></div></section>
+  <main id="main-content" class="page-body container">
+    <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>연속 저장</strong><span>같은 크기의 칸이 메모리에서 바로 이어진다.</span></article><article class="summary-card"><strong>주소 계산</strong><span>addr(i) = base + i × size다.</span></article><article class="summary-card"><strong>유효 범위</strong><span>원소가 6개면 0 ≤ i &lt; 6이다.</span></article></div></section>
+
+    <section class="topic-example">
+      <header class="example-header"><h2 class="section-title">주소는 base + i × size로 한 번에 계산한다</h2><p class="lead">마커의 위치, 기준 주소, 칸 크기가 하나의 주소 식을 만든다. 양끝의 점선 칸은 계산 가능한 주소와 유효한 원소를 구분한다.</p></header>
+      <div class="visual-lab">
+        <div class="visual-controls visual-controls--triple">
+          <div class="control-field"><label for="base">기준 주소 base <output id="base-out" class="control-value" for="base">1000</output></label><input id="base" type="range" min="800" max="2000" step="100" value="1000"></div>
+          <div class="control-field"><label for="size">한 칸 크기 size <output id="size-out" class="control-value" for="size">8바이트</output></label><input id="size" type="range" min="4" max="16" step="4" value="8"></div>
+          <div class="control-field"><label for="index">인덱스 i <output id="index-out" class="control-value" for="index">3</output></label><input id="index" type="range" min="-1" max="6" step="1" value="3"></div>
+        </div>
+        <figure class="visual-figure">
+          <div class="visual-frame">
+            <div id="memory-stage" class="memory-stage">
+              <button id="index-marker" class="index-marker" type="button" role="slider" aria-label="주소 자의 인덱스 마커" aria-valuemin="-1" aria-valuemax="6" aria-valuenow="3"><span id="marker-label">i=3</span><span class="marker-stem" aria-hidden="true"></span></button>
+              <div id="address-ruler" class="address-ruler" aria-label="클릭하거나 드래그할 수 있는 주소 자"></div>
+            </div>
+            <div class="formula-strip">
+              <div class="equation-card"><strong>주소 식</strong><p id="formula" class="equation">1000 + 3 × 8 = 1024</p><p id="distance" class="eq-detail">첫 칸에서 3칸, 24바이트 떨어져 있다.</p></div>
+              <div id="boundary-card" class="boundary-card is-valid"><strong>경계 판정</strong><p id="boundary" class="equation">0 ≤ 3 &lt; 6</p><p id="boundary-note" class="eq-detail">유효한 원소 58을 가리킨다.</p></div>
+            </div>
+          </div>
+          <figcaption class="visual-caption">점선 칸은 계산은 되지만 배열 경계 밖인 주소다. 초록 테두리 판정 카드는 유효한 원소, 빨간 테두리는 경계 밖이다.</figcaption>
+        </figure>
+        <div id="address-live" class="visual-readouts" aria-live="polite"></div>
+        <p class="visual-note">주소 계산과 경계 검사는 별개의 일이다. 식은 범위 밖 주소도 만들지만 공개된 배열 원소는 0부터 5까지만 존재한다.</p>
+      </div>
+    </section>
+
+    <section class="topic-example">
+      <header class="example-header"><h2 class="section-title">0 기반 인덱스는 첫 칸에서 떨어진 칸 수다</h2><p class="lead">위 절의 base, size, i를 그대로 쓴다. 같은 물리적 칸을 두 번호 체계로 나타내면 0 기반 인덱스는 첫 칸에서 떨어진 칸 수와 같다.</p></header>
+      <div class="visual-lab">
+        <div class="comparison-grid">
+          <article id="zero-card" class="comparison-card"><strong>0 기반 인덱스</strong><p id="zero-position" class="counting-line">i = 3</p><p id="zero-formula">base + 3 × size</p></article>
+          <article id="one-card" class="comparison-card"><strong>1 기반 순서</strong><p id="one-position" class="counting-line">4번째 칸</p><p id="one-formula">base + (4 − 1) × size</p></article>
+        </div>
+        <div id="count-live" class="visual-readouts" aria-live="polite"></div>
+        <p class="visual-note">0 기반 인덱스는 보정 없이 곧바로 칸의 거리로 쓰인다. 1 기반 순서는 1을 빼야 같은 주소에 도달한다.</p>
+      </div>
+    </section>
+
+    <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../04. Reasoning About Growth/best-worst-and-average.html">이전 · Best Worst And Average</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="backing-array.html">다음 · Backing Array</a></nav>
+  </main>
+  <footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+  <script>
+    (() => {
+      const values = [40, 25, 13, 58, 7, 91];
+      const $ = id => document.getElementById(id);
+      const J = (w, t) => { const s = String(w), c = s.replace(/[\])\s]+$/, '').slice(-1), P = { '을': ['을', '를'], '이': ['이', '가'], '은': ['은', '는'], '과': ['과', '와'], '으로': ['으로', '로'] }; let f = false, l = false; if (/[가-힣]/.test(c)) { const k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = '013678'.includes(c); l = '178'.includes(c); } else if (/[a-z]/i.test(c)) { f = 'lmnr'.includes(c.toLowerCase()); l = 'lr'.includes(c.toLowerCase()); } const p = P[t]; return s + (t === '으로' ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); };
+      const state = { base: 1000, size: 8, index: 3 };
+      const readout = (label, value) => '<div class="visual-readout"><span class="visual-readout-label">' + label + '</span><strong class="visual-readout-value">' + value + '</strong></div>';
+
+      function setIndex(next) {
+        state.index = Math.max(-1, Math.min(6, Math.round(next)));
+        $('index').value = state.index;
+        render();
+      }
+
+      function renderRuler() {
+        const ruler = $('address-ruler');
+        ruler.replaceChildren();
+        for (let i = -1; i <= 6; i += 1) {
+          const button = document.createElement('button');
+          button.type = 'button';
+          button.className = 'address-slot';
+          if (i === state.index) button.classList.add('is-selected');
+          if (i < 0 || i >= values.length) button.classList.add('is-outside');
+          button.setAttribute('aria-label', '인덱스 ' + i + ', 주소 ' + (state.base + i * state.size) + (i < 0 || i >= values.length ? ', 범위 밖' : ', 값 ' + values[i]));
+          const indexLabel = document.createElement('small');
+          indexLabel.textContent = 'i=' + i;
+          const valueLabel = document.createElement('strong');
+          valueLabel.textContent = i < 0 || i >= values.length ? '범위 밖' : values[i];
+          const addressLabel = document.createElement('small');
+          addressLabel.textContent = state.base + i * state.size;
+          button.append(indexLabel, valueLabel, addressLabel);
+          button.addEventListener('click', () => setIndex(i));
+          ruler.append(button);
+        }
+      }
+
+      function render() {
+        state.base = Number($('base').value);
+        state.size = Number($('size').value);
+        state.index = Number($('index').value);
+        const address = state.base + state.index * state.size;
+        const valid = state.index >= 0 && state.index < values.length;
+        $('base-out').value = state.base;
+        $('size-out').value = state.size + '바이트';
+        $('index-out').value = state.index;
+        $('memory-stage').style.setProperty('--marker-left', ((state.index + 1.5) / 8 * 100) + '%');
+        $('index-marker').setAttribute('aria-valuenow', state.index);
+        $('index-marker').setAttribute('aria-valuetext', '인덱스 ' + state.index + ', 주소 ' + address + (valid ? ', 유효' : ', 범위 밖'));
+        $('marker-label').textContent = 'i=' + state.index;
+        $('formula').textContent = state.base + ' + ' + state.index + ' × ' + state.size + ' = ' + address;
+        $('distance').textContent = state.index >= 0 ? '첫 칸에서 ' + state.index + '칸, ' + (state.index * state.size) + '바이트 떨어진 주소다.' : '첫 칸보다 ' + (-state.index) + '칸, ' + (-state.index * state.size) + '바이트 앞의 주소다.';
+        $('boundary').textContent = '0 ≤ ' + state.index + ' < 6';
+        $('boundary-note').textContent = valid ? '유효한 원소 ' + J(values[state.index], '을') + ' 가리킨다.' : '주소 ' + J(address, '은') + ' 계산되지만 배열 경계 밖이다.';
+        $('boundary-card').className = 'boundary-card ' + (valid ? 'is-valid' : 'is-invalid');
+        $('zero-position').textContent = valid ? 'i = ' + state.index : '유효한 칸이 아니다';
+        $('zero-formula').textContent = valid ? 'base + ' + state.index + ' × size = ' + address : '경계 검사에서 원소 접근이 중단된다';
+        $('one-position').textContent = valid ? (state.index + 1) + '번째 칸' : '유효한 순서가 아니다';
+        $('one-formula').textContent = valid ? 'base + (' + (state.index + 1) + ' − 1) × size = ' + address : '주소 계산 결과와 원소 유효성은 다르다';
+        $('address-live').innerHTML = readout('계산된 주소', address) + readout('인덱스 경계', valid ? '유효' : '범위 밖') + readout('주소 연산', '곱셈 1회 + 덧셈 1회');
+        $('count-live').innerHTML = valid ? readout('0 기반 번호', state.index) + readout('1 기반 순서', state.index + 1) + readout('공통 주소', address) : readout('현재 인덱스', state.index) + readout('판정', '배열 원소 없음');
+        renderRuler();
+      }
+
+      ['base', 'size', 'index'].forEach(id => $(id).addEventListener('input', render));
+      const stage = $('memory-stage');
+      let dragging = false;
+      function pointerToIndex(event) {
+        const rect = $('address-ruler').getBoundingClientRect();
+        const position = Math.max(0, Math.min(rect.width - 1, event.clientX - rect.left));
+        setIndex(Math.floor(position / rect.width * 8) - 1);
+      }
+      stage.addEventListener('pointerdown', event => {
+        if (event.target.closest('.address-slot')) return;
+        dragging = true;
+        stage.setPointerCapture(event.pointerId);
+        pointerToIndex(event);
+      });
+      stage.addEventListener('pointermove', event => {
+        if (dragging) pointerToIndex(event);
+      });
+      stage.addEventListener('pointerup', event => {
+        dragging = false;
+        if (stage.hasPointerCapture(event.pointerId)) stage.releasePointerCapture(event.pointerId);
+      });
+      $('index-marker').addEventListener('keydown', event => {
+        if (event.key === 'ArrowLeft' || event.key === 'ArrowDown') {
+          event.preventDefault();
+          setIndex(state.index - 1);
+        }
+        if (event.key === 'ArrowRight' || event.key === 'ArrowUp') {
+          event.preventDefault();
+          setIndex(state.index + 1);
+        }
+        if (event.key === 'Home') {
+          event.preventDefault();
+          setIndex(-1);
+        }
+        if (event.key === 'End') {
+          event.preventDefault();
+          setIndex(6);
+        }
+      });
+      render();
+    })();
+  </script>
+</body>
+</html>
