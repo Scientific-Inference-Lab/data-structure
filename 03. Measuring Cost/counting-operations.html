@@ -1,0 +1,49 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Counting Operations | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+    .example-header{max-width:100%}.example-header .lead{max-width:82ch}
+    .count-controls{display:grid;grid-template-columns:minmax(240px,1fr) minmax(180px,.6fr) 1.2fr;gap:1rem;align-items:end}.step-buttons{display:flex;flex-wrap:wrap;gap:.5rem}.trace-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:1rem}.code-panel,.state-panel{padding:1rem;border:1px solid var(--line-200);background:var(--white)}.code-line{display:grid;grid-template-columns:2rem 1fr auto;gap:.5rem;padding:.55rem;font:700 .88rem/1.4 var(--mono)}.code-line.active{background:var(--callout-bg);box-shadow:inset 5px 0 0 var(--pnu-green)}.badge{padding:.15rem .45rem;border-radius:999px;background:var(--pnu-blue-tint);color:var(--pnu-blue-dark)}.counter{font:900 2rem/1 var(--mono);color:var(--pnu-blue-dark)}.convention{margin:0 0 1rem;padding:1rem 1.25rem;border-left:5px solid var(--pnu-green);background:var(--callout-bg)}.model-grid{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.model{padding:1rem;border:1px solid var(--line-200);background:var(--white)}.model strong{display:block;color:var(--pnu-blue-dark)}.equation{font:800 1.05rem/1.6 var(--mono)}
+    @media(max-width:760px){.count-controls,.trace-grid,.model-grid{grid-template-columns:1fr}.example-header .lead{max-width:none}}
+  </style>
+
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Measuring Cost</span><span class="nav-tag is-current" aria-current="page">Counting Operations</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Measuring Cost</p><h1 class="page-title">Counting Operations</h1><hr class="accent-rule"><p class="page-subtitle">입력 크기와 셀 연산을 먼저 정한 뒤 코드 한 줄의 실행을 따라 정확한 횟수를 센다. 이 수는 정한 계산 모형의 값이며 기계 시간 자체가 아니다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>입력 크기(input size)</strong><span>처리할 자료의 양을 나타내는 기준이다. 합산 함수는 더하는 정수의 개수, 목록 순회는 원소 수 len(a)를 n으로 둔다.</span></article><article class="summary-card"><strong>연산 수(operation count)</strong><span>미리 정한 연산이 실행되는 횟수다. 여기서는 명시적인 대입만 센다.</span></article><article class="summary-card"><strong>정확한 식</strong><span>초기 대입과 반복 대입을 더한다.</span></article></div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">한 줄씩 실행하며 대입 횟수를 누적한다</h2><p class="lead">함수와 n에 따라 코드 줄별 실행 횟수가 달라진다. 단계 이동은 현재 실행과 누적 연산 수를 같은 시점에 보여 준다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="variant">함수</label><select id="variant"><option value="loop">sum_loop</option><option value="extra">sum_extra</option><option value="pair">total과 count 함께 갱신</option></select></div><div class="control-field"><label for="n">입력 크기 n <output id="n-out" class="control-value" for="n">4</output></label><input id="n" type="range" min="0" max="8" value="4"></div><div class="action-row"><button id="first" class="btn btn-outline" type="button">처음으로</button><button id="prev" class="btn btn-outline" type="button">이전</button><button id="next" class="btn" type="button">다음</button></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="convention"><strong>여기서 세는 연산</strong> <code>total</code>, <code>value</code>, <code>count</code>에 값을 넣는 명시적 대입만 센다. 반복 제어, 함수 호출, 반환은 세지 않는다.</div><div class="trace-grid">
+        <article id="code" class="code-panel"></article><article class="state-panel"><strong>현재 실행 상태</strong><p id="event"></p><p class="counter"><span id="count">0</span>회</p><p id="total"></p></article>
+      </div></div><figcaption id="caption" class="visual-caption">코드에서 초록 막대가 붙은 줄이 방금 실행한 대입이고, 줄 끝 표시는 그 줄이 실행되는 횟수다. 현재 실행 상태 칸의 큰 숫자는 지금까지 센 대입 수다.</figcaption></figure>
+      <div id="live" class="visual-readouts" aria-live="polite"></div><p id="cause" class="visual-note"></p>
+    </div>
+  </section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">계산 모형이 달라지면 세는 대상도 달라진다</h2><p class="lead">대입 모형과 산술 모형은 셀 연산을 서로 다르게 정한다. 계산된 식은 해당 모형의 연산 수이지 기계 시간이 아니다.</p></header>
+    <div class="visual-lab"><div class="model-grid"><article class="model"><strong>명시적 대입 모형</strong><p class="equation">sum_loop: T(n) = 1 + n<br>sum_extra: T(n) = 1 + 2n<br>total과 count 갱신: T(n) = 2 + 2n</p><p>반복 안의 대입 한 줄이 늘면 n회가 추가된다.</p></article><article class="model"><strong>합 공식의 산술 연산 모형</strong><p class="equation">n + 1 · 1회<br>곱셈 · 1회<br>정수 나눗셈 · 1회</p><p>지정한 산술 연산은 3회지만 큰 정수의 실제 시간은 자릿수에도 영향을 받는다.</p></article></div><p class="visual-note">연산 수는 코드 구조를 설명하고 실행 시간은 특정 언어, 구현, 컴퓨터에서 측정한 값이다.</p></div>
+  </section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="timing-a-run.html">이전 · Timing A Run</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="loops-and-input-size.html">다음 · Loops And Input Size</a></nav>
+</main><footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(() => {
+  const $=id=>document.getElementById(id), state={variant:'loop',n:4,step:0};const J=(w,t)=>{const s=String(w),c=s.replace(/[\])"\s]+$/,'').slice(-1),P={'을':['을','를'],'이':['이','가'],'은':['은','는'],'과':['과','와'],'으로':['으로','로']};let f=false,l=false;if(/[가-힣]/.test(c)){const k=(c.charCodeAt(0)-44032)%28;f=k>0;l=k===8}else if(/[0-9]/.test(c)){f='013678'.includes(c);l='178'.includes(c)}else if(/[a-z]/i.test(c)){f='lmnr'.includes(c.toLowerCase());l='lr'.includes(c.toLowerCase())}const p=P[t];return s+(t==='으로'?(f&&!l?p[0]:p[1]):(f?p[0]:p[1]))};
+  const lines={loop:['total = 0','for i in range(1, n + 1):','    total = total + i','return total'],extra:['total = 0','for i in range(1, n + 1):','    value = i','    total = total + value','return total'],pair:['total = 0','count = 0','for x in a:','    total = total + x','    count = count + 1']};
+  const read=(l,v)=>'<div class="visual-readout"><span class="visual-readout-label">'+l+'</span><strong class="visual-readout-value">'+v+'</strong></div>';
+  function events(){if(state.variant==='pair'){const e=[{line:0,label:'total에 0을 대입',total:0,count:0},{line:1,label:'count에 0을 대입',total:0,count:0}];for(let i=1;i<=state.n;i++){const p=e[e.length-1];e.push({line:3,label:'total을 '+J(p.total+i,'으로')+' 갱신',total:p.total+i,count:p.count});e.push({line:4,label:'count를 '+J(p.count+1,'으로')+' 갱신',total:p.total+i,count:p.count+1})}return e}const e=[{line:0,label:'total에 0을 대입',total:0}];for(let i=1;i<=state.n;i++){if(state.variant==='extra')e.push({line:2,label:'value에 '+J(i,'을')+' 대입',total:e[e.length-1].total});e.push({line:state.variant==='extra'?3:2,label:'total을 '+J(e[e.length-1].total+i,'으로')+' 갱신',total:e[e.length-1].total+i})}return e}
+  function render(){const es=events(),x=state.step?es[state.step-1]:null,codeLines=lines[state.variant];$('n-out').value=state.n;$('code').innerHTML=codeLines.map((v,i)=>'<div class="code-line '+(x&&x.line===i?'active':'')+'"><span>'+(i+1)+'</span><code>'+v+'</code><span class="badge">'+(state.variant==='pair'?(i<2?'1회':i===2?'제외':'n회'):(i===0)?'1회':(state.variant==='loop'&&i===2)||(state.variant==='extra'&&(i===2||i===3))?'n회':'제외')+'</span></div>').join('');$('event').textContent=x?x.label:'실행 전';$('count').textContent=state.step;$('total').textContent='total = '+(x?x.total:'정해지지 않음')+(state.variant==='pair'?', count = '+(x?x.count:'정해지지 않음'):'');$('live').innerHTML=read('입력 크기',state.n)+read('현재 누적',state.step+'회')+read('전체 식','T(n) = '+(state.variant==='loop'?'1 + n':state.variant==='extra'?'1 + 2n':'2 + 2n'))+read('전체 수',es.length+'회');$('cause').innerHTML=''+(x?x.label+'했으므로 대입 수가 한 번 늘었다.':'아직 어떤 대입문도 실행하지 않았다.')+(state.variant==='pair'&&state.n===0?' 빈 목록이면 반복문 밖의 대입 2회만 실행된다.':' 반복 제어와 반환은 이 계산 모형에서 제외한다.');$('first').disabled=$('prev').disabled=state.step===0;$('next').disabled=state.step===es.length}
+  $('variant').addEventListener('change',e=>{state.variant=e.target.value;state.step=0;render()});$('n').addEventListener('input',e=>{state.n=+e.target.value;state.step=0;render()});$('first').onclick=()=>{state.step=0;render()};$('prev').onclick=()=>{state.step=Math.max(0,state.step-1);render()};$('next').onclick=()=>{state.step=Math.min(events().length,state.step+1);render()};render();
+})();
+</script></body></html>

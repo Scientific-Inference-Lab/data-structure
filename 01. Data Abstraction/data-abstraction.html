@@ -139,13 +139,13 @@
   $('reset').addEventListener('click', () => { list.values = initial.slice(); list.last = null; list.returned = '없음'; $('value').value = '30'; renderList(); });
 
   const needs = {
-    stack: [['요구사항', '최근 기록부터 되돌린다'], ['ADT', '스택(stack)'], ['연산의 의미', 'pop()은 가장 최근에 추가한 원소를 반환하고 제거한다'], ['구현과 비용', '저장 방식에 따라 pop()의 내부 작업량이 달라진다']],
-    queue: [['요구사항', '먼저 온 요청부터 처리한다'], ['ADT', '큐(queue)'], ['연산의 의미', 'dequeue()는 가장 먼저 추가한 원소를 반환하고 제거한다'], ['구현과 비용', '저장 방식에 따라 dequeue()의 내부 작업량이 달라진다']]
+    stack: [['요구사항', '최근 기록부터 되돌린다'], ['ADT', '스택(stack)'], ['연산의 의미', 'pop()은 가장 최근에 추가한 원소를 반환하고 삭제한다'], ['구현과 비용', '저장 방식에 따라 pop()의 내부 작업량이 달라진다']],
+    queue: [['요구사항', '먼저 온 요청부터 처리한다'], ['ADT', '큐(queue)'], ['연산의 의미', 'dequeue()는 가장 먼저 추가한 원소를 반환하고 삭제한다'], ['구현과 비용', '저장 방식에 따라 dequeue()의 내부 작업량이 달라진다']]
   };
   function renderFlow() {
     const k = $('need').value;
     $('flow').innerHTML = needs[k].map((x, i) => '<article class="flow-card' + (i === 1 ? ' focus' : '') + '" role="listitem"><strong>' + x[0] + '</strong><span>' + x[1] + '</span></article>').join('');
-    $('flow-live').innerHTML = read('선택한 ADT', k === 'stack' ? '스택' : '큐') + read('제거 연산', k === 'stack' ? 'pop()' : 'dequeue()') + read('먼저 나오는 원소', k === 'stack' ? '가장 최근에 추가한 원소' : '가장 먼저 추가한 원소');
+    $('flow-live').innerHTML = read('선택한 ADT', k === 'stack' ? '스택' : '큐') + read('삭제 연산', k === 'stack' ? 'pop()' : 'dequeue()') + read('먼저 나오는 원소', k === 'stack' ? '가장 최근에 추가한 원소' : '가장 먼저 추가한 원소');
     $('flow-note').textContent = 'ADT는 필요한 결과를 정하고, 그 결과를 만드는 작업량은 내부 표현에 따라 달라진다. 지금 요구사항에는 ' + (k === 'stack' ? '스택' : '큐') + '의 연산 의미가 맞는다.';
   }
   $('need').addEventListener('change', renderFlow);

@@ -1,0 +1,34 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff">
+  <title>Growth Rates and Asymptotic Notation Concept Check | 자료구조</title><link rel="icon" href="../assets/logo/pnu_signature.png"><link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/problem-set-shell.css">
+</head>
+<body class="problem-set-page">
+  <a class="skip-link" href="#main-content">본문으로 이동</a><header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 자료"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 자료"><span class="nav-tag">Reasoning About Growth</span><span class="nav-tag is-current" aria-current="page">Growth Rates and Asymptotic Notation</span></nav></div></div></header>
+  <section class="hero topic-hero"><div class="container"><p class="eyebrow">Reasoning About Growth</p><h1 class="page-title">Growth Rates and Asymptotic Notation</h1><hr class="accent-rule"><p class="page-subtitle">비용 함수를 비교하고 코드의 증가 차수를 판단한다.</p></div></section>
+  <main id="main-content" class="page-body container"><div class="problem-list">
+    <article class="problem-card" id="question-1"><header class="problem-card-header"><span class="problem-number">문제 1</span><h2>작은 입력과 큰 입력</h2></header><div class="problem-body"><p>두 알고리즘의 연산 수가 T_A(n) = 20n + 400, T_B(n) = 2n log₂ n이다.</p><ol><li>n = 16일 때 두 함수값을 계산하고 더 작은 쪽을 고른다.</li><li>n = 2048일 때 두 함수값을 계산하고 더 작은 쪽을 고른다.</li><li>작은 입력에서 더 빨랐다는 사실만으로 큰 입력에서도 더 빠르다고 결론 내릴 수 없는 이유를 한 문장으로 설명한다.</li></ol></div><details class="solution-panel"><summary>해설 펼치기</summary><div class="solution-body"><ol><li>T_A = 20·16 + 400 = 720, T_B = 2·16·4 = 128이다. 이 입력에서는 B가 작다.</li><li>T_A = 41,360, T_B = 2·2048·11 = 45,056이다. 이 입력에서는 A가 작다.</li><li>계수와 낮은 차수 항은 작은 입력의 대소 관계에 영향을 준다. 입력이 커지면 n log n이 n보다 빠르게 증가하므로 두 함수의 순서가 바뀔 수 있다.</li></ol><p>점근 표기는 충분히 큰 입력에서의 증가를 설명하며 특정 입력의 실제 함수값을 대신하지 않는다.</p></div></details></article>
+    <article class="problem-card" id="question-2"><header class="problem-card-header"><span class="problem-number">문제 2</span><h2>상한, 하한, 가장 구체적인 분류</h2></header><div class="problem-body"><p>f(n) = 5n + 20에 관한 다음 명제의 참·거짓을 판단한다.</p><ol><li>f(n) = O(n)</li><li>f(n) = O(n²)</li><li>f(n) = Ω(n)</li><li>f(n) = Θ(n)</li><li>f(n) = Θ(n²)</li></ol><p>참인 Big-O 명제와 Ω 명제에는 실제로 사용할 수 있는 양의 상수 c와 시작점 n₀를 하나씩 제시한다. 여러 상한이 참일 때 어떤 표기가 증가를 가장 구체적으로 나타내는지 적는다. 마지막으로 3 log₂ n과 log₁₀ n이 같은 Θ 분류인지 판단한다.</p></div><details class="solution-panel"><summary>해설 펼치기</summary><div class="solution-body"><ol><li>참이다. c = 6, n₀ = 20이면 모든 n ≥ 20에서 5n + 20 ≤ 6n이다.</li><li>참이다. O(n)인 함수는 더 느슨한 상한인 O(n²)에도 속한다.</li><li>참이다. c = 5, n₀ = 1이면 모든 n ≥ 1에서 5n ≤ 5n + 20이다.</li><li>참이다. n ≥ 20에서 5n ≤ 5n + 20 ≤ 6n이 함께 성립한다.</li><li>거짓이다. 충분히 큰 n에서 양의 상수 c에 대해 cn² ≤ 5n + 20을 계속 만족시킬 수 없어 n²의 하한이 성립하지 않는다.</li></ol><p>가장 구체적인 분류는 Θ(n)이다. O(n²)도 참이지만 증가율에 관한 정보가 더 적다. 상수는 부등식이 성립하는 한 쌍이면 충분하며 가장 작은 값을 찾을 필요는 없다. 3 log₂ n = 3 × 3.32… × log₁₀ n으로 상수 배 차이이므로 둘 다 Θ(log n)이다.</p></div></details></article>
+    <article class="problem-card" id="question-3"><header class="problem-card-header"><span class="problem-number">문제 3</span><h2>세 반복 블록</h2></header><div class="problem-body"><p>목록 A의 길이는 m, 목록 B의 길이는 n이고 둘 다 1 이상이다. inspect와 compare 한 번의 비용은 일정하다.</p><pre class="code-block"><code>for a in A:
+    inspect(a)
+
+for a in A:
+    for b in B:
+        compare(a, b)
+
+k = len(B)
+while k &gt; 1:
+    k //= 2</code></pre><ol><li>세 블록의 연산 수를 각각 m, n으로 나타낸다.</li><li>전체 시간 복잡도를 먼저 합의 형태로 적는다.</li><li>이를 곧바로 Θ(n²)이라고 쓰면 안 되는 이유를 설명한다.</li></ol></div><details class="solution-panel"><summary>해설 펼치기</summary><div class="solution-body"><ol><li>첫 블록은 Θ(m), 둘째 블록은 Θ(mn), 셋째 블록은 Θ(log n)이다.</li><li>Θ(m + mn + log n)이다. m, n ≥ 1이라는 조건에서는 Θ(mn)으로 줄여 쓸 수 있다.</li><li>m과 n의 관계가 주어지지 않았으므로 m을 n으로 바꾸어 Θ(n²)이라고 쓸 수 없다. 각 반복이 어느 입력의 길이에 따라 도는지 먼저 확인한다.</li></ol></div></details></article>
+    <article class="problem-card" id="question-4"><header class="problem-card-header"><span class="problem-number">문제 4</span><h2>경우별 비교 수</h2></header><div class="problem-body"><p>길이 n인 목록을 앞에서부터 탐색하고, 찾으면 바로 반환한다.</p><ol><li>최선의 경우와 최악의 경우의 비교 수와 입력 상태를 적는다.</li><li>찾는 값이 없을 확률이 1/2이고, 값이 있다면 각 위치에 있을 확률이 서로 같다. 전체 평균 비교 수를 계산하고 Θ 표기로 나타낸다.</li><li>입력 분포를 밝히지 않고 평균 비용만 제시하면 안 되는 이유를 설명한다.</li><li>‘최악의 경우가 Θ(n)이다’와 ‘이 알고리즘은 O(n)이다’가 각각 무엇을 말하는지 구분한다.</li></ol></div><details class="solution-panel"><summary>해설 펼치기</summary><div class="solution-body"><ol><li>최선은 찾는 값이 첫 원소일 때 1회, 최악은 마지막 원소이거나 값이 없을 때 n회다.</li><li>값이 없으면 n회, 있으면 평균 (1 + 2 + ⋯ + n)/n = (n + 1)/2회이므로 전체 평균은 (1/2)n + (1/2)(n + 1)/2 = (3n + 1)/4 = Θ(n)이다.</li><li>평균은 각 입력 상태의 비용에 그 상태의 확률을 곱한 기댓값이다. 값이 없을 확률이나 위치별 확률이 달라지면 평균 비교 수도 달라진다.</li><li>최악의 경우는 같은 크기의 입력 가운데 비용이 가장 큰 입력을 고르는 기준이고, Big-O는 그렇게 정한 비용 함수의 상한을 나타내는 기호다. 이 코드는 어떤 입력에서도 n회를 넘지 않으므로 O(n)이라 말할 수 있다.</li></ol></div></details></article>
+    <article class="problem-card" id="question-5"><header class="problem-card-header"><span class="problem-number">문제 5</span><h2>공간 비용을 바꾸는 조건</h2></header><div class="problem-body"><p>문자별 빈도를 세어 길이 n인 두 문자열이 같은 문자들로 이루어졌는지 확인한다고 하자.</p><ol><li>사용할 수 있는 문자가 영어 소문자 26개로 고정되어 있으면 빈도표의 추가 공간은 얼마인가?</li><li>입력에 등장한 문자 종류마다 빈도 칸을 새로 만들고, 서로 다른 문자 종류가 u개라면 추가 공간은 얼마인가?</li><li>두 답이 달라지는 조건을 설명한다.</li><li>빈도를 세기 전에 한 문자열을 b = list(a)로 복사하는 방법과 b = a로 이름만 붙이는 방법의 시간과 추가 공간을 각각 적는다.</li></ol></div><details class="solution-panel"><summary>해설 펼치기</summary><div class="solution-body"><ol><li>항상 26칸만 만들면 입력 길이와 관계없이 추가 공간은 Θ(1)이다.</li><li>Θ(u)다. u ≤ n이므로 O(n)까지 커질 수 있다.</li><li>첫 답은 문자 종류의 수가 입력 크기와 무관한 상수라는 조건에 의존한다. 문자 종류가 입력과 함께 늘어날 수 있으면 같은 빈도 세기 방법이라도 공간 복잡도가 달라진다.</li><li>list(a)는 원소 n개의 참조를 새 목록에 담으므로 시간 Θ(n), 추가 공간 Θ(n)이다. b = a는 같은 목록을 가리키므로 시간과 추가 공간 모두 Θ(1)이다.</li></ol></div></details></article>
+  </div><nav class="problem-set-nav" aria-label="개념 확인 탐색"><a href="../index.html">자료구조 전체 자료로 돌아가기</a></nav></main><footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+</body></html>

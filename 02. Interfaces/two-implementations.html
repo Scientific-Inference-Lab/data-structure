@@ -27,9 +27,9 @@
     </div>
   </section>
   <section class="topic-example"><header class="example-header"><h2 class="section-title">같은 스택 연산을 서로 다른 리스트 메서드에 대응시킨다</h2><p class="lead">구현의 차이는 경계 안의 메서드 대응이며 클라이언트 코드의 호출은 바뀌지 않는다.</p></header>
-    <div class="visual-lab"><div class="table-scroll-region" role="region" aria-label="스택 구현 대응표" tabindex="0"><table class="mapping"><thead><tr><th>스택 연산</th><th>EndStack 내부</th><th>FrontStack 내부</th><th>외부 의미</th></tr></thead><tbody><tr><th>push(item)</th><td>append(item)</td><td>insert(0, item)</td><td>item을 새 맨 위 원소로 둔다</td></tr><tr><th>pop()</th><td>pop()</td><td>pop(0)</td><td>맨 위 원소를 제거해 반환한다</td></tr></tbody></table></div><p class="visual-note">클라이언트 코드는 내부 list의 방향이 아니라 push와 pop의 결과에 의존한다. 내부 list 메서드를 직접 호출하면 구현을 바꿀 때 함께 고쳐야 한다.</p></div>
+    <div class="visual-lab"><div class="table-scroll-region" role="region" aria-label="스택 구현 대응표" tabindex="0"><table class="mapping"><thead><tr><th>스택 연산</th><th>EndStack 내부</th><th>FrontStack 내부</th><th>외부 의미</th></tr></thead><tbody><tr><th>push(item)</th><td>append(item)</td><td>insert(0, item)</td><td>item을 새 맨 위 원소로 둔다</td></tr><tr><th>pop()</th><td>pop()</td><td>pop(0)</td><td>맨 위 원소를 삭제해 반환한다</td></tr></tbody></table></div><p class="visual-note">클라이언트 코드는 내부 list의 방향이 아니라 push와 pop의 결과에 의존한다. 내부 list 메서드를 직접 호출하면 구현을 바꿀 때 함께 고쳐야 한다.</p></div>
   </section>
-  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="python-objects.html">이전 · Python Objects</a><a class="pager-link is-all" href="../index.html">전체</a></nav>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="python-objects.html">이전 · Python Objects</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../03. Measuring Cost/timing-a-run.html">다음 · Timing A Run</a></nav>
 </main><footer class="site-footer">
   <div class="container footer-inner">
     <span class="footer-course-code">DS3600082-140</span>

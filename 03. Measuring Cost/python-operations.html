@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Python Operations | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+    .example-header{max-width:100%}.example-header .lead{max-width:82ch}
+    .compare{display:grid;grid-template-columns:1fr 1fr;gap:1rem}.path{padding:1rem;border:1px solid var(--line-200);background:var(--white)}.path h3{margin:0;color:var(--pnu-blue-dark)}.path.emphasis{border:2px solid var(--pnu-green);background:var(--callout-bg)}.work-row{display:flex;flex-wrap:wrap;gap:.35rem;margin:1rem 0}.work{display:grid;place-items:center;min-width:48px;min-height:44px;padding:.3rem;border:2px solid var(--pnu-blue);background:var(--pnu-blue-tint);font:700 .75rem var(--mono)}.work.current{border-color:var(--pnu-green);background:var(--pnu-green);color:var(--white)}.cost{font:900 1.1rem/1.5 var(--mono);color:var(--pnu-blue-dark)}.scope-note{margin-top:1rem;padding:1rem 1.25rem;border-left:5px solid var(--pnu-green);background:var(--callout-bg)}.matrix{width:100%;border-collapse:collapse}.matrix th,.matrix td{padding:.8rem;border:1px solid var(--line-200);text-align:left}.matrix td:nth-child(2),.matrix td:nth-child(3){font-family:var(--mono)}.measured{width:100%;margin-top:1rem;border-collapse:collapse}.measured th,.measured td{padding:.7rem;border:1px solid var(--line-200);text-align:right;font-variant-numeric:tabular-nums}.measured th:first-child,.measured td:first-child{text-align:left}.measured caption{caption-side:bottom;padding-top:.5rem;color:var(--ink-600);font-size:.85rem;text-align:left}.empty-work{color:var(--ink-600)}
+    @media(max-width:760px){.compare{grid-template-columns:1fr}.example-header .lead{max-width:none}}
+  </style>
+
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Measuring Cost</span><span class="nav-tag is-current" aria-current="page">Python Operations</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Measuring Cost</p><h1 class="page-title">Python Operations</h1><hr class="accent-rule"><p class="page-subtitle">같은 결과를 만드는 Python 코드도 내부 작업이 다르다. 새 목록 생성, 원소 이동, 값 비교 가운데 어느 작업이 생기는지가 입력 크기에 따른 비용을 가른다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>append와 +</strong><span>기존 목록 변경과 새 목록 생성을 구분한다.</span></article><article class="summary-card"><strong>pop 위치</strong><span>앞에서 삭제하면 뒤 원소가 왼쪽으로 이동한다.</span></article><article class="summary-card"><strong>in 조회</strong><span>list와 dict에 모두 없는 값을 찾아 두 조회를 같은 조건에서 비교한다.</span></article></div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">구조에서 생기는 작업을 단계별로 비교한다</h2><p class="lead">비교 항목과 원소 수, 단계에 따라 두 코드의 누적 작업이 달라진다. 상자 수는 코드 구조로 셀 수 있는 작업이며 실행 시간이 아니다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--triple"><div class="control-field"><label for="operation">비교</label><select id="operation"><option value="build">append 대 목록 연결 +</option><option value="pop">pop() 대 pop(0)</option><option value="contains">list의 in 대 dict의 in</option></select></div><div class="control-field"><label for="n">원소 수 n <output id="n-out" class="control-value" for="n">6</output></label><input id="n" type="range" min="2" max="12" value="6"></div><div class="control-field"><label for="step">현재 단계 <output id="step-out" class="control-value" for="step">6</output></label><input id="step" type="range" min="0" max="6" value="6"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="compare">
+        <article id="left" class="path"><h3 id="left-title"></h3><div id="left-work" class="work-row"></div><p id="left-cost" class="cost"></p><p id="left-reason"></p></article>
+        <article id="right" class="path emphasis"><h3 id="right-title"></h3><div id="right-work" class="work-row"></div><p id="right-cost" class="cost"></p><p id="right-reason"></p></article>
+      </div></div><figcaption id="caption" class="visual-caption">왼쪽과 오른쪽은 같은 결과를 만드는 두 코드다. 파란 상자 하나가 호출, 새 목록에 놓은 참조, 이동, 비교 가운데 한 번의 작업이고, 초록 상자가 현재 단계의 작업이다.</figcaption></figure>
+      <div id="live" class="visual-readouts" aria-live="polite"></div><p id="cause" class="visual-note"></p>
+    </div>
+  </section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">측정 조건과 측정값을 구조 근거와 함께 읽는다</h2><p class="lead">위에서 고른 비교에 대해, 같은 조건으로 잰 호출당 시간의 중앙값을 아래에 둔다. 측정 입력의 n은 위 절의 n보다 훨씬 크다.</p></header>
+    <div class="visual-lab"><div class="table-scroll-region" role="region" aria-label="Python 연산 비용 비교표" tabindex="0"><table class="matrix"><thead><tr><th>비교</th><th>왼쪽 구조 작업</th><th>오른쪽 구조 작업</th><th>맞출 조건</th></tr></thead><tbody><tr><th>목록 생성</th><td>append 호출 n회</td><td>새 목록에 1+···+n개 참조 배치</td><td>함수 전체를 같은 n에서 잰다</td></tr><tr><th>원소 삭제</th><td>끝 삭제, 뒤 원소 이동 없음</td><td>앞 삭제, n-1개 참조 이동</td><td>삭제 뒤 끝에 넣어 길이를 유지한다</td></tr><tr><th>없는 값 조회</th><td>list에서 n개 값 비교</td><td>dict에서 같은 값 -1 조회</td><td>생성 시간 제외, 같은 값과 n을 쓴다</td></tr></tbody></table></div><div class="table-scroll-region" role="region" aria-label="한 컴퓨터에서 잰 측정값" tabindex="0"><table class="measured"><caption id="measured-caption"></caption><thead id="measured-head"></thead><tbody id="measured-body"></tbody></table></div><p id="measured-note" class="visual-note"></p></div>
+  </section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="loops-and-input-size.html">이전 · Loops And Input Size</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../04. Reasoning About Growth/growth-rate.html">다음 · Growth Rate</a></nav>
+</main><footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(() => {
+  const $=id=>document.getElementById(id), state={op:'build',n:6,step:6};
+  const read=(l,v)=>'<div class="visual-readout"><span class="visual-readout-label">'+l+'</span><strong class="visual-readout-value">'+v+'</strong></div>';
+  function boxes(count,current,label){const out=[];for(let i=1;i<=count;i++){const e=document.createElement('span');e.className='work'+(i===current?' current':'');e.textContent=label?label(i):i;out.push(e)}return out}
+  function render(){const n=state.n,s=Math.min(state.step,n);$('n-out').value=n;$('step').max=n;$('step').value=s;$('step-out').value=s;let a,b;
+    if(state.op==='build'){const copied=s*(s+1)/2;a={title:'a.append(i)',count:s,current:s,cost:'append 호출 '+s+'회',reason:'기존 목록에 값을 덧붙인다.'};b={title:'a = a + [i]',count:copied,current:copied,cost:'새 목록에 놓은 참조 '+copied+'개',reason:'각 반복에서 길이 1부터 '+s+'까지의 새 목록을 만든다.'};$('cause').innerHTML='목록 연결은 매 반복마다 이전 원소를 포함한 새 목록을 만들어 단계 '+s+'까지 1 + ··· + '+s+' = '+copied+'개의 참조를 놓지만, append는 기존 목록을 바꾼다.'}
+    if(state.op==='pop'){a={title:'a.pop()',count:0,current:0,cost:'이동 0개',reason:'끝 원소 뒤에는 당길 원소가 없다.'};b={title:'a.pop(0)',count:n-1,current:Math.min(s,n-1),cost:'왼쪽 이동 '+(n-1)+'개',reason:'앞의 빈 칸을 뒤 원소가 차례로 메운다.'};$('cause').innerHTML='두 연산 모두 한 값을 삭제하지만 삭제 위치 뒤에 남은 원소 수가 다르다. 앞에서 삭제하면 원래 인덱스 1부터 '+(n-1)+'까지의 참조가 왼쪽으로 이동한다. 측정할 때는 삭제한 값을 끝에 다시 넣어 매 반복의 목록 길이를 유지한다.'}
+    if(state.op==='contains'){a={title:'-1 in list',count:n,current:s,cost:'값 비교 '+n+'개',reason:'없는 값을 찾느라 끝까지 순서대로 확인한다.'};b={title:'-1 in dict',count:0,current:0,cost:'작업 수는 세지 않고 측정값으로 비교',reason:'dict는 목록처럼 값을 앞에서부터 차례로 비교하지 않는다. 내부 동작은 여기서 다루지 않는다.'};$('cause').innerHTML='두 식 모두 False를 반환하고 목록과 dict를 만드는 시간은 측정에서 뺀다. 찾는 값과 원소 수가 같으므로 두 측정은 자료구조만 다르다.'}
+    $('left-title').textContent=a.title;$('right-title').textContent=b.title;const none=t=>{const e=document.createElement('span');e.className='empty-work';e.textContent=t;return [e]};$('left-work').replaceChildren(...(a.count?boxes(a.count,a.current,i=>state.op==='contains'?'비교 '+i:'호출 '+i):none('옮길 원소 없음')));$('right-work').replaceChildren(...(b.count?boxes(Math.min(b.count,78),b.current,i=>state.op==='build'?'참조 '+i:'이동 '+i):none('상자로 세지 않음')));const M={build:{head:['n','append','+'],rows:[['1,000','36.367','1,114.133'],['4,000','178.933','20,615.433'],['16,000','742.000','326,253.900']],cap:'함수 전체를 한 묶음에서 3회 호출해 나눈 값의 5묶음 중앙값(μs)',note:'표의 값은 목록 생성부터 반환까지의 시간이며 append 한 번의 시간이 아니다. n이 4배가 될 때 append 쪽은 약 4배에서 5배, + 쪽은 약 16배에서 19배 늘었다.'},pop:{head:['n','끝에서 삭제·복구','앞에서 삭제·복구'],rows:[['1,000','0.062','0.123'],['10,000','0.043','28.049'],['100,000','0.049','305.687']],cap:'삭제·복구 한 쌍을 한 묶음에서 1,000쌍 실행해 나눈 값의 5묶음 중앙값(μs)',note:'측정 범위가 같은데 앞에서 삭제하는 쪽의 시간만 목록 길이에 따라 크게 늘었다.'},contains:{head:['n','list','dict'],rows:[['1,000','7.563','0.029'],['10,000','89.548','0.030'],['100,000','983.916','0.033']],cap:'없는 정수 -1을 한 묶음에서 100회 조회해 나눈 값의 5묶음 중앙값(μs)',note:'이 입력에서 list 조회 시간은 원소 수와 함께 늘었고, dict의 작은 차이는 측정 변동과 구분하기 어렵다. 항상 없는 값을 찾았다는 조건까지 함께 읽어야 한다.'}}[state.op];$('measured-head').innerHTML='<tr>'+M.head.map(h=>'<th scope="col">'+h+'</th>').join('')+'</tr>';$('measured-body').innerHTML=M.rows.map(r=>'<tr>'+r.map(c=>'<td>'+c+'</td>').join('')+'</tr>').join('');$('measured-caption').textContent=M.cap+'. 한 컴퓨터에서 잰 값이다.';$('measured-note').textContent=M.note;$('left-cost').textContent=a.cost;$('right-cost').textContent=b.cost;$('left-reason').textContent=a.reason;$('right-reason').textContent=b.reason;$('live').innerHTML=read('비교',a.title+' / '+b.title)+read('n',n)+read('현재 단계',s)+read('작업 수',a.cost+' / '+b.cost);}
+  $('operation').addEventListener('change',e=>{state.op=e.target.value;state.step=state.n;render()});$('n').addEventListener('input',e=>{state.n=+e.target.value;state.step=state.n;render()});$('step').addEventListener('input',e=>{state.step=+e.target.value;render()});render();
+})();
+</script></body></html>

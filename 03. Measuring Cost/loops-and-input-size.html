@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Loops And Input Size | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+    .example-header{max-width:100%}.example-header .lead{max-width:82ch}
+    .loop-controls{display:grid;grid-template-columns:minmax(250px,1fr) minmax(150px,.55fr) minmax(150px,.55fr) 1.1fr;gap:1rem;align-items:end}.buttons{display:flex;flex-wrap:wrap;gap:.5rem}.grid-board{display:grid;gap:.35rem;min-width:600px;padding:1rem;background:var(--white)}.iteration{display:grid;place-items:center;min-width:48px;min-height:48px;border:2px solid var(--pnu-blue);background:var(--pnu-blue-tint);font:700 .78rem var(--mono)}.iteration.done{border-color:var(--pnu-green);background:var(--callout-bg)}.iteration.now{background:var(--pnu-green);color:var(--white)}.iteration.blank{border:1px dashed var(--line-300);background:repeating-linear-gradient(135deg,#fff,#fff 7px,var(--surface-050) 7px,var(--surface-050) 14px);color:var(--ink-500)}.legend{display:flex;flex-wrap:wrap;gap:1rem;margin:.8rem 1rem .4rem}.legend span{font-size:.85rem}.swatch{display:inline-block;width:16px;height:16px;margin-right:.35rem;vertical-align:-3px;border:2px solid var(--pnu-blue)}.swatch.blank{border:1px dashed var(--line-300);background:var(--surface-050)}.comparison{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:.8rem}.compare{padding:1rem;border:1px solid var(--line-200);background:var(--white)}.compare strong{display:block;color:var(--pnu-blue-dark)}.equation{font:800 1rem/1.6 var(--mono)}
+    @media(max-width:760px){.loop-controls,.comparison{grid-template-columns:1fr}.example-header .lead{max-width:none}}
+  </style>
+
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Measuring Cost</span><span class="nav-tag is-current" aria-current="page">Loops And Input Size</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Measuring Cost</p><h1 class="page-title">Loops And Input Size</h1><hr class="accent-rule"><p class="page-subtitle">반복문의 겹 수보다 실제 실행 범위를 읽는다. 연속된 반복은 더하고, 독립적인 중첩은 곱하고, 안쪽 길이가 달라지면 줄마다 더한다. 칸 하나가 안쪽 문장 한 번의 실행이다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>한 번의 순회와 연속 반복</strong><span>원소 하나마다 한 번 실행되고, 나란한 두 반복문은 m + n으로 더한다.</span></article><article class="summary-card"><strong>독립적인 중첩</strong><span>바깥 한 단계마다 안쪽을 처음부터 다시 실행하므로 곱한다.</span></article><article class="summary-card"><strong>삼각 범위</strong><span>행 i에서 i개를 실행해 0부터 n − 1까지 더한다.</span></article></div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">반복 구조에 따라 실행되는 칸의 수와 순서가 달라진다</h2><p class="lead">실행 칸의 수가 곧 정확한 실행 횟수이며, 삼각형을 맞추기 위한 빈 칸은 실행 횟수에 포함하지 않는다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--triple"><div class="control-field"><label for="shape">반복 구조</label><select id="shape"><option value="single">한 번의 range(n)</option><option value="serial">for x in a 뒤 for y in b</option><option value="pairs">for x in a 안의 for y in b</option><option value="nested">range(n) 안의 range(n)</option><option value="constant">range(n) 안의 range(3)</option><option value="triangular">range(n) 안의 range(i)</option></select></div><div class="control-field"><label for="m">첫 목록 크기 m <output id="m-out" class="control-value" for="m">3</output></label><input id="m" type="range" min="2" max="8" value="3"></div><div class="control-field"><label for="n">입력 크기 n <output id="n-out" class="control-value" for="n">5</output></label><input id="n" type="range" min="2" max="8" value="5"></div><div class="action-row"><button id="first" class="btn btn-outline" type="button">처음으로</button><button id="prev" class="btn btn-outline" type="button">이전</button><button id="next" class="btn" type="button">다음</button></div></div>
+      <p id="m-reason" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div id="board" class="grid-board" role="img" aria-label="반복 실행 격자"></div><div class="legend" aria-hidden="true"><span><i class="swatch"></i>실행 칸</span><span><i class="swatch blank"></i>배치용 빈 칸, 실행 아님</span></div></div><figcaption id="caption" class="visual-caption">칸 하나가 반복 본문 한 번의 실행이다. 연한 초록 칸은 이미 실행한 칸, 진한 초록 칸은 지금 실행하는 칸이고, 빗금 칸은 배치를 맞춘 빈 칸이라 실행 횟수에서 제외한다.</figcaption></figure>
+      <div id="live" class="visual-readouts" aria-live="polite"></div><p id="cause" class="visual-note"></p>
+    </div>
+  </section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">같은 크기에서 범위별 정확한 수를 나란히 읽는다</h2><p class="lead">아래 비교도 위의 m과 n을 사용한다. 반복문의 겹 수가 아니라 각 범위의 실제 길이가 비용식을 정한다.</p></header>
+    <div class="visual-lab"><div class="comparison"><article class="compare"><strong>한 번의 순회</strong><p id="single-eq" class="equation"></p><p>n개 원소를 한 번씩 처리한다.</p></article><article class="compare"><strong>연속된 두 반복문</strong><p id="serial-eq" class="equation"></p><p>각각 센 뒤 더한다. mn이 아니다.</p></article><article class="compare"><strong>두 목록의 모든 쌍</strong><p id="pairs-eq" class="equation"></p><p>두 크기를 하나의 n으로 합치지 않는다.</p></article><article class="compare"><strong>독립적인 중첩</strong><p id="nested-eq" class="equation"></p><p>n개 행마다 n개 열을 실행한다.</p></article><article class="compare"><strong>안쪽이 상수 범위</strong><p id="const-eq" class="equation"></p><p>두 겹이어도 안쪽 길이가 3으로 고정이다.</p></article><article class="compare"><strong>삼각 범위</strong><p id="tri-eq" class="equation"></p><p>0 + 1 + ··· + (n - 1)을 더한다.</p></article></div><p class="visual-note">안쪽 범위가 상수인지, n인지, 바깥 인덱스 i인지 먼저 확인한다.</p></div>
+  </section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="counting-operations.html">이전 · Counting Operations</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="python-operations.html">다음 · Python Operations</a></nav>
+</main><footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(() => {
+  const $=id=>document.getElementById(id), state={shape:'single',m:3,n:5,step:0};
+  const read=(l,v)=>'<div class="visual-readout"><span class="visual-readout-label">'+l+'</span><strong class="visual-readout-value">'+v+'</strong></div>';
+  const usesM=()=>state.shape==='serial'||state.shape==='pairs';
+  const names={single:'한 번의 순회',serial:'연속된 두 반복문',pairs:'두 목록의 모든 쌍',nested:'독립적인 중첩',constant:'안쪽이 상수 범위',triangular:'삼각 범위'};
+  function total(){const m=state.m,n=state.n;return {single:n,serial:m+n,pairs:m*n,nested:n*n,constant:3*n,triangular:n*(n-1)/2}[state.shape]}
+  function formula(){return {single:'T(n) = n',serial:'T(m, n) = m + n',pairs:'T(m, n) = m × n',nested:'T(n) = n × n',constant:'T(n) = 3n',triangular:'T(n) = n(n − 1) / 2'}[state.shape]}
+  function layout(){const m=state.m,n=state.n,out=[];let cols=n;
+    if(state.shape==='single'){for(let j=0;j<n;j++)out.push({label:'i='+j})}
+    else if(state.shape==='serial'){cols=Math.max(m,n);for(let j=0;j<cols;j++)out.push(j<m?{label:'x'+j}:{blank:true});for(let j=0;j<cols;j++)out.push(j<n?{label:'y'+j}:{blank:true})}
+    else if(state.shape==='pairs'){for(let i=0;i<m;i++)for(let j=0;j<n;j++)out.push({label:'('+i+','+j+')'})}
+    else if(state.shape==='constant'){cols=3;for(let i=0;i<n;i++)for(let j=0;j<3;j++)out.push({label:'('+i+','+j+')'})}
+    else{for(let i=0;i<n;i++)for(let j=0;j<n;j++)out.push(state.shape==='triangular'&&j>=i?{blank:true}:{label:'('+i+','+j+')'})}
+    return {cols,out}}
+  function render(){const {cols,out}=layout(),t=total(),f=formula();$('n-out').value=state.n;$('m-out').value=state.m;$('m').disabled=!usesM();$('m-reason').hidden=usesM();$('m-reason').textContent=usesM()?'':'첫 목록 크기 m은 목록 두 개를 쓰는 구조에서만 바뀐다. 지금 구조는 목록 하나의 크기 n만 쓴다.';$('board').style.gridTemplateColumns='repeat('+cols+',minmax(48px,1fr))';let seen=0;
+    $('board').replaceChildren(...out.map(x=>{const e=document.createElement('span');if(x.blank){e.className='iteration blank';e.textContent='실행 안 함'}else{seen++;e.className='iteration'+(seen<state.step?' done':seen===state.step?' now':'');e.textContent=x.label}return e}));
+    $('board').setAttribute('aria-label',f+', 실행 칸 '+t+'개, 현재 '+state.step+'개까지 진행');
+
+    $('live').innerHTML=read('구조',names[state.shape])+read('진행',state.step+' / '+t)+read('정확한 식',f)+read('실행 수',t+'회');
+    const why={single:'각 i가 문장 한 번에 대응한다.',serial:'첫 줄은 첫 반복문의 m번, 둘째 줄은 둘째 반복문의 n번이다. 끝난 뒤 다음 반복문이 시작되므로 더한다.',pairs:'바깥 원소 하나마다 안쪽 n개를 모두 실행한다. m만 두 배로 늘리면 2mn, 두 크기를 모두 두 배로 늘리면 4mn이다.',nested:'각 바깥 단계에서 안쪽 n개를 처음부터 모두 실행한다.',constant:'두 겹이지만 안쪽은 항상 3번이라 n에 비례한다. 겹 수만 보고 n²이라고 결론 내리면 틀린다.',triangular:'행 i에는 실행 칸이 i개뿐이다. 모든 줄의 길이가 같지 않으므로 n × n으로 곱할 수 없다.'};
+    $('cause').innerHTML=''+why[state.shape];
+    $('single-eq').textContent='n = '+state.n;$('serial-eq').textContent='m + n = '+(state.m+state.n);$('pairs-eq').textContent='m × n = '+state.m*state.n;$('nested-eq').textContent='n² = '+state.n*state.n;$('const-eq').textContent='3n = '+3*state.n;$('tri-eq').textContent='n(n-1)/2 = '+state.n*(state.n-1)/2;
+    $('first').disabled=$('prev').disabled=state.step===0;$('next').disabled=state.step===t}
+  $('shape').addEventListener('change',e=>{state.shape=e.target.value;state.step=0;render()});$('n').addEventListener('input',e=>{state.n=+e.target.value;state.step=0;render()});$('m').addEventListener('input',e=>{state.m=+e.target.value;state.step=0;render()});$('first').onclick=()=>{state.step=0;render()};$('prev').onclick=()=>{state.step=Math.max(0,state.step-1);render()};$('next').onclick=()=>{state.step=Math.min(total(),state.step+1);render()};render();
+})();
+</script></body></html>
