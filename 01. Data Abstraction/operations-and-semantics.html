@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Operations And Semantics | 자료구조</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <style>
+    .end-board{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:.8rem;min-height:130px;padding:1rem}.end{padding:.55rem;border:1px solid var(--line-200);background:var(--surface-050);font-weight:800}.items{display:flex;flex-wrap:wrap;justify-content:center;gap:.45rem}.item{display:grid;place-items:center;min-width:70px;min-height:58px;padding:0 .4rem;border:2px solid var(--pnu-blue);background:var(--pnu-blue-tint);font:800 .95rem var(--mono)}.item.target{border-color:var(--pnu-green);background:var(--callout-bg);box-shadow:inset 0 0 0 2px var(--pnu-green)}.item small{display:block;color:var(--ink-600);font-size:.72rem}.empty-note{color:var(--ink-500)}
+    .compare-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem}.compare-card{padding:1rem;border:1px solid var(--line-200);background:var(--white)}.compare-card strong{display:block;color:var(--pnu-blue-dark)}.mini-seq{margin:.7rem 0;font:800 .9rem var(--mono);overflow-wrap:anywhere}
+    @media(max-width:720px){.compare-grid{grid-template-columns:1fr}.end-board{grid-template-columns:1fr}.end{text-align:center}}
+    .example-header{max-width:100%}.example-header .lead{max-width:82ch}@media(max-width:760px){.example-header .lead{max-width:none}}
+  </style>
+
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Data Abstraction</span><span class="nav-tag is-current" aria-current="page">Operations And Semantics</span></nav></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow">Data Abstraction</p><h1 class="page-title">Operations And Semantics</h1><hr class="accent-rule"><p class="page-subtitle">같은 값을 같은 순서로 담아도 ADT의 연산 규칙에 따라 먼저 나오는 값이 달라진다. 호출의 반환값과 다음 상태가 연산의 의미를 이룬다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>스택(stack)</strong><span>push(x)로 맨 위에 추가하고 pop()으로 맨 위 원소를 제거해 반환한다.</span></article><article class="summary-card"><strong>큐(queue)</strong><span>enqueue(x)로 뒤쪽에 추가하고 dequeue()로 앞쪽 원소를 제거해 반환한다.</span></article><article class="summary-card"><strong>덱(deque)</strong><span>앞쪽과 뒤쪽 모두에서 추가하고 제거한다.</span></article><article class="summary-card"><strong>우선순위 큐(priority queue)</strong><span>접수 순서가 아니라 우선순위로 제거할 원소를 고른다.</span></article></div></section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">연산을 고르면 제거될 원소와 다음 상태가 바뀐다</h2><p class="lead">스택·큐·덱은 <code>[4, "dog", True]</code>에서, 우선순위 큐는 인쇄 작업 세 건에서 시작한다. 초록 칸은 지금 제거 연산을 호출하면 나올 원소다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><span class="control-label">ADT</span><div class="choice-row" role="group" aria-label="ADT 선택"><button class="btn" type="button" data-adt="stack" aria-pressed="true">스택</button><button class="btn btn-outline" type="button" data-adt="queue" aria-pressed="false">큐</button><button class="btn btn-outline" type="button" data-adt="deque" aria-pressed="false">덱</button><button class="btn btn-outline" type="button" data-adt="pq" aria-pressed="false">우선순위 큐</button></div></div><div class="control-field"><span class="control-label">연산</span><div id="ops" class="action-row" role="group" aria-label="연산"></div></div></div>
+      <p id="reason" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="end-board"><span id="left-label" class="end">앞쪽</span><div id="items" class="items" role="img" aria-label="현재 ADT 상태"></div><span id="right-label" class="end">뒤쪽</span></div></div><figcaption id="caption" class="visual-caption"></figcaption></figure>
+      <div id="live" class="visual-readouts" aria-live="polite"></div><p id="channel" class="visual-note"></p>
+    </div>
+  </section>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">같은 추가 순서도 제거 결과는 다르다</h2><p class="lead">4, dog, True를 차례로 추가한 같은 상태에서 첫 제거 연산만 바꾼다.</p></header>
+    <div class="visual-lab"><div class="compare-grid">
+      <article class="compare-card"><strong>스택 · pop()</strong><p class="mini-seq">[4, "dog", True] → [4, "dog"]</p><p>가장 최근에 추가한 True를 반환한다.</p></article>
+      <article class="compare-card"><strong>큐 · dequeue()</strong><p class="mini-seq">[4, "dog", True] → ["dog", True]</p><p>가장 먼저 추가한 4를 반환한다.</p></article>
+      <article class="compare-card"><strong>덱 · 같은 끝과 다른 끝</strong><p class="mini-seq">add_last + remove_last · add_last + remove_first</p><p>같은 끝에서 추가하고 제거하면 스택, 서로 다른 끝을 쓰면 큐와 같은 제거 순서가 된다.</p></article>
+    </div><p class="visual-note">최근 기록을 먼저 꺼내야 하면 스택, 먼저 접수한 값을 먼저 꺼내야 하면 큐의 연산 의미가 맞는다.</p></div>
+  </section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="data-abstraction.html">이전 · Data Abstraction</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="adt-specifications.html">다음 · ADT Specifications</a></nav>
+</main><footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-instructor">오용경</span>
+      <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
+    </address>
+  </div>
+</footer>
+<script>
+(() => {
+  const $ = id => document.getElementById(id);
+  const J = (w, t) => { const s = String(w), c = s.replace(/[\])"\s]+$/, '').slice(-1), P = { '을': ['을', '를'], '이': ['이', '가'], '은': ['은', '는'], '과': ['과', '와'], '으로': ['으로', '로'] }; let f = false, l = false; if (/[가-힣]/.test(c)) { const k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = '013678'.includes(c); l = '178'.includes(c); } else if (/[a-z]/i.test(c)) { f = 'lmnr'.includes(c.toLowerCase()); l = 'lr'.includes(c.toLowerCase()); } const p = P[t]; return s + (t === '으로' ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); };
+  const read = (l, v) => '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>';
+  const names = { stack: '스택', queue: '큐', deque: '덱', pq: '우선순위 큐' };
+  const starts = { list: () => ['4', '"dog"', 'True'], pq: () => [['일반 인쇄', 3], ['시험지 인쇄', 1], ['강의자료 인쇄', 2]] };
+  const extras = [['보고서 인쇄', 2], ['공지 인쇄', 1], ['포스터 인쇄', 3]];
+  const state = { adt: 'stack', values: starts.list(), next: 5, extra: 0, returned: '없음', last: '' };
+  const specs = {
+    stack: [['push', 'add_last'], ['pop()', 'remove_last']],
+    queue: [['enqueue', 'add_last'], ['dequeue()', 'remove_first']],
+    deque: [['add_first', 'add_first'], ['add_last', 'add_last'], ['remove_first()', 'remove_first'], ['remove_last()', 'remove_last']],
+    pq: [['add', 'pqAdd'], ['remove()', 'pqRemove']]
+  };
+  const pqMin = () => state.values.reduce((b, x, i) => (b < 0 || x[1] < state.values[b][1] ? i : b), -1);
+  const show = x => Array.isArray(x) ? x[0] + '(' + x[1] + ')' : x;
+  function label(name) {
+    if (state.adt === 'pq' && name === 'add') { const e = extras[state.extra % extras.length]; return 'add(' + e[0] + ', ' + e[1] + ')'; }
+    return name.endsWith(')') ? name : name + '(' + state.next + ')';
+  }
+  function targets() {
+    const n = state.values.length; if (!n) return [];
+    if (state.adt === 'stack') return [n - 1];
+    if (state.adt === 'queue') return [0];
+    if (state.adt === 'deque') return n === 1 ? [0] : [0, n - 1];
+    return [pqMin()];
+  }
+  function render() {
+    const n = state.values.length, t = targets();
+    document.querySelectorAll('[data-adt]').forEach(b => { const on = b.dataset.adt === state.adt; b.className = 'btn ' + (on ? '' : 'btn-outline'); b.setAttribute('aria-pressed', on ? 'true' : 'false'); });
+    $('ops').replaceChildren(...specs[state.adt].map(([name, op]) => { const b = document.createElement('button'); b.className = 'btn btn-outline'; b.type = 'button'; b.textContent = label(name); b.disabled = op.startsWith('remove') || op === 'pqRemove' ? n === 0 : n >= 8; b.addEventListener('click', () => act(op, label(name))); return b; }), (() => { const b = document.createElement('button'); b.className = 'btn btn-outline'; b.type = 'button'; b.textContent = '처음 상태'; b.addEventListener('click', reset); return b; })());
+    $('reason').hidden = !(n === 0 || n >= 8);
+    $('reason').textContent = n === 0 ? '비어 있는 상태에는 제거할 원소가 없어 제거 연산을 호출할 수 없다.' : '화면에는 원소 8개까지만 표시하므로 추가를 멈춘다.';
+    const cells = state.values.map((v, i) => { const e = document.createElement('span'); e.className = 'item' + (t.includes(i) ? ' target' : ''); if (Array.isArray(v)) { e.textContent = v[0]; const s = document.createElement('small'); s.textContent = '우선순위 ' + v[1]; e.append(s); } else e.textContent = v; return e; });
+    if (!n) { const e = document.createElement('span'); e.className = 'empty-note'; e.textContent = '비어 있음'; cells.push(e); }
+    $('items').replaceChildren(...cells);
+    $('left-label').textContent = state.adt === 'pq' ? '먼저 접수' : '앞쪽';
+    $('right-label').textContent = state.adt === 'pq' ? '나중 접수' : state.adt === 'stack' ? '뒤쪽(맨 위)' : '뒤쪽';
+    const stateText = '[' + state.values.map(show).join(', ') + ']';
+    $('items').setAttribute('aria-label', names[state.adt] + ' 상태 ' + (n ? stateText : '비어 있음') + (t.length ? ', 다음 제거 후보 ' + t.map(i => show(state.values[i])).join(', ') : ''));
+    $('caption').textContent = state.adt === 'stack' ? 'push와 pop은 모두 맨 위인 뒤쪽 끝을 사용한다.' : state.adt === 'queue' ? 'enqueue는 뒤쪽에 넣고 dequeue는 앞쪽에서 제거한다.' : state.adt === 'deque' ? '연산 이름의 first는 앞쪽 끝, last는 뒤쪽 끝을 뜻한다. 초록 칸 두 개가 제거할 수 있는 양쪽 끝이다.' : '접수 순서대로 놓여 있지만 remove()는 우선순위 숫자가 가장 작은 원소를 먼저 반환한다.';
+    $('live').innerHTML = read('현재 ADT', names[state.adt]) + read('최근 호출', state.last || '아직 없음') + read('반환값', state.returned) + read('다음 상태', n ? stateText : '[]');
+    const cand = t.map(i => show(state.values[i]));
+    $('channel').innerHTML = (state.last ? '<strong>' + state.last + '</strong> ' : '') + (state.last ? (state.returned === '없음' ? '값을 추가했고 반환값은 없다. ' : J(state.returned, '을') + ' 반환하고 그 원소를 상태에서 제거했다. ') : '제거 연산을 호출하면 초록 칸의 원소가 반환되고 표시된 목록이 다음 상태가 된다. ') + (cand.length ? '다음 제거 후보는 ' + (cand.length === 2 ? J(cand[0], '과') + ' ' + cand[1] : cand[0]) + '이다.' : '');
+  }
+  function act(op, text) {
+    state.returned = '없음'; state.last = text;
+    if (op === 'add_first') { state.values.unshift(String(state.next)); state.next += 1; }
+    if (op === 'add_last') { state.values.push(String(state.next)); state.next += 1; }
+    if (op === 'remove_first' && state.values.length) state.returned = show(state.values.shift());
+    if (op === 'remove_last' && state.values.length) state.returned = show(state.values.pop());
+    if (op === 'pqAdd') { state.values.push(extras[state.extra % extras.length].slice()); state.extra += 1; }
+    if (op === 'pqRemove' && state.values.length) state.returned = show(state.values.splice(pqMin(), 1)[0]);
+    render();
+  }
+  function reset() { state.values = state.adt === 'pq' ? starts.pq() : starts.list(); state.next = 5; state.extra = 0; state.returned = '없음'; state.last = ''; render(); }
+  document.querySelectorAll('[data-adt]').forEach(b => b.addEventListener('click', () => { state.adt = b.dataset.adt; reset(); }));
+  render();
+})();
+</script></body></html>
