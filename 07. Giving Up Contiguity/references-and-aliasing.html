@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#ffffff">
-  <title>References And Aliasing | 자료구조</title><link rel="icon" href="data:,">
+  <title>References And Aliasing | 자료구조</title><meta name="description" content="참조(reference)를 복사하면 객체가 복제되지 않는다. 두 이름이 같은 객체를 가리키는 별칭(alias) 상태에서는 한 이름을 통한 객체 변경이 다른 이름에서도 보인다."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/07.%20Giving%20Up%20Contiguity/references-and-aliasing.html"><meta property="og:type" content="website"><meta property="og:site_name" content="자료구조"><meta property="og:title" content="References And Aliasing | 자료구조"><meta property="og:description" content="참조(reference)를 복사하면 객체가 복제되지 않는다. 두 이름이 같은 객체를 가리키는 별칭(alias) 상태에서는 한 이름을 통한 객체 변경이 다른 이름에서도 보인다."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/07.%20Giving%20Up%20Contiguity/references-and-aliasing.html"><meta property="og:locale" content="ko_KR"><link rel="icon" href="data:,">
   <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
   <style>
     .alias-board{min-width:760px;display:grid;grid-template-columns:260px 1fr;gap:1rem;padding:1.25rem;background:var(--surface-050);border:1px solid var(--line-200)}.code{margin:0;padding:1rem;background:var(--pnu-blue-dark);color:var(--white);counter-reset:line}.code-line{display:block;padding:.55rem .7rem;border-left:4px solid transparent;font:650 .88rem/1.45 var(--mono);white-space:pre}.code-line::before{counter-increment:line;content:counter(line);display:inline-block;width:1.8rem;color:var(--line-200)}.code-line.active{border-color:var(--pnu-green);background:var(--pnu-blue);color:var(--white)}
@@ -14,7 +14,7 @@
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
-  window.gtag('config', "G-H8EZQ381WH");
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure/topic" });
   const tag = document.createElement('script');
   tag.async = true;
   tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
