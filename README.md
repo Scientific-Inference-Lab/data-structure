@@ -1,4 +1,4 @@
-# Data Structures
+# Data Structure
 
 [Open the course materials](https://scientific-inference-lab.github.io/data-structure/).
 
