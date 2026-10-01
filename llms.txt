@@ -1,4 +1,4 @@
-# Data Structures (자료구조)
+# Data Structure (자료구조)
 
 > Korean-language course materials from Pusan National University: lecture slides (PDF), interactive topic pages, and concept-check problem sets.
 
