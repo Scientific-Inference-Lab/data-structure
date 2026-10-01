@@ -1,7 +1,7 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Choosing An ADT | 자료구조</title><meta name="description" content="자료구조 이름보다 필요한 연산을 먼저 정한다. 요구사항이 위치, 같은 값, 순서, 삭제 순서 가운데 무엇을 묻는지 먼저 가른다."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/01.%20Data%20Abstraction/choosing-an-adt.html"><meta property="og:type" content="website"><meta property="og:site_name" content="자료구조"><meta property="og:title" content="Choosing An ADT | 자료구조"><meta property="og:description" content="자료구조 이름보다 필요한 연산을 먼저 정한다. 요구사항이 위치, 같은 값, 순서, 삭제 순서 가운데 무엇을 묻는지 먼저 가른다."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/01.%20Data%20Abstraction/choosing-an-adt.html"><meta property="og:locale" content="ko_KR"><link rel="icon" href="data:,">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Choosing An ADT | 자료구조</title><meta name="description" content="자료구조 이름보다 필요한 연산을 먼저 정한다. 요구사항이 위치, 같은 값, 순서, 삭제 순서 가운데 무엇을 묻는지 먼저 가른다."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/01.%20Data%20Abstraction/choosing-an-adt.html"><meta property="og:type" content="website"><meta property="og:site_name" content="자료구조"><meta property="og:title" content="Choosing An ADT | 자료구조"><meta property="og:description" content="자료구조 이름보다 필요한 연산을 먼저 정한다. 요구사항이 위치, 같은 값, 순서, 삭제 순서 가운데 무엇을 묻는지 먼저 가른다."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/01.%20Data%20Abstraction/choosing-an-adt.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" href="data:,">
   <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
   <style>
     .task-picker{display:grid;grid-template-columns:minmax(280px,1.3fr) minmax(220px,.7fr);gap:1rem;align-items:end}.requirement{padding:1rem 1.25rem;border-left:5px solid var(--pnu-green);background:var(--callout-bg)}.matrix-wrap{overflow-x:auto}.matrix{width:100%;min-width:880px;border-collapse:collapse}.matrix th,.matrix td{padding:.8rem;border:1px solid var(--line-200);text-align:center}.matrix th:first-child,.matrix td:first-child{text-align:left}.matrix .selected{background:var(--callout-bg);box-shadow:inset 5px 0 0 var(--pnu-green)}.supports{color:var(--pnu-blue-dark);font-weight:800}.not-used{color:var(--ink-500)}.call-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:.7rem}.call-card{padding:1rem;border:1px solid var(--line-200);background:var(--white)}.call-card strong{display:block;color:var(--pnu-blue-dark)}.call-card code{display:block;margin:.7rem 0;font-weight:800}.call-card.active{border:2px solid var(--pnu-green);background:var(--callout-bg)}
@@ -13,7 +13,7 @@
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () { window.dataLayer.push(arguments); };
   window.gtag('js', new Date());
-  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure/topic" });
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
   const tag = document.createElement('script');
   tag.async = true;
   tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
