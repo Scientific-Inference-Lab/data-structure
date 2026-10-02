@@ -1,9 +1,8 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Arrays Vs Linked Lists | 자료구조</title><meta name="description" content="같은 List 인터페이스의 get, add, remove도 내부 표현이 배열인지 연결리스트인지에 따라 실행하는 일과 연산 비용(operation cost)이 달라진다. 배열은 원소 이동이, 연결리스트는 위치를 찾는 순회가 비용을 지배한다."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/10.%20Same%20List%2C%20Different%20Costs/arrays-vs-linked-lists.html"><meta property="og:type" content="website"><meta property="og:site_name" content="자료구조"><meta property="og:title" content="Arrays Vs Linked Lists | 자료구조"><meta property="og:description" content="같은 List 인터페이스의 get, add, remove도 내부 표현이 배열인지 연결리스트인지에 따라 실행하는 일과 연산 비용(operation cost)이 달라진다. 배열은 원소 이동이, 연결리스트는 위치를 찾는 순회가 비용을 지배한다."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/10.%20Same%20List%2C%20Different%20Costs/arrays-vs-linked-lists.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" href="data:,">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Arrays vs Linked Lists | Data Structure | Pusan National University</title><meta name="description" content="같은 List 인터페이스의 get, add, remove도 내부 표현이 배열인지 연결리스트인지에 따라 실행하는 일과 연산 비용(operation cost)이 달라진다. 배열은 원소 이동이, 연결리스트는 위치를 찾는 순회가 비용을 지배한다."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/10.%20Same%20List%2C%20Different%20Costs/arrays-vs-linked-lists.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Arrays vs Linked Lists | Data Structure | Pusan National University"><meta property="og:description" content="같은 List 인터페이스의 get, add, remove도 내부 표현이 배열인지 연결리스트인지에 따라 실행하는 일과 연산 비용(operation cost)이 달라진다. 배열은 원소 이동이, 연결리스트는 위치를 찾는 순회가 비용을 지배한다."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/10.%20Same%20List%2C%20Different%20Costs/arrays-vs-linked-lists.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
   <style>
 
   </style>
@@ -20,8 +19,8 @@
 </head>
 <body class="visual-topic topic-arrays-vs-linked-lists">
 <a class="skip-link" href="#main-content">본문으로 이동</a>
-<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Same List, Different Costs</span><span class="nav-tag is-current" aria-current="page">Arrays Vs Linked Lists</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/10.%20Same%20List,%20Different%20Costs.pdf">Same List, Different <span class="publication-lecture-tail">Costs<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Arrays Vs Linked Lists</h1><hr class="accent-rule"><p class="page-subtitle">같은 List 인터페이스의 get, add, remove도 내부 표현이 배열인지 연결리스트인지에 따라 실행하는 일과 연산 비용(operation cost)이 달라진다. 배열은 원소 이동이, 연결리스트는 위치를 찾는 순회가 비용을 지배한다.</p></div></section>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Same List, Different Costs</span><span class="nav-tag is-current" aria-current="page">Arrays vs Linked Lists</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/10.%20Same%20List,%20Different%20Costs.pdf">Same List, Different <span class="publication-lecture-tail">Costs<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Arrays vs Linked Lists</h1><hr class="accent-rule"><p class="page-subtitle">같은 List 인터페이스의 get, add, remove도 내부 표현이 배열인지 연결리스트인지에 따라 실행하는 일과 연산 비용(operation cost)이 달라진다. 배열은 원소 이동이, 연결리스트는 위치를 찾는 순회가 비용을 지배한다.</p></div></section>
 <main id="main-content" class="page-body container">
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>ArrayStack</strong><span>내부 배열에 원소를 연속으로 두고 n과 용량을 따로 센다.</span></article><article class="summary-card"><strong>SLList · DLList</strong><span>노드마다 next, 또는 prev와 next를 두어 순서를 연결한다.</span></article><article class="summary-card"><strong>비용을 읽는 순서</strong><span>어떤 연산인지, 내부에서 무엇을 하는지, 몇 번 반복하는지 센다.</span></article></div></section>
 
@@ -51,7 +50,7 @@
   <div class="container footer-inner">
     <span class="footer-course-code">DS3600082-140</span>
     <address class="footer-contact" aria-label="강의자 연락처">
-      <span class="footer-instructor">오용경</span>
+      <span class="footer-contact-label">Contact:</span>
       <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
     </address>
   </div>
