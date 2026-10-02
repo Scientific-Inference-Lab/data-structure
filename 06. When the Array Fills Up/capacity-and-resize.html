@@ -2,9 +2,8 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1">
-  <title>Capacity And Resize | 자료구조</title><meta name="description" content="원소 수 n이 용량(capacity)과 같을 때 끝에 추가하면 더 큰 배열을 할당하고 기존 원소 n개를 같은 순서로 복사한 뒤 새 값을 쓴다."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/06.%20When%20the%20Array%20Fills%20Up/capacity-and-resize.html"><meta property="og:type" content="website"><meta property="og:site_name" content="자료구조"><meta property="og:title" content="Capacity And Resize | 자료구조"><meta property="og:description" content="원소 수 n이 용량(capacity)과 같을 때 끝에 추가하면 더 큰 배열을 할당하고 기존 원소 n개를 같은 순서로 복사한 뒤 새 값을 쓴다."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/06.%20When%20the%20Array%20Fills%20Up/capacity-and-resize.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" href="data:,">
-  <link rel="stylesheet" href="../assets/pnu-theme.css">
+  <meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Capacity and Resize | Data Structure | Pusan National University</title><meta name="description" content="원소 수 n이 용량(capacity)과 같을 때 끝에 추가하면 더 큰 배열을 할당하고 기존 원소 n개를 같은 순서로 복사한 뒤 새 값을 쓴다."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/06.%20When%20the%20Array%20Fills%20Up/capacity-and-resize.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Capacity and Resize | Data Structure | Pusan National University"><meta property="og:description" content="원소 수 n이 용량(capacity)과 같을 때 끝에 추가하면 더 큰 배열을 할당하고 기존 원소 n개를 같은 순서로 복사한 뒤 새 값을 쓴다."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/06.%20When%20the%20Array%20Fills%20Up/capacity-and-resize.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="stylesheet" href="../assets/pnu-theme.css">
   <link rel="stylesheet" href="../assets/topic-visual-shell.css">
   <style>
     .row,.controls{display:flex;gap:.5rem;flex-wrap:wrap}
@@ -33,8 +32,8 @@
 </head>
 <body class="visual-topic">
   <a class="skip-link" href="#main-content">본문으로 이동</a>
-  <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">When the Array Fills Up</span><span class="nav-tag is-current" aria-current="page">Capacity And Resize</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-  <section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/06.%20When%20the%20Array%20Fills%20Up.pdf">When the Array Fills <span class="publication-lecture-tail">Up<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Capacity And Resize</h1><hr class="accent-rule"><p class="page-subtitle">원소 수 n이 용량(capacity)과 같을 때 끝에 추가하면 더 큰 배열을 할당하고 기존 원소 n개를 같은 순서로 복사한 뒤 새 값을 쓴다.</p></div></section>
+  <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">When the Array Fills Up</span><span class="nav-tag is-current" aria-current="page">Capacity and Resize</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+  <section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/06.%20When%20the%20Array%20Fills%20Up.pdf">When the Array Fills <span class="publication-lecture-tail">Up<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Capacity and Resize</h1><hr class="accent-rule"><p class="page-subtitle">원소 수 n이 용량(capacity)과 같을 때 끝에 추가하면 더 큰 배열을 할당하고 기존 원소 n개를 같은 순서로 복사한 뒤 새 값을 쓴다.</p></div></section>
   <main id="main-content" class="page-body container">
     <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>원소 수 n</strong><span>현재 담긴 원소의 수다.</span></article><article class="summary-card"><strong>용량(capacity)</strong><span>내부 배열에 확보한 칸 수다.</span></article><article class="summary-card"><strong>재할당</strong><span>더 큰 배열을 할당하고 기존 원소를 옮긴 뒤 새 배열로 바꾸는 일이다.</span></article></div></section>
     <section class="topic-example">
@@ -61,7 +60,7 @@
   <div class="container footer-inner">
     <span class="footer-course-code">DS3600082-140</span>
     <address class="footer-contact" aria-label="강의자 연락처">
-      <span class="footer-instructor">오용경</span>
+      <span class="footer-contact-label">Contact:</span>
       <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
     </address>
   </div>

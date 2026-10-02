@@ -1,8 +1,7 @@
 <!doctype html>
 <html lang="ko">
 <head>
-  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Representation And Work | 자료구조</title><meta name="description" content="같은 인터페이스라도 내부 표현(representation)에 따라 연산마다 읽고 옮기는 작업이 달라진다. 배열로 구현한 리스트에서는 연산의 결과가 배열 칸에 대한 대입문으로 만들어진다."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/02.%20Interfaces/representation-and-work.html"><meta property="og:type" content="website"><meta property="og:site_name" content="자료구조"><meta property="og:title" content="Representation And Work | 자료구조"><meta property="og:description" content="같은 인터페이스라도 내부 표현(representation)에 따라 연산마다 읽고 옮기는 작업이 달라진다. 배열로 구현한 리스트에서는 연산의 결과가 배열 칸에 대한 대입문으로 만들어진다."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/02.%20Interfaces/representation-and-work.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" href="data:,">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light"><title>Representation and Work | Data Structure | Pusan National University</title><meta name="description" content="같은 인터페이스라도 내부 표현(representation)에 따라 연산마다 읽고 옮기는 작업이 달라진다. 배열로 구현한 리스트에서는 연산의 결과가 배열 칸에 대한 대입문으로 만들어진다."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/02.%20Interfaces/representation-and-work.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Representation and Work | Data Structure | Pusan National University"><meta property="og:description" content="같은 인터페이스라도 내부 표현(representation)에 따라 연산마다 읽고 옮기는 작업이 달라진다. 배열로 구현한 리스트에서는 연산의 결과가 배열 칸에 대한 대입문으로 만들어진다."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/02.%20Interfaces/representation-and-work.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
   <style>
 
     .public-strip{margin:0 0 1rem;padding:.8rem;border:3px solid var(--pnu-green);background:var(--callout-bg);text-align:center;font:800 1.05rem var(--mono)}
@@ -31,8 +30,8 @@
 }</script>
 </head>
 <body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
-<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Interfaces</span><span class="nav-tag is-current" aria-current="page">Representation And Work</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/02.%20Interfaces.pdf"><span class="publication-lecture-tail">Interfaces<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Representation And Work</h1><hr class="accent-rule"><p class="page-subtitle">같은 인터페이스라도 내부 표현(representation)에 따라 연산마다 읽고 옮기는 작업이 달라진다. 배열로 구현한 리스트에서는 연산의 결과가 배열 칸에 대한 대입문으로 만들어진다.</p></div></section>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Interfaces</span><span class="nav-tag is-current" aria-current="page">Representation and Work</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/02.%20Interfaces.pdf"><span class="publication-lecture-tail">Interfaces<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Representation and Work</h1><hr class="accent-rule"><p class="page-subtitle">같은 인터페이스라도 내부 표현(representation)에 따라 연산마다 읽고 옮기는 작업이 달라진다. 배열로 구현한 리스트에서는 연산의 결과가 배열 칸에 대한 대입문으로 만들어진다.</p></div></section>
 <main id="main-content" class="page-body container">
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>내부 표현(representation)</strong><span>값과 관계를 저장하는 방식이다.</span></article><article class="summary-card"><strong>구현(implementation)</strong><span>내부 표현을 사용해 연산을 실행하는 코드다.</span></article><article class="summary-card"><strong>자료구조(data structure)</strong><span>ADT의 연산을 실행할 수 있도록 값을 저장하고 처리하는 구체적인 구현이다.</span></article></div></section>
   <section class="topic-example"><header class="example-header"><h2 class="section-title">배열 안의 대입문이 연산의 결과를 만든다</h2><p class="lead">내부 배열 <code>a</code>는 칸 5개이고 빈 칸은 <code>None</code>이다. 대입문이 실행될 때마다 대상 칸이 바뀌고, 외부 상태는 연산이 끝날 때만 바뀐다.</p></header>
@@ -45,12 +44,12 @@
   <section class="topic-example"><header class="example-header"><h2 class="section-title">인터페이스에서 비용까지 질문을 나눈다</h2><p class="lead">위에서 고른 연산을 기준으로, 배열로 리스트를 구현할 때 각 층이 답하는 질문을 적는다.</p></header>
     <div class="visual-lab"><div id="layers" class="layers" role="list" aria-label="인터페이스에서 비용까지"></div><p class="visual-note">인터페이스와 명세는 결과를 정하고, 내부 표현과 내부 작업은 그 결과를 만드는 방법을 정한다. 비용은 그 작업이 입력 크기에 따라 얼마나 늘어나는지를 묻는다.</p></div>
   </section>
-  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="interface-and-specification.html">이전 · Interface And Specification</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="python-objects.html">다음 · Python Objects</a></nav>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="interface-and-specification.html">이전 · Interface and Specification</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="python-objects.html">다음 · Python Objects</a></nav>
 </main><footer class="site-footer">
   <div class="container footer-inner">
     <span class="footer-course-code">DS3600082-140</span>
     <address class="footer-contact" aria-label="강의자 연락처">
-      <span class="footer-instructor">오용경</span>
+      <span class="footer-contact-label">Contact:</span>
       <a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>
     </address>
   </div>
