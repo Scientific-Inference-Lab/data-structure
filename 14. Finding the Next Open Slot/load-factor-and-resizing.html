@@ -1,0 +1,112 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Load Factor and Resizing | Data Structure | Pusan National University</title><meta name="description" content="The load factor measures table occupancy; resizing reduces crowding and recomputes every key's index for the new table length."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/load-factor-and-resizing.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Load Factor and Resizing | Data Structure | Pusan National University"><meta property="og:description" content="The load factor measures table occupancy; resizing reduces crowding and recomputes every key's index for the new table length."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/load-factor-and-resizing.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-load-factor-and-resizing">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Finding the Next Open Slot</span><span class="nav-tag is-current" aria-current="page">Load Factor and Resizing</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/14.%20Finding%20the%20Next%20Open%20Slot.pdf">Finding the Next Open <span class="publication-lecture-tail">Slot<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Load Factor and Resizing</h1><hr class="accent-rule"><p class="page-subtitle">원소 수를 표 길이로 나눈 값(load factor) α = n/m은 표가 얼마나 찼는지를 나타낸다. α가 커지면 충돌과 조사 길이가 늘어나므로 크기 재할당(resize)으로 더 큰 표를 만들고, 모든 키의 인덱스를 새 표 길이로 다시 계산한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>load factor α</strong><span>n / m이며 표가 찬 비율이다.</span></article><article class="summary-card"><strong>재할당 기준</strong><span>구현마다 다르므로 하나의 숫자를 모든 해시테이블의 규칙으로 쓰지 않는다.</span></article><article class="summary-card"><strong>재배치</strong><span>기존 칸 위치를 복사하지 않고 모든 키를 새 표에 다시 넣는다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">load factor가 커질수록 빈 칸이 줄고 다음 저장 위치를 찾기 어려워진다</h2><p class="lead">넣은 키 수와 예시 기준을 바꾸면 α, 빈 칸 수, 재할당이 필요한지가 바뀐다. 표 길이는 m = 8이다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="ln">넣은 키 수 n <output id="ln-out" class="control-value" for="ln">3</output></label><input id="ln" type="range" min="0" max="8" step="1" value="3"></div><div class="control-field"><label for="lth">예시 기준</label><select id="lth"><option value="0.5">α > 1/2이면 재할당</option><option value="0.75">α > 3/4이면 재할당</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="lf-row"></div></div></div><figcaption class="visual-caption">칸 위 숫자는 인덱스다. 파란 칸은 키가 든 칸, 점선 칸은 빈 칸이며, 빨간 점선 칸은 기준을 넘긴 뒤에 넣은 키다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">표 길이가 바뀌면 모든 키의 인덱스를 다시 계산한다</h2><p class="lead">표 길이를 바꾸면 키 6, 10, 14의 k mod m과, 앞 칸이 차 있으면 다음 칸으로 넘어가는 저장 위치가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="rm">표 길이 m</label><select id="rm"><option value="4">m = 4 · 재할당 전</option><option value="8">m = 8 · 재할당 후</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="rh-row"></div><table id="rh-table" class="topic-table" aria-label="키별 인덱스 계산"></table></div></div><figcaption class="visual-caption">위 줄은 표이며 파란 칸이 저장된 키다. 아래 표는 키마다 시작 인덱스 k mod m과 실제 저장 인덱스이며, 두 값이 다르면 앞 칸이 차 있어 다음 칸으로 넘어간 것이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../13. Keys to Indices/separate-chaining.html">이전 · Separate Chaining</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../14. Finding the Next Open Slot/open-addressing-probes.html">다음 · Open Addressing Probes</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+
+  function cell(t, cls, lab) { return '<span class="ds-cell ' + (cls || "") + '">' + (lab !== undefined ? "<small>" + lab + "</small>" : "") + t + "</span>"; }
+  function arrow(t) { return '<span class="ds-arrow" aria-hidden="true">' + (t || "→") + "</span>"; }
+  function stepper(sid, n, getMax, render) {
+    var st = { i: 0 };
+    function go(v) {
+      var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
+      $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
+      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
+      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
+    }
+    $(sid + "-first").addEventListener("click", function () { go(0); });
+    $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });
+    $(sid + "-next").addEventListener("click", function () { go(st.i + 1); });
+    return { go: go, reset: function () { go(0); }, now: function () { return st.i; } };
+  }
+
+  var lkeys = [7, 12, 21, 30, 4, 18, 25, 9];
+  function place(keys, m) { var t = []; for (var i = 0; i < m; i++) t.push(null); var info = []; keys.forEach(function (k) { var h = k % m, i = h, path = [h]; while (t[i] !== null) { i = (i + 1) % m; path.push(i); } t[i] = k; info.push({ k: k, h: h, at: i, path: path }); }); return { t: t, info: info }; }
+  function renderLoad() {
+    var n = Number($("ln").value), th = Number($("lth").value), m = 8, p = place(lkeys.slice(0, n), m), limit = Math.floor(th * m);
+    $("ln-out").textContent = n;
+    var over = {}; p.info.forEach(function (x, j) { if (j + 1 > limit) over[x.at] = "is-alert"; });
+    $("lf-row").innerHTML = '<div class="ds-row has-labels"><span class="ds-row-label">표</span>' + p.t.map(function (v, i) { return cell(v === null ? "·" : v, v === null ? "is-empty" : over[i] || "is-x", i); }).join("") + "</div>";
+    var a = n / m, need = a > th;
+    show(1, [["α = n / m", n + " / 8 = " + a.toFixed(3)], ["빈 칸", (m - n) + "칸"], ["재할당", need ? "필요 (α > " + (th === 0.5 ? "1/2" : "3/4") + ")" : "아직 아님"]],
+      n === m ? "α = 1이면 빈 칸이 없어 개방주소에서는 다음 키를 저장할 곳이 없다." :
+      need ? "α = " + pj(a.toFixed(3), "으로") + " 예시 기준을 넘었다. 빈 칸이 " + (m - n) + "개뿐이라 새 키가 빈 칸을 찾기까지 지나는 칸이 늘어나므로 더 큰 표로 재할당한다. 기준 숫자는 구현마다 다르다."
+        : "α = " + pj(a.toFixed(3), "으로") + " 아직 빈 칸이 " + (m - n) + "개 있다. α가 계속 커지면 충돌과 조사 길이가 늘어난다.");
+  }
+  function renderRehash() {
+    var m = Number($("rm").value), keys = m === 4 ? [6, 10, 14] : place([6, 10, 14], 4).t.filter(function (v) { return v !== null; }), p = place(keys, m);
+    $("rh-row").innerHTML = '<div class="ds-row has-labels"><span class="ds-row-label">m = ' + m + "</span>" + p.t.map(function (v, i) { return cell(v === null ? "·" : v, v === null ? "is-empty" : "is-x", i); }).join("") + "</div>";
+    $("rh-table").innerHTML = '<thead><tr><th scope="col">키 k</th><th scope="col">k mod ' + m + '</th><th scope="col">확인한 인덱스</th><th scope="col">저장 인덱스</th></tr></thead><tbody>' + p.info.map(function (x) { return '<tr><th scope="row">' + x.k + "</th><td>" + x.h + "</td><td>" + x.path.join(", ") + '</td><td class="' + (x.at !== x.h ? "is-y" : "") + '">' + x.at + "</td></tr>"; }).join("") + "</tbody>";
+    show(2, [["넣는 순서", keys.join(", ")], ["k mod m", p.info.map(function (x) { return x.h; }).join(", ")], ["저장 인덱스", p.info.map(function (x) { return x.at; }).join(", ")], ["연속으로 찬 칸", m === 4 ? "2, 3, 0" : "2와 6, 7"]],
+      m === 4 ? "m = 4에서는 세 키가 모두 인덱스 2에서 시작해 2, 3, 0으로 줄줄이 밀린다."
+        : "m = 8로 바꾸면 나머지의 나누는 수가 달라져 6과 14는 6, 10은 2에서 시작한다. 기존 위치 2, 3, 0을 그대로 복사하면 탐색이 새 k mod 8에서 시작해 키를 찾지 못하므로, 기존 표의 칸 순서(14, 6, 10)대로 모든 키를 새 표에 다시 넣는다. 그래서 14가 6, 6이 7, 10이 2에 놓인다.");
+  }
+  on("ln", renderLoad); on("lth", renderLoad); on("rm", renderRehash);
+  renderLoad(); renderRehash();
+}());
+</script>
+</body>
+</html>

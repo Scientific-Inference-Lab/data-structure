@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
-  <title>Arrays vs Linked Lists | Data Structure | Pusan National University</title><meta name="description" content="For one List interface, get, add, and remove cost differently by representation: shifting dominates in arrays, and traversal to the position dominates in linked lists."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/10.%20Same%20List%2C%20Different%20Costs/arrays-vs-linked-lists.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Arrays vs Linked Lists | Data Structure | Pusan National University"><meta property="og:description" content="For one List interface, get, add, and remove cost differently by representation: shifting dominates in arrays, and traversal to the position dominates in linked lists."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/10.%20Same%20List%2C%20Different%20Costs/arrays-vs-linked-lists.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <title>Arrays vs Linked Lists | Data Structure | Pusan National University</title><meta name="description" content="For one List interface, get, add, and remove cost differently by representation: shifting dominates in arrays, and traversal to the position dominates in linked lists."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/10.%20Same%20List%2C%20Different%20Costs/arrays-vs-linked-lists.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Arrays vs Linked Lists | Data Structure | Pusan National University"><meta property="og:description" content="For one List interface, get, add, and remove cost differently by representation: shifting dominates in arrays, and traversal to the position dominates in linked lists."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/10.%20Same%20List%2C%20Different%20Costs/arrays-vs-linked-lists.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
   <style>
 
   </style>
@@ -96,14 +97,14 @@
     } else {
       var front = i < N - i, steps_ = front ? i : N - i;
       h = '<div class="ds-row has-labels"><span class="ds-row-label">' + (front ? "dummy.next →" : "← dummy") + "</span>" + vals.map(function (v, k) { var on = front ? k < i : k > i; return cell(v, (on ? "is-x" : "") + (k === i ? " is-on" : ""), "노드 " + k) + (k < N - 1 ? arrow(front ? "→" : "←") : ""); }).join("") + "</div>";
-      work = (front ? "next " : "prev ") + steps_ + "회"; how = (front ? "앞" : "뒤") + "의 가까운 끝에서 " + steps_ + "번"; cost = "Θ(1 + min{i, n − i})";
+      work = (front ? "next " : "prev ") + steps_ + "회"; how = i === N - i ? "뒤 끝에서 " + steps_ + "번(두 끝까지 거리가 같음)" : (front ? "앞" : "뒤") + "의 가까운 끝에서 " + steps_ + "번"; cost = "Θ(1 + min{i, n − i})";
     }
     $("get-board").innerHTML = h;
     $("get-board").setAttribute("aria-label", "get(" + i + "): " + how);
     show(1, [["get(" + i + ")의 내부 작업", work], ["어떻게", how], ["비용", cost]],
       r === "array" ? "배열은 시작 주소에서 떨어진 위치를 곱셈과 덧셈으로 계산하므로 i와 n이 달라져도 한 번에 닿는다. i = " + i + "여도 거치는 칸이 없다."
         : r === "sl" ? "SLList는 노드의 주소를 계산할 수 없어 head부터 next를 따라가며 앞의 " + i + "개 노드를 지난다. 뒤쪽 원소일수록 비용이 커진다."
-        : "DLList는 prev가 있어 앞과 뒤 중 가까운 끝에서 출발한다. i = " + kj(i, "은", "는") + " " + (i < N - i ? "앞쪽" : "뒤쪽") + "에 가까워 " + work + "만 따라간다.");
+        : "DLList는 prev가 있어 앞과 뒤 중 가까운 끝에서 출발한다. i = " + kj(i, "은", "는") + " " + (i < N - i ? "앞쪽에 가까워 " : i > N - i ? "뒤쪽에 가까워 " : "앞과 뒤에서 같은 거리라 뒤쪽 끝에서 출발해 ") + work + "만 따라간다.");
   }
   function renderAdd() {
     var i = Number($("ai").value), a = N - i, s = Math.max(0, i - 1), d = Math.min(i, N - i), best = Math.min(a, s, d);

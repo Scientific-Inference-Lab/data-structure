@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Hash Tables | Data Structure | Pusan National University</title><meta name="description" content="A hash table computes an array index from a key and checks only the selected bucket, giving expected cost near O(1) when keys spread evenly."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/13.%20Keys%20to%20Indices/hash-tables.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Hash Tables | Data Structure | Pusan National University"><meta property="og:description" content="A hash table computes an array index from a key and checks only the selected bucket, giving expected cost near O(1) when keys spread evenly."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/13.%20Keys%20to%20Indices/hash-tables.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-hash-tables .ds-split .topic-table{min-width:240px}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-hash-tables">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Keys to Indices</span><span class="nav-tag is-current" aria-current="page">Hash Tables</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/13.%20Keys%20to%20Indices.pdf">Keys to <span class="publication-lecture-tail">Indices<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Hash Tables</h1><hr class="accent-rule"><p class="page-subtitle">해시테이블(hash table)은 해시 함수로 키에서 배열 인덱스를 계산해 Map 연산을 수행한다. 앞에서부터 차례로 찾는 대신 계산한 위치의 버킷만 확인하므로, 키가 고르게 퍼지면 기대 비용이 O(1)에 가깝다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>Map ADT</strong><span>set(k, v), get(k), contains(k), remove(k)로 키와 값을 다룬다.</span></article><article class="summary-card"><strong>해시테이블의 세 부분</strong><span>해시 함수, 버킷 배열, 충돌 처리가 함께 있어야 한다.</span></article><article class="summary-card"><strong>O(1)의 조건</strong><span>해시 계산이 빠르고 키가 고르게 퍼지며 표가 충분히 커야 한다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">순차 탐색은 최악에 n개를 보지만 해시테이블은 계산한 버킷만 본다</h2><p class="lead">찾을 키를 바꾸면 리스트에서 앞부터 비교하는 횟수와, h(k) = k mod 11로 고른 버킷에서 비교하는 횟수가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="hkey">찾을 키</label><select id="hkey"><option value="54">54 · 리스트 첫 원소</option><option value="31">31 · 가운데</option><option value="77">77 · 마지막 원소</option><option value="99">99 · 없음</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="seq-row"></div><div id="hash-row"></div></div></div><figcaption class="visual-caption">위 줄은 앞에서부터 비교하는 리스트, 아래 줄은 길이 11인 버킷 배열이다. 파란 칸은 비교한 원소, 초록 테두리 칸은 찾은 원소 또는 계산한 버킷이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">Map은 정수 위치가 아니라 키로 값을 저장하고 찾는다</h2><p class="lead">단계를 옮기면 dict 연산 하나가 실행되고, 저장된 키와 값 쌍, 반환값이 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="action-row"><button id="mp-first" class="btn btn-outline" type="button">처음으로</button><button id="mp-prev" class="btn btn-outline" type="button">이전</button><button id="mp-next" class="btn" type="button">다음</button></div></div>
+      <p id="reason-2" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-split"><ol id="mp-log" class="ds-log"></ol><table id="mp-table" class="topic-table" aria-label="저장된 키와 값"></table></div></div><figcaption class="visual-caption">왼쪽은 연산 순서이고 짙은 줄이 방금 실행한 연산이다. 오른쪽 표는 지금 저장된 키와 값이며 초록 칸이 방금 바뀐 쌍이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../12. First In, First Out/deque-adt.html">이전 · Deque ADT</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../13. Keys to Indices/hash-functions.html">다음 · Hash Functions</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+
+  function cell(t, cls, lab) { return '<span class="ds-cell ' + (cls || "") + '">' + (lab !== undefined ? "<small>" + lab + "</small>" : "") + t + "</span>"; }
+  function arrow(t) { return '<span class="ds-arrow" aria-hidden="true">' + (t || "→") + "</span>"; }
+  function stepper(sid, n, getMax, render) {
+    var st = { i: 0 };
+    function go(v) {
+      var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
+      $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
+      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
+      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
+    }
+    $(sid + "-first").addEventListener("click", function () { go(0); });
+    $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });
+    $(sid + "-next").addEventListener("click", function () { go(st.i + 1); });
+    return { go: go, reset: function () { go(0); }, now: function () { return st.i; } };
+  }
+
+  var list = [54, 26, 93, 17, 31, 44, 55, 20, 77];
+  function renderSearch() {
+    var k = Number($("hkey").value), pos = list.indexOf(k), comps = pos >= 0 ? pos + 1 : list.length, m = 11, b = [];
+    for (var i = 0; i < m; i++) b.push([]);
+    list.forEach(function (x) { b[x % m].push(x); });
+    var h = k % m, bucket = b[h], bc = bucket.indexOf(k) >= 0 ? bucket.indexOf(k) + 1 : bucket.length;
+    $("seq-row").innerHTML = '<div class="ds-row has-labels"><span class="ds-row-label">리스트</span>' + list.map(function (x, i) { return cell(x, i === pos ? "is-on" : i < comps ? "is-x" : "", i); }).join("") + "</div>";
+    $("hash-row").innerHTML = '<div class="ds-row has-labels"><span class="ds-row-label">버킷</span>' + b.map(function (bk, i) { return cell(bk.length ? bk.join(",") : "·", i === h ? "is-on" : bk.length ? "" : "is-empty", i); }).join("") + "</div>";
+    show(1, [["순차 탐색 비교", comps + "회"], ["h(" + k + ") = " + k + " mod 11", String(h)], ["버킷 안 비교", bc + "회"], ["결과", pos >= 0 ? "찾음" : "없음"]],
+      pos >= 0 ? "리스트에서는 " + k + "에 닿기까지 " + comps + "개를 비교하지만, 해시테이블은 인덱스 " + pj(h, "을") + " 계산한 뒤 그 버킷의 " + bc + "개만 비교한다."
+        : "없는 키는 리스트에서 " + list.length + "개를 모두 비교해야 알 수 있다. 해시테이블은 버킷 " + h + "만 확인하면 되지만, 한 버킷에 키가 몰리면 그 버킷 길이만큼 비교하므로 O(1)이 최악 비용을 보장하지는 않는다.");
+  }
+  var mops = [["set", "Kim", 90], ["set", "Lee", 85], ["get", "Kim"], ["contains", "Park"], ["set", "Kim", 95], ["remove", "Lee"], ["contains", "Lee"]];
+  var mapShow = { set: function (o) { return 'score["' + o[1] + '"] = ' + o[2]; }, get: function (o) { return 'score["' + o[1] + '"]'; }, contains: function (o) { return '"' + o[1] + '" in score'; }, remove: function (o) { return 'del score["' + o[1] + '"]'; } };
+  var mp = stepper("mp", 2, function () { return mops.length; }, function (k) {
+    var d = {}, order = [], ret = "없음", changed = null;
+    for (var t = 0; t < k; t++) {
+      var o = mops[t];
+      if (o[0] === "set") { if (!(o[1] in d)) order.push(o[1]); d[o[1]] = o[2]; ret = "없음"; changed = o[1]; }
+      else if (o[0] === "get") { ret = String(d[o[1]]); changed = null; }
+      else if (o[0] === "contains") { ret = o[1] in d ? "True" : "False"; changed = null; }
+      else { ret = String(d[o[1]]); delete d[o[1]]; order = order.filter(function (x) { return x !== o[1]; }); changed = null; }
+    }
+    $("mp-log").innerHTML = mops.map(function (o, j) { return '<li class="' + (j === k - 1 ? "is-now" : "") + '">' + mapShow[o[0]](o) + "</li>"; }).join("");
+    $("mp-table").innerHTML = '<thead><tr><th scope="col">키</th><th scope="col">값</th></tr></thead><tbody>' + (order.length ? order.map(function (x) { return '<tr><th scope="row" class="' + (x === changed ? "is-y" : "") + '">' + x + '</th><td class="' + (x === changed ? "is-y" : "") + '">' + d[x] + "</td></tr>"; }).join("") : '<tr><td colspan="2">비어 있음</td></tr>') + "</tbody>";
+    var o2 = k ? mops[k - 1] : null;
+    show(2, [["실행한 연산", o2 ? mapShow[o2[0]](o2) : "시작 전"], ["Map 연산", o2 ? o2[0] + "(" + o2[1] + (o2[2] !== undefined ? ", " + o2[2] : "") + ")" : "없음"], ["반환값", ret], ["저장된 쌍", order.length + "개"]],
+      !o2 ? "dict는 Map ADT의 구현 사례다. 각 연산은 키로 값을 다룬다."
+        : o2[0] === "set" ? (k === 5 ? "이미 있는 키 Kim에 set하면 새 쌍을 추가하지 않고 값만 95로 바꾼다." : pj(o2[1], "과") + " 값 " + pj(o2[2], "을") + " 한 쌍으로 저장했다.")
+        : o2[0] === "get" ? "키 Kim으로 짝인 값 " + pj(ret, "을") + " 찾았다. 정수 위치를 몰라도 된다."
+        : o2[0] === "contains" ? '"' + o2[1] + '" in score는 키가 있는지만 검사해 ' + pj(ret, "을") + " 반환한다."
+        : "del은 키 Lee와 그 값을 함께 삭제한다.");
+  });
+  on("hkey", renderSearch);
+  renderSearch(); mp.reset();
+}());
+</script>
+</body>
+</html>

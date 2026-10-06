@@ -1,0 +1,134 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Tombstones | Data Structure | Pusan National University</title><meta name="description" content="A tombstone preserves the search path through a deleted slot while allowing that slot to be reused for insertion."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/tombstones.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Tombstones | Data Structure | Pusan National University"><meta property="og:description" content="A tombstone preserves the search path through a deleted slot while allowing that slot to be reused for insertion."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/tombstones.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-tombstones">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Finding the Next Open Slot</span><span class="nav-tag is-current" aria-current="page">Tombstones</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/14.%20Finding%20the%20Next%20Open%20Slot.pdf">Finding the Next Open <span class="publication-lecture-tail">Slot<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Tombstones</h1><hr class="accent-rule"><p class="page-subtitle">개방주소에서 삭제한 칸을 처음부터 빈 칸과 같은 모양으로 두면, 충돌로 뒤에 밀린 키를 찾는 조사 경로가 중간에서 끊긴다. 지운 자리 표시(tombstone)는 탐색에는 지나갈 칸으로, 삽입에는 다시 쓸 수 있는 칸으로 쓰인다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>처음부터 빈 칸</strong><span>이 뒤에는 같은 경로로 저장된 키가 없다는 뜻이다.</span></article><article class="summary-card"><strong>tombstone</strong><span>삭제 흔적이며 탐색은 지나가고 삽입은 후보 위치로 기억한다.</span></article><article class="summary-card"><strong>재할당</strong><span>활성 항목만 새 표에 다시 넣어 tombstone을 정리한다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">지운 칸을 빈 칸으로 두면 뒤에 밀린 키를 찾지 못한다</h2><p class="lead">삭제 처리 방식과 찾을 키를 바꾸면 44를 지운 표에서 조사 경로, 멈춘 이유, 탐색 결과가 바뀐다. 77, 44, 55는 h(k) = 0, 31과 20은 h(k) = 9, 54는 h(k) = 10이다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="dmode2">44를 지울 때</label><select id="dmode2"><option value="empty">빈 칸으로 비움</option><option value="tomb">tombstone을 남김</option></select></div><div class="control-field"><label for="fk">찾을 키</label><select id="fk"><option value="55">55 · 있음</option><option value="20">20 · 있음</option><option value="66">66 · 없음, h = 0</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="tb-row"></div></div></div><figcaption class="visual-caption">칸 위 숫자는 인덱스다. 회색 점선 칸은 tombstone, 파란 칸은 지나간 칸, 초록 테두리 칸은 찾은 칸, 빨간 칸은 탐색이 멈춘 빈 칸이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">삽입은 처음 만난 tombstone을 기억했다가 키가 없으면 그 자리에 넣는다</h2><p class="lead">넣을 키를 바꾸면 tombstone이 있는 표에서 같은 키가 있는지 끝까지 확인한 경로와 실제로 저장하거나 갱신하는 칸이 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="ik">넣을 키</label><select id="ik"><option value="33">33 · 새 키, h = 0</option><option value="55">55 · 이미 있음, 값 갱신</option><option value="26">26 · 새 키, h = 4</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="ins-row"></div></div></div><figcaption class="visual-caption">칸 위 숫자는 인덱스다. 파란 칸은 확인한 칸, 초록 테두리 칸은 최종으로 쓰는 칸이며, 회색 점선 칸은 tombstone이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../14. Finding the Next Open Slot/open-addressing-probes.html">이전 · Open Addressing Probes</a><a class="pager-link is-all" href="../index.html">전체</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+
+  function cell(t, cls, lab) { return '<span class="ds-cell ' + (cls || "") + '">' + (lab !== undefined ? "<small>" + lab + "</small>" : "") + t + "</span>"; }
+  function arrow(t) { return '<span class="ds-arrow" aria-hidden="true">' + (t || "→") + "</span>"; }
+  function stepper(sid, n, getMax, render) {
+    var st = { i: 0 };
+    function go(v) {
+      var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
+      $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
+      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
+      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
+    }
+    $(sid + "-first").addEventListener("click", function () { go(0); });
+    $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });
+    $(sid + "-next").addEventListener("click", function () { go(st.i + 1); });
+    return { go: go, reset: function () { go(0); }, now: function () { return st.i; } };
+  }
+
+  function tableRow(label, arr, marks) {
+    return '<div class="ds-row has-labels"><span class="ds-row-label">' + label + "</span>" + arr.map(function (v, i) {
+      var cls = marks && marks[i] ? marks[i] : (v === null ? "is-empty" : v === "T" ? "is-grave" : "");
+      return cell(v === null ? "·" : v === "T" ? "지움" : v, cls, i);
+    }).join("") + "</div>";
+  }
+
+  function base(mode) { var t = [77, mode === "tomb" ? "T" : null, 55, 20]; for (var i = 4; i < 11; i++) t.push(null); t[9] = 31; t[10] = 54; return t; }
+  function renderFind() {
+    var mode = $("dmode2").value, k = Number($("fk").value), t = base(mode), m = 11, j = k % m, path = [], res = "", why = "";
+    for (var s = 0; s < m; s++) {
+      path.push(j);
+      if (t[j] === null) { res = "없음"; why = "빈 칸 " + j + "에서 멈춤"; break; }
+      if (t[j] === k) { res = "찾음"; why = "같은 키를 인덱스 " + j + "에서 만남"; break; }
+      j = (j + 1) % m;
+    }
+    var marks = {}; path.forEach(function (p) { marks[p] = "is-x"; });
+    var end = path[path.length - 1]; marks[end] = res === "찾음" ? "is-on" : "is-alert";
+    $("tb-row").innerHTML = tableRow("표", t, marks);
+    var wrong = mode === "empty" && k === 55;
+    show(1, [["시작 인덱스", k + " mod 11 = " + (k % 11)], ["확인한 인덱스", path.join(", ")], ["멈춘 이유", why], ["결과", res + (wrong ? " (잘못된 판단)" : "")]],
+      wrong ? "55는 실제로 인덱스 2에 있지만, 44를 지운 인덱스 1이 처음부터 빈 칸과 같아 보여 탐색이 거기서 끝난다. 두 종류의 빈 칸을 같은 모양으로 두면 탐색이 틀린다."
+        : mode === "tomb" && k === 55 ? "인덱스 0의 다른 키와 인덱스 1의 tombstone을 지나 인덱스 2에서 55를 찾는다. tombstone은 이 뒤에 밀린 키가 있을 수 있다는 표시다."
+        : k === 20 ? (mode === "empty" ? "20은 h(20) = 9에서 시작해 9, 10, 0을 지나지만, 지운 인덱스 1이 빈 칸처럼 보여 인덱스 3에 있는 20을 찾지 못한다." : "20은 9, 10, 0과 tombstone 1, 55가 있는 2를 지나 인덱스 3에서 찾는다. 나머지 연산이 배열 끝을 처음과 이어 준다.")
+        : "66은 표에 없으므로 처음부터 빈 칸을 만나야 없다고 판단할 수 있다. tombstone에서는 멈추지 않고 계속 지나간다.");
+  }
+  function renderIns() {
+    var k = Number($("ik").value), t = base("tomb"), m = 11, j = k % m, path = [], firstT = -1, at = -1, update = false;
+    for (var s = 0; s < m; s++) {
+      path.push(j);
+      if (t[j] === "T") { if (firstT < 0) firstT = j; }
+      else if (t[j] === null) { at = firstT >= 0 ? firstT : j; break; }
+      else if (t[j] === k) { at = j; update = true; break; }
+      j = (j + 1) % m;
+    }
+    var marks = {}; path.forEach(function (p) { marks[p] = "is-x"; }); marks[at] = "is-on";
+    var t2 = t.slice(); t2[at] = k;
+    $("ins-row").innerHTML = tableRow("표", t2, marks);
+    show(2, [["확인한 인덱스", path.join(", ")], ["처음 만난 tombstone", firstT >= 0 ? String(firstT) : "없음"], ["최종 위치", at + (update ? " (값 갱신)" : " (새로 저장)")]],
+      update ? "55는 tombstone을 기억해 두고 계속 탐색하다 인덱스 2에서 같은 키를 만나 값만 갱신한다. tombstone 자리에 바로 넣었다면 같은 키가 두 칸에 생긴다."
+        : firstT >= 0 ? pj(k, "은") + " 인덱스 1의 tombstone을 후보로 기억하고, 같은 키가 없는지 빈 칸 " + path[path.length - 1] + "까지 확인한 뒤 기억한 인덱스 " + firstT + "에 넣는다. 삭제 흔적을 다시 써 공간을 아낀다."
+        : pj(k, "은") + " 경로에 tombstone이 없어 처음 만난 빈 칸 " + at + "에 넣는다. tombstone이 많이 쌓이면 활성 원소가 적어도 탐색이 길어지므로 재할당 때 활성 항목만 다시 넣어 정리한다.");
+  }
+  on("dmode2", renderFind); on("fk", renderFind); on("ik", renderIns);
+  renderFind(); renderIns();
+}());
+</script>
+</body>
+</html>

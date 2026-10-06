@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Open Addressing Probes | Data Structure | Pusan National University</title><meta name="description" content="Open addressing stores one entry per slot and follows the same probe sequence when inserting and searching after a collision."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/open-addressing-probes.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Open Addressing Probes | Data Structure | Pusan National University"><meta property="og:description" content="Open addressing stores one entry per slot and follows the same probe sequence when inserting and searching after a collision."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/open-addressing-probes.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-open-addressing-probes">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Finding the Next Open Slot</span><span class="nav-tag is-current" aria-current="page">Open Addressing Probes</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/14.%20Finding%20the%20Next%20Open%20Slot.pdf">Finding the Next Open <span class="publication-lecture-tail">Slot<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Open Addressing Probes</h1><hr class="accent-rule"><p class="page-subtitle">개방주소(open addressing)는 배열 한 칸에 항목 하나만 두고, 충돌하면 정해진 조사 순서에 따라 같은 표 안의 다른 칸을 찾는다. 저장할 때 이동한 경로를 찾을 때도 똑같이 따라가야 한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>linear probing</strong><span>h(k), h(k) + 1, h(k) + 2, … 순서로 한 칸씩 본다.</span></article><article class="summary-card"><strong>탐색의 멈춤</strong><span>같은 키를 만나면 성공, 처음부터 빈 칸을 만나면 실패다.</span></article><article class="summary-card"><strong>조사 방식</strong><span>quadratic probing은 i², double hashing은 키별 간격 h₂(k)만큼 떨어진 칸을 본다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">linear probing은 충돌하면 다음 칸으로 한 칸씩 이동한다</h2><p class="lead">단계를 옮기면 키 31, 54, 77, 44, 55, 20을 차례로 m = 11인 표에 넣고, 시작 인덱스에서 빈 칸을 찾을 때까지 확인한 인덱스가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="action-row"><button id="lp-first" class="btn btn-outline" type="button">처음으로</button><button id="lp-prev" class="btn btn-outline" type="button">이전</button><button id="lp-next" class="btn" type="button">다음</button></div></div>
+      <p id="reason-1" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="lp-row"></div></div></div><figcaption class="visual-caption">칸 위 숫자는 인덱스다. 파란 칸은 방금 넣은 키가 지나간 칸, 초록 테두리 칸은 저장한 칸, 점선 칸은 빈 칸이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">조사 방식에 따라 다음 후보 칸이 달라진다</h2><p class="lead">조사 방식을 바꾸면 인덱스 0, 1, 4, 5, 9가 차 있는 표에 h(55) = 0인 55를 넣을 때 확인하는 후보 순서와 저장 위치가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="pm">조사 방식</label><select id="pm"><option value="linear">linear probing: h(k) + i</option><option value="quad">quadratic probing: h(k) + i²</option><option value="double">double hashing: h(k) + i · h₂(k), h₂(k) = 5 − (k mod 5)</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="pm-row"></div></div></div><figcaption class="visual-caption">칸 위 숫자는 인덱스다. 파란 칸은 확인했지만 차 있던 후보, 초록 테두리 칸은 55를 저장한 칸이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../14. Finding the Next Open Slot/load-factor-and-resizing.html">이전 · Load Factor and Resizing</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../14. Finding the Next Open Slot/tombstones.html">다음 · Tombstones</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+
+  function cell(t, cls, lab) { return '<span class="ds-cell ' + (cls || "") + '">' + (lab !== undefined ? "<small>" + lab + "</small>" : "") + t + "</span>"; }
+  function arrow(t) { return '<span class="ds-arrow" aria-hidden="true">' + (t || "→") + "</span>"; }
+  function stepper(sid, n, getMax, render) {
+    var st = { i: 0 };
+    function go(v) {
+      var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
+      $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
+      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
+      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
+    }
+    $(sid + "-first").addEventListener("click", function () { go(0); });
+    $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });
+    $(sid + "-next").addEventListener("click", function () { go(st.i + 1); });
+    return { go: go, reset: function () { go(0); }, now: function () { return st.i; } };
+  }
+
+  function tableRow(label, arr, marks) {
+    return '<div class="ds-row has-labels"><span class="ds-row-label">' + label + "</span>" + arr.map(function (v, i) {
+      var cls = marks && marks[i] ? marks[i] : (v === null ? "is-empty" : v === "T" ? "is-grave" : "");
+      return cell(v === null ? "·" : v === "T" ? "지움" : v, cls, i);
+    }).join("") + "</div>";
+  }
+
+  var lkeys = [31, 54, 77, 44, 55, 20];
+  var lp = stepper("lp", 1, function () { return lkeys.length; }, function (k) {
+    var m = 11, t = [], last = null;
+    for (var i = 0; i < m; i++) t.push(null);
+    for (var s = 0; s < k; s++) { var key = lkeys[s], h = key % m, j = h, path = [h]; while (t[j] !== null) { j = (j + 1) % m; path.push(j); } t[j] = key; last = { k: key, h: h, path: path, at: j }; }
+    var marks = {};
+    if (last) { last.path.forEach(function (p) { marks[p] = "is-x"; }); marks[last.at] = "is-on"; }
+    $("lp-row").innerHTML = tableRow("표", t, marks);
+    show(1, [["넣은 키", last ? String(last.k) : "없음"], ["시작 인덱스 h(k)", last ? last.k + " mod 11 = " + last.h : "·"], ["확인한 인덱스", last ? last.path.join(", ") : "·"], ["저장 인덱스", last ? String(last.at) : "·"]],
+      !last ? "표가 비어 있다."
+        : last.path.length === 1 ? pj(last.k, "은") + " 시작 인덱스 " + pj(last.h, "이") + " 비어 있어 바로 저장한다."
+        : pj(last.k, "은") + " 인덱스 " + last.h + "에서 충돌해 " + pj(last.path.join(", "), "을") + " 차례로 확인했다." + (last.k === 20 ? " 10 다음 인덱스는 나머지 연산으로 0이 되어 배열 끝이 처음과 이어진다." : "") + " 0, 1, 2처럼 연속으로 찬 칸이 길어지면 그 근처에서 시작하는 다음 키도 더 많은 칸을 지난다.");
+  });
+  function renderPM() {
+    var mode = $("pm").value, m = 11, t = [77, 44, null, null, 26, 93, null, null, null, 20, null], key = 55, h = 0, h2 = 5 - (key % 5), path = [], at = -1;
+    for (var i = 0; i < m && at < 0; i++) { var j = mode === "linear" ? (h + i) % m : mode === "quad" ? (h + i * i) % m : (h + i * h2) % m; path.push(j); if (t[j] === null) at = j; }
+    var marks = {}; path.forEach(function (p) { marks[p] = "is-x"; }); marks[at] = "is-on";
+    var t2 = t.slice(); t2[at] = key;
+    $("pm-row").innerHTML = tableRow("표", t2, marks);
+    show(2, [["i번째 후보", mode === "linear" ? "0 + i" : mode === "quad" ? "0 + i²" : "0 + i · " + h2], ["확인한 순서", path.join(", ")], ["확인 수", path.length + "칸"], ["저장 위치", String(at)]],
+      mode === "linear" ? "linear probing은 한 칸씩 보므로 0, 1을 지나 바로 옆 빈 칸 2에 넣는다. 가까운 칸을 채워 연속 구간이 길어지기 쉽다."
+        : mode === "quad" ? "quadratic probing은 1, 4, 9, 16, 25칸 떨어진 곳을 보며 0, 1, 4, 9, 5를 지나 인덱스 3에 넣는다. 연속 구간을 건너뛴다."
+        : "double hashing은 키마다 간격 h₂(55) = " + pj(h2, "을") + " 정해 0, 5를 지나 10에 넣는다. h₂(k)가 0이 아니고 m과 서로소여야 모든 칸을 방문할 수 있다.");
+  }
+  on("pm", renderPM);
+  lp.reset(); renderPM();
+}());
+</script>
+</body>
+</html>

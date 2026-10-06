@@ -40,6 +40,12 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/12.%20First%20In%2C%20First%20Out/deque-adt.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/12.%20First%20In%2C%20First%20Out/queue-adt.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/12.%20First%20In%2C%20First%20Out/queue-simulations.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/13.%20Keys%20to%20Indices/hash-functions.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/13.%20Keys%20to%20Indices/hash-tables.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/13.%20Keys%20to%20Indices/separate-chaining.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/load-factor-and-resizing.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/open-addressing-probes.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/tombstones.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/00.%20Intro.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/01.%20Data%20Abstraction.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/02.%20Interfaces.pdf</loc></url>
@@ -53,16 +59,20 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/10.%20Same%20List%2C%20Different%20Costs.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/11.%20Last%20In%2C%20First%20Out.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/12.%20First%20In%2C%20First%20Out.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/13.%20Keys%20to%20Indices.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/14.%20Finding%20the%20Next%20Open%20Slot.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/arrays-and-linked-lists.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/arrays.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/asymptotic-growth.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/data-abstraction-and-adts.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/doubly-linked-lists.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/dynamic-arrays.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/hash-tables-and-chaining.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/interfaces-and-implementations.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/linked-list-operations.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/linked-lists.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/measuring-cost.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/open-addressing.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/queues-and-deques.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/problem-sets/stacks.html</loc></url>
 </urlset>

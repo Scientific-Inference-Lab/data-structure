@@ -1,0 +1,114 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Hash Functions | Data Structure | Pusan National University</title><meta name="description" content="A hash function maps each key consistently to a bucket index from 0 to m minus 1 and aims to spread different keys evenly."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/13.%20Keys%20to%20Indices/hash-functions.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Hash Functions | Data Structure | Pusan National University"><meta property="og:description" content="A hash function maps each key consistently to a bucket index from 0 to m minus 1 and aims to spread different keys evenly."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/13.%20Keys%20to%20Indices/hash-functions.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-hash-functions">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Keys to Indices</span><span class="nav-tag is-current" aria-current="page">Hash Functions</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/13.%20Keys%20to%20Indices.pdf">Keys to <span class="publication-lecture-tail">Indices<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Hash Functions</h1><hr class="accent-rule"><p class="page-subtitle">해시 함수(hash function)는 키를 0부터 m − 1 사이의 버킷 인덱스로 바꾼다. 같은 키에는 항상 같은 인덱스를 주어야 하고, 서로 다른 키는 가능한 한 고르게 퍼뜨려야 한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>h(k) = k mod m</strong><span>나머지 연산은 결과를 항상 0부터 m − 1 사이로 만든다.</span></article><article class="summary-card"><strong>문자열 키</strong><span>문자별 ord 값을 합쳐 정수로 바꾼 뒤 나머지를 취한다.</span></article><article class="summary-card"><strong>원래 키도 저장</strong><span>해시 값이 같아도 키를 비교해 서로 구분한다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">나머지 연산은 어떤 정수 키도 유효한 인덱스로 바꾼다</h2><p class="lead">키 k와 표 길이 m을 바꾸면 k mod m으로 계산한 버킷 인덱스와 같은 버킷에 모이는 키가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="hk">키 k <output id="hk-out" class="control-value" for="hk">77</output></label><input id="hk" type="range" min="0" max="99" step="1" value="77"></div><div class="control-field"><label for="hm">표 길이 m</label><select id="hm"><option value="7">7</option><option value="10">10</option><option value="11" selected>11</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="mod-row"></div><div id="mod-keys" class="ds-row"></div></div></div><figcaption class="visual-caption">위 줄은 버킷 인덱스 0부터 m − 1이며 초록 테두리 칸이 k가 가는 버킷이다. 아래 줄은 예시 키 10, 20, 30, 40, 50, 60의 버킷이며 파란 칸이 k와 같은 버킷에 모인 키다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">단순 합은 글자 순서를 무시하고, 위치 가중치가 순서를 반영한다</h2><p class="lead">해시 방식을 바꾸면 cat과 act의 문자별 기여, 합계, 11로 나눈 버킷이 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="hmode">해시 방식</label><select id="hmode"><option value="sum">단순 합: Σ ord(c)</option><option value="weight">위치 가중치: Σ (i + 1) · ord(c)</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><table id="str-table" class="topic-table" aria-label="문자별 ord 값과 해시 계산"></table></div><figcaption class="visual-caption">행은 단어다. 칸마다 문자와 그 문자가 합계에 더하는 값이며, 마지막 열이 11로 나눈 버킷이다. 빨간 글자는 두 단어의 버킷이 같을 때다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../13. Keys to Indices/hash-tables.html">이전 · Hash Tables</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../13. Keys to Indices/separate-chaining.html">다음 · Separate Chaining</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+
+  function cell(t, cls, lab) { return '<span class="ds-cell ' + (cls || "") + '">' + (lab !== undefined ? "<small>" + lab + "</small>" : "") + t + "</span>"; }
+  function arrow(t) { return '<span class="ds-arrow" aria-hidden="true">' + (t || "→") + "</span>"; }
+  function stepper(sid, n, getMax, render) {
+    var st = { i: 0 };
+    function go(v) {
+      var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
+      $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
+      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
+      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
+    }
+    $(sid + "-first").addEventListener("click", function () { go(0); });
+    $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });
+    $(sid + "-next").addEventListener("click", function () { go(st.i + 1); });
+    return { go: go, reset: function () { go(0); }, now: function () { return st.i; } };
+  }
+
+  function renderMod() {
+    var k = Number($("hk").value), m = Number($("hm").value), h = k % m, ex = [10, 20, 30, 40, 50, 60];
+    $("hk-out").textContent = k;
+    var row = '<div class="ds-row has-labels"><span class="ds-row-label">버킷</span>';
+    for (var i = 0; i < m; i++) row += cell(i === h ? k : "·", i === h ? "is-on" : "is-empty", i);
+    $("mod-row").innerHTML = row + "</div>";
+    var same = ex.filter(function (x) { return x % m === h; });
+    $("mod-keys").innerHTML = '<span class="ds-row-label">예시 키 → 버킷</span>' + ex.map(function (x) { return cell(x + "→" + (x % m), x % m === h ? "is-x" : ""); }).join("");
+    show(1, [["k mod m", k + " mod " + m + " = " + h], ["인덱스 범위", "0 ~ " + (m - 1)], ["같은 버킷의 예시 키", same.length ? same.join(", ") : "없음"]],
+      "나머지는 항상 0 이상 " + (m - 1) + " 이하라 어떤 k도 유효한 인덱스가 된다. " + (m === 10 ? "m = 10이면 예시 키가 모두 끝자리 0이라 전부 버킷 0에 모인다. 키의 규칙과 m이 겹치면 고르게 퍼지지 않는다." : "m = " + m + "이면 예시 키 10, 20, …, 60이 여러 버킷으로 흩어진다. 같은 키에는 언제나 같은 인덱스가 나오므로 저장과 탐색이 같은 버킷을 본다."));
+  }
+  function renderStr() {
+    var mode = $("hmode").value, words = ["cat", "act"], res = [];
+    var rows = words.map(function (w) {
+      var tot = 0, cells = w.split("").map(function (c, i) { var o = c.charCodeAt(0), v = mode === "sum" ? o : (i + 1) * o; tot += v; return "<td>" + c + " · " + (mode === "sum" ? o : (i + 1) + "×" + o + " = " + v) + "</td>"; }).join("");
+      res.push([tot, tot % 11]);
+      return '<tr><th scope="row">' + w + "</th>" + cells + "<td>" + tot + '</td><td data-b="' + (tot % 11) + '">' + (tot % 11) + "</td></tr>";
+    });
+    var same = res[0][1] === res[1][1];
+    $("str-table").innerHTML = '<thead><tr><th scope="col">단어</th><th scope="col">1번째</th><th scope="col">2번째</th><th scope="col">3번째</th><th scope="col">합계</th><th scope="col">mod 11</th></tr></thead><tbody>' + rows.join("").replace(/<td data-b="(\d+)">/g, same ? '<td class="is-alert">' : "<td>") + "</tbody>";
+    show(2, [["cat", res[0][0] + " → 버킷 " + res[0][1]], ["act", res[1][0] + " → 버킷 " + res[1][1]], ["같은 버킷인가", same ? "같음" : "다름"]],
+      mode === "sum" ? "c, a, t의 ord 값은 더하는 순서와 관계없이 합이 312로 같아 cat과 act가 같은 버킷에 간다. 글자 구성만 같고 순서가 다른 키가 모두 충돌한다."
+        : "각 위치에 다른 가중치를 곱하면 같은 글자라도 놓인 자리에 따라 합에 더하는 값이 달라 cat과 act의 합이 달라진다. 그래도 충돌을 완전히 없애지는 못하므로 버킷에 원래 키를 함께 저장한다.");
+  }
+  on("hk", renderMod); on("hm", renderMod); on("hmode", renderStr);
+  renderMod(); renderStr();
+}());
+</script>
+</body>
+</html>
