@@ -1,0 +1,109 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Separate Chaining | Data Structure | Pusan National University</title><meta name="description" content="Separate chaining stores colliding key-value pairs in a small list at each bucket and compares keys only within the selected bucket."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/13.%20Keys%20to%20Indices/separate-chaining.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Separate Chaining | Data Structure | Pusan National University"><meta property="og:description" content="Separate chaining stores colliding key-value pairs in a small list at each bucket and compares keys only within the selected bucket."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/13.%20Keys%20to%20Indices/separate-chaining.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-separate-chaining">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Keys to Indices</span><span class="nav-tag is-current" aria-current="page">Separate Chaining</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/13.%20Keys%20to%20Indices.pdf">Keys to <span class="publication-lecture-tail">Indices<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Separate Chaining</h1><hr class="accent-rule"><p class="page-subtitle">충돌(collision)은 서로 다른 키가 같은 버킷 인덱스를 받는 사건이다. 체이닝(chaining)은 각 버킷에 작은 목록을 두어 충돌한 키와 값 쌍을 함께 저장하고, 찾을 때는 선택된 버킷 안에서만 키를 비교한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>충돌</strong><span>가능한 키가 버킷보다 많으면 적어도 한 버킷은 여러 키를 받는다.</span></article><article class="summary-card"><strong>저장과 탐색</strong><span>h(k)로 버킷을 고른 뒤 그 안에서 같은 키를 찾는다.</span></article><article class="summary-card"><strong>비용</strong><span>버킷 길이를 b라 하면 O(1 + b)이며 한 버킷에 몰리면 O(n)이다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">충돌한 키는 같은 버킷의 목록에 차례로 붙는다</h2><p class="lead">단계를 옮기면 키 하나를 h(k) = k mod 11로 넣고, 그 버킷의 길이와 충돌 여부가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="action-row"><button id="ch-first" class="btn btn-outline" type="button">처음으로</button><button id="ch-prev" class="btn btn-outline" type="button">이전</button><button id="ch-next" class="btn" type="button">다음</button></div></div>
+      <p id="reason-1" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><div id="ch-board" class="ds-board" role="img" aria-label="체이닝 버킷"></div></div><figcaption class="visual-caption">행 하나가 버킷이며 왼쪽 칸이 인덱스다. 초록 테두리 칸은 방금 넣은 키, 파란 칸은 같은 버킷에 먼저 있던 키다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">get(k)는 선택된 버킷 안의 키만 비교한다</h2><p class="lead">찾을 키를 바꾸면 h(k) = k mod 4로 고른 버킷과 그 안에서 비교하는 키, 비교 횟수, 결과가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="gk">찾을 키</label><select id="gk"><option value="10">10</option><option value="6">6</option><option value="12">12</option><option value="14">14 · 없음</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div id="get-board" class="ds-board" role="img" aria-label="버킷 4개"></div></div><figcaption class="visual-caption">행 하나가 버킷이다. 초록 테두리 칸은 찾은 키, 파란 칸은 비교했지만 다른 키, 흐린 행은 보지 않은 버킷이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../13. Keys to Indices/hash-functions.html">이전 · Hash Functions</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../14. Finding the Next Open Slot/load-factor-and-resizing.html">다음 · Load Factor and Resizing</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  var neg = function (v) { return String(v).replace(/-/g, "−"); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function on(id, fn) { var el = $(id); el.addEventListener(el.tagName === "SELECT" ? "change" : "input", fn); }
+
+  function cell(t, cls, lab) { return '<span class="ds-cell ' + (cls || "") + '">' + (lab !== undefined ? "<small>" + lab + "</small>" : "") + t + "</span>"; }
+  function arrow(t) { return '<span class="ds-arrow" aria-hidden="true">' + (t || "→") + "</span>"; }
+  function stepper(sid, n, getMax, render) {
+    var st = { i: 0 };
+    function go(v) {
+      var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
+      $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
+      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
+      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
+    }
+    $(sid + "-first").addEventListener("click", function () { go(0); });
+    $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });
+    $(sid + "-next").addEventListener("click", function () { go(st.i + 1); });
+    return { go: go, reset: function () { go(0); }, now: function () { return st.i; } };
+  }
+
+  var ins = [77, 44, 55, 20, 26, 93, 17, 31];
+  function buckets(keys, m) { var b = []; for (var i = 0; i < m; i++) b.push([]); keys.forEach(function (x) { b[x % m].push(x); }); return b; }
+  var ch = stepper("ch", 1, function () { return ins.length; }, function (k) {
+    var keys = ins.slice(0, k), b = buckets(keys, 11), last = k ? ins[k - 1] : null, h = last !== null ? last % 11 : -1;
+    $("ch-board").innerHTML = b.map(function (bk, i) { return '<div class="ds-bucket">' + cell(i) + (bk.length ? bk.map(function (x) { return arrow() + cell(x, x === last ? "is-on" : i === h ? "is-x" : ""); }).join("") : arrow() + '<span class="ds-arrow">None</span>') + "</div>"; }).join("");
+    show(1, [["넣은 키", last !== null ? String(last) : "없음"], ["h(k)", last !== null ? last + " mod 11 = " + h : "·"], ["그 버킷의 길이", last !== null ? b[h].length + "개" : "·"], ["충돌", last !== null ? (b[h].length > 1 ? "있음" : "없음") : "·"]],
+      last === null ? "버킷 11개가 모두 비어 있다."
+        : b[h].length > 1 ? pj(last, "은") + " 버킷 " + h + "에서 " + pj(b[h].slice(0, -1).join(", "), "과") + " 충돌했다. 덮어쓰지 않고 같은 버킷의 목록에 쌍을 추가해 서로 다른 키를 모두 보관한다."
+        : pj(last, "은") + " 빈 버킷 " + h + "에 들어가 충돌이 없다.");
+  });
+  function renderGet() {
+    var k = Number($("gk").value), b = buckets([8, 12, 5, 2, 6, 10], 4), h = k % 4, bk = b[h], idx = bk.indexOf(k), comps = idx >= 0 ? idx + 1 : bk.length;
+    $("get-board").innerHTML = b.map(function (row, i) { return '<div class="ds-bucket' + (i === h ? "" : " is-off") + '">' + cell(i, i === h ? "is-on" : "") + (row.length ? row.map(function (x, j) { return arrow() + cell(x, i !== h ? "" : x === k ? "is-on" : j < comps ? "is-x" : ""); }).join("") : arrow() + '<span class="ds-arrow">None</span>') + "</div>"; }).join("");
+    show(2, [["h(" + k + ") = " + k + " mod 4", String(h)], ["비교한 키", bk.slice(0, comps).join(", ") || "없음"], ["비교 횟수", comps + "회 (전체 6개 중)"], ["결과", idx >= 0 ? "찾음" : "없음"]],
+      idx >= 0 ? "get(" + pj(k + ")", "은") + " 버킷 " + h + "만 골라 그 안의 키를 앞에서부터 비교해 " + comps + "번째에서 찾는다. 다른 버킷의 키는 보지 않는다."
+        : "키 " + pj(k, "은") + " 버킷 " + h + "의 " + bk.length + "개를 모두 비교한 뒤 없다고 판단한다. 키가 고르게 퍼지면 버킷 길이가 작아 기대 비용이 O(1)에 가깝지만, 모든 키가 한 버킷에 몰리면 최악 O(n)이다.");
+  }
+  on("gk", renderGet);
+  ch.reset(); renderGet();
+}());
+</script>
+</body>
+</html>
