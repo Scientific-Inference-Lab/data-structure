@@ -24,7 +24,15 @@ The slides credit sources where they are used. Source-specific licenses below co
 
   Text and adaptations follow [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/). The slides identify reused or adapted material at the point of use.
 
+- Kuperberg, G. (2015). How hard is it to approximate the Jones polynomial? *Theory of Computing, 11*(6), 183–219. https://doi.org/10.4086/toc.2015.v011a006
+
+  The parentheses diagram in *Last In, First Out* is cropped from page 203 and follows [CC BY 3.0](https://creativecommons.org/licenses/by/3.0/), with attribution on the slide.
+
 - Miller, B. N., & Ranum, D. L. (2013). *Problem solving with algorithms and data structures using Python*. Runestone Academy. https://runestone.academy/ns/books/published/pythonds/index.html
+
+  Reused figures and Korean adaptations follow [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/), with attribution on the relevant slides.
+
+- Miller, B. N., Ranum, D. L., Yasinovskyy, R., & Eisenberg, J. D. (2023). *Problem solving with algorithms and data structures using Java*. Runestone Academy. https://github.com/RunestoneInteractive/javads
 
   Reused figures and Korean adaptations follow [CC BY-NC-SA 4.0](https://creativecommons.org/licenses/by-nc-sa/4.0/), with attribution on the relevant slides.
 
@@ -60,3 +68,7 @@ The slides credit sources where they are used. Source-specific licenses below co
 - University of British Columbia. (n.d.). *DSCI 221: Data structures for data science* [Course materials]. https://ubc-cs.github.io/dsci221/
 
   Reused figures and Korean adaptations follow [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/) under the source's [LICENSE](https://github.com/UBC-CS/dsci221/blob/main/LICENSE.md), with attribution on the relevant slides.
+
+- Vegpuff. (2009). *Data Queue* [Diagram]. Wikimedia Commons. https://commons.wikimedia.org/wiki/File:Data_Queue.svg
+
+  Credit: Vegpuff/Wikipedia. The FIFO diagram in *First In, First Out* follows [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), with attribution on the slide and a link to the source above.
