@@ -105,7 +105,7 @@
       if (o[0] === "set") { if (!(o[1] in d)) order.push(o[1]); d[o[1]] = o[2]; ret = "없음"; changed = o[1]; }
       else if (o[0] === "get") { ret = String(d[o[1]]); changed = null; }
       else if (o[0] === "contains") { ret = o[1] in d ? "True" : "False"; changed = null; }
-      else { ret = String(d[o[1]]); delete d[o[1]]; order = order.filter(function (x) { return x !== o[1]; }); changed = null; }
+else { ret = "없음"; delete d[o[1]]; order = order.filter(function (x) { return x !== o[1]; }); changed = null; }
     }
     $("mp-log").innerHTML = mops.map(function (o, j) { return '<li class="' + (j === k - 1 ? "is-now" : "") + '">' + mapShow[o[0]](o) + "</li>"; }).join("");
     $("mp-table").innerHTML = '<thead><tr><th scope="col">키</th><th scope="col">값</th></tr></thead><tbody>' + (order.length ? order.map(function (x) { return '<tr><th scope="row" class="' + (x === changed ? "is-y" : "") + '">' + x + '</th><td class="' + (x === changed ? "is-y" : "") + '">' + d[x] + "</td></tr>"; }).join("") : '<tr><td colspan="2">비어 있음</td></tr>') + "</tbody>";
@@ -115,7 +115,7 @@
         : o2[0] === "set" ? (k === 5 ? "이미 있는 키 Kim에 set하면 새 쌍을 추가하지 않고 값만 95로 바꾼다." : pj(o2[1], "과") + " 값 " + pj(o2[2], "을") + " 한 쌍으로 저장했다.")
         : o2[0] === "get" ? "키 Kim으로 짝인 값 " + pj(ret, "을") + " 찾았다. 정수 위치를 몰라도 된다."
         : o2[0] === "contains" ? '"' + o2[1] + '" in score는 키가 있는지만 검사해 ' + pj(ret, "을") + " 반환한다."
-        : "del은 키 Lee와 그 값을 함께 삭제한다.");
+        : "del은 키 Lee와 그 값을 함께 삭제한다. 값을 반환하는 Map의 remove와 달리 del 문에는 반환값이 없다.");
   });
   on("hkey", renderSearch);
   renderSearch(); mp.reset();

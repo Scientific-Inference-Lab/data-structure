@@ -2,7 +2,8 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
-  <title>Stack ADT | Data Structure | Pusan National University</title><meta name="description" content="A stack inserts and removes only at its top, and LIFO order follows from the sequence of push and pop calls, not from the values."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/11.%20Last%20In%2C%20First%20Out/stack-adt.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Stack ADT | Data Structure | Pusan National University"><meta property="og:description" content="A stack inserts and removes only at its top, and LIFO order follows from the sequence of push and pop calls, not from the values."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/11.%20Last%20In%2C%20First%20Out/stack-adt.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <title>Stack ADT | Data Structure | Pusan National University</title><meta name="description" content="A stack inserts and removes only at its top, and LIFO order follows from the sequence of push and pop calls, not from the values."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/11.%20Last%20In%2C%20First%20Out/stack-adt.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Stack ADT | Data Structure | Pusan National University"><meta property="og:description" content="A stack inserts and removes only at its top, and LIFO order follows from the sequence of push and pop calls, not from the values."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/11.%20Last%20In%2C%20First%20Out/stack-adt.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
   <style>
 
   </style>
@@ -106,8 +107,8 @@
     else { h = '<div class="ds-row has-labels"><span class="ds-row-label">head →</span>' + cell("x", "is-on", "새 노드") + arrow() + old.map(function (v, k) { return cell(v, "", "노드") + (k < n - 1 ? arrow() : ""); }).join("") + arrow() + '<span class="ds-arrow">None</span></div>'; }
     $("impl-board").innerHTML = h;
     var moved = im === "left" ? n : 0, code = im === "right" ? "self._items.append(x)" : im === "left" ? "self._items.insert(0, x)" : "x.next = head; head = x", cost = im === "right" ? "상각 Θ(1)" : im === "left" ? "Θ(n)" : "Θ(1)";
-    show(2, [["push 코드", code], ["옮기는 원소", moved + "개"], ["push 비용", cost], ["pop 비용", im === "left" ? "Θ(n) · pop(0)" : "Θ(1)"]],
-      im === "right" ? "오른쪽 끝을 맨 위로 두면 push와 pop이 모두 끝에서 일어나 원소를 옮기지 않는다. 다만 재할당이 일어나는 한 번의 push는 Θ(n)일 수 있어 push는 상각 Θ(1)이다."
+    show(2, [["push 코드", code], ["옮기는 원소", moved + "개"], ["push 비용", cost], ["pop 비용", im === "left" ? "Θ(n) · pop(0)" : im === "right" ? "상각 Θ(1)" : "Θ(1)"]],
+      im === "right" ? "도식은 용량에 여유가 있어 재할당 없이 push한 경우다. 오른쪽 끝 push와 pop은 가운데 원소를 이동하지 않지만 재할당 비용이 있으므로 둘 다 상각 Θ(1)이다. 재할당이 일어나는 한 번의 호출은 Θ(n)일 수 있다."
         : im === "left" ? "왼쪽 앞을 맨 위로 두어도 LIFO 결과는 맞지만, insert(0, x)가 기존 원소 " + n + "개를 모두 한 칸씩 옮겨 push와 pop이 Θ(n)이다."
         : "SLList는 머리를 맨 위로 두면 앞 삽입과 앞 삭제만 쓰므로 순회 없이 참조만 바꾼다. push, pop, peek이 모두 Θ(1)이다.");
   }

@@ -128,7 +128,7 @@
     const order = names.length ? names.join(' → ') + ' → None' : 'None';
     $('heap').setAttribute('aria-label', 'head ' + head + ', tail ' + tail + ', 원소 수 ' + names.length + ', 연결 순서 ' + order);
     $('list-live').innerHTML = readout('head', head) + readout('tail', tail) + readout('n', names.length) + readout('논리 순서', order);
-    const listTail = ' 목록 객체는 head·tail·n으로 전체 상태를 관리하고 각 노드는 data와 next만 저장한다. tail이 없으면 끝에 붙일 때 head부터 next를 n−1번 따라가야 하고, n을 저장하지 않으면 원소 수를 물을 때마다 Θ(n)이 든다.' + (names.length === 3 ? ' C를 지울 때는 tail만으로 앞 노드 B를 알 수 없어 head에서 A, B를 따라가야 한다. 따라서 마지막 노드 삭제는 Θ(n)이다.' : '');
+    const listTail = ' 목록 객체는 head·tail·n으로 전체 상태를 관리하고 각 노드는 data와 next만 저장한다. tail이 없으면 끝에 붙일 때 head부터 next를 n−1번 따라가야 하고, n을 저장하지 않으면 원소 수를 물을 때마다 Θ(n)이 든다.';
     $('list-note').textContent = (!names.length ? '빈 목록에서는 head와 tail이 모두 None이고 n은 0이다.' : names.length === 1 ? '원소가 하나이면 head와 tail이 같은 노드를 가리키고 그 노드의 next는 None이다.' : (placement === 'row' ? '노드를 나란히 놓아도 순서는 next 참조가 정한다.' : '노드를 흩어 놓아도 A.next가 B를, B.next가 C를 가리키므로 논리 순서는 A → B → C다.')) + listTail;
   }
   ['list-state', 'placement'].forEach(id => $(id).addEventListener('change', renderList));
