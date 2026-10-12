@@ -57,11 +57,15 @@ The slides credit sources where they are used. Source-specific licenses below co
 
   </details>
 
-- Python Software Foundation. (n.d.-a). *Mapping types — dict*. In *Python 3.14 documentation*. https://docs.python.org/3.14/library/stdtypes.html#mapping-types-dict
+- Python Software Foundation. (n.d.-a). *deque objects*. In *Python 3.14 documentation*. https://docs.python.org/3.14/library/collections.html#collections.deque
+
+  Python documentation follows the [Python Software Foundation License Version 2](https://docs.python.org/3.14/license.html). *First In, First Out* cites the documented operations and costs of `collections.deque`.
+
+- Python Software Foundation. (n.d.-b). *Mapping types — dict*. In *Python 3.14 documentation*. https://docs.python.org/3.14/library/stdtypes.html#mapping-types-dict
 
   Python documentation follows the [Python Software Foundation License Version 2](https://docs.python.org/3.14/license.html). *Finding the Next Open Slot* cites the documented behavior of dictionaries.
 
-- Python Software Foundation. (n.d.-b). *Objects/dictobject.c* [Source code]. In *CPython*. https://github.com/python/cpython/blob/main/Objects/dictobject.c
+- Python Software Foundation. (n.d.-c). *Objects/dictobject.c* [Source code]. In *CPython*. https://github.com/python/cpython/blob/main/Objects/dictobject.c
 
   CPython follows the [Python Software Foundation license and associated notices](https://github.com/python/cpython/blob/main/LICENSE). *Finding the Next Open Slot* cites dictionary implementation concepts illustrated with course-authored diagrams.
 
@@ -72,3 +76,7 @@ The slides credit sources where they are used. Source-specific licenses below co
 - Vegpuff. (2009). *Data Queue* [Diagram]. Wikimedia Commons. https://commons.wikimedia.org/wiki/File:Data_Queue.svg
 
   Credit: Vegpuff/Wikipedia. The FIFO diagram in *First In, First Out* follows [CC BY-SA 3.0](https://creativecommons.org/licenses/by-sa/3.0/), with attribution on the slide and a link to the source above.
+
+- YES24. (n.d.). *Python-euro swipge baeuneun jaryogujo* [Learning data structures easily with Python; book listing and cover image]. https://www.yes24.com/product/goods/119590391
+
+  The introduction PDF credits this source for the book cover on slide 22 (ISBN 9791192932187). No open license for the cover is asserted here.

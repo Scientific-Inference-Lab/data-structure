@@ -38,7 +38,7 @@ q = Counter()
 r = p
 p.up()
 r.up()
-q.up()</code></pre></div><details class="solution-panel"><summary>해설 펼치기</summary><div class="solution-body"><ol><li>a, b, c 모두 [1, 2, 3]이다. a is b는 False, a == b는 True, a is c는 False, a == c는 True다.</li><li>바뀌지 않는다. list(a)는 새 리스트 객체를 만들었으므로 c의 변경은 a에 보이지 않는다.</li><li>append는 a와 b가 공유하던 객체를 변경해 a에서도 보였다. 마지막 재할당은 새 리스트를 만들어 b만 그 객체를 가리키게 했다. is는 같은 객체인지, ==는 값이 같은지를 묻는다.</li><li>p.value = 2, q.value = 1, r.value = 2, r is p는 True다. self는 메서드가 호출된 인스턴스 객체를 가리키므로 p.up()과 r.up()은 같은 객체를, q.up()은 다른 객체의 상태를 바꾼다.</li></ol></div></details></article>
+q.up()</code></pre></div><details class="solution-panel"><summary>해설 펼치기</summary><div class="solution-body"><ol><li>a, b, c 모두 [1, 2, 3]이다. a is b는 False, a == b는 True, a is c는 False, a == c는 True다.</li><li>바뀌지 않는다. list(a)는 새 리스트 객체를 만들었으므로 c의 변경은 a에 보이지 않는다.</li><li>append는 a와 b가 공유하던 객체를 변경해 a에서도 보였다. 마지막 재대입에서는 b만 새 리스트를 가리키게 됐다. is는 같은 객체인지, ==는 값이 같은지를 묻는다.</li><li>p.value = 2, q.value = 1, r.value = 2, r is p는 True다. self는 메서드가 호출된 인스턴스 객체를 가리키므로 p.up()과 r.up()은 같은 객체를, q.up()은 다른 객체의 상태를 바꾼다.</li></ol></div></details></article>
     <article class="problem-card" id="question-5"><header class="problem-card-header"><span class="problem-number">문제 5</span><h2>다른 내부 순서, 같은 스택</h2></header><div class="problem-body"><p>두 스택 구현이 있다. EndStack은 리스트 뒤쪽을, FrontStack은 리스트 앞쪽을 맨 위로 사용한다. 빈 스택에 다음 연산을 차례로 호출한다.</p><pre class="code-block"><code>push(1)
 push(2)
 pop()

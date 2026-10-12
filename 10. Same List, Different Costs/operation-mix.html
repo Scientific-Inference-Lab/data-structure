@@ -22,7 +22,7 @@
 <main id="main-content" class="page-body container">
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>연산 조합</strong><span>임의 접근과 앞 삽입을 몇 번씩 쓰는지 구분한다.</span></article><article class="summary-card"><strong>전체 작업량</strong><span>각 연산의 호출 횟수와 한 번의 비용을 곱해 더한다.</span></article><article class="summary-card"><strong>구현 선택</strong><span>ADT 이름만으로 정하지 않고 실제 사용 비율을 근거로 고른다.</span></article></div></section>
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">연산을 섞어 쓰는 비율에 따라 더 싼 표현이 바뀐다</h2><p class="lead">100번의 연산 가운데 임의 접근 횟수를 바꾸면 나머지는 앞 삽입이 되고, 두 표현의 전체 작업량과 최고차항이 바뀐다. n = 1,000이다.</p></header>
+    <header class="example-header"><h2 class="section-title">연산을 섞어 쓰는 비율에 따라 더 싼 표현이 바뀐다</h2><p class="lead">100번의 연산 가운데 임의 접근 횟수를 바꾸면 나머지는 앞 삽입이 되고, 두 표현의 전체 작업량과 최고차항이 바뀐다. n = 1,000이다. 임의 접근 비용은 배열 1, SLList n으로 세는 최악 비용 모형을 쓴다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="mix">임의 접근 횟수 <output id="mix-out" class="control-value" for="mix">90</output></label><input id="mix" type="range" min="0" max="100" step="10" value="90"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><table id="mix-table" class="topic-table" aria-label="연산 비율별 전체 작업량"></table></div><figcaption class="visual-caption">행은 표현이다. 전체 작업량은 호출 횟수 × 연산 한 번의 비용의 합이며 초록 테두리 칸이 더 작은 표현이다.</figcaption></figure>

@@ -26,11 +26,11 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>원형 이동</strong><span>enqueue(dequeue())는 앞쪽 값을 뒤쪽으로 보낸다.</span></article><article class="summary-card"><strong>도착과 시작</strong><span>작업이 도착하면 enqueue, 처리를 시작하면 dequeue한다.</span></article><article class="summary-card"><strong>대기 시간</strong><span>wₖ = sₖ − aₖ이며 처리 시작 시각에서 도착 시각을 뺀 값이다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">enqueue(dequeue())를 반복하면 원을 따라 전달하는 것과 같다</h2><p class="lead">전달 횟수와 단계를 바꾸면 앞쪽 사람이 뒤로 옮겨지는 과정, 탈락하는 사람, 남은 순서가 바뀐다. 처음 순서는 A, B, C, D, E다.</p></header>
+    <header class="example-header"><h2 class="section-title">큐를 돌려 발표 차례를 정한다</h2><p class="lead">이동 횟수와 단계를 바꾸면 앞 사람이 뒤로 옮겨지는 과정, 차례를 배정받는 사람, 대기 명단이 바뀐다. 처음 순서는 A, B, C, D다. 정해진 횟수만큼 이동한 뒤 다음 앞 사람을 선택하므로 무작위 추첨은 아니다.</p></header>
     <div class="visual-lab">
-      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="pass">한 번에 전달하는 횟수 <output id="pass-out" class="control-value" for="pass">3</output></label><input id="pass" type="range" min="1" max="5" step="1" value="3"></div><div class="action-row"><button id="hp-first" class="btn btn-outline" type="button">처음으로</button><button id="hp-prev" class="btn btn-outline" type="button">이전</button><button id="hp-next" class="btn" type="button">다음</button></div></div>
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="pass">차례 배정 전 이동 횟수 <output id="pass-out" class="control-value" for="pass">3</output></label><input id="pass" type="range" min="1" max="5" step="1" value="3"></div><div class="action-row"><button id="hp-first" class="btn btn-outline" type="button">처음으로</button><button id="hp-prev" class="btn btn-outline" type="button">이전</button><button id="hp-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-1" class="control-reason" hidden></p>
-      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="hp-row" class="ds-row has-labels"></div><div id="hp-out" class="ds-row"></div></div></div><figcaption class="visual-caption">위 줄은 큐이며 왼쪽이 앞쪽이다. 초록 테두리 칸은 방금 뒤로 옮긴 사람, 빨간 점선 칸은 방금 탈락한 사람이다. 아래 줄은 탈락한 순서다.</figcaption></figure>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="hp-row" class="ds-row has-labels"></div><div id="hp-out" class="ds-row"></div></div></div><figcaption class="visual-caption">위 줄은 대기 큐이며 왼쪽이 앞쪽이다. 초록 테두리 칸은 방금 뒤로 옮긴 사람, 빨간 점선 칸은 방금 차례를 배정하고 큐에서 삭제한 사람이다. 아래 줄은 먼저 배정한 발표 차례다. 마지막 한 명은 마지막 차례다.</figcaption></figure>
       <div id="read-1" class="visual-readouts" aria-live="polite"></div>
       <p id="note-1" class="visual-note"></p>
     </div>
@@ -84,7 +84,7 @@
     return { go: go, reset: function () { go(0); }, now: function () { return st.i; } };
   }
 
-  var people = ["A", "B", "C", "D", "E"];
+  var people = ["A", "B", "C", "D"];
   function hpEvents(p) {
     var q = people.slice(), ev = [];
     while (q.length > 1) {
@@ -97,11 +97,11 @@
     var p = Number($("pass").value), ev = hpEvents(p), cur = k ? ev[k - 1] : { q: people.slice(), moved: null, out: null }, outs = ev.slice(0, k).filter(function (e) { return e.out; }).map(function (e) { return e.out; });
     $("pass-out").textContent = p;
     $("hp-row").innerHTML = '<span class="ds-row-label">앞쪽 →</span>' + cur.q.map(function (v, j) { return cell(v, v === cur.moved && j === cur.q.length - 1 ? "is-on" : "is-x"); }).join("") + (cur.out ? cell(cur.out, "is-alert", "삭제") : "");
-    $("hp-out").innerHTML = '<span class="ds-row-label">탈락 순서</span>' + (outs.length ? outs.map(function (v) { return cell(v, "is-grave"); }).join("") : cell("없음", "is-empty"));
-    show(1, [["방금 한 일", !k ? "시작 전" : cur.out ? "dequeue() → " + cur.out + " 탈락" : "enqueue(dequeue()) · " + cur.moved + " 이동"], ["큐", cur.q.join(", ")], ["탈락한 사람", outs.length ? outs.join(", ") : "없음"]],
-      !k ? "앞쪽 사람을 꺼내 바로 뒤쪽에 넣는 enqueue(dequeue())를 " + p + "번 한 뒤, 앞쪽 사람을 탈락시킨다."
-        : k === mx ? cur.q[0] + "만 남아 반복이 끝났다. 원형 연결 구조를 따로 만들지 않고도 큐의 두 연산으로 원을 따라 도는 과정을 표현했다."
-        : cur.out ? pj(cur.out, "을") + " 삭제했다. 남은 사람은 같은 순서를 유지한 채 다시 전달을 시작한다." : pj(cur.moved, "이") + " 앞쪽에서 뒤쪽으로 옮겨졌다. 나머지의 상대 순서는 그대로다.");
+    $("hp-out").innerHTML = '<span class="ds-row-label">배정한 차례</span>' + (outs.length ? outs.map(function (v) { return cell(v, "is-grave"); }).join("") : cell("없음", "is-empty"));
+    show(1, [["방금 한 일", !k ? "시작 전" : cur.out ? "dequeue() → " + cur.out + " 차례 배정" : "enqueue(dequeue()) · " + cur.moved + " 이동"], ["대기 큐", cur.q.join(", ")], ["먼저 배정한 차례", outs.length ? outs.join(", ") : "없음"]],
+      !k ? "앞 사람을 꺼내 바로 뒤에 넣는 enqueue(dequeue())를 " + p + "번 한 뒤 다음 앞 사람에게 차례를 배정하고 큐에서 삭제한다."
+        : k === mx ? cur.q[0] + "만 남아 마지막 차례가 됐다. 전체 발표 순서는 " + outs.concat(cur.q).join(", ") + "다. 별도 원형 연결 구조 없이 큐의 두 연산으로 순환을 표현했다."
+        : cur.out ? pj(cur.out, "을") + " 선택해 차례를 배정하고 큐에서 삭제했다. 대기 중인 사람은 같은 순서를 유지한 채 다시 이동한다." : pj(cur.moved, "이") + " 앞쪽에서 뒤쪽으로 옮겨졌다. 나머지의 상대 순서는 그대로다.");
   });
   var jobs = [{ id: "J1", a: 0, d: 4 }, { id: "J2", a: 1, d: 3 }, { id: "J3", a: 2, d: 5 }, { id: "J4", a: 9, d: 2 }, { id: "J5", a: 10, d: 4 }];
   function simulate(T) {
