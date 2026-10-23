@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>BST Insertion | Data Structure | Pusan National University</title><meta name="description" content="Binary-search-tree insertion searches for an empty child position and attaches a new leaf there, preserving the ordering invariant established by comparisons along the path."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/18.%20Keeping%20the%20Order/bst-insertion.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="BST Insertion | Data Structure | Pusan National University"><meta property="og:description" content="Binary-search-tree insertion searches for an empty child position and attaches a new leaf there, preserving the ordering invariant established by comparisons along the path."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/18.%20Keeping%20the%20Order/bst-insertion.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .edge.is-on{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .node circle{fill:var(--white);stroke:var(--line-300);stroke-width:2}
+    .topic-plot .node text{font-size:16px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-done circle{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:2.5}
+    .topic-plot .node.is-cur circle{fill:var(--pnu-green);stroke:var(--pnu-green-deep);stroke-width:3}
+    .topic-plot .node.is-cur text{fill:var(--white)}
+    .topic-plot .gap rect{fill:var(--white);stroke:var(--line-300);stroke-width:1.2;stroke-dasharray:5 3}
+    .topic-plot .gap text{font-size:12px;fill:var(--ink-600);text-anchor:middle;dominant-baseline:central}
+    .topic-plot .gap.is-on rect{fill:color-mix(in srgb,var(--pnu-green) 18%,var(--white));stroke:var(--pnu-green);stroke-width:3;stroke-dasharray:none}
+    .topic-plot .gap.is-on text{fill:var(--ink-900);font-weight:700}
+    .topic-plot .stub{stroke:var(--line-300);stroke-width:1.2;stroke-dasharray:4 3}
+    .topic-plot .stub.is-on{stroke:var(--pnu-green);stroke-width:3;stroke-dasharray:6 3}
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .code-lines{font-family:var(--mono);font-size:13px;line-height:1.7;margin:0;padding:10px 14px;background:var(--surface-050);border:1px solid var(--line-200);border-radius:8px;white-space:pre}
+    .code-lines .is-hot{background:var(--pnu-green-tint);outline:2px solid var(--pnu-green);border-radius:3px}
+    .ins-grid{display:grid;grid-template-columns:minmax(0,1fr) max-content;gap:14px;align-items:start;min-width:900px;padding:8px}
+    .ins-grid .topic-plot{min-width:0}
+    .ins-grid .topic-table{min-width:0}
+    .ins-stack{display:grid;gap:12px;justify-items:center;min-width:600px;padding:8px}
+    .ins-stack .topic-plot{min-width:0;max-width:720px}
+    .topic-table tr.is-new td{background:color-mix(in srgb,var(--pnu-green) 12%,var(--white));font-weight:700}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-bst-insertion">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Keeping the Order</span><span class="nav-tag is-current" aria-current="page">BST Insertion</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/18.%20Keeping%20the%20Order.pdf">Keeping the <span class="publication-lecture-tail">Order<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">BST Insertion</h1><hr class="accent-rule"><p class="page-subtitle">BST 삽입은 넣을 키로 먼저 탐색하고, 탐색이 비어 있는 자식 노드 자리에서 멈추면 그 자리에 새 단말 노드(leaf)를 붙인다. 지나온 노드와 이미 대소를 비교하며 내려왔으므로 붙인 뒤에도 ordering invariant(순서 불변식)가 깨지지 않는다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>탐색이 멈춘 자리</strong><span>루트에서 비교하며 내려가다 가야 할 자식 노드 자리가 비어 있으면 거기에 붙인다.</span></article><article class="summary-card"><strong>자리는 하나뿐</strong><span>빈 자리마다 허용 범위가 겹치지 않으므로 새 키가 들어갈 수 있는 빈 자리는 정확히 하나다.</span></article><article class="summary-card"><strong>같은 키</strong><span>이미 있는 키를 넣으면 새 노드를 만들지 않고 기존 노드의 값만 새 값으로 바꾼다.</span></article><article class="summary-card"><strong>지나온 노드 수</strong><span>한 번의 삽입은 지나온 노드마다 키를 한두 번 비교하므로 비교 횟수는 지나온 노드 수에 비례한다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">일곱 키를 차례로 넣으면 각 키는 탐색이 멈춘 자리에 단말 노드로 붙는다</h2><p class="lead">50, 30, 70, 20, 40, 60, 80을 순서대로 넣는다. 넣은 키 수를 옮기면 방금 넣은 키가 지나온 길, 붙은 자리, 그리고 지금까지의 삽입 기록이 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="n1">넣은 키 수 <output id="n1-out" class="control-value" for="n1">4</output></label><input id="n1" type="range" min="0" max="7" step="1" value="4"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ins-grid"><svg id="build-plot" class="topic-plot" viewBox="0 0 540 290" role="img" aria-labelledby="bu-title bu-desc"><title id="bu-title">차례로 넣어 만든 BST</title><desc id="bu-desc">넣은 키와 지나온 길</desc></svg><table id="build-table" class="topic-table" aria-label="삽입 기록"></table></div></div><figcaption class="visual-caption">초록 원이 방금 넣은 키, 옅은 파란 원이 그 키가 지나온 노드, 굵은 초록 선이 지나온 길이다. 오른쪽 표는 넣은 순서대로 지나온 길과 붙은 자리를 적은 것이며 초록 행이 방금 넣은 키다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">빈 자리마다 허용 범위가 달라 새 키가 갈 수 있는 곳은 하나뿐이다</h2><p class="lead">위에서 만든 일곱 노드 트리에 키 하나를 더 넣는다. 넣을 키를 바꾸면 탐색 경로, 멈추는 빈 자리, _put에서 실행하는 줄이 바뀐다. 이미 있는 키를 고르면 노드 수는 그대로다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="key2">넣을 키 <output id="key2-out" class="control-value" for="key2">45</output></label><input id="key2" type="range" min="5" max="95" step="1" value="45"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="ins-stack"><svg id="gap-plot" class="topic-plot" viewBox="0 0 560 350" role="img" aria-labelledby="gp-title gp-desc"><title id="gp-title">빈 자리와 허용 범위</title><desc id="gp-desc">여덟 개의 빈 자리와 새 키가 멈추는 자리</desc></svg><pre id="put-code" class="code-lines" aria-label="_put 메서드"></pre></div></div><figcaption class="visual-caption">점선 상자는 단말 노드 아래의 빈 자식 노드 자리이고 상자 안 괄호는 그 자리에 올 수 있는 키의 열린 범위다. 초록 선과 초록 상자가 넣을 키의 탐색 경로와 멈춘 자리이고, 초록 원은 같은 키를 가진 노드다. 아래 코드의 초록 줄은 마지막에 실행한 줄이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../17. Choose One Subtree/bst-search.html">이전 · BST Search</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../18. Keeping the Order/bst-deletion.html">다음 · BST Deletion</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s"]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+  function inf(v) { return v === -Infinity ? "−∞" : v === Infinity ? "∞" : String(v); }
+
+  var ORDER = [50, 30, 70, 20, 40, 60, 80];
+  // node: {key, left, right, parent, depth}
+  function insertAll(keys) {
+    var root = null, log = [];
+    keys.forEach(function (k) {
+      if (!root) { root = { key: k, left: null, right: null, parent: null, depth: 0 }; log.push({ key: k, path: [], dirs: [], at: "루트" }); return; }
+      var n = root, path = [], dirs = [];
+      while (true) {
+        path.push(n.key);
+        var d = k < n.key ? "left" : "right"; dirs.push(d);
+        if (!n[d]) { n[d] = { key: k, left: null, right: null, parent: n, depth: n.depth + 1 }; log.push({ key: k, path: path, dirs: dirs, at: n.key + "의 " + (d === "left" ? "왼쪽" : "오른쪽") }); break; }
+        n = n[d];
+      }
+    });
+    return { root: root, log: log };
+  }
+  function nodes(root) { var out = []; (function go(n) { if (!n) return; go(n.left); out.push(n); go(n.right); }(root)); return out; }
+  var FULL = insertAll(ORDER).root, XPOS = {};
+  nodes(FULL).forEach(function (n, i) { XPOS[n.key] = i; });
+  function edgeSvg(a, b, cls) { var dx = b[0] - a[0], dy = b[1] - a[1], L = Math.sqrt(dx * dx + dy * dy), r = 20; return '<line class="edge' + (cls ? " " + cls : "") + '" x1="' + (a[0] + dx * r / L).toFixed(1) + '" y1="' + (a[1] + dy * r / L).toFixed(1) + '" x2="' + (b[0] - dx * r / L).toFixed(1) + '" y2="' + (b[1] - dy * r / L).toFixed(1) + '"/>'; }
+  function nodeSvg(p, key, cls) { return '<g class="node ' + (cls || "") + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="20"/><text x="' + p[0] + '" y="' + p[1] + '">' + key + "</text></g>"; }
+
+  function renderBuild() {
+    var k = Number($("n1").value), res = insertAll(ORDER.slice(0, k)), svg = $("build-plot"), h = head(svg), last = k ? res.log[k - 1] : null;
+    $("n1-out").textContent = k;
+    var pos = function (n) { return [50 + XPOS[n.key] * 73, 40 + n.depth * 95]; }, all = nodes(res.root);
+    all.forEach(function (n) { if (n.parent) { var on = last && n.key === last.key || last && last.path.indexOf(n.key) >= 0 && n.parent && last.path.indexOf(n.parent.key) >= 0; h += edgeSvg(pos(n.parent), pos(n), on ? "is-on" : ""); } });
+    all.forEach(function (n) { h += nodeSvg(pos(n), n.key, last && n.key === last.key ? "is-cur" : last && last.path.indexOf(n.key) >= 0 ? "is-done" : ""); });
+    if (!k) h += '<text class="small" x="270" y="140" text-anchor="middle">빈 트리 (root is None)</text>';
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = k ? "넣은 키 " + ORDER.slice(0, k).join(", ") + ", 마지막 " + pj(last.key, "은") + " " + last.at + "에 붙음" : "빈 트리";
+    var rows = res.log.map(function (e, i) {
+      var route = !e.path.length ? "없음" : e.path.map(function (p, j) { return p + "에서 " + (e.dirs[j] === "left" ? "왼쪽" : "오른쪽"); }).join(", ");
+      return '<tr class="' + (i === k - 1 ? "is-new" : "") + '"><td>' + e.key + "</td><td>" + route + "</td><td>" + e.at + "</td></tr>";
+    });
+    $("build-table").innerHTML = '<thead><tr><th scope="col">넣은 키</th><th scope="col">지나온 길</th><th scope="col">붙은 자리</th></tr></thead><tbody>' + (rows.join("") || '<tr><td colspan="3">아직 넣은 키가 없다</td></tr>') + "</tbody>";
+    var note;
+    if (!k) note = "빈 트리에서 시작한다. put은 root가 None이면 첫 키로 루트를 만들고, 그렇지 않으면 _put으로 자리를 찾는다.";
+    else if (k === 1) note = "첫 키 50은 비교할 노드가 없으므로 루트가 된다.";
+    else note = pj(last.key, "은") + " " + last.path.map(function (p, j) { return p + "에서 " + (last.dirs[j] === "left" ? "작아 왼쪽" : "커서 오른쪽"); }).join(", ") + "으로 내려간 뒤 그쪽 자식 노드 자리가 비어 있어 " + last.at + "에 단말 노드로 붙었다. 지나온 노드는 " + last.path.length + "개이고 기존 노드는 하나도 움직이지 않았다. _put은 노드마다 키를 한두 번 비교한다." + (k === 7 ? " 일곱 키를 모두 넣은 트리의 높이는 2다." : "");
+    show(1, [["방금 넣은 키", last ? String(last.key) : "없음"], ["붙은 자리", last ? last.at : "없음"], ["지나온 노드 수", last ? last.path.length + "개" : "0개"], ["트리의 노드 수", k + "개"]], note);
+  }
+
+  var PUT = ["def _put(self, key, value, node):", "    if key < node.key:", "        if node.left is None: node.left = TreeNode(key, value)", "        else: self._put(key, value, node.left)", "    elif key > node.key:", "        if node.right is None: node.right = TreeNode(key, value)", "        else: self._put(key, value, node.right)", "    else:", "        node.value = value"];
+  function renderGap() {
+    var key = Number($("key2").value), svg = $("gap-plot"), h = head(svg);
+    $("key2-out").textContent = key;
+    var pos = function (n) { return [60 + XPOS[n.key] * 73, 40 + n.depth * 90]; }, all = nodes(FULL);
+    var n = FULL, path = [], lo = -Infinity, hi = Infinity, stopAt = null, dir = null, dup = null;
+    while (n) { path.push(n); if (key === n.key) { dup = n; break; } if (key < n.key) { hi = n.key; if (!n.left) { stopAt = n; dir = "left"; break; } n = n.left; } else { lo = n.key; if (!n.right) { stopAt = n; dir = "right"; break; } n = n.right; } }
+    var pk = path.map(function (p) { return p.key; });
+    all.forEach(function (m) { if (m.parent) h += edgeSvg(pos(m.parent), pos(m), pk.indexOf(m.key) >= 0 && pk.indexOf(m.parent.key) >= 0 ? "is-on" : ""); });
+    all.forEach(function (m) { h += nodeSvg(pos(m), m.key, dup === m ? "is-cur" : pk.indexOf(m.key) >= 0 ? "is-done" : ""); });
+    // gaps under leaves: ranges from inorder neighbours
+    var keys = all.map(function (m) { return m.key; });
+    all.forEach(function (m) {
+      if (m.left || m.right) return;
+      var i = keys.indexOf(m.key), p = pos(m);
+      [["left", i > 0 ? keys[i - 1] : -Infinity, m.key, -30], ["right", m.key, i < keys.length - 1 ? keys[i + 1] : Infinity, 30]].forEach(function (g) {
+        var on = stopAt === m && dir === g[0], gx = p[0] + g[3], gy = 300;
+        h += '<line class="stub' + (on ? " is-on" : "") + '" x1="' + (p[0] + g[3] * 0.5) + '" y1="' + (p[1] + 18) + '" x2="' + gx + '" y2="' + (gy - 16) + '"/>';
+        h += '<g class="gap' + (on ? " is-on" : "") + '"><rect x="' + (gx - 29) + '" y="' + (gy - 16) + '" width="58" height="32" rx="4"/><text x="' + gx + '" y="' + gy + '">(' + inf(g[1]) + "," + inf(g[2]) + ")</text></g>";
+      });
+    });
+    svg.innerHTML = h;
+    var hot = dup ? 8 : dir === "left" ? 2 : 5;
+    $("put-code").innerHTML = PUT.map(function (l, i) { return '<span class="' + (i === hot ? "is-hot" : "") + '">' + l + "</span>"; }).join("\n");
+    var at = dup ? "새 자리 없음" : stopAt.key + "의 " + (dir === "left" ? "왼쪽" : "오른쪽");
+    svg.querySelector("desc").textContent = "넣을 키 " + key + ", 경로 " + pk.join(", ") + ", " + (dup ? "같은 키가 있어 값 갱신" : at + " 빈 자리, 허용 범위 " + inf(lo) + "보다 크고 " + inf(hi) + "보다 작음");
+    var note = dup
+      ? pj(key, "은") + " 이미 트리에 있다. " + (pk.length === 1 ? "루트 " + key + "에서" : pk.join(" → ") + " 경로에서") + " 같은 키를 만나 else 아래 줄에서 기존 노드의 값만 바꾸므로 노드 수는 7개 그대로이고 모양도 바뀌지 않는다."
+      : pj(key, "은") + " " + pk.join(" → ") + " 경로를 따라 내려가 " + at + " 빈 자리에서 멈춘다. 이 자리의 허용 범위 " + pj("(" + inf(lo) + ", " + inf(hi) + ")", "은") + " 지나온 노드들이 정한 것이고, 여덟 개의 빈 자리 범위는 서로 겹치지 않으므로 " + pj(key, "이") + " 들어갈 수 있는 자리는 여기 하나뿐이다.";
+    show(2, [["탐색 경로", pk.join(" → ")], ["붙는 자리", at], ["허용 범위", dup ? "해당 없음" : "(" + inf(lo) + ", " + inf(hi) + ")"], ["노드 수", dup ? "7개 (값만 갱신)" : "8개"]], note);
+  }
+
+  $("n1").addEventListener("input", renderBuild); $("key2").addEventListener("input", renderGap);
+  renderBuild(); renderGap();
+}());
+</script>
+</body>
+</html>

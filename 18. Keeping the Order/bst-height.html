@@ -1,0 +1,181 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>BST Height | Data Structure | Pusan National University</title><meta name="description" content="Binary-search-tree search, insertion, and deletion depend on height, and sorted insertion can produce a skewed tree with linear operation cost."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/18.%20Keeping%20the%20Order/bst-height.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="BST Height | Data Structure | Pusan National University"><meta property="og:description" content="Binary-search-tree search, insertion, and deletion depend on height, and sorted insertion can produce a skewed tree with linear operation cost."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/18.%20Keeping%20the%20Order/bst-height.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .edge.is-on{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .node circle{fill:var(--white);stroke:var(--line-300);stroke-width:2}
+    .topic-plot .node text{font-size:15px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-done circle{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:2.5}
+    .topic-plot .node.is-cur circle{fill:var(--pnu-green);stroke:var(--pnu-green-deep);stroke-width:3}
+    .topic-plot .node.is-cur text{fill:var(--white)}
+    .topic-plot .node.is-off circle{fill:var(--surface-050);stroke:var(--line-300);stroke-dasharray:4 4}
+    .topic-plot .node.is-off text{fill:var(--ink-600);font-weight:400}
+    .topic-plot .band{fill:var(--surface-050)}
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .topic-plot .lbl{font-size:14px;fill:var(--ink-700);paint-order:stroke;stroke:var(--white);stroke-width:4px}
+    .topic-plot .line-a{fill:none;stroke:var(--pnu-blue);stroke-width:3}
+    .topic-plot .line-b{fill:none;stroke:var(--pnu-green);stroke-width:3;stroke-dasharray:8 5}
+    .topic-plot .dot-a{fill:var(--pnu-blue)}
+    .topic-plot .dot-b{fill:var(--pnu-green)}
+    .topic-plot .guide{stroke:var(--ink-600);stroke-width:1;stroke-dasharray:3 3}
+    .topic-plot .slot rect{fill:var(--white);stroke:var(--line-300);stroke-width:1.5}
+    .topic-plot .slot.is-fill rect{fill:color-mix(in srgb,var(--pnu-green) 18%,var(--white));stroke:var(--pnu-green)}
+    .topic-plot .slot text{font-size:15px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-bst-height">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Keeping the Order</span><span class="nav-tag is-current" aria-current="page">BST Height</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/18.%20Keeping%20the%20Order.pdf">Keeping the <span class="publication-lecture-tail">Order<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">BST Height</h1><hr class="accent-rule"><p class="page-subtitle">탐색, 삽입, 삭제는 모두 루트에서 한 갈래를 따라 내려가므로 비용이 높이(height)에 달려 있다. 같은 키라도 넣는 순서가 높이를 정하며, 정렬된 순서로 넣으면 한쪽으로만 자란 편향 트리(skewed tree)가 되어 비용이 O(n)으로 커진다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>세 연산의 비용</strong><span>탐색은 찾았는지 답하고, 삽입은 단말 노드를 붙이고, 삭제는 경우에 따라 잇는다. 내려가는 길이는 모두 높이로 제한된다.</span></article><article class="summary-card"><strong>삽입 순서</strong><span>같은 키 집합이라도 먼저 넣은 키가 위에 자리 잡으므로 순서가 모양과 높이를 바꾼다.</span></article><article class="summary-card"><strong>편향 트리</strong><span>어느 노드에서도 갈림길이 없어 연결리스트처럼 한 줄이 된다.</span></article><article class="summary-card"><strong>순서가 필요한 연산</strong><span>해시테이블은 키 하나 찾기가 기대 O(1)이지만 순서대로 출력하거나 범위로 찾으려면 모든 키를 보아야 한다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">같은 일곱 키도 넣는 순서에 따라 높이가 2에서 6까지 달라진다</h2><p class="lead">20부터 80까지 10 간격의 일곱 키를 넣는 순서를 고르고 넣은 키 수를 옮기면 트리 모양, 높이, 삽입 때 지나온 노드 수가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="ord">삽입 순서</label><select id="ord"><option value="mid">50, 30, 70, 20, 40, 60, 80</option><option value="mix">50, 20, 30, 80, 70, 40, 60</option><option value="asc">20, 30, 40, 50, 60, 70, 80 (오름차순)</option><option value="desc">80, 70, 60, 50, 40, 30, 20 (내림차순)</option></select></div><div class="control-field"><label for="n1">넣은 키 수 <output id="n1-out" class="control-value" for="n1">7</output></label><input id="n1" type="range" min="1" max="7" step="1" value="7"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="ord-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="or-title or-desc"><title id="or-title">삽입 순서와 BST 모양</title><desc id="or-desc">넣은 순서대로 만든 BST</desc></svg></div><figcaption class="visual-caption">가로 띠 하나가 깊이 하나다. 노드의 가로 위치는 키의 크기 순서로 고정했다. 초록 원이 방금 넣은 키이고, 초록 선이 그 키까지 내려온 길이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">노드 수가 늘수록 편향 트리와 낮은 트리의 비용 차이는 벌어진다</h2><p class="lead">노드 수 n을 바꾸면 두 모양에서 가장 깊은 노드까지 내려갈 때 방문하는 노드 수가 바뀐다. 탐색, 삽입, 삭제 모두 이 길이 안에서 내려간다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="n2">노드 수 n <output id="n2-out" class="control-value" for="n2">15</output></label><input id="n2" type="range" min="1" max="100" step="1" value="15"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="cost-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="co-title co-desc"><title id="co-title">노드 수와 최대 방문 노드 수</title><desc id="co-desc">편향 트리는 n, 가장 낮게 만든 트리는 log n에 따라 늘어난다</desc></svg></div><figcaption class="visual-caption">가로축은 노드 수 n, 세로축은 루트에서 가장 깊은 노드까지 방문하는 노드 수(높이 + 1)다. 파란 실선은 정렬된 순서로 넣은 편향 트리, 초록 점선은 같은 n으로 만들 수 있는 가장 낮은 BST이고 두 점이 현재 n이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">범위로 찾을 때 BST는 범위와 겹치는 갈래만 내려간다</h2><p class="lead">15개 키를 가진 높이 3의 BST에서 하한과 상한을 바꾸면 방문하는 노드와 출력되는 키가 바뀐다. 같은 키를 해시테이블에 담았다면 15개 키를 모두 확인한 뒤 정렬해야 한다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="lo">하한 <output id="lo-out" class="control-value" for="lo">45</output></label><input id="lo" type="range" min="0" max="160" step="5" value="45"></div><div class="control-field"><label for="hi">상한 <output id="hi-out" class="control-value" for="hi">95</output></label><input id="hi" type="range" min="0" max="160" step="5" value="95"></div></div>
+      <p id="reason-3" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="range-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="ra-title ra-desc"><title id="ra-title">BST의 범위 탐색</title><desc id="ra-desc">범위와 겹치는 갈래만 방문</desc></svg></div><figcaption class="visual-caption">초록 원이 범위 안이라 출력한 키, 옅은 파란 원이 방문했지만 범위 밖인 키, 흐린 점선 원이 방문하지 않은 키이고 초록 선이 내려간 참조다. 아래 칸은 출력 순서다.</figcaption></figure>
+      <div id="read-3" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-3" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../18. Keeping the Order/bst-deletion.html">이전 · BST Deletion</a><a class="pager-link is-all" href="../index.html">전체</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s"]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+  function edgeSvg(a, b, cls, r) { var dx = b[0] - a[0], dy = b[1] - a[1], L = Math.sqrt(dx * dx + dy * dy); return '<line class="edge' + (cls ? " " + cls : "") + '" x1="' + (a[0] + dx * r / L).toFixed(1) + '" y1="' + (a[1] + dy * r / L).toFixed(1) + '" x2="' + (b[0] - dx * r / L).toFixed(1) + '" y2="' + (b[1] - dy * r / L).toFixed(1) + '"/>'; }
+  function nodeSvg(p, key, cls, r) { return '<g class="node ' + (cls || "") + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="' + r + '"/><text x="' + p[0] + '" y="' + p[1] + '">' + key + "</text></g>"; }
+
+  function insertAll(keys) {
+    var root = null, info = {};
+    keys.forEach(function (k) {
+      if (!root) { root = { key: k, left: null, right: null }; info[k] = { depth: 0, parent: null, path: [] }; return; }
+      var n = root, path = [];
+      while (true) { path.push(n.key); var d = k < n.key ? "left" : "right"; if (!n[d]) { n[d] = { key: k, left: null, right: null }; info[k] = { depth: path.length, parent: n.key, path: path }; break; } n = n[d]; }
+    });
+    return info;
+  }
+
+  var ORDERS = { mid: [50, 30, 70, 20, 40, 60, 80], mix: [50, 20, 30, 80, 70, 40, 60], asc: [20, 30, 40, 50, 60, 70, 80], desc: [80, 70, 60, 50, 40, 30, 20] };
+  function renderOrder() {
+    var name = $("ord").value, n = Number($("n1").value), keys = ORDERS[name].slice(0, n), info = insertAll(keys), svg = $("ord-plot"), h = head(svg);
+    $("n1-out").textContent = n;
+    var pos = function (k) { return [120 + ((k - 20) / 10) * 110, 34 + info[k].depth * 52]; }, last = keys[n - 1];
+    for (var d = 0; d <= 6; d++) h += '<rect class="band" x="10" y="' + (12 + d * 52) + '" width="880" height="44" rx="6"/><text class="small" x="22" y="' + (38 + d * 52) + '">깊이 ' + d + "</text>";
+    keys.forEach(function (k) { if (info[k].parent !== null) { var on = k === last || (info[last].path.indexOf(k) >= 0 && info[last].path.indexOf(info[k].parent) >= 0); h += edgeSvg(pos(info[k].parent), pos(k), on ? "is-on" : "", 19); } });
+    keys.forEach(function (k) { h += nodeSvg(pos(k), k, k === last ? "is-cur" : info[last].path.indexOf(k) >= 0 ? "is-done" : "", 19); });
+    svg.innerHTML = h;
+    var height = Math.max.apply(null, keys.map(function (k) { return info[k].depth; })), total = keys.reduce(function (s, k) { return s + info[k].depth; }, 0);
+    svg.querySelector("desc").textContent = keys.join(", ") + " 순서로 넣은 BST, 높이 " + height;
+    var note;
+    if (name === "asc" || name === "desc") note = (name === "asc" ? "오름차순" : "내림차순") + "으로 넣으면 새 키가 매번 지금까지의 모든 키보다 " + (name === "asc" ? "커서 오른쪽" : "작아서 왼쪽") + " 끝에 붙는다. 갈림길이 없는 편향 트리가 되어 " + n + "개 키의 높이가 " + pj(height, "이") + " 되고, 삽입 때 지나온 노드가 모두 " + total + "개다. 마지막 키는 앞의 " + (n - 1) + "개 노드를 모두 거쳤다.";
+    else if (name === "mid") note = "가운데 키 50을 먼저 넣고 양쪽 가운데 키 30과 70을 넣으면 한 층이 다 찬 뒤 다음 층으로 내려간다. " + n + "개 키의 높이는 " + height + "이고 삽입 때 지나온 노드는 모두 " + total + "개다." + (n === 7 ? " 오름차순으로 넣은 21개보다 훨씬 적다." : "");
+    else note = "같은 일곱 키를 섞인 순서로 넣으면 높이가 " + height + "이고 삽입 때 지나온 노드는 모두 " + total + "개다. 먼저 들어온 50, 20, 80이 위층에 자리 잡아 모양을 정한다.";
+    show(1, [["방금 넣은 키", String(last)], ["높이", String(height)], ["가장 깊은 노드까지 방문", (height + 1) + "개"], ["삽입 때 지나온 노드 합계", total + "개"]], note);
+  }
+
+  function renderCost() {
+    var n = Number($("n2").value), svg = $("cost-plot"), h = head(svg);
+    $("n2-out").textContent = n;
+    var X = function (v) { return 80 + (v - 1) / 99 * 780; }, Y = function (v) { return 310 - v / 100 * 280; };
+    var low = function (m) { return Math.floor(Math.log2(m)) + 1; };
+    for (var g = 0; g <= 100; g += 20) h += '<line class="grid" x1="80" y1="' + Y(g) + '" x2="860" y2="' + Y(g) + '"/><text class="small" x="70" y="' + (Y(g) + 4) + '" text-anchor="end">' + g + "</text>";
+    [1, 20, 40, 60, 80, 100].forEach(function (v) { h += '<text class="small" x="' + X(v) + '" y="330" text-anchor="middle">' + v + "</text>"; });
+    h += '<line class="axis" x1="80" y1="310" x2="860" y2="310"/><line class="axis" x1="80" y1="30" x2="80" y2="310"/>';
+    h += '<text class="small" x="470" y="352" text-anchor="middle">노드 수 n</text><text class="small" x="84" y="20">방문 노드 수</text>';
+    var pa = "", pb = "";
+    for (var m = 1; m <= 100; m++) { pa += (m === 1 ? "M" : "L") + X(m).toFixed(1) + " " + Y(m).toFixed(1); pb += (m === 1 ? "M" : "L") + X(m).toFixed(1) + " " + Y(low(m)).toFixed(1); }
+    h += '<path class="line-a" d="' + pa + '"/><path class="line-b" d="' + pb + '"/>';
+    h += '<line class="guide" x1="' + X(n) + '" y1="30" x2="' + X(n) + '" y2="310"/>';
+    h += '<circle class="dot-a" cx="' + X(n) + '" cy="' + Y(n) + '" r="7"/><circle class="dot-b" cx="' + X(n) + '" cy="' + Y(low(n)) + '" r="7"/>';
+    h += '<text class="lbl" x="' + Math.min(X(n) + 12, 760) + '" y="' + (Y(n) - 10) + '">편향 트리 ' + n + "개</text>";
+    h += '<text class="lbl" x="' + Math.min(X(n) + 12, 760) + '" y="' + (Y(low(n)) - 12) + '">가장 낮은 트리 ' + low(n) + "개</text>";
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = "n = " + n + ", 편향 트리 " + n + "개 방문, 가장 낮은 트리 " + low(n) + "개 방문";
+    var note = n === 1 ? "노드가 하나면 두 모양이 같다." : "노드 " + n + "개를 정렬된 순서로 넣은 편향 트리는 높이가 " + pj(n - 1, "이") + " 되어 가장 깊은 노드까지 " + n + "개 노드를 방문한다. 가장 낮게 만든 BST는 높이가 " + (pj(low(n) - 1, "이").slice(-1) === "이" ? (low(n) - 1) + "이라 " : (low(n) - 1) + "라 ") + low(n) + "개면 된다. 탐색, 삽입, 삭제는 모두 이 길이 안에서 내려가므로 비용은 각각 O(n)과 O(log n)으로 갈린다.";
+    show(2, [["노드 수 n", String(n)], ["편향 트리의 높이", String(n - 1)], ["가장 낮은 트리의 높이", String(low(n) - 1)], ["최대 방문 노드 수", n + "개 대 " + low(n) + "개"]], note);
+  }
+
+  var RT = [80, [40, [20, [10], [30]], [60, [50], [70]]], [120, [100, [90], [110]], [140, [130], [150]]]];
+  var RPOS = {};
+  (function () { var i = 0; (function go(t, d) { if (!t) return; go(t[1], d + 1); RPOS[t[0]] = [60 + i * 55, 40 + d * 75]; i++; go(t[2], d + 1); }(RT, 0)); }());
+  function renderRange(ev) {
+    var lo = Number($("lo").value), hi = Number($("hi").value), reason = $("reason-3");
+    if (lo > hi) { if (ev && ev.target.id === "lo") { $("hi").value = String(lo); hi = lo; } else { $("lo").value = String(hi); lo = hi; } reason.hidden = false; reason.textContent = "하한은 상한보다 클 수 없으므로 다른 쪽 값을 같이 옮겼다."; }
+    else reason.hidden = true;
+    $("lo-out").textContent = lo; $("hi-out").textContent = hi;
+    var visited = [], out = [];
+    (function go(t) { if (!t) return; visited.push(t[0]); if (lo < t[0]) go(t[1]); if (lo <= t[0] && t[0] <= hi) out.push(t[0]); if (t[0] < hi) go(t[2]); }(RT));
+    var svg = $("range-plot"), h = head(svg);
+    (function go(t) { if (!t) return; [t[1], t[2]].forEach(function (c) { if (c) h += edgeSvg(RPOS[t[0]], RPOS[c[0]], visited.indexOf(c[0]) >= 0 ? "is-on" : "", 20); go(c); }); }(RT));
+    Object.keys(RPOS).forEach(function (k) { k = Number(k); h += nodeSvg(RPOS[k], k, out.indexOf(k) >= 0 ? "is-cur" : visited.indexOf(k) >= 0 ? "is-done" : "is-off", 20); });
+    h += '<text class="lbl" x="20" y="322">출력</text>';
+    for (var i = 0; i < 15; i++) { var x = 70 + i * 55; h += '<g class="slot' + (i < out.length ? " is-fill" : "") + '"><rect x="' + x + '" y="302" width="48" height="36" rx="4"/><text x="' + (x + 24) + '" y="320">' + (i < out.length ? out[i] : "") + "</text></g>"; }
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = "범위 " + lo + " 이상 " + hi + " 이하, 출력 " + (out.join(", ") || "없음") + ", 방문 " + visited.length + "개";
+    var note = out.length
+      ? "범위 [" + lo + ", " + hi + "] 안의 키 " + out.length + "개를 찾으려고 " + visited.length + "개 노드를 방문했다. 현재 키가 하한 이하이면 왼쪽 부분 트리를, 상한 이상이면 오른쪽 부분 트리를 건너뛰므로 범위 밖 갈래는 내려가지 않는다. 중위 순회 순서로 방문하므로 출력은 따로 정렬하지 않아도 오름차순이다."
+      : "범위 [" + lo + ", " + hi + "] 안에 키가 없다. BST는 범위가 있을 법한 갈래 하나만 따라 " + visited.length + "개 노드를 방문하고 끝나지만, 해시테이블은 없다는 답을 내려고도 15개 키를 모두 확인한다.";
+    show(3, [["범위 안 키", out.length ? out.join(", ") : "없음"], ["BST가 방문한 노드", visited.length + "개"], ["해시테이블이 확인할 키", "15개, 이어서 정렬"], ["출력 순서", out.length ? "오름차순" : "출력 없음"]], note);
+  }
+
+  $("ord").addEventListener("change", renderOrder); $("n1").addEventListener("input", renderOrder);
+  $("n2").addEventListener("input", renderCost);
+  $("lo").addEventListener("input", renderRange); $("hi").addEventListener("input", renderRange);
+  renderOrder(); renderCost(); renderRange();
+}());
+</script>
+</body>
+</html>

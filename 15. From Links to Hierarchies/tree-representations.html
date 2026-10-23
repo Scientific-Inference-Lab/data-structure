@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Tree Representations | Data Structure | Pusan National University</title><meta name="description" content="Nested Python lists and linked nodes represent the same recursive binary-tree structure using different memory layouts."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/15.%20From%20Links%20to%20Hierarchies/tree-representations.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Tree Representations | Data Structure | Pusan National University"><meta property="og:description" content="Nested Python lists and linked nodes represent the same recursive binary-tree structure using different memory layouts."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/15.%20From%20Links%20to%20Hierarchies/tree-representations.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .rep-wrap{display:grid;gap:12px;min-width:560px;padding:10px}
+    .list-code{font-family:var(--mono);font-size:15px;line-height:1.9;padding:12px 14px;border-radius:8px;background:var(--surface-050);border:1px solid var(--line-200);word-break:break-all}
+    .list-code span.is-on{background:var(--pnu-green-tint);outline:2px solid var(--pnu-green);border-radius:3px}
+    .list-code span.is-on span.is-on{outline-color:var(--pnu-green-deep)}
+    .list-code span.is-new{background:var(--pnu-blue-tint);outline:2px dashed var(--pnu-blue);border-radius:3px}
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .edge.is-on{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .node circle{fill:var(--surface-050);stroke:var(--line-300);stroke-width:2}
+    .topic-plot .node text{font-size:17px;font-weight:700;text-anchor:middle;dominant-baseline:central;font-family:var(--mono)}
+    .topic-plot .node.is-on circle{fill:var(--pnu-green-tint);stroke:var(--pnu-green);stroke-width:3}
+    .topic-plot .node.is-root circle{fill:var(--pnu-green);stroke:var(--pnu-green-deep);stroke-width:3}
+    .topic-plot .node.is-root text{fill:var(--white)}
+    .topic-plot .node.is-new circle{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:3;stroke-dasharray:5 3}
+    .topic-plot .box rect{fill:var(--white);stroke:var(--line-300);stroke-width:1.5}
+    .topic-plot .box .kf{fill:var(--surface-050)}
+    .topic-plot .box text{font-family:var(--mono);font-size:13px;dominant-baseline:central}
+    .topic-plot .box.is-on rect{stroke:var(--pnu-green);stroke-width:3}
+    .topic-plot .box.is-end rect.kf{fill:var(--pnu-green-tint)}
+    .topic-plot .ref{stroke:var(--ink-500);stroke-width:1.8;fill:none}
+    .topic-plot .ref.is-on{stroke:var(--pnu-green);stroke-width:3.5}
+    .topic-plot .none{font-family:var(--mono);font-size:12px;fill:var(--ink-500)}
+    .topic-plot marker path{fill:var(--ink-500)}
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-tree-representations">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">From Links to Hierarchies</span><span class="nav-tag is-current" aria-current="page">Tree Representations</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/15.%20From%20Links%20to%20Hierarchies.pdf">From Links to <span class="publication-lecture-tail">Hierarchies<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Tree Representations</h1><hr class="accent-rule"><p class="page-subtitle">같은 이진트리를 Python에서는 중첩 리스트 [root, left, right]나 key, left_child, right_child를 가진 노드와 참조로 나타낸다. 메모리 모양은 달라도 루트와 두 부분 트리라는 재귀 구조는 같다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>중첩 리스트</strong><span>인덱스 0은 루트 값, 1은 왼쪽 부분 트리, 2는 오른쪽 부분 트리이며 빈 트리는 []다.</span></article><article class="summary-card"><strong>insert_left</strong><span>기존 왼쪽 부분 트리를 버리지 않고 새 노드의 왼쪽 부분 트리로 내린다.</span></article><article class="summary-card"><strong>노드와 참조</strong><span>각 노드가 key와 두 자식 노드의 참조를 가지며 빈 자식 노드는 None이다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">인덱스를 이어 붙이면 부분 트리를 차례로 내려간다</h2><p class="lead">트리 a 아래에 b(d, e)와 c(f)가 있는 중첩 리스트에서 식을 바꾸면 리스트의 어느 부분을 꺼내는지와 그 부분이 나타내는 부분 트리가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="expr">식</label><select id="expr"><option value="">tree</option><option value="0">tree[0]</option><option value="1" selected>tree[1]</option><option value="2">tree[2]</option><option value="11">tree[1][1]</option><option value="12">tree[1][2]</option><option value="21">tree[2][1]</option><option value="22">tree[2][2]</option><option value="110">tree[1][1][0]</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="rep-wrap"><div id="list-1" class="list-code" aria-label="중첩 리스트"></div><svg id="nl-plot" class="topic-plot" viewBox="0 0 900 250" role="img" aria-labelledby="nl-title nl-desc"><title id="nl-title">중첩 리스트가 나타내는 트리</title><desc id="nl-desc">식이 가리키는 부분 트리</desc></svg></div></div><figcaption class="visual-caption">위는 중첩 리스트, 아래는 같은 트리 그림이다. 초록으로 감싼 부분이 식의 결과이고, 그림에서 초록으로 채운 원이 그 부분 트리의 루트, 옅은 초록 원이 나머지 노드다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">insert_left는 기존 왼쪽 부분 트리를 새 노드 아래로 내린다</h2><p class="lead">root = ["a", ["b", [], []], ["c", [], []]]에 insert_left(root, "x")를 실행한다. 단계를 옮기면 리스트와 트리가 한 줄씩 실행한 결과로 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="step">실행 단계 <output id="step-out" class="control-value" for="step">0</output></label><input id="step" type="range" min="0" max="3" step="1" value="0"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="rep-wrap"><div id="list-2" class="list-code" aria-label="insert_left 실행 중인 리스트"></div><svg id="ins-plot" class="topic-plot" viewBox="0 0 900 250" role="img" aria-labelledby="ins-title ins-desc"><title id="ins-title">insert_left 단계</title><desc id="ins-desc">단계별 리스트와 트리</desc></svg></div></div><figcaption class="visual-caption">위는 root의 현재 값과 그 단계에서 만든 변수, 아래는 root가 나타내는 트리다. 파란 점선 부분이 새로 만든 리스트, 초록 부분이 old_left다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">노드와 참조 표현에서는 참조를 따라 부분 트리에 접근한다</h2><p class="lead">같은 트리를 BinaryTree 노드로 만들었다. 표현식을 바꾸면 루트에서 따라가는 참조와 도달한 노드, 결과가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="ref">표현식</label><select id="ref"><option value="key">tree.key</option><option value="L" selected>tree.left_child</option><option value="R">tree.right_child</option><option value="L.key">tree.left_child.key</option><option value="L.R.key">tree.left_child.right_child.key</option><option value="R.R">tree.right_child.right_child</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="ref-plot" class="topic-plot" viewBox="0 0 900 330" role="img" aria-labelledby="rf-title rf-desc"><title id="rf-title">노드와 참조</title><desc id="rf-desc">BinaryTree 노드의 key와 두 참조</desc></svg></div><figcaption class="visual-caption">상자 하나가 노드이며 세 칸은 차례로 key와 두 자식 노드의 참조다. 화살표가 참조이고, None은 참조할 자식 노드가 없다는 뜻이다. 초록 화살표와 초록 테두리 상자가 표현식이 따라간 경로와 도달한 노드다.</figcaption></figure>
+      <div id="read-3" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-3" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../15. From Links to Hierarchies/binary-trees.html">이전 · Binary Trees</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../16. When Do We Visit the Root/depth-first-tree-traversals.html">다음 · Depth First Tree Traversals</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s"]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function esc(s) { return String(s).replace(/&/g, "&amp;").replace(/</g, "&lt;"); }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+
+  var TREE = ["a", ["b", ["d", [], []], ["e", [], []]], ["c", ["f", [], []], []]];
+  function at(t, path) { return path.split("").reduce(function (x, i) { return x[Number(i)]; }, t); }
+  function listHtml(t, path, on, cls) {
+    if (!Array.isArray(t)) return '<span class="' + (path === on ? cls : "") + '">"' + esc(t) + '"</span>';
+    var inner = t.length ? t.map(function (c, i) { return listHtml(c, path + i, on, cls); }).join(", ") : "";
+    return '<span class="' + (path === on ? cls : "") + '">[' + inner + "]</span>";
+  }
+  function pyRepr(t) { return Array.isArray(t) ? "[" + t.map(pyRepr).join(", ") + "]" : '"' + t + '"'; }
+  function layout(t, x, y, span, out, parent) {
+    if (!Array.isArray(t) || !t.length) return;
+    var me = { id: t[0], x: x, y: y, parent: parent, list: t };
+    out.push(me);
+    layout(t[1], x - span, y + 80, span / 2, out, me);
+    layout(t[2], x + span, y + 80, span / 2, out, me);
+  }
+  function drawTree(t, onSub, rootOf, newIds) {
+    var nodes = [], h = "";
+    layout(t, 450, 40, 200, nodes, null);
+    var subIds = [];
+    (function collect(x) { if (Array.isArray(x) && x.length) { subIds.push(x[0]); collect(x[1]); collect(x[2]); } }(onSub));
+    nodes.forEach(function (n) { if (n.parent) h += '<line class="edge' + (subIds.indexOf(n.id) >= 0 && subIds.indexOf(n.parent.id) >= 0 ? " is-on" : "") + '" x1="' + n.parent.x + '" y1="' + (n.parent.y + 21) + '" x2="' + n.x + '" y2="' + (n.y - 21) + '"/>'; });
+    nodes.forEach(function (n) { var cls = n.id === rootOf ? "is-root" : subIds.indexOf(n.id) >= 0 ? "is-on" : (newIds || []).indexOf(n.id) >= 0 ? "is-new" : ""; h += '<g class="node ' + cls + '"><circle cx="' + n.x + '" cy="' + n.y + '" r="21"/><text x="' + n.x + '" y="' + n.y + '">' + n.id + "</text></g>"; });
+    return h;
+  }
+
+  var LABEL = { "": "tree", "0": "tree[0]", "1": "tree[1]", "2": "tree[2]", "11": "tree[1][1]", "12": "tree[1][2]", "21": "tree[2][1]", "22": "tree[2][2]", "110": "tree[1][1][0]" };
+  function renderList() {
+    var path = $("expr").value, v = at(TREE, path), isList = Array.isArray(v);
+    $("list-1").innerHTML = "tree = " + listHtml(TREE, "", path, "is-on");
+    var svg = $("nl-plot");
+    svg.innerHTML = head(svg) + drawTree(TREE, isList ? v : null, isList && v.length ? v[0] : (isList ? null : v));
+    svg.querySelector("desc").textContent = LABEL[path] + " → " + pyRepr(v);
+    var roleIdx = path.slice(-1);
+    var role = path === "" ? "트리 전체" : roleIdx === "0" ? "루트 값" : roleIdx === "1" ? "왼쪽 부분 트리" : "오른쪽 부분 트리";
+    var note;
+    if (!isList) note = pj(LABEL[path], "은") + " 인덱스 0이라 부분 트리가 아니라 그 루트 값 \"" + v + "\"다. 인덱스 0, 1, 2의 역할은 어느 층에서나 같다.";
+    else if (!v.length) note = pj(LABEL[path], "은") + " 빈 리스트 []다. 노드가 없는 빈 트리이므로 이 자리에는 자식 노드가 없다.";
+    else if (path === "") note = "tree는 트리 전체이며 tree[0] = \"a\"가 루트 값이다. 각 부분 트리도 [root, left, right] 모양이다.";
+    else note = pj(LABEL[path], "은") + " " + role + "이며 그 자체가 루트 \"" + v[0] + "\"를 가진 [root, left, right] 리스트다. 인덱스를 한 번 더 붙이면 이 부분 트리 안으로 한 층 더 내려간다.";
+    show(1, [["식", LABEL[path]], ["결과", esc(pyRepr(v))], ["역할", isList && !v.length ? "빈 트리" : role]], note);
+  }
+
+  var STEPS = [
+    { root: ["a", ["b", [], []], ["c", [], []]], extra: "", on: "none", note: "실행 전이다. root[1]에는 b가 루트인 왼쪽 부분 트리 [\"b\", [], []]가 있다.", code: "시작 상태" },
+    { root: ["a", ["b", [], []], ["c", [], []]], extra: "old_left = root[1]", on: "1", note: "old_left = root[1]로 기존 왼쪽 부분 트리를 변수에 담는다. 이 단계에서는 root가 바뀌지 않았다.", code: "old_left = root[1]" },
+    { root: ["a", ["b", [], []], ["c", [], []]], extra: "new = [\"x\", old_left, []]", on: "1", note: "new = [\"x\", old_left, []]로 x를 루트로 삼고 old_left를 왼쪽 부분 트리로 둔 새 리스트를 만든다. 아직 root에는 연결되지 않았다.", code: "new = [\"x\", old_left, []]" },
+    { root: ["a", ["x", ["b", [], []], []], ["c", [], []]], extra: "", on: "11", note: "root[1] = new로 새 리스트를 a의 왼쪽 자리에 넣는다. b는 버려지지 않고 x의 왼쪽 자식 노드가 되어 한 층 아래로 내려간다.", code: "root[1] = new" }
+  ];
+  function renderIns() {
+    var k = Number($("step").value), s = STEPS[k];
+    $("step-out").textContent = k;
+    var html = "root = " + listHtml(s.root, "", s.on, "is-on");
+    if (k === 1) html += '<br>old_left = <span class="is-on">["b", [], []]</span>';
+    if (k === 2) html += '<br>old_left = <span class="is-on">["b", [], []]</span><br>new = <span class="is-new">["x", <span class="is-on">["b", [], []]</span>, []]</span>';
+    $("list-2").innerHTML = html;
+    var svg = $("ins-plot"), tree = s.root, sub = k === 3 ? s.root[1][1] : (k > 0 ? s.root[1] : null);
+    svg.innerHTML = head(svg) + drawTree(tree, sub, null, k === 3 ? ["x"] : []);
+    svg.querySelector("desc").textContent = "단계 " + k + ": " + s.code + ", root = " + pyRepr(s.root);
+    show(2, [["실행한 줄", esc(s.code)], ["root[1]", esc(pyRepr(s.root[1]))], ["a의 왼쪽 자식 노드", s.root[1][0]]], s.note);
+  }
+
+  var NB = { a: [450, 50], b: [230, 160], c: [670, 160], d: [120, 270], e: [340, 270], f: [560, 270] };
+  var NK = { a: ["b", "c"], b: ["d", "e"], c: ["f", null], d: [null, null], e: [null, null], f: [null, null] };
+  function renderRef() {
+    var key = $("ref").value, parts = key.split("."), cur = "a", path = ["a"], hops = [];
+    parts.forEach(function (p) { if (p === "L" || p === "R") { var nx = NK[cur][p === "L" ? 0 : 1]; hops.push([cur, p, nx]); cur = nx; if (nx) path.push(nx); } });
+    var wantKey = parts[parts.length - 1] === "key", result = cur === null ? "None" : wantKey ? '"' + cur + '"' : cur + " 노드";
+    var svg = $("ref-plot"), h = head(svg) + '<defs><marker id="rarr" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z"/></marker></defs>';
+    Object.keys(NB).forEach(function (id) {
+      var p = NB[id], x = p[0] - 75, y = p[1] - 18, on = path.indexOf(id) >= 0, end = id === cur;
+      h += '<g class="box' + (on ? " is-on" : "") + (end && wantKey ? " is-end" : "") + '"><rect class="kf" x="' + x + '" y="' + y + '" width="50" height="36"/><rect x="' + (x + 50) + '" y="' + y + '" width="50" height="36"/><rect x="' + (x + 100) + '" y="' + y + '" width="50" height="36"/><text x="' + (x + 25) + '" y="' + (y + 18) + '" text-anchor="middle">"' + id + '"</text></g>';
+      NK[id].forEach(function (c, side) {
+        var sx = x + 75 + side * 50, sy = y + 36, isOn = hops.some(function (hp) { return hp[0] === id && hp[1] === (side ? "R" : "L"); });
+        if (c) { var t = NB[c]; h += '<path class="ref' + (isOn ? " is-on" : "") + '" d="M' + sx + " " + (sy - 18) + " L" + t[0] + " " + (t[1] - 20) + '" marker-end="url(#rarr)"/>'; }
+        else h += '<text class="none' + (isOn ? "" : "") + '" x="' + sx + '" y="' + (sy + 16) + '" text-anchor="middle">' + (isOn ? "None ←" : "None") + "</text>";
+      });
+    });
+    h += '<text class="small" x="30" y="318">칸 순서: key · left_child · right_child</text>';
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = key + " → " + result;
+    var expr = $("ref").options[$("ref").selectedIndex].textContent;
+    var note = cur === null ? pj(expr, "은") + " c의 right_child를 읽는다. c에는 오른쪽 자식 노드가 없어 None이 나오며, None에서 .key를 더 읽으면 오류가 난다."
+      : wantKey && !hops.length ? "tree.key는 참조를 따라가지 않고 루트 노드의 key \"a\"를 바로 읽는다." : wantKey ? pj(expr, "은") + " 참조 " + hops.length + "개를 따라 " + cur + " 노드에 도달한 뒤 그 노드의 key \"" + cur + "\"를 읽는다."
+      : hops.length ? pj(expr, "은") + " 참조 " + hops.length + "개를 따라 " + cur + " 노드에 도달한다. 결과는 값이 아니라 " + cur + "를 루트로 삼는 부분 트리의 노드 객체다."
+      : "tree는 루트 노드 객체다.";
+    show(3, [["표현식", expr], ["따라간 참조 수", String(hops.length)], ["결과", result]], note);
+  }
+
+  $("expr").addEventListener("change", renderList);
+  $("step").addEventListener("input", renderIns);
+  $("ref").addEventListener("change", renderRef);
+  renderList(); renderIns(); renderRef();
+}());
+</script>
+</body>
+</html>

@@ -46,6 +46,17 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/load-factor-and-resizing.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/open-addressing-probes.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/tombstones.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/15.%20From%20Links%20to%20Hierarchies/binary-trees.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/15.%20From%20Links%20to%20Hierarchies/tree-representations.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/15.%20From%20Links%20to%20Hierarchies/tree-vocabulary.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/16.%20When%20Do%20We%20Visit%20the%20Root/depth-first-tree-traversals.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/16.%20When%20Do%20We%20Visit%20the%20Root/level-order-traversal.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/16.%20When%20Do%20We%20Visit%20the%20Root/parse-trees.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/17.%20Choose%20One%20Subtree/bst-ordering-invariant.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/17.%20Choose%20One%20Subtree/bst-search.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/18.%20Keeping%20the%20Order/bst-deletion.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/18.%20Keeping%20the%20Order/bst-height.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/18.%20Keeping%20the%20Order/bst-insertion.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/00.%20Intro.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/01.%20Data%20Abstraction.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/02.%20Interfaces.pdf</loc></url>
@@ -61,9 +72,15 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/12.%20First%20In%2C%20First%20Out.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/13.%20Keys%20to%20Indices.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/14.%20Finding%20the%20Next%20Open%20Slot.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/15.%20From%20Links%20to%20Hierarchies.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/16.%20When%20Do%20We%20Visit%20the%20Root.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/17.%20Choose%20One%20Subtree.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/18.%20Keeping%20the%20Order.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/arrays-and-linked-lists.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/arrays.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/asymptotic-growth.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/binary-search-trees.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/bst-insertion-and-deletion.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/data-abstraction-and-adts.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/doubly-linked-lists.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/dynamic-arrays.html</loc></url>
@@ -75,4 +92,6 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/open-addressing.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/queues-and-deques.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/stacks.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/tree-terminology.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/tree-traversals.html</loc></url>
 </urlset>

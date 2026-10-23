@@ -1,0 +1,188 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Tree Vocabulary | Data Structure | Pusan National University</title><meta name="description" content="A tree is a hierarchy whose branches do not merge again; root, parent, child, sibling, leaf, depth, and height describe a node's place in it."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/15.%20From%20Links%20to%20Hierarchies/tree-vocabulary.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Tree Vocabulary | Data Structure | Pusan National University"><meta property="og:description" content="A tree is a hierarchy whose branches do not merge again; root, parent, child, sibling, leaf, depth, and height describe a node's place in it."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/15.%20From%20Links%20to%20Hierarchies/tree-vocabulary.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .edge.is-up{stroke:var(--pnu-blue);stroke-width:4}
+    .topic-plot .edge.is-down{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .edge.is-bad{stroke:var(--alert-700);stroke-width:4;stroke-dasharray:7 4}
+    .topic-plot .node circle{fill:var(--surface-050);stroke:var(--line-300);stroke-width:2}
+    .topic-plot .node text{font-size:17px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-sel circle{fill:var(--pnu-green);stroke:var(--pnu-green-deep);stroke-width:3}
+    .topic-plot .node.is-sel text{fill:var(--white)}
+    .topic-plot .node.is-parent circle{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:3}
+    .topic-plot .node.is-child circle{fill:var(--pnu-green-tint);stroke:var(--pnu-green);stroke-width:3}
+    .topic-plot .node.is-sib circle{stroke:var(--pnu-blue-dark);stroke-width:3;stroke-dasharray:5 3}
+    .topic-plot .node.is-sub circle{fill:var(--pnu-green-tint)}
+    .topic-plot .node.is-bad circle{fill:var(--alert-050);stroke:var(--alert-700);stroke-width:3}
+    .topic-plot .node{cursor:pointer}
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .topic-plot marker path{fill:var(--ink-500)}
+    .topic-plot .tag{font-size:13px;fill:var(--ink-700);text-anchor:middle}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-tree-vocabulary">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">From Links to Hierarchies</span><span class="nav-tag is-current" aria-current="page">Tree Vocabulary</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/15.%20From%20Links%20to%20Hierarchies.pdf">From Links to <span class="publication-lecture-tail">Hierarchies<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Tree Vocabulary</h1><hr class="accent-rule"><p class="page-subtitle">트리(tree)는 노드들이 하나의 시작점에서 여러 단계로 갈라지는 계층 구조이며, 갈라진 갈래가 다시 합쳐지지 않는다. 한 노드의 위치는 루트, 부모 노드, 자식 노드, 형제 노드, 단말 노드, 깊이와 높이로 읽는다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>루트(root)</strong><span>부모 노드가 없는 유일한 노드다.</span></article><article class="summary-card"><strong>부분 트리(subtree)</strong><span>한 노드와 그 아래의 모든 자손으로 이루어진 트리다.</span></article><article class="summary-card"><strong>깊이(depth)와 높이(height)</strong><span>깊이는 루트에서 그 노드까지, 높이는 그 노드에서 가장 먼 단말 노드까지 지나가는 연결 수다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">노드 하나를 고르면 부모·자식·형제 노드와 부분 트리가 정해진다</h2><p class="lead">고른 노드를 바꾸면 바로 위에 연결된 부모 노드, 바로 아래의 자식 노드, 같은 부모 노드를 둔 형제 노드, 그 노드가 루트인 부분 트리가 바뀐다. 그림의 노드를 눌러도 고를 수 있다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="pick">고른 노드</label><select id="pick"></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="rel-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="rel-title rel-desc"><title id="rel-title">노드 관계</title><desc id="rel-desc">고른 노드와 부모·자식·형제 노드, 부분 트리를 표시한 트리</desc></svg></div><figcaption class="visual-caption">화살표는 부모 노드에서 자식 노드로 가는 연결이다. 초록으로 채운 원이 고른 노드, 파란 원이 부모 노드, 초록 테두리 원이 자식 노드, 짙은 점선 테두리가 형제 노드, 옅은 초록 원은 부분 트리의 나머지 자손이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">깊이는 루트에서 아래로, 높이는 가장 먼 단말 노드에서 위로 센다</h2><p class="lead">노드를 바꾸면 루트에서 그 노드까지의 경로와 그 노드에서 가장 먼 단말 노드까지의 경로가 바뀌고, 두 경로의 연결 수가 깊이와 높이가 된다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="pick2">노드</label><select id="pick2"></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="dh-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="dh-title dh-desc"><title id="dh-title">깊이와 높이</title><desc id="dh-desc">루트에서 노드까지의 경로와 노드에서 가장 먼 단말 노드까지의 경로</desc></svg></div><figcaption class="visual-caption">파란 굵은 연결이 루트에서 고른 노드까지의 경로이고 그 수가 깊이다. 초록 굵은 연결이 고른 노드에서 가장 먼 단말 노드까지의 경로이고 그 수가 높이다. 왼쪽 숫자는 각 층의 깊이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">시작점이 하나이고 갈래가 다시 합쳐지지 않아야 트리다</h2><p class="lead">연결 모양을 바꾸면 부모 노드가 없는 시작 노드의 수, 위쪽 연결이 둘인 노드, 시작점에서 D까지 가는 경로 수가 바뀌고 트리인지가 정해진다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="shape">연결 모양</label><select id="shape"><option value="tree">여러 갈래로 나뉘는 모양</option><option value="chain">한 줄로 이어진 모양</option><option value="merge">갈래가 D에서 다시 합쳐지는 모양</option><option value="forest">시작점이 둘인 모양</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="check-plot" class="topic-plot" viewBox="0 0 900 330" role="img" aria-labelledby="ck-title ck-desc"><title id="ck-title">트리인지 확인하기</title><desc id="ck-desc">연결 모양에 따른 시작 노드와 위쪽 연결</desc></svg></div><figcaption class="visual-caption">화살표는 위에서 아래로 가는 연결이다. 빨간 원과 빨간 점선 연결은 트리의 조건을 어기는 노드와 연결이다.</figcaption></figure>
+      <div id="read-3" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-3" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../14. Finding the Next Open Slot/tombstones.html">이전 · Tombstones</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../15. From Links to Hierarchies/binary-trees.html">다음 · Binary Trees</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+
+  var POS = { A: [470, 50], B: [260, 140], C: [470, 140], D: [680, 140], E: [170, 230], F: [350, 230], G: [680, 230], H: [300, 320], I: [400, 320], J: [680, 320] };
+  var KIDS = { A: ["B", "C", "D"], B: ["E", "F"], C: [], D: ["G"], E: [], F: ["H", "I"], G: ["J"], H: [], I: [], J: [] };
+  var PARENT = {};
+  Object.keys(KIDS).forEach(function (p) { KIDS[p].forEach(function (c) { PARENT[c] = p; }); });
+  var IDS = Object.keys(POS);
+  function desc(u) { var out = []; KIDS[u].forEach(function (c) { out.push(c); out = out.concat(desc(c)); }); return out; }
+  function height(u) { return KIDS[u].length ? 1 + Math.max.apply(null, KIDS[u].map(height)) : 0; }
+  function depth(u) { return PARENT[u] ? 1 + depth(PARENT[u]) : 0; }
+  function farLeafPath(u) { if (!KIDS[u].length) return [u]; var best = null; KIDS[u].forEach(function (c) { var p = farLeafPath(c); if (!best || p.length > best.length) best = p; }); return [u].concat(best); }
+  function edgeLine(p, c, cls) {
+    var a = POS[p], b = POS[c], dx = b[0] - a[0], dy = b[1] - a[1], L = Math.sqrt(dx * dx + dy * dy), r = 24;
+    return '<line class="edge' + (cls ? " " + cls : "") + '" x1="' + (a[0] + dx * r / L).toFixed(1) + '" y1="' + (a[1] + dy * r / L).toFixed(1) + '" x2="' + (b[0] - dx * r / L).toFixed(1) + '" y2="' + (b[1] - dy * r / L).toFixed(1) + '" marker-end="url(#arr)"/>';
+  }
+  var MARK = '<defs><marker id="arr" viewBox="0 0 10 10" refX="9" refY="5" markerUnits="userSpaceOnUse" markerWidth="12" markerHeight="12" orient="auto-start-reverse"><path d="M0 0L10 5L0 10z" fill="currentColor"/></marker></defs>';
+  function nodeSvg(id, cls, x, y) { return '<g class="node ' + cls + '" data-node="' + id + '"><circle cx="' + x + '" cy="' + y + '" r="22"/><text x="' + x + '" y="' + y + '">' + id + "</text></g>"; }
+  function keepTitle(svg) { var t = svg.querySelector("title"), d = svg.querySelector("desc"); return [t.outerHTML, d.outerHTML]; }
+
+  [$("pick"), $("pick2")].forEach(function (sel, i) { IDS.forEach(function (id) { var o = document.createElement("option"); o.value = id; o.textContent = id; if (id === (i ? "B" : "F")) o.selected = true; sel.appendChild(o); }); });
+
+  function renderRel() {
+    var u = $("pick").value, sub = desc(u), par = PARENT[u], sibs = par ? KIDS[par].filter(function (c) { return c !== u; }) : [];
+    var svg = $("rel-plot"), td = keepTitle(svg);
+    var h = td[0] + td[1] + MARK;
+    Object.keys(KIDS).forEach(function (p) { KIDS[p].forEach(function (c) { h += edgeLine(p, c, p === u || sub.indexOf(p) >= 0 ? "is-down" : c === u ? "is-up" : ""); }); });
+    IDS.forEach(function (id) {
+      var cls = id === u ? "is-sel" : id === par ? "is-parent" : KIDS[u].indexOf(id) >= 0 ? "is-child" : sibs.indexOf(id) >= 0 ? "is-sib" : sub.indexOf(id) >= 0 ? "is-sub" : "";
+      h += nodeSvg(id, cls, POS[id][0], POS[id][1]);
+    });
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = u + " 노드, 부모 " + (par || "없음") + ", 자식 " + (KIDS[u].join(", ") || "없음");
+    var leaf = !KIDS[u].length;
+    show(1, [["부모 노드", par || "없음 (루트)"], ["자식 노드", KIDS[u].join(", ") || "없음"], ["형제 노드", sibs.join(", ") || "없음"], ["부분 트리의 노드", [u].concat(sub).join(", ")]],
+      (par ? pj(u, "은") + " " + par + "의 자식 노드" : pj(u, "은") + " 부모 노드가 없는 루트") + (leaf ? "이고 자식 노드가 없는 단말 노드(leaf)다. 부분 트리는 " + u + " 하나뿐이다." : "이며 자식 노드 " + KIDS[u].length + "개를 둔다. " + (par ? pj(u, "을") + " 루트로 삼는 부분 트리도 노드 " + (sub.length + 1) + "개짜리 트리이므로 같은 정의와 알고리즘을 다시 적용할 수 있다." : "루트의 부분 트리는 노드 " + (sub.length + 1) + "개인 트리 전체다.")) + (sibs.length ? " 같은 부모 노드를 둔 " + pj(sibs.join(", "), "이") + " 형제 노드(sibling)다." : ""));
+  }
+
+  function renderDh() {
+    var u = $("pick2").value, up = [u], x = u;
+    while (PARENT[x]) { x = PARENT[x]; up.unshift(x); }
+    var down = farLeafPath(u), svg = $("dh-plot"), td = keepTitle(svg);
+    var h = td[0] + td[1] + MARK;
+    [0, 1, 2, 3].forEach(function (d) { h += '<text class="small" x="40" y="' + (54 + d * 90) + '">깊이 ' + d + "</text>"; });
+    Object.keys(KIDS).forEach(function (p) { KIDS[p].forEach(function (c) {
+      var iu = up.indexOf(c), idn = down.indexOf(c);
+      var cls = iu > 0 && up[iu - 1] === p ? "is-up" : idn > 0 && down[idn - 1] === p ? "is-down" : "";
+      h += edgeLine(p, c, cls);
+    }); });
+    IDS.forEach(function (id) { h += nodeSvg(id, id === u ? "is-sel" : down.indexOf(id) > 0 ? "is-child" : up.indexOf(id) >= 0 && id !== u ? "is-parent" : "", POS[id][0], POS[id][1]); });
+    svg.innerHTML = h;
+    var d = depth(u), ht = height(u);
+    svg.querySelector("desc").textContent = u + " 노드의 깊이 " + d + ", 높이 " + ht;
+    show(2, [["깊이", d + " (" + up.join(" → ") + ")"], ["높이", ht + " (" + down.join(" → ") + ")"], ["트리의 높이", "루트 A의 높이 " + height("A")]],
+      d === 0 ? "A는 루트라 깊이가 0이다. A에서 가장 먼 단말 노드까지 " + down.join(" → ") + "로 연결 " + ht + "개를 지나므로 트리의 높이는 " + ht + "이다."
+        : ht === 0 ? pj(u, "은") + " 단말 노드라 높이가 0이고, 루트에서 " + up.join(" → ") + "로 연결 " + d + "개를 지나므로 깊이는 " + d + "이다. 같은 트리 안에서도 깊이와 높이는 노드마다 다르다."
+        : pj(u, "은") + " 루트에서 연결 " + d + "개 아래에 있어 깊이 " + d + ", 가장 먼 단말 노드 " + down[down.length - 1] + "까지 연결 " + ht + "개라 높이 " + ht + "이다. 깊이는 부모 노드의 깊이보다 1 크고, 높이는 자식 노드들의 높이 가운데 가장 큰 값보다 1 크다.");
+  }
+
+  var SHAPES = {
+    tree: { pos: { A: [450, 50], B: [300, 150], C: [600, 150], D: [220, 260], E: [380, 260] }, edges: [["A", "B"], ["A", "C"], ["B", "D"], ["B", "E"]] },
+    chain: { pos: { A: [450, 40], B: [450, 120], C: [450, 200], D: [450, 280] }, edges: [["A", "B"], ["B", "C"], ["C", "D"]] },
+    merge: { pos: { A: [450, 50], B: [300, 150], C: [600, 150], D: [450, 260] }, edges: [["A", "B"], ["A", "C"], ["B", "D"], ["C", "D"]] },
+    forest: { pos: { A: [300, 60], B: [600, 60], C: [300, 190], D: [600, 190] }, edges: [["A", "C"], ["B", "D"]] }
+  };
+  function renderCheck() {
+    var key = $("shape").value, S = SHAPES[key], ids = Object.keys(S.pos), svg = $("check-plot"), td = keepTitle(svg);
+    var inDeg = {}, out = {};
+    ids.forEach(function (i) { inDeg[i] = 0; out[i] = []; });
+    S.edges.forEach(function (e) { inDeg[e[1]]++; out[e[0]].push(e[1]); });
+    var starts = ids.filter(function (i) { return inDeg[i] === 0; }), multi = ids.filter(function (i) { return inDeg[i] > 1; });
+    function paths(a, b) { if (a === b) return 1; return out[a].reduce(function (s, c) { return s + paths(c, b); }, 0); }
+    var np = starts.reduce(function (s, st) { return s + paths(st, "D"); }, 0);
+    var isTree = starts.length === 1 && multi.length === 0;
+    var h = td[0] + td[1] + MARK, oldPos = POS;
+    POS = S.pos;
+    S.edges.forEach(function (e) { h += edgeLine(e[0], e[1], multi.indexOf(e[1]) >= 0 ? "is-bad" : ""); });
+    ids.forEach(function (i) { h += nodeSvg(i, multi.indexOf(i) >= 0 || (starts.length > 1 && starts.indexOf(i) >= 0) ? "is-bad" : "", S.pos[i][0], S.pos[i][1]); });
+    POS = oldPos;
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = (isTree ? "트리" : "트리가 아님") + ", 시작 노드 " + starts.length + "개";
+    var note = key === "tree" ? "시작 노드가 A 하나이고 A 이외의 모든 노드는 위쪽 연결이 하나다. A에서 D로 가는 경로도 A → B → D 하나뿐이라 트리다."
+      : key === "chain" ? "한 줄로 이어진 모양도 시작 노드가 하나이고 합쳐지는 곳이 없어 트리다. 모든 노드가 자식 노드를 최대 하나만 두는 연결리스트와 같은 모양이다."
+      : key === "merge" ? "D는 B와 C 두 곳에서 위쪽 연결을 받아 A에서 D로 가는 경로가 A → B → D와 A → C → D 두 개다. 갈래가 다시 합쳐지므로 트리가 아니다."
+      : "부모 노드가 없는 노드가 A와 B 둘이라 루트를 하나로 정할 수 없다. 각 부분은 트리이지만 전체는 하나의 트리가 아니다.";
+    show(3, [["시작 노드", starts.join(", ")], ["위쪽 연결이 둘 이상인 노드", multi.join(", ") || "없음"], ["시작점에서 D까지 경로 수", String(np)], ["판정", isTree ? "트리" : "트리가 아님"]], note);
+  }
+
+  $("pick").addEventListener("change", renderRel);
+  $("pick2").addEventListener("change", renderDh);
+  $("shape").addEventListener("change", renderCheck);
+  $("rel-plot").addEventListener("click", function (e) { var g = e.target.closest(".node"); if (!g) return; $("pick").value = g.getAttribute("data-node"); renderRel(); });
+  $("dh-plot").addEventListener("click", function (e) { var g = e.target.closest(".node"); if (!g) return; $("pick2").value = g.getAttribute("data-node"); renderDh(); });
+  renderRel(); renderDh(); renderCheck();
+}());
+</script>
+</body>
+</html>

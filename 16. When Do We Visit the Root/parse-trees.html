@@ -1,0 +1,184 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Parse Trees | Data Structure | Pusan National University</title><meta name="description" content="A parse tree represents arithmetic evaluation order with operators at internal nodes and numbers at leaves, using postorder for evaluation and inorder to reconstruct the expression."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/16.%20When%20Do%20We%20Visit%20the%20Root/parse-trees.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Parse Trees | Data Structure | Pusan National University"><meta property="og:description" content="A parse tree represents arithmetic evaluation order with operators at internal nodes and numbers at leaves, using postorder for evaluation and inorder to reconstruct the expression."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/16.%20When%20Do%20We%20Visit%20the%20Root/parse-trees.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .node circle{fill:var(--white);stroke:var(--line-300);stroke-width:2}
+    .topic-plot .node text{font-size:18px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-op circle{fill:var(--surface-050)}
+    .topic-plot .node.is-done circle{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:2.5}
+    .topic-plot .node.is-cur circle{fill:var(--pnu-green);stroke:var(--pnu-green-deep);stroke-width:3}
+    .topic-plot .node.is-cur text{fill:var(--white)}
+    .topic-plot .node.is-empty circle{fill:var(--surface-100);stroke:var(--ink-500);stroke-dasharray:5 3}
+    .topic-plot .node.is-here circle{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .val{font-size:14px;font-weight:700;fill:var(--pnu-green-deep);text-anchor:middle}
+    .topic-plot .tok rect{fill:var(--white);stroke:var(--line-300);stroke-width:1.5}
+    .topic-plot .tok.is-read rect{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue)}
+    .topic-plot .tok.is-now rect{fill:var(--pnu-green);stroke:var(--pnu-green-deep)}
+    .topic-plot .tok.is-now text{fill:var(--white)}
+    .topic-plot .tok text{font-family:var(--mono);font-size:17px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .slot rect{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:1.5}
+    .topic-plot .slot text{font-size:14px;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .topic-plot .lbl{font-size:14px;fill:var(--ink-700)}
+    .out-line{font-family:var(--mono);font-size:18px;padding:10px 14px;margin:8px 10px 0;border-radius:8px;background:var(--surface-050);border:1px solid var(--line-200);min-height:1.8em}
+    .out-line .is-new{background:var(--pnu-green-tint);outline:2px solid var(--pnu-green);border-radius:3px}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-parse-trees">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">When Do We Visit the Root</span><span class="nav-tag is-current" aria-current="page">Parse Trees</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/16.%20When%20Do%20We%20Visit%20the%20Root.pdf">When Do We Visit the <span class="publication-lecture-tail">Root<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Parse Trees</h1><hr class="accent-rule"><p class="page-subtitle">parse tree는 연산자를 내부 노드에, 수를 단말 노드에 두어 식의 계산 순서를 나타내는 이진트리다. 값 계산에는 두 자식 노드 결과가 먼저 필요한 후위 순회를, 식 출력에는 원래 순서를 복원하는 중위 순회를 쓴다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>연산자와 피연산자</strong><span>한 연산자의 왼쪽과 오른쪽 부분 트리가 두 피연산자를 나타낸다.</span></article><article class="summary-card"><strong>만들기</strong><span>식을 읽으며 자식 노드로 내려가기 전에 현재 노드를 스택에 push하고 돌아올 때 pop한다.</span></article><article class="summary-card"><strong>계산과 출력</strong><span>후위 순회는 값을 계산하고, 중위 순회는 괄호와 함께 식을 출력한다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">후위 순회로 계산하면 두 자식 노드의 값이 부모 노드보다 먼저 준비된다</h2><p class="lead">((7 + 3) × (5 − 2))의 parse tree에서 처리한 노드 수를 옮기면 후위 순회로 처리한 노드와 그 노드가 반환한 값이 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="ev">처리한 노드 수 <output id="ev-out" class="control-value" for="ev">0</output></label><input id="ev" type="range" min="0" max="7" step="1" value="0"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="ev-plot" class="topic-plot" viewBox="0 0 900 330" role="img" aria-labelledby="ev-title ev-desc"><title id="ev-title">후위 순회 계산</title><desc id="ev-desc">parse tree와 노드별 반환값</desc></svg></div><figcaption class="visual-caption">회색 원은 연산자 노드, 흰 원은 수가 든 단말 노드다. 초록으로 채운 원이 방금 처리한 노드, 옅은 파란 원이 이미 처리한 노드이며 원 아래 초록 수가 그 노드가 반환한 값이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">식을 한 기호씩 읽으며 트리를 만들고 스택으로 부모 노드에 돌아간다</h2><p class="lead">(3 + (4 × 5))를 읽는다. 읽은 기호 수를 옮기면 기호에 따른 동작, 현재 위치, 스택에 쌓인 부모 노드가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="bt">읽은 기호 수 <output id="bt-out" class="control-value" for="bt">0</output></label><input id="bt" type="range" min="0" max="9" step="1" value="0"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="bt-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="bt-title bt-desc"><title id="bt-title">parse tree 만들기</title><desc id="bt-desc">읽은 기호와 트리, 스택</desc></svg></div><figcaption class="visual-caption">맨 위 줄은 입력 기호이며 초록 칸이 방금 읽은 기호, 파란 칸이 이미 읽은 기호다. 트리에서 초록 굵은 테두리가 현재 위치, 점선 원이 아직 값이 없는 노드다. 오른쪽 기둥은 부모 노드를 기억하는 스택이며 위가 맨 위다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">같은 parse tree도 순회 방식에 따라 계산 결과나 다른 표기가 나온다</h2><p class="lead">((7 + 3) × (5 − 2))의 parse tree에서 순회 방식을 바꾸면 노드를 처리하는 순서와 그 순서로 만든 출력이 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="mode">순회 방식</label><select id="mode"><option value="post">후위 순회로 출력</option><option value="in">중위 순회로 괄호와 함께 출력</option><option value="exp">중위 순회로 print_exp 그대로 출력</option><option value="pre">전위 순회로 출력</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div id="out-line" class="out-line" aria-label="순회 출력"></div></div><figcaption class="visual-caption">순회가 노드를 처리한 순서대로 이어 붙인 출력이다. 중위 순회는 연산자 노드마다 앞뒤에 괄호를 붙이고, print_exp 그대로 출력하면 수 노드에도 괄호가 붙는다.</figcaption></figure>
+      <div id="read-3" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-3" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../16. When Do We Visit the Root/level-order-traversal.html">이전 · Level Order Traversal</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../17. Choose One Subtree/bst-ordering-invariant.html">다음 · BST Ordering Invariant</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+
+  var T = { r: ["×", "p", "m"], p: ["+", "a", "b"], m: ["−", "c", "d"], a: ["7"], b: ["3"], c: ["5"], d: ["2"] };
+  var TP = { r: [450, 50], p: [270, 150], m: [630, 150], a: [180, 250], b: [360, 250], c: [540, 250], d: [720, 250] };
+  var OPS = { "+": function (x, y) { return x + y; }, "−": function (x, y) { return x - y; }, "×": function (x, y) { return x * y; } };
+  function post(u, out) { if (T[u].length > 1) { post(T[u][1], out); post(T[u][2], out); } out.push(u); return out; }
+  function pre(u, out) { out.push(u); if (T[u].length > 1) { pre(T[u][1], out); pre(T[u][2], out); } return out; }
+  function val(u) { return T[u].length > 1 ? OPS[T[u][0]](val(T[u][1]), val(T[u][2])) : Number(T[u][0]); }
+  var POST = post("r", []);
+  function drawT(clsOf, valOf) {
+    var h = "";
+    Object.keys(T).forEach(function (u) { if (T[u].length > 1) [1, 2].forEach(function (i) { var c = T[u][i]; h += '<line class="edge" x1="' + TP[u][0] + '" y1="' + (TP[u][1] + 23) + '" x2="' + TP[c][0] + '" y2="' + (TP[c][1] - 23) + '"/>'; }); });
+    Object.keys(T).forEach(function (u) { var p = TP[u], v = valOf ? valOf(u) : null; h += '<g class="node ' + (T[u].length > 1 ? "is-op " : "") + clsOf(u) + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="23"/><text x="' + p[0] + '" y="' + p[1] + '">' + T[u][0] + "</text></g>"; if (v !== null) h += '<text class="val" x="' + p[0] + '" y="' + (p[1] + 42) + '">= ' + String(v).replace("-", "−") + "</text>"; });
+    return h;
+  }
+
+  function renderEval() {
+    var k = Number($("ev").value), done = POST.slice(0, k), svg = $("ev-plot");
+    $("ev-out").textContent = k;
+    svg.innerHTML = head(svg) + drawT(function (u) { var i = done.indexOf(u); return i < 0 ? "" : i === k - 1 ? "is-cur" : "is-done"; }, function (u) { return done.indexOf(u) >= 0 ? val(u) : null; });
+    var u = k ? POST[k - 1] : null;
+    svg.querySelector("desc").textContent = k ? "처리한 노드 " + T[u][0] + ", 값 " + val(u) : "처리 전";
+    var note;
+    if (!u) note = "후위 순회는 왼쪽 부분 트리, 오른쪽 부분 트리, 루트 순서로 처리한다. 연산자 노드는 두 자식 노드의 값이 모두 준비된 뒤에야 계산할 수 있다.";
+    else if (T[u].length === 1) note = "단말 노드 " + pj(T[u][0], "은") + " 수를 그대로 반환한다. 부모 연산자 노드는 다른 쪽 자식 노드까지 처리한 뒤에 계산한다.";
+    else note = "연산자 노드 " + pj(T[u][0], "은") + " 이미 처리한 두 자식 노드의 값 " + pj(val(T[u][1]), "과") + " " + val(T[u][2]) + "에 연산을 적용해 " + pj(val(u), "을") + " 반환한다." + (u === "r" ? " 루트를 마지막에 처리해 식 전체의 값 30을 얻는다." : "");
+    show(1, [["처리 순서", done.map(function (x) { return T[x][0]; }).join(" ") || "없음"], ["방금 처리한 노드", u ? T[u][0] : "없음"], ["반환한 값", u ? String(val(u)) : "없음"]], note);
+  }
+
+  var TOK = ["(", "3", "+", "(", "4", "×", "5", ")", ")"];
+  var BUILD = (function () {
+    var nodes = { n0: { key: null, left: null, right: null } }, cnt = 1, stack = ["n0"], cur = "n0", out = [{ nodes: JSON.parse(JSON.stringify(nodes)), stack: stack.slice(), cur: cur, act: "빈 루트를 만들고 스택에 push" }];
+    TOK.forEach(function (t) {
+      var act;
+      if (t === "(") { var id = "n" + cnt++; nodes[id] = { key: null, left: null, right: null }; nodes[cur].left = id; stack.push(cur); cur = id; act = "왼쪽 자식 노드를 만들고 현재 노드를 push한 뒤 내려감"; }
+      else if (/[0-9]/.test(t)) { nodes[cur].key = t; cur = stack.pop(); act = "현재 노드에 " + pj(t, "을") + " 저장하고 pop한 부모 노드로 돌아감"; }
+      else if (t === ")") { cur = stack.pop(); act = "pop한 부모 노드로 돌아감"; }
+      else { nodes[cur].key = t; var id2 = "n" + cnt++; nodes[id2] = { key: null, left: null, right: null }; nodes[cur].right = id2; stack.push(cur); cur = id2; act = "현재 노드에 " + pj(t, "을") + " 저장하고 오른쪽 자식 노드를 만든 뒤 push하고 내려감"; }
+      out.push({ nodes: JSON.parse(JSON.stringify(nodes)), stack: stack.slice(), cur: cur, act: act });
+    });
+    return out;
+  }());
+  function placeTree(nodes) {
+    var pos = {};
+    (function lay(id, x, y, span) { if (!id) return; pos[id] = [x, y]; lay(nodes[id].left, x - span, y + 85, span / 2); lay(nodes[id].right, x + span, y + 85, span / 2); }("n0", 360, 110, 170));
+    return pos;
+  }
+  function renderBuild() {
+    var k = Number($("bt").value), s = BUILD[k], svg = $("bt-plot"), h = head(svg), pos = placeTree(s.nodes);
+    $("bt-out").textContent = k;
+    TOK.forEach(function (t, i) { var x = 40 + i * 58; h += '<g class="tok' + (i < k ? (i === k - 1 ? " is-now" : " is-read") : "") + '"><rect x="' + x + '" y="12" width="48" height="44" rx="5"/><text x="' + (x + 24) + '" y="34">' + t + "</text></g>"; });
+    Object.keys(pos).forEach(function (id) { var n = s.nodes[id]; [n.left, n.right].forEach(function (c) { if (c && pos[c]) h += '<line class="edge" x1="' + pos[id][0] + '" y1="' + (pos[id][1] + 23) + '" x2="' + pos[c][0] + '" y2="' + (pos[c][1] - 23) + '"/>'; }); });
+    Object.keys(pos).forEach(function (id) { var n = s.nodes[id], p = pos[id]; h += '<g class="node ' + (n.key === null ? "is-empty " : (/[0-9]/.test(n.key) ? "" : "is-op ")) + (id === s.cur ? "is-here" : "") + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="23"/><text x="' + p[0] + '" y="' + p[1] + '">' + (n.key || "") + "</text></g>"; });
+    h += '<text class="lbl" x="720" y="96">스택 (위가 맨 위)</text>';
+    var top = s.stack.slice().reverse();
+    top.forEach(function (id, i) { var y = 108 + i * 44, n = s.nodes[id]; h += '<g class="slot"><rect x="720" y="' + y + '" width="150" height="38" rx="4"/><text x="795" y="' + (y + 19) + '">' + (n.key ? n.key + " 노드" : "빈 노드") + (id === "n0" ? " (루트)" : "") + "</text></g>"; });
+    if (!top.length) h += '<text class="small" x="795" y="130" text-anchor="middle">비어 있음</text>';
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = (k ? "읽은 기호 " + TOK[k - 1] + ": " : "") + s.act + ", 스택 " + top.length + "개";
+    var note = k === 0 ? "빈 루트 노드 하나를 만들고 스택에 넣은 뒤 기호를 하나씩 읽는다. 스택은 내려갔다가 돌아올 부모 노드를 기억한다."
+      : k === 3 ? "(3 +까지 읽으면 +가 루트에 저장되고 3이 왼쪽 자식 노드에 놓인다. 오른쪽에 새로 만든 빈 노드가 다음 입력으로 채울 현재 위치다."
+      : k === 9 ? "마지막 )에서 스택이 비고 트리가 완성된다. +의 오른쪽 부분 트리가 곱셈 4 × 5 전체를 나타낸다."
+      : "읽은 기호 " + TOK[k - 1] + ": " + s.act + ". 스택에는 돌아갈 노드가 " + top.length + "개 남아 있다.";
+    show(2, [["읽은 기호", k ? TOK[k - 1] : "없음"], ["동작", s.act], ["스택 크기", String(top.length)]], note);
+  }
+
+  function printExp(u) { if (!u) return ""; var k = T[u][0] === "×" ? "*" : T[u][0] === "−" ? "-" : T[u][0]; return "(" + printExp(T[u][1]) + k + printExp(T[u][2]) + ")"; }
+  function inorder(u) { return T[u].length > 1 ? "(" + inorder(T[u][1]) + " " + T[u][0] + " " + inorder(T[u][2]) + ")" : T[u][0]; }
+  function renderMode() {
+    var mode = $("mode").value, text, order;
+    if (mode === "post") { order = POST.map(function (u) { return T[u][0]; }); text = order.join(" "); }
+    else if (mode === "pre") { order = pre("r", []).map(function (u) { return T[u][0]; }); text = order.join(" "); }
+    else if (mode === "exp") { text = printExp("r"); order = null; }
+    else { text = inorder("r"); order = null; }
+    $("out-line").textContent = text;
+    show(3, [["출력", text], ["첫 기호", order ? order[0] : "("], ["마지막 기호", order ? order[order.length - 1] : ")"]],
+      mode === "post" ? "후위 순회 출력 7 3 + 5 2 − ×에서 각 연산자는 두 피연산자 뒤에 온다. 왼쪽부터 읽으며 연산자를 만날 때 앞의 두 값에 적용하면 30이 되어, 앞 절의 계산 순서와 같다."
+        : mode === "exp" ? "강의의 print_exp는 빈 부분 트리에 빈 문자열을 돌려주므로 수 노드 7도 앞뒤 빈 문자열 사이에 끼워 (7)로 감싼다. 그래서 출력은 (((7)+(3))*((5)-(2)))가 되고, 괄호가 늘었을 뿐 왼쪽 식, 연산자, 오른쪽 식 순서와 계산 우선순위는 연산자에만 괄호를 붙인 출력과 같다."
+        : mode === "in" ? "중위 순회는 왼쪽 식, 연산자, 오른쪽 식 순서라 원래 식의 순서를 복원한다. 연산자 노드마다 괄호를 붙여야 ((7 + 3) × (5 − 2))의 계산 우선순위를 잃지 않는다."
+        : "전위 순회 출력 × + 7 3 − 5 2에서 각 연산자는 두 피연산자 앞에 온다. 루트 연산자가 가장 먼저 나오지만 그 순간에는 두 자식 노드의 값이 아직 없어 바로 계산할 수 없다.");
+  }
+
+  $("ev").addEventListener("input", renderEval); $("bt").addEventListener("input", renderBuild); $("mode").addEventListener("change", renderMode);
+  renderEval(); renderBuild(); renderMode();
+}());
+</script>
+</body>
+</html>
