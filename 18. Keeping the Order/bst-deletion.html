@@ -1,0 +1,201 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>BST Deletion | Data Structure | Pusan National University</title><meta name="description" content="Binary-search-tree deletion splices out a node with at most one child, or copies its successor's key before splicing out the successor when it has two children."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/18.%20Keeping%20the%20Order/bst-deletion.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="BST Deletion | Data Structure | Pusan National University"><meta property="og:description" content="Binary-search-tree deletion splices out a node with at most one child, or copies its successor's key before splicing out the successor when it has two children."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/18.%20Keeping%20the%20Order/bst-deletion.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .edge.is-on{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .edge.is-off{stroke:var(--line-300);stroke-dasharray:5 4}
+    .topic-plot .node circle{fill:var(--white);stroke:var(--line-300);stroke-width:2}
+    .topic-plot .node text{font-size:16px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-done circle{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:2.5}
+    .topic-plot .node.is-cur circle{fill:var(--pnu-green);stroke:var(--pnu-green-deep);stroke-width:3}
+    .topic-plot .node.is-cur text{fill:var(--white)}
+    .topic-plot .node.is-off circle{fill:var(--surface-050);stroke:var(--line-300);stroke-dasharray:4 4}
+    .topic-plot .node.is-off text{fill:var(--ink-600)}
+    .topic-plot .node.is-target circle{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .old{font-size:12px;fill:var(--ink-600);text-anchor:middle;text-decoration:line-through}
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .topic-plot .lbl{font-size:14px;font-weight:700;fill:var(--ink-700)}
+    .topic-plot .divider{stroke:var(--line-200);stroke-width:1.5}
+    .topic-table .is-now td{background:color-mix(in srgb,var(--pnu-green) 12%,var(--white));font-weight:700}
+    .topic-table td:last-child{text-align:left}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-bst-deletion">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Keeping the Order</span><span class="nav-tag is-current" aria-current="page">BST Deletion</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/18.%20Keeping%20the%20Order.pdf">Keeping the <span class="publication-lecture-tail">Order<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">BST Deletion</h1><hr class="accent-rule"><p class="page-subtitle">BST 삭제(delete)는 지울 노드를 찾은 뒤 그 노드의 자식 노드 수로 세 경우를 나눈다. 자식 노드가 없거나 하나면 splice(노드를 떼어내고 부모와 자식을 직접 잇기)로 끝나고, 둘이면 후계 노드(successor)의 키를 옮겨 적은 뒤 후계 노드를 splice한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>자식 노드 0개</strong><span>부모 노드의 참조를 None으로 비운다.</span></article><article class="summary-card"><strong>자식 노드 1개</strong><span>부모 노드가 하나뿐인 자식 노드를 직접 가리키게 한다. 참조 하나만 바꾸므로 O(1)이다.</span></article><article class="summary-card"><strong>자식 노드 2개</strong><span>오른쪽 부분 트리의 최솟값인 후계 노드의 키와 값을 옮겨 적고, 후계 노드를 앞의 두 경우로 지운다.</span></article><article class="summary-card"><strong>후계 노드의 자식</strong><span>후계 노드는 최솟값이라 왼쪽 자식 노드가 없으므로 자식 노드가 없거나 오른쪽 하나뿐이다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">지울 노드의 자식 노드 수가 삭제 절차를 정한다</h2><p class="lead">삭제 예를 고르고 진행한 단계를 옮기면 트리의 연결, 단계 기록, 중위 순회가 함께 바뀐다. 앞의 세 예는 강의의 20, 30, 50 삭제이고, 마지막 예는 일곱 노드 트리에서 루트가 아닌 30을 지운다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="ex1">삭제 예</label><select id="ex1"><option value="leaf">단말 노드 20 지우기</option><option value="one">자식 노드가 하나인 30 지우기</option><option value="two">자식 노드가 둘인 50 지우기</option><option value="two30">자식 노드가 둘인 30 지우기</option></select></div><div class="control-field"><label for="k1">진행한 단계 <output id="k1-out" class="control-value" for="k1">0</output></label><input id="k1" type="range" min="0" max="2" step="1" value="0"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="del-plot" class="topic-plot" viewBox="0 0 900 260" role="img" aria-labelledby="dl-title dl-desc"><title id="dl-title">BST 삭제 단계</title><desc id="dl-desc">삭제할 노드와 바뀐 연결</desc></svg><table id="del-table" class="topic-table" aria-label="삭제 단계 기록"></table></div><figcaption class="visual-caption">초록 원이 이번 단계에서 다루는 노드, 옅은 파란 원과 초록 선이 내려간 경로, 초록 테두리 원이 지울 노드다. 흐린 점선 원은 곧 떼어낼 원래 후계 노드이고, 초록 원 옆 줄 그은 수는 옮겨 적기 전의 키다. 아래 표는 단계마다 한 일이며 초록 행이 현재 단계다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">후계 노드와 선행 노드 가운데 어느 쪽을 올려도 순서가 유지된다</h2><p class="lead">자식 노드가 둘인 노드를 고르고 빈자리를 채울 노드를 바꾸면 찾아가는 경로, 옮겨 오는 키, 삭제 뒤 트리 모양이 바뀐다. 선행 노드(predecessor)는 왼쪽 부분 트리의 최댓값이다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="t2">지울 키</label><select id="t2"><option value="50">50</option><option value="30">30</option><option value="70">70</option></select></div><div class="control-field"><label for="m2">빈자리를 채울 노드</label><select id="m2"><option value="succ">후계 노드 (오른쪽 부분 트리의 최솟값)</option><option value="pred">선행 노드 (왼쪽 부분 트리의 최댓값)</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="rep-plot" class="topic-plot" viewBox="0 0 900 300" role="img" aria-labelledby="rp-title rp-desc"><title id="rp-title">후계 노드와 선행 노드</title><desc id="rp-desc">지우기 전 트리와 지운 뒤 트리</desc></svg></div><figcaption class="visual-caption">왼쪽은 지우기 전, 오른쪽은 지운 뒤다. 왼쪽에서 초록 테두리 원이 지울 노드, 옅은 파란 원과 초록 선이 빈자리를 채울 노드까지 내려간 경로, 초록 원이 그 노드다. 오른쪽에서 초록 원은 키가 바뀐 자리이고 초록 선은 splice로 새로 이은 참조다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../18. Keeping the Order/bst-insertion.html">이전 · BST Insertion</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../18. Keeping the Order/bst-height.html">다음 · BST Height</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s"]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+
+  // nested [key, left, right] -> nodes {id, key, left, right}; id = original key
+  function build(t) { return t ? { id: t[0], key: t[0], left: build(t[1]), right: build(t[2]) } : null; }
+  function clone(n) { return n ? { id: n.id, key: n.key, left: clone(n.left), right: clone(n.right) } : null; }
+  function inorder(n, f) { if (!n) return; inorder(n.left, f); f(n); inorder(n.right, f); }
+  function keysOf(n) { var a = []; inorder(n, function (m) { a.push(m.key); }); return a; }
+  function parentOf(root, id) { var p = null; (function go(n) { if (!n) return; if ((n.left && n.left.id === id) || (n.right && n.right.id === id)) p = n; go(n.left); go(n.right); }(root)); return p; }
+  function byId(root, id) { var r = null; (function go(n) { if (!n) return; if (n.id === id) r = n; go(n.left); go(n.right); }(root)); return r; }
+  function relink(root, id, child) { var p = parentOf(root, id); if (!p) return child; if (p.left && p.left.id === id) p.left = child; else p.right = child; return root; }
+  function paren(n) { return n ? (n.left || n.right ? n.key + "(" + (n.left ? paren(n.left) : ".") + ", " + (n.right ? paren(n.right) : ".") + ")" : String(n.key)) : "."; }
+
+  function deletion(t0, key, mode) {
+    var root = build(t0), steps = [{ root: clone(root), act: "시작", cur: null, path: [], moves: 0 }];
+    var path = [], n = root;
+    while (n && n.key !== key) { path.push(n.id); n = key < n.key ? n.left : n.right; }
+    path.push(n.id);
+    var target = n, kids = (n.left ? 1 : 0) + (n.right ? 1 : 0);
+    steps.push({ root: clone(root), act: "지울 노드 " + key + " 찾기", cur: n.id, path: path.slice(), moves: path.length, target: n.id });
+    if (kids === 0) {
+      var p = parentOf(root, n.id), r0 = relink(clone(root), n.id, null);
+      steps.push({ root: r0, act: p.key + "의 " + (p.left && p.left.id === n.id ? "왼쪽" : "오른쪽") + " 참조를 None으로 비우기", cur: null, path: [], linkFrom: null, moves: path.length });
+    } else if (kids === 1) {
+      var child = n.left || n.right, p1 = parentOf(root, n.id), r1 = clone(root);
+      r1 = relink(r1, n.id, byId(r1, child.id));
+      steps.push({ root: r1, act: pj(p1.key, "이") + " " + key + " 대신 " + pj(child.key, "을") + " 가리키게 잇기", cur: null, path: [], link: [p1.id, child.id], moves: path.length });
+    } else {
+      var rp = [], m = mode === "pred" ? n.left : n.right;
+      rp.push(m.id);
+      while (mode === "pred" ? m.right : m.left) { m = mode === "pred" ? m.right : m.left; rp.push(m.id); }
+      var rep = m, name = mode === "pred" ? "선행 노드" : "후계 노드";
+      steps.push({ root: clone(root), act: (mode === "pred" ? "왼쪽으로 한 번 간 뒤 오른쪽 끝까지 가서 " : "오른쪽으로 한 번 간 뒤 왼쪽 끝까지 가서 ") + name + " " + rep.key + " 찾기", cur: rep.id, path: rp, target: n.id, moves: path.length + rp.length });
+      var r2 = clone(root); byId(r2, n.id).key = rep.key;
+      steps.push({ root: r2, act: key + " 자리에 " + rep.key + "의 키와 값 옮겨 적기", cur: n.id, old: key, off: rep.id, moves: path.length + rp.length });
+      var r3 = clone(r2), repChild = mode === "pred" ? byId(r3, rep.id).left : byId(r3, rep.id).right, rpar = parentOf(r3, rep.id);
+      r3 = relink(r3, rep.id, repChild);
+      steps.push({ root: r3, act: "원래 " + name + " " + pj(rep.key, "을") + " splice" + (repChild ? "해 " + pj(rpar.key, "이") + " " + pj(repChild.key, "을") + " 가리키게 하기" : "해 " + rpar.key + "의 참조 비우기"), cur: n.id, link: repChild ? [rpar.id, repChild.id] : null, moves: path.length + rp.length, rep: rep, repChild: repChild });
+    }
+    return { steps: steps, kids: kids, target: target };
+  }
+
+  function draw(root, xs, x0, dx, y0, dy, st) {
+    var h = "", pos = {};
+    (function go(n, d) { if (!n) return; pos[n.id] = [x0 + xs[n.id] * dx, y0 + d * dy]; go(n.left, d + 1); go(n.right, d + 1); }(root, 0));
+    (function go(n) {
+      if (!n) return;
+      [n.left, n.right].forEach(function (c) {
+        if (!c) return;
+        var a = pos[n.id], b = pos[c.id], ddx = b[0] - a[0], ddy = b[1] - a[1], L = Math.sqrt(ddx * ddx + ddy * ddy), r = 20;
+        var on = (st.path && st.path.indexOf(c.id) >= 0 && (st.path.indexOf(n.id) >= 0 || n.id === st.target)) || (st.link && st.link[0] === n.id && st.link[1] === c.id);
+        h += '<line class="edge' + (on ? " is-on" : "") + '" x1="' + (a[0] + ddx * r / L).toFixed(1) + '" y1="' + (a[1] + ddy * r / L).toFixed(1) + '" x2="' + (b[0] - ddx * r / L).toFixed(1) + '" y2="' + (b[1] - ddy * r / L).toFixed(1) + '"/>';
+      });
+      go(n.left); go(n.right);
+    }(root));
+    (function go(n) {
+      if (!n) return;
+      var p = pos[n.id], cls = n.id === st.off ? "is-off" : n.id === st.cur ? "is-cur" : st.path && st.path.indexOf(n.id) >= 0 ? "is-done" : "";
+      if (n.id === st.target && n.id !== st.cur) cls += " is-target";
+      h += '<g class="node ' + cls + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="20"/><text x="' + p[0] + '" y="' + p[1] + '">' + n.key + "</text></g>";
+      if (st.old !== undefined && n.id === st.cur) h += '<text class="old" x="' + (p[0] + 32) + '" y="' + (p[1] - 16) + '">' + st.old + "</text>";
+      go(n.left); go(n.right);
+    }(root));
+    return h;
+  }
+  function xsOf(t) { var xs = {}, i = 0; inorder(build(t), function (n) { xs[n.id] = i++; }); return xs; }
+
+  var FULL = [50, [30, [20, null, null], [40, null, null]], [70, [60, null, null], [80, null, null]]];
+  var SMALL = [50, [30, [20, null, null], null], [70, null, null]];
+  var EX = { leaf: [FULL, 20], one: [SMALL, 30], two: [FULL, 50], two30: [FULL, 30] };
+  var CASE = ["자식 노드 없음 (경우 1)", "자식 노드 하나 (경우 2)", "자식 노드 둘 (경우 3)"];
+
+  function renderDel() {
+    var ex = EX[$("ex1").value], res = deletion(ex[0], ex[1], "succ"), steps = res.steps, k1 = $("k1");
+    k1.max = String(steps.length - 1);
+    if (Number(k1.value) > steps.length - 1) k1.value = String(steps.length - 1);
+    var k = Number(k1.value), st = steps[k], svg = $("del-plot"), h = head(svg), xs = xsOf(ex[0]);
+    $("k1-out").textContent = k;
+    h += draw(st.root, xs, 150 + (7 - Object.keys(xs).length) * 50, 100, 45, 95, st);
+    svg.innerHTML = h;
+    var ino = keysOf(st.root), done = k === steps.length - 1;
+    svg.querySelector("desc").textContent = st.act + ", 트리 " + paren(st.root);
+    $("del-table").innerHTML = '<thead><tr><th scope="col">단계</th><th scope="col">한 일</th></tr></thead><tbody>' + steps.map(function (s, i) { return '<tr class="' + (i === k ? "is-now" : "") + '"><td>' + i + "</td><td>" + (i <= k ? s.act : "") + "</td></tr>"; }).join("") + "</tbody>";
+    var key = ex[1], note;
+    if (k === 0) note = pj(key, "을") + " 지운다. 트리는 " + paren(st.root) + "이고 중위 순회는 " + keysOf(st.root).join(", ") + "이다.";
+    else if (k === 1) note = "루트에서 탐색해 " + pj(key, "을") + " 찾았다. " + pj(key, "은") + " 자식 노드가 " + ["없어 경우 1이다.", "하나여서 경우 2다.", "둘이어서 경우 3이다. 두 자식 노드 가운데 하나를 올리면 다른 쪽 부분 트리가 갈 곳을 잃으므로 노드 대신 키 하나를 가져온다."][res.kids];
+    else if (res.kids === 0) note = "단말 노드는 아래에 매달린 것이 없으므로 부모 노드의 참조만 비우면 끝난다. 나머지 노드는 하나도 움직이지 않았고 중위 순회는 " + ino.join(", ") + "이다.";
+    else if (res.kids === 1) note = "하나뿐인 자식 노드 20을 30 자리로 끌어올렸다. 20은 원래 50의 왼쪽 부분 트리 안에 있었으므로 50보다 작다는 관계가 그대로다. 트리는 " + paren(st.root) + "이고 중위 순회는 " + ino.join(", ") + "이다.";
+    else if (k === 2) note = key + "의 오른쪽 자식 노드에서 왼쪽 끝까지 내려가 후계 노드 " + pj(steps[2].cur, "을") + " 찾았다. " + key + "의 오른쪽 부분 트리에서 가장 작은 키이므로 왼쪽 부분 트리의 모든 키보다 크고 오른쪽 부분 트리의 나머지 키보다 작다.";
+    else if (k === 3) note = "노드는 옮기지 않고 키와 값만 옮겨 적었다. 지금은 같은 키 " + pj(steps[2].cur, "이") + " 두 곳에 있으므로 원래 후계 노드를 지워야 한다.";
+    else note = "후계 노드 " + pj(st.rep.key, "은") + " " + (st.repChild ? "왼쪽 자식 노드 없이 오른쪽 자식 노드만 있어 경우 2로" : "자식 노드가 없어 경우 1로") + " 지웠다. 결과 트리 " + paren(st.root) + "의 중위 순회 " + ino.join(", ") + "에서 " + key + " 하나만 빠졌고 나머지 순서는 그대로다.";
+    show(1, [["경우", CASE[res.kids]], ["내려간 노드 수", st.moves + "개"], ["노드 수", ino.length + "개"], ["중위 순회", ino.join(", ")]], note);
+  }
+
+  var BIG = [50, [30, [20, null, null], [40, [35, null, null], [45, null, null]]], [70, [60, null, [65, null, null]], [80, null, null]]];
+  function renderRep() {
+    var key = Number($("t2").value), mode = $("m2").value, res = deletion(BIG, key, mode), steps = res.steps, svg = $("rep-plot"), h = head(svg), xs = xsOf(BIG);
+    var find = steps[2], last = steps[steps.length - 1];
+    h += '<text class="lbl" x="20" y="24">지우기 전</text><text class="lbl" x="470" y="24">지운 뒤</text><line class="divider" x1="450" y1="10" x2="450" y2="290"/>';
+    h += draw(steps[0].root, xs, 32, 42, 60, 70, { path: find.path, cur: find.cur, target: res.target.id });
+    h += draw(last.root, xs, 482, 42, 60, 70, { cur: last.cur, link: last.link });
+    svg.innerHTML = h;
+    var rep = last.rep, name = mode === "pred" ? "선행 노드" : "후계 노드", ino = keysOf(last.root);
+    var routeKeys = find.path.map(function (id) { return id; });
+    svg.querySelector("desc").textContent = key + " 삭제, " + name + " " + rep.key + ", 결과 " + paren(last.root);
+    var childTxt = last.repChild ? (mode === "pred" ? "왼쪽 자식 노드 " : "오른쪽 자식 노드 ") + last.repChild.key + " 하나" : "없음";
+    var side = mode === "pred" ? "왼쪽" : "오른쪽", other = mode === "pred" ? "오른쪽" : "왼쪽";
+    var note = (routeKeys.length === 1 ? key + "의 " + side + " 자식 노드 " + pj(rep.key, "이") + " " + other + " 자식 노드가 없어 그대로 " + name + "다. " : name + " " + pj(rep.key, "은") + " " + key + "에서 " + side + "으로 한 번 간 뒤 " + other + " 끝까지 내려가 " + routeKeys.join(" → ") + " 경로 끝에서 찾았다. ") +
+      (routeKeys.length === 1 ? "" : (mode === "pred" ? "최댓값이라 오른쪽 자식 노드가 없고, " : "최솟값이라 왼쪽 자식 노드가 없고, ")) + (last.repChild ? "남은 자식 노드 " + pj(last.repChild.key, "을") + " 부모에 이어 splice했다. " : "단말 노드여서 부모의 참조만 비웠다. ") +
+      "삭제 뒤 중위 순회 " + pj(ino.join(", "), "은") + " " + key + "만 빠진 오름차순이다.";
+    show(2, [[name, String(rep.key)], ["찾아간 경로", key + " → " + routeKeys.join(" → ")], [name + "의 자식 노드", childTxt], ["삭제 뒤 중위 순회", ino.join(", ")]], note);
+  }
+
+  $("ex1").addEventListener("change", renderDel); $("k1").addEventListener("input", renderDel);
+  $("t2").addEventListener("change", renderRep); $("m2").addEventListener("change", renderRep);
+  renderDel(); renderRep();
+}());
+</script>
+</body>
+</html>

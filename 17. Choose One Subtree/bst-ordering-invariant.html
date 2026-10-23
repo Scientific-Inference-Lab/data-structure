@@ -1,0 +1,223 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>BST Ordering Invariant | Data Structure | Pusan National University</title><meta name="description" content="A binary search tree requires every key in a node's left subtree to be smaller and every key in its right subtree to be larger than the node's key."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/17.%20Choose%20One%20Subtree/bst-ordering-invariant.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="BST Ordering Invariant | Data Structure | Pusan National University"><meta property="og:description" content="A binary search tree requires every key in a node's left subtree to be smaller and every key in its right subtree to be larger than the node's key."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/17.%20Choose%20One%20Subtree/bst-ordering-invariant.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .edge.is-on{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .node circle{fill:var(--white);stroke:var(--line-300);stroke-width:2}
+    .topic-plot .node text{font-size:17px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-done circle{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:2.5}
+    .topic-plot .node.is-cur circle{fill:var(--pnu-green);stroke:var(--pnu-green-deep);stroke-width:3}
+    .topic-plot .node.is-cur text{fill:var(--white)}
+    .topic-plot .node.is-bad circle{fill:var(--alert-050);stroke:var(--alert-700);stroke-width:3}
+    .topic-plot .node.is-bad text{fill:var(--alert-700)}
+    .topic-plot .node.is-skip circle{stroke-dasharray:4 4}
+    .topic-plot .node.is-skip text{fill:var(--ink-600)}
+    .topic-plot .sub{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:1.5;stroke-dasharray:6 4}
+    .topic-plot .rng{font-size:13px;font-weight:700;fill:var(--pnu-blue-dark);text-anchor:middle;paint-order:stroke;stroke:var(--white);stroke-width:5px}
+    .topic-plot .rng.is-bad{fill:var(--alert-700)}
+    .topic-plot .ord{font-size:13px;font-weight:700;fill:var(--pnu-blue-dark);text-anchor:middle;paint-order:stroke;stroke:var(--white);stroke-width:4px}
+    .topic-plot .axis{stroke:var(--ink-600);stroke-width:1.5}
+    .topic-plot .band{fill:color-mix(in srgb,var(--pnu-green) 22%,var(--white));stroke:var(--pnu-green);stroke-width:1.5}
+    .topic-plot .tick{font-size:12px;fill:var(--ink-600);text-anchor:middle}
+    .topic-plot .mark{fill:var(--pnu-blue);stroke:var(--white);stroke-width:2}
+    .topic-plot .mark.is-bad{fill:var(--alert-700)}
+    .topic-plot .slot rect{fill:var(--white);stroke:var(--line-300);stroke-width:1.5}
+    .topic-plot .slot.is-fill rect{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue)}
+    .topic-plot .slot.is-bad rect{fill:var(--alert-050);stroke:var(--alert-700);stroke-width:2.5}
+    .topic-plot .slot text{font-size:16px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .topic-plot .lbl{font-size:14px;fill:var(--ink-700)}
+    .topic-plot .lbl.is-bad{fill:var(--alert-700);font-weight:700}
+    .code-lines{font-family:var(--mono);font-size:14px;line-height:1.7;margin:0;padding:10px 14px;background:var(--surface-050);border:1px solid var(--line-200);border-radius:8px;white-space:pre}
+    .code-lines .is-hot{background:var(--pnu-green-tint);outline:2px solid var(--pnu-green);border-radius:3px}
+    .code-lines .is-bad{background:var(--alert-050);outline:2px solid var(--alert-700);border-radius:3px}
+    .trav-grid{display:grid;grid-template-columns:minmax(0,1fr) max-content;gap:12px;align-items:start;min-width:860px;padding:8px}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-bst-ordering-invariant">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Choose One Subtree</span><span class="nav-tag is-current" aria-current="page">BST Ordering Invariant</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/17.%20Choose%20One%20Subtree.pdf">Choose One <span class="publication-lecture-tail">Subtree<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">BST Ordering Invariant</h1><hr class="accent-rule"><p class="page-subtitle">이진 탐색 트리(binary search tree, BST)는 ordering invariant(모든 노드가 지키는 키 순서 조건)를 지키는 이진트리다. 어느 노드 u에서든 왼쪽 부분 트리(subtree)의 모든 키는 u.key보다 작고 오른쪽 부분 트리의 모든 키는 u.key보다 크다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>부분 트리 전체</strong><span>조건은 부모와 자식 한 쌍이 아니라 그 노드 아래의 모든 키에 걸린다.</span></article><article class="summary-card"><strong>허용 범위</strong><span>루트에서 내려오며 지나온 노드들이 하한과 상한을 하나씩 좁힌다.</span></article><article class="summary-card"><strong>중복 키</strong><span>이 강의의 Map 방식은 같은 키를 다시 넣으면 기존 값을 갱신하므로 트리에 같은 키가 두 번 나오지 않는다.</span></article><article class="summary-card"><strong>중위 순회(inorder traversal)</strong><span>ordering invariant를 지키는 트리를 중위 순회로 읽으면 키가 오름차순으로 나온다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">부모보다 크기만 하면 되는 것이 아니라 조상 모두와의 대소가 맞아야 한다</h2><p class="lead">3의 오른쪽 자식 노드 자리에 넣을 키를 바꾸면 부모 3과의 비교, 루트 8과의 비교, 그리고 그 자리에 허용되는 범위 안에 있는지가 함께 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="x">3의 오른쪽 자식 노드 키 <output id="x-out" class="control-value" for="x">10</output></label><input id="x" type="range" min="0" max="15" step="1" value="10"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="slot-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="sl-title sl-desc"><title id="sl-title">한 자리에 허용되는 키 범위</title><desc id="sl-desc">루트 8, 왼쪽 자식 3, 3의 오른쪽 자식 자리의 키와 허용 범위</desc></svg></div><figcaption class="visual-caption">점선 영역은 루트 8의 왼쪽 부분 트리다. 초록 원이 바꾸는 자리이고, 빨간 원은 ordering invariant를 어긴 키다. 아래 수직선의 초록 띠는 그 자리에 올 수 있는 열린 범위이고 점이 현재 키다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">is_bst는 허용 범위를 내려보내며 노드마다 한 번씩 검사한다</h2><p class="lead">트리를 고르고 호출 수를 옮기면 지금 검사하는 노드, 그 노드가 받은 (low, high) 범위, 코드에서 실행 중인 줄이 바뀐다. 두 트리 모두 부모와 자식 한 쌍씩만 보면 대소가 맞다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="tree2">트리</label><select id="tree2"><option value="A">3의 자식 노드가 1과 6인 트리</option><option value="B">3의 자식 노드가 1과 10인 트리</option></select></div><div class="control-field"><label for="k2">검사한 노드 수 <output id="k2-out" class="control-value" for="k2">0</output></label><input id="k2" type="range" min="0" max="6" step="1" value="0"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="trav-grid"><svg id="chk-plot" class="topic-plot" viewBox="0 0 520 320" role="img" aria-labelledby="ck-title ck-desc"><title id="ck-title">is_bst의 범위 검사</title><desc id="ck-desc">노드마다 받은 허용 범위와 판정</desc></svg><pre id="chk-code" class="code-lines" aria-label="is_bst 함수"></pre></div></div><figcaption class="visual-caption">초록 원이 지금 검사하는 노드, 옅은 파란 원이 통과한 노드, 빨간 원이 범위를 벗어난 노드, 점선 원이 검사하지 않은 노드다. 원 아래 괄호가 그 노드가 받은 (low, high)이고 원 위 수가 검사 순서다. 코드의 초록 줄은 방금 실행한 판정, 빨간 줄은 False를 돌려준 줄이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">ordering invariant를 지키면 중위 순회의 출력이 오름차순이 된다</h2><p class="lead">같은 두 트리를 중위 순회로 읽는다. 출력한 키 수를 옮기면 방문 순서와 출력 칸이 늘어나고, 앞 키보다 작은 키가 나오는 곳이 드러난다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="tree3">트리</label><select id="tree3"><option value="A">3의 자식 노드가 1과 6인 트리</option><option value="B">3의 자식 노드가 1과 10인 트리</option></select></div><div class="control-field"><label for="k3">출력한 키 수 <output id="k3-out" class="control-value" for="k3">6</output></label><input id="k3" type="range" min="0" max="6" step="1" value="6"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="in-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="in-title in-desc"><title id="in-title">중위 순회의 출력</title><desc id="in-desc">방문 순서와 출력한 키</desc></svg></div><figcaption class="visual-caption">원 위 수가 중위 순회의 방문 순서이고 초록 원이 마지막으로 출력한 노드다. 아래 칸은 왼쪽부터 출력 순서이며 빨간 칸은 바로 앞 키보다 작은 키다.</figcaption></figure>
+      <div id="read-3" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-3" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../16. When Do We Visit the Root/parse-trees.html">이전 · Parse Trees</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../17. Choose One Subtree/bst-search.html">다음 · BST Search</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s"]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+  function inf(v) { return v === -Infinity ? "−∞" : v === Infinity ? "∞" : String(v); }
+
+  // tree = [key, left, right]; layout by inorder index and depth
+  function layout(t, x0, dx, y0, dy) {
+    var out = [], idx = 0;
+    (function walk(n, d, parent) { if (!n) return; var me = { key: n[0], d: d, parent: parent, node: n }; walk(n[1], d + 1, me); me.x = x0 + idx * dx; me.y = y0 + d * dy; idx++; out.push(me); walk(n[2], d + 1, me); }(t, 0, null));
+    return out;
+  }
+  function edgeSvg(a, b, cls) { var dx = b.x - a.x, dy = b.y - a.y, L = Math.sqrt(dx * dx + dy * dy), r = 21; return '<line class="edge' + (cls ? " " + cls : "") + '" x1="' + (a.x + dx * r / L).toFixed(1) + '" y1="' + (a.y + dy * r / L).toFixed(1) + '" x2="' + (b.x - dx * r / L).toFixed(1) + '" y2="' + (b.y - dy * r / L).toFixed(1) + '"/>'; }
+  function nodeSvg(p, cls, label) { return '<g class="node ' + (cls || "") + '"><circle cx="' + p.x + '" cy="' + p.y + '" r="21"/><text x="' + p.x + '" y="' + p.y + '">' + (label === undefined ? p.key : label) + "</text></g>"; }
+  function edges(pts) { return pts.map(function (p) { return p.parent ? edgeSvg(p.parent, p) : ""; }).join(""); }
+
+  var TREES = {
+    A: [8, [3, [1, null, null], [6, null, null]], [10, null, [14, null, null]]],
+    B: [8, [3, [1, null, null], [10, null, null]], [12, null, [14, null, null]]]
+  };
+
+  // Section 1
+  function renderSlot() {
+    var x = Number($("x").value), svg = $("slot-plot"), h = head(svg);
+    $("x-out").textContent = x;
+    var tree = [8, [3, [1, null, null], ["X", null, null]], [12, null, [14, null, null]]];
+    var pts = layout(tree, 150, 130, 50, 85), byKey = {};
+    pts.forEach(function (p) { byKey[p.key] = p; });
+    var dup = x === 3 || x === 8, parentOk = x > 3, rootOk = x < 8, ok = parentOk && rootOk;
+    h += '<rect class="sub" x="100" y="100" width="420" height="160" rx="14"/><text class="small" x="112" y="120">8의 왼쪽 부분 트리</text>';
+    h += edges(pts);
+    pts.forEach(function (p) { h += p.key === "X" ? nodeSvg(p, ok ? "is-cur" : "is-bad", x) : nodeSvg(p, ""); });
+    var X = byKey.X;
+    h += '<text class="lbl' + (parentOk ? "" : " is-bad") + '" x="' + (X.x + 34) + '" y="' + (X.y - 4) + '">' + (parentOk ? "3 < " + x : x + (x === 3 ? " = 3" : " < 3")) + "</text>";
+    h += '<text class="lbl' + (rootOk ? "" : " is-bad") + '" x="' + (X.x + 34) + '" y="' + (X.y + 16) + '">' + (rootOk ? x + " < 8" : (x === 8 ? "8 = 8" : "8 < " + x)) + "</text>";
+    var ax = function (v) { return 90 + v * 48; }, ly = 320;
+    h += '<rect class="band" x="' + ax(3) + '" y="' + (ly - 12) + '" width="' + (ax(8) - ax(3)) + '" height="24" rx="4"/>';
+    h += '<line class="axis" x1="' + ax(0) + '" y1="' + ly + '" x2="' + ax(15) + '" y2="' + ly + '"/>';
+    for (var v = 0; v <= 15; v++) h += '<text class="tick" x="' + ax(v) + '" y="' + (ly + 34) + '">' + v + "</text>";
+    h += '<text class="small" x="' + ((ax(3) + ax(8)) / 2) + '" y="' + (ly - 20) + '" text-anchor="middle">허용 범위 (3, 8)</text>';
+    h += '<circle class="mark' + (ok ? "" : " is-bad") + '" cx="' + ax(x) + '" cy="' + ly + '" r="9"/>';
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = "3의 오른쪽 자식 노드 키 " + x + ", 허용 범위 3보다 크고 8보다 작음, " + (ok ? "ordering invariant를 지킴" : "ordering invariant를 어김");
+    var note;
+    if (ok) note = pj(x, "은") + " 3의 오른쪽에 있으므로 3보다 크고, 8의 왼쪽 부분 트리 안에 있으므로 8보다 작다. 이 자리의 허용 범위 (3, 8) 안에 있어 모든 조상과의 대소가 맞는다.";
+    else if (dup) note = pj(x, "은") + " 트리에 이미 있는 키다. ordering invariant는 작다와 크다만 허용하므로 같은 키는 이 자리에 올 수 없고, 같은 키를 다시 넣으면 기존 노드의 값을 갱신한다.";
+    else if (parentOk) note = pj(x, "은") + " 부모 3보다 커서 부모와의 비교만 보면 맞다. 그러나 이 자리는 루트 8의 왼쪽 부분 트리 안이므로 " + pj(x, "이") + " 8보다 커서 ordering invariant를 어긴다. 조건은 부분 트리 전체에 걸린다.";
+    else note = pj(x, "은") + " 3의 오른쪽 자리에 있는데 3보다 작아 부모와의 비교에서 이미 어긋난다. 허용 범위 (3, 8)의 하한은 3이 정한다.";
+    show(1, [["부모 3과 비교", parentOk ? "3 < " + x + " 맞음" : "어긋남"], ["루트 8과 비교", rootOk ? x + " < 8 맞음" : "어긋남"], ["허용 범위", "3 < 키 < 8"], ["BST 여부", ok ? "BST다" : "BST가 아니다"]], note);
+  }
+
+  // Section 2
+  var CODE = ["def is_bst(node, low, high):", "    if node is None:", "        return True", "    if not (low < node.key < high):", "        return False", "    return (is_bst(node.left, low, node.key)", "            and is_bst(node.right, node.key, high))"];
+  function checks(t) {
+    var out = [], stop = false;
+    (function go(n, lo, hi) { if (!n || stop) return true; var ok = lo < n[0] && n[0] < hi; out.push({ key: n[0], lo: lo, hi: hi, ok: ok, leaf: !n[1] && !n[2] }); if (!ok) { stop = true; return false; } return go(n[1], lo, n[0]) && go(n[2], n[0], hi); }(t, -Infinity, Infinity));
+    return out;
+  }
+  function pairsOk(t) { var ok = true; (function go(n) { if (!n) return; if (n[1] && !(n[1][0] < n[0])) ok = false; if (n[2] && !(n[2][0] > n[0])) ok = false; go(n[1]); go(n[2]); }(t)); return ok; }
+  function renderCheck() {
+    var name = $("tree2").value, t = TREES[name], steps = checks(t), k2 = $("k2");
+    k2.max = String(steps.length);
+    if (Number(k2.value) > steps.length) k2.value = String(steps.length);
+    var k = Number(k2.value), svg = $("chk-plot"), h = head(svg), pts = layout(t, 50, 84, 50, 110), cur = k ? steps[k - 1] : null;
+    $("k2-out").textContent = k;
+    h += edges(pts);
+    pts.forEach(function (p) {
+      var i = -1; steps.forEach(function (s, j) { if (s.key === p.key && j < k) i = j; });
+      var done = k === steps.length, cls = i < 0 ? (done ? "is-skip" : "") : !steps[i].ok ? "is-bad" : i === k - 1 ? "is-cur" : "is-done";
+      h += nodeSvg(p, cls);
+      if (i >= 0) { h += '<text class="ord" x="' + (p.x + 24) + '" y="' + (p.y - 22) + '">' + (i + 1) + "</text>"; h += '<text class="rng' + (steps[i].ok ? "" : " is-bad") + '" x="' + p.x + '" y="' + (p.y + 40) + '">(' + inf(steps[i].lo) + ", " + inf(steps[i].hi) + ")</text>"; }
+    });
+    svg.innerHTML = h;
+    var hot = !cur ? -1 : cur.ok ? 3 : 4;
+    $("chk-code").innerHTML = CODE.map(function (line, i) { return '<span class="' + (i === hot ? (cur.ok ? "is-hot" : "is-bad") : "") + '">' + line + "</span>"; }).join("\n");
+    var result = steps[steps.length - 1].ok ? "True" : "False";
+    svg.querySelector("desc").textContent = cur ? "노드 " + cur.key + " 검사, 범위 (" + inf(cur.lo) + ", " + inf(cur.hi) + "), " + (cur.ok ? "통과" : "실패") : "검사 전";
+    var note;
+    if (!cur) note = "is_bst(root, float(\"-inf\"), float(\"inf\"))로 시작한다. 루트는 어떤 키든 받을 수 있고, 왼쪽으로 내려갈 때는 상한을, 오른쪽으로 내려갈 때는 하한을 현재 키로 좁힌다.";
+    else if (!cur.ok) note = pj(cur.key, "은") + " 부모 3보다 커서 부모와 자식 한 쌍의 대소는 맞지만, 루트 8의 왼쪽과 3의 오른쪽을 거쳐 받은 범위 (3, 8)을 벗어난다. 여기서 False를 돌려주고 and 뒤의 오른쪽 부분 트리는 검사하지 않는다.";
+    else if (k === steps.length) note = "여섯 노드가 모두 받은 범위 안에 있어 True다. 각 노드의 범위는 루트에서 그 노드까지 지나온 조상들이 정한 가장 좁은 하한과 상한이다.";
+    else if (cur.leaf) note = pj(cur.key, "은") + " 범위 (" + inf(cur.lo) + ", " + inf(cur.hi) + ") 안에 있어 통과한다. 자식 노드가 없으므로 두 재귀 호출은 node is None에서 곧바로 True를 돌려준다.";
+    else note = pj(cur.key, "은") + " 범위 (" + inf(cur.lo) + ", " + inf(cur.hi) + ") 안에 있어 통과한다. 이제 왼쪽 자식 노드에는 (" + inf(cur.lo) + ", " + cur.key + "), 오른쪽 자식 노드에는 " + pj("(" + cur.key + ", " + inf(cur.hi) + ")", "을") + " 넘긴다.";
+    show(2, [["검사 순서", steps.slice(0, k).map(function (s) { return s.key; }).join(", ") || "없음"], ["현재 범위", cur ? "(" + inf(cur.lo) + ", " + inf(cur.hi) + ")" : "없음"], ["is_bst 결과", k === steps.length ? result : "진행 중"], ["부모와 자식 쌍만 볼 때", pairsOk(t) ? "모두 맞음" : "어긋남 있음"]], note);
+  }
+
+  // Section 3
+  function renderInorder() {
+    var name = $("tree3").value, t = TREES[name], k = Number($("k3").value), svg = $("in-plot"), h = head(svg), pts = layout(t, 150, 120, 50, 90);
+    $("k3-out").textContent = k;
+    var seq = pts.map(function (p) { return p.key; });
+    h += edges(pts);
+    pts.forEach(function (p, i) { h += nodeSvg(p, i < k ? (i === k - 1 ? "is-cur" : "is-done") : ""); if (i < k) h += '<text class="ord" x="' + (p.x + 24) + '" y="' + (p.y - 22) + '">' + (i + 1) + "</text>"; });
+    var drops = [];
+    for (var i = 0; i < 6; i++) {
+      var bad = i > 0 && i < k && seq[i] < seq[i - 1], xx = 150 + i * 110;
+      if (bad) drops.push(seq[i - 1] + " 뒤 " + seq[i]);
+      h += '<g class="slot' + (i < k ? (bad ? " is-bad" : " is-fill") : "") + '"><rect x="' + (xx - 40) + '" y="300" width="80" height="44" rx="5"/><text x="' + xx + '" y="322">' + (i < k ? seq[i] : "") + "</text></g>";
+    }
+    h += '<text class="lbl" x="20" y="327">출력</text>';
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = "출력 " + (seq.slice(0, k).join(", ") || "없음");
+    var mn = [], mx = [];
+    for (var n = t; n; n = n[1]) mn.push(n[0]);
+    for (n = t; n; n = n[2]) mx.push(n[0]);
+    var note;
+    if (k < 6) note = k === 0 ? "중위 순회는 왼쪽 부분 트리, 현재 노드, 오른쪽 부분 트리 순서로 방문한다. 첫 출력은 왼쪽으로 끝까지 내려간 노드다." : "지금까지 " + pj(seq.slice(0, k).join(", "), "을") + " 출력했다." + (drops.length ? " " + pj(drops[0], "이") + " 나와 앞 키보다 작은 키가 생겼다." : " 아직 앞 키보다 작은 키는 없다.");
+    else if (name === "A") note = "출력 1, 3, 6, 8, 10, 14가 오름차순이다. 8의 왼쪽 부분 트리 출력 1, 3, 6은 모두 8보다 작고 오른쪽 부분 트리 출력 10, 14는 모두 크므로, 세 부분을 이으면 전체가 정렬된다.";
+    else note = "출력 1, 3, 10, 8, 12, 14에서 10 뒤에 8이 나온다. 8의 왼쪽 부분 트리 출력에 8보다 큰 10이 섞여 있기 때문이며, 중위 순회가 정렬되지 않으면 ordering invariant가 깨진 것이다.";
+    show(3, [["출력", seq.slice(0, k).join(", ") || "없음"], ["앞 키보다 작은 키", drops.length ? drops.join(", ") : "없음"], ["최솟값 경로", mn.join(" → ")], ["최댓값 경로", mx.join(" → ")]], note);
+  }
+
+  $("x").addEventListener("input", renderSlot);
+  $("tree2").addEventListener("change", renderCheck); $("k2").addEventListener("input", renderCheck);
+  $("tree3").addEventListener("change", renderInorder); $("k3").addEventListener("input", renderInorder);
+  renderSlot(); renderCheck(); renderInorder();
+}());
+</script>
+</body>
+</html>

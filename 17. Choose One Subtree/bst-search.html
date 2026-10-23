@@ -1,0 +1,243 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>BST Search | Data Structure | Pusan National University</title><meta name="description" content="Binary-search-tree search compares the target key with each visited node and follows one subtree, so its cost depends on the search path's length."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/17.%20Choose%20One%20Subtree/bst-search.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="BST Search | Data Structure | Pusan National University"><meta property="og:description" content="Binary-search-tree search compares the target key with each visited node and follows one subtree, so its cost depends on the search path's length."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/17.%20Choose%20One%20Subtree/bst-search.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .edge.is-on{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .edge.is-off{stroke:var(--line-200)}
+    .topic-plot .node circle{fill:var(--white);stroke:var(--line-300);stroke-width:2}
+    .topic-plot .node text{font-size:17px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-done circle{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:2.5}
+    .topic-plot .node.is-cur circle{fill:var(--pnu-green);stroke:var(--pnu-green-deep);stroke-width:3}
+    .topic-plot .node.is-cur text{fill:var(--white)}
+    .topic-plot .node.is-off circle{fill:var(--surface-050);stroke:var(--line-200);stroke-dasharray:4 4}
+    .topic-plot .node.is-off text{fill:var(--ink-600);font-weight:400}
+    .topic-plot .none rect{fill:var(--alert-050);stroke:var(--alert-700);stroke-width:2.5;stroke-dasharray:6 3}
+    .topic-plot .none text{font-size:14px;font-weight:700;fill:var(--alert-700);text-anchor:middle;dominant-baseline:central}
+    .topic-plot .cmp{font-size:13px;font-weight:700;fill:var(--pnu-blue-dark);paint-order:stroke;stroke:var(--white);stroke-width:5px}
+    .topic-plot .bar{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:1.5}
+    .topic-plot .bar.is-on{fill:var(--pnu-green);stroke:var(--pnu-green-deep)}
+    .topic-plot .axis{stroke:var(--ink-600);stroke-width:1.2}
+    .topic-plot .grid{stroke:var(--line-200);stroke-width:1}
+    .topic-plot .tick{font-size:12px;fill:var(--ink-600);text-anchor:middle}
+    .topic-plot .val{font-size:13px;font-weight:700;fill:var(--ink-900);text-anchor:middle}
+    .topic-plot .frame rect{fill:var(--white);stroke:var(--pnu-blue);stroke-width:1.5}
+    .topic-plot .frame.is-top rect{fill:var(--pnu-green-tint);stroke:var(--pnu-green);stroke-width:3}
+    .topic-plot .frame.is-none rect{fill:var(--alert-050);stroke:var(--alert-700)}
+    .topic-plot .frame text{font-family:var(--mono);font-size:14px;dominant-baseline:central}
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .topic-plot .lbl{font-size:14px;fill:var(--ink-700)}
+    .code-lines{font-family:var(--mono);font-size:14px;line-height:1.7;margin:0;padding:10px 14px;background:var(--surface-050);border:1px solid var(--line-200);border-radius:8px;white-space:pre}
+    .code-lines .is-hot{background:var(--pnu-green-tint);outline:2px solid var(--pnu-green);border-radius:3px}
+    .pair-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;align-items:start;min-width:820px;padding:8px}
+    .pair-grid h3{margin:0 0 6px;font-size:15px}
+    .pair-grid .topic-plot{min-width:0;margin-top:8px}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-bst-search">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Choose One Subtree</span><span class="nav-tag is-current" aria-current="page">BST Search</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/17.%20Choose%20One%20Subtree.pdf">Choose One <span class="publication-lecture-tail">Subtree<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">BST Search</h1><hr class="accent-rule"><p class="page-subtitle">BST 탐색은 루트에서 시작해 찾는 키와 현재 노드의 키를 비교하고, 작으면 왼쪽, 크면 오른쪽 부분 트리로 내려간다. 이렇게 방문한 노드의 나열이 탐색 경로(search path)이며 탐색 비용은 이 경로의 길이다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>세 가지 비교 결과</strong><span>x &lt; u.key이면 왼쪽, x &gt; u.key이면 오른쪽 자식 노드로 가고, 같으면 현재 노드에서 성공한다.</span></article><article class="summary-card"><strong>버리는 부분 트리</strong><span>한 번 비교할 때마다 현재 노드와 반대쪽 부분 트리 전체를 더 보지 않는다.</span></article><article class="summary-card"><strong>실패 탐색</strong><span>가야 할 자식 노드 자리가 None이면 멈춘다. 마지막 노드와 그 빈 방향이 새 키가 들어갈 위치다.</span></article><article class="summary-card"><strong>O(높이)</strong><span>경로는 루트에서 아래로만 내려가므로 방문 노드 수는 높이 + 1을 넘지 않는다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">한 번 비교할 때마다 부분 트리 하나를 통째로 버린다</h2><p class="lead">찾는 키를 고르고 진행한 단계를 옮기면 현재 노드, 지나온 경로, 더 이상 볼 필요가 없어진 노드가 바뀐다. 트리는 8, 3, 12, 1, 6, 10, 14의 일곱 키를 가진 BST다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="key1">찾는 키 <output id="key1-out" class="control-value" for="key1">6</output></label><input id="key1" type="range" min="0" max="15" step="1" value="6"></div><div class="control-field"><label for="k1">진행한 단계 <output id="k1-out" class="control-value" for="k1">0</output></label><input id="k1" type="range" min="0" max="3" step="1" value="0"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="path-plot" class="topic-plot" viewBox="0 0 900 400" role="img" aria-labelledby="pa-title pa-desc"><title id="pa-title">BST의 탐색 경로</title><desc id="pa-desc">찾는 키의 비교 경로와 버린 노드</desc></svg></div><figcaption class="visual-caption">초록 원이 지금 비교하는 노드, 옅은 파란 원과 굵은 초록 선이 지나온 경로다. 흐린 점선 원은 앞선 비교로 더 볼 필요가 없어진 노드이고, 빨간 점선 상자는 가야 할 자식 노드 자리가 비어 있는 곳이다. 원 옆 글자는 그 노드에서의 비교 결과다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">같은 키를 담아도 트리 모양이 방문 노드 수를 정한다</h2><p class="lead">같은 일곱 키를 두 모양으로 연결했다. 모양과 찾는 키를 바꾸면 그 키까지의 경로와 키마다의 방문 노드 수 막대가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="shape">트리 모양</label><select id="shape"><option value="bal">루트가 8인 높이 2의 트리</option><option value="chain">루트가 1이고 오른쪽으로만 이어진 트리</option></select></div><div class="control-field"><label for="key2">찾는 키</label><select id="key2"><option value="1">1</option><option value="3">3</option><option value="6">6</option><option value="8">8</option><option value="10">10</option><option value="12">12</option><option value="14" selected>14</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="shape-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="sh-title sh-desc"><title id="sh-title">트리 모양과 방문 노드 수</title><desc id="sh-desc">왼쪽은 트리와 경로, 오른쪽은 키마다 성공할 때까지의 방문 노드 수</desc></svg></div><figcaption class="visual-caption">왼쪽은 트리이며 초록 선이 찾는 키까지의 경로다. 오른쪽 막대는 각 키를 찾을 때까지 비교한 노드 수이고 초록 막대가 지금 찾는 키다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">재귀 _get과 반복문 search는 같은 경로를 방문한다</h2><p class="lead">찾는 키와 진행한 단계를 바꾸면 왼쪽에서는 쌓인 _get 호출이, 오른쪽에서는 반복문의 node 변수가 바뀐다. 각 노드에 저장한 값은 "v" 뒤에 키를 붙인 문자열이다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="key3">찾는 키</label><select id="key3"><option value="6">6 (있는 키)</option><option value="11">11 (없는 키)</option><option value="8">8 (루트의 키)</option></select></div><div class="control-field"><label for="k3">진행한 단계 <output id="k3-out" class="control-value" for="k3">1</output></label><input id="k3" type="range" min="1" max="3" step="1" value="1"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><div class="pair-grid"><div><h3>재귀 보조 메서드</h3><pre id="rec-code" class="code-lines" aria-label="_get 메서드"></pre><svg id="stack-plot" class="topic-plot" viewBox="0 0 400 230" role="img" aria-labelledby="st-title st-desc"><title id="st-title">_get 호출 스택</title><desc id="st-desc">쌓인 _get 호출</desc></svg></div><div><h3>반복문</h3><pre id="loop-code" class="code-lines" aria-label="search 메서드"></pre><svg id="loop-plot" class="topic-plot" viewBox="0 0 400 230" role="img" aria-labelledby="lp-title lp-desc"><title id="lp-title">search의 node 변수</title><desc id="lp-desc">반복마다 바뀐 node 변수</desc></svg></div></div></div><figcaption class="visual-caption">코드의 초록 줄이 이번 단계에서 실행한 줄이다. 왼쪽 아래 상자는 아래에서 위로 쌓인 _get 호출이고 초록 상자가 맨 위 호출이다. 오른쪽 아래 칸은 node 변수가 가리킨 노드를 차례로 적은 것이며 빨간 상자는 None이다.</figcaption></figure>
+      <div id="read-3" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-3" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../17. Choose One Subtree/bst-ordering-invariant.html">이전 · BST Ordering Invariant</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../18. Keeping the Order/bst-insertion.html">다음 · BST Insertion</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s"]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+
+  function layout(t, x0, dx, y0, dy) {
+    var out = [], idx = 0;
+    (function walk(n, d, parent) { if (!n) return; var me = { key: n[0], d: d, parent: parent, node: n }; walk(n[1], d + 1, me); me.x = x0 + idx * dx; me.y = y0 + d * dy; idx++; out.push(me); walk(n[2], d + 1, me); }(t, 0, null));
+    return out;
+  }
+  function edgeSvg(a, b, cls) { var dx = b.x - a.x, dy = b.y - a.y, L = Math.sqrt(dx * dx + dy * dy), r = 21; return '<line class="edge' + (cls ? " " + cls : "") + '" x1="' + (a.x + dx * r / L).toFixed(1) + '" y1="' + (a.y + dy * r / L).toFixed(1) + '" x2="' + (b.x - dx * r / L).toFixed(1) + '" y2="' + (b.y - dy * r / L).toFixed(1) + '"/>'; }
+  function nodeSvg(p, cls) { return '<g class="node ' + (cls || "") + '"><circle cx="' + p.x + '" cy="' + p.y + '" r="21"/><text x="' + p.x + '" y="' + p.y + '">' + p.key + "</text></g>"; }
+  function subtreeKeys(n) { var s = []; (function go(m) { if (!m) return; s.push(m[0]); go(m[1]); go(m[2]); }(n)); return s; }
+  // path: list of {node, dir} ; last entry node may be null (failure)
+  function search(t, key) {
+    var path = [], n = t;
+    while (n) { var dir = key < n[0] ? "L" : key > n[0] ? "R" : "="; path.push({ n: n, dir: dir }); if (dir === "=") return { path: path, found: true }; n = dir === "L" ? n[1] : n[2]; }
+    path.push({ n: null, dir: null });
+    return { path: path, found: false };
+  }
+  var T = [8, [3, [1, null, null], [6, null, null]], [12, [10, null, null], [14, null, null]]];
+  var CHAIN = [1, null, [3, null, [6, null, [8, null, [10, null, [12, null, [14, null, null]]]]]]];
+
+  // Section 1
+  function renderPath() {
+    var key = Number($("key1").value), res = search(T, key), steps = res.path, k1 = $("k1");
+    $("key1-out").textContent = key;
+    k1.max = String(steps.length);
+    if (Number(k1.value) > steps.length) k1.value = String(steps.length);
+    var k = Number(k1.value), svg = $("path-plot"), h = head(svg), pts = layout(T, 150, 100, 50, 110), byKey = {};
+    $("k1-out").textContent = k;
+    pts.forEach(function (p) { byKey[p.key] = p; });
+    var alive = subtreeKeys(T), cur = k ? steps[k - 1] : null;
+    for (var i = 0; i < k; i++) {
+      var s = steps[i];
+      if (!s.n) break;
+      if (s.dir === "=") { alive = [s.n[0]]; }
+      else alive = subtreeKeys(s.dir === "L" ? s.n[1] : s.n[2]);
+    }
+    var onPath = steps.slice(0, k).filter(function (s) { return s.n; }).map(function (s) { return s.n[0]; });
+    pts.forEach(function (p) { if (p.parent) { var on = onPath.indexOf(p.key) >= 0 && onPath.indexOf(p.parent.key) >= 0; h += edgeSvg(p.parent, p, on ? "is-on" : alive.indexOf(p.key) < 0 && onPath.indexOf(p.key) < 0 ? "is-off" : ""); } });
+    pts.forEach(function (p) {
+      var isCur = cur && cur.n && cur.n[0] === p.key, cls = isCur ? "is-cur" : onPath.indexOf(p.key) >= 0 ? "is-done" : alive.indexOf(p.key) < 0 ? "is-off" : "";
+      h += nodeSvg(p, cls);
+    });
+    steps.slice(0, k).forEach(function (s, i) {
+      if (!s.n) return;
+      var p = byKey[s.n[0]], txt = s.dir === "=" ? key + " = " + s.n[0] + " 성공" : s.dir === "L" ? key + " < " + s.n[0] + " 왼쪽" : key + " > " + s.n[0] + " 오른쪽";
+      var leaf = p.d === 2, anc = !leaf ? "start" : s.dir === "R" ? "end" : s.dir === "L" ? "start" : "middle", lx = !leaf ? p.x + 26 : s.dir === "R" ? p.x + 8 : s.dir === "L" ? p.x - 8 : p.x;
+      h += '<text class="cmp" x="' + lx + '" y="' + (p.y + (leaf ? 44 : -22)) + '" text-anchor="' + anc + '">' + (i + 1) + ". " + txt + "</text>";
+    });
+    if (cur && !cur.n) {
+      var last = steps[k - 2], lp = byKey[last.n[0]], nx = lp.x + (last.dir === "L" ? -40 : 40), ny = lp.y + 80;
+      h += '<line class="edge is-on" x1="' + lp.x + '" y1="' + (lp.y + 21) + '" x2="' + nx + '" y2="' + (ny - 16) + '" stroke-dasharray="6 4"/>';
+      h += '<g class="none"><rect x="' + (nx - 30) + '" y="' + (ny - 16) + '" width="60" height="32" rx="5"/><text x="' + nx + '" y="' + ny + '">None</text></g>';
+    }
+    svg.innerHTML = h;
+    var nodesSeen = onPath.length, pathTxt = onPath.join(" → ") + (cur && !cur.n ? " → None" : "");
+    svg.querySelector("desc").textContent = "찾는 키 " + key + ", 경로 " + (pathTxt || "없음") + ", 남은 후보 " + alive.length + "개";
+    var note;
+    if (!cur) note = "루트 8에서 시작한다. 아직 비교하지 않았으므로 일곱 노드가 모두 후보다.";
+    else if (!cur.n) note = "마지막으로 비교한 " + steps[k - 2].n[0] + "의 " + (steps[k - 2].dir === "L" ? "왼쪽" : "오른쪽") + " 자식 노드 자리가 비어 있어 " + pj(key, "을") + " 찾지 못하고 멈춘다. " + nodesSeen + "개 노드를 보았고, " + pj(key, "을") + " 새로 넣는다면 바로 이 빈자리에 들어간다.";
+    else if (cur.dir === "=") note = pj(key, "과") + " 같은 키를 " + k + "개 노드를 보고 찾았다. 경로 " + pathTxt + " 밖의 " + (7 - nodesSeen) + "개 노드는 한 번도 보지 않았다.";
+    else if (!cur.n[1] && !cur.n[2]) note = pj(key, "이") + " " + cur.n[0] + "보다 " + (cur.dir === "L" ? "작으므로 왼쪽" : "크므로 오른쪽") + " 자식 노드 자리로 간다. " + pj(cur.n[0], "은") + " 단말 노드여서 그 자리가 비어 있고 남은 후보가 없다.";
+    else note = pj(key, "이") + " " + cur.n[0] + "보다 " + (cur.dir === "L" ? "작으므로 " + cur.n[0] + "의 오른쪽 부분 트리를" : "크므로 " + cur.n[0] + "의 왼쪽 부분 트리를") + " 버리고 " + (cur.dir === "L" ? "왼쪽" : "오른쪽") + "으로 내려간다. " + (alive.length ? "남은 후보는 " + alive.join(", ") + "이다." : "그쪽 자식 노드가 없어 남은 후보가 없다.");
+    show(1, [["경로", pathTxt || "없음"], ["비교한 노드 수", nodesSeen + "개"], ["남은 후보", alive.length && !(cur && !cur.n) ? alive.length + "개" : "0개"], ["결과", k === steps.length ? (res.found ? "성공" : "실패") : "진행 중"]], note);
+  }
+
+  // Section 2
+  var KEYS = [1, 3, 6, 8, 10, 12, 14];
+  function height(n) { return n ? 1 + Math.max(height(n[1]), height(n[2])) : -1; }
+  function renderShape() {
+    var shape = $("shape").value, key = Number($("key2").value), t = shape === "bal" ? T : CHAIN, svg = $("shape-plot"), h = head(svg);
+    var pts = shape === "bal" ? layout(t, 50, 60, 60, 110) : layout(t, 50, 60, 30, 50);
+    var path = search(t, key).path.map(function (s) { return s.n[0]; });
+    pts.forEach(function (p) { if (p.parent) h += edgeSvg(p.parent, p, path.indexOf(p.key) >= 0 && path.indexOf(p.parent.key) >= 0 ? "is-on" : ""); });
+    pts.forEach(function (p) { h += nodeSvg(p, p.key === key ? "is-cur" : path.indexOf(p.key) >= 0 ? "is-done" : ""); });
+    var counts = KEYS.map(function (x) { return search(t, x).path.length; });
+    var bx = 480, by = 330, bw = 50, sc = 40;
+    for (var g = 0; g <= 7; g++) { h += '<line class="grid" x1="' + (bx - 10) + '" y1="' + (by - g * sc) + '" x2="' + (bx + 7 * bw + 20) + '" y2="' + (by - g * sc) + '"/><text class="tick" x="' + (bx - 24) + '" y="' + (by - g * sc + 4) + '">' + g + "</text>"; }
+    KEYS.forEach(function (x, i) {
+      var c = counts[i], xx = bx + i * bw + 8;
+      h += '<rect class="bar' + (x === key ? " is-on" : "") + '" x="' + xx + '" y="' + (by - c * sc) + '" width="34" height="' + c * sc + '"/>';
+      h += '<text class="tick" x="' + (xx + 17) + '" y="' + (by + 20) + '">' + x + "</text>";
+    });
+    h += '<line class="axis" x1="' + (bx - 10) + '" y1="' + by + '" x2="' + (bx + 7 * bw + 20) + '" y2="' + by + '"/>';
+    h += '<text class="small" x="' + (bx - 30) + '" y="' + (by - 7 * sc - 14) + '">방문 노드 수</text><text class="small" x="' + (bx + 150) + '" y="' + (by + 42) + '">찾는 키</text>';
+    svg.innerHTML = h;
+    var hgt = height(t), sum = counts.reduce(function (a, b) { return a + b; }, 0), c = path.length;
+    svg.querySelector("desc").textContent = (shape === "bal" ? "높이 2의 트리" : "오른쪽으로만 이어진 트리") + ", 키 " + key + " 방문 노드 " + c + "개";
+    var note = shape === "bal"
+      ? "높이가 2이므로 어느 키든 세 노드 이내에서 찾는다. " + pj(key, "을") + " 찾는 경로는 " + path.join(" → ") + "이고, 일곱 키의 방문 노드 수를 모두 더하면 " + sum + "개다."
+      : "같은 키를 오른쪽으로만 이었더니 높이가 " + pj(hgt, "이") + " 되어 " + pj(key, "을") + " 찾는 데 " + c + "개, 가장 깊은 14를 찾는 데 7개 노드를 본다. 한 노드에서 버리는 부분 트리가 비어 있어 노드를 하나씩만 줄이므로, 비용은 노드 수가 아니라 높이가 정한다.";
+    show(2, [["경로", path.join(" → ")], ["방문 노드 수", c + "개"], ["트리의 높이", String(hgt)], ["일곱 키의 평균 방문 노드 수", (sum / 7).toFixed(2) + "개"]], note);
+  }
+
+  // Section 3
+  var REC = ["def _get(self, key, node):", "    if node is None: return None", "    if key == node.key: return node", "    if key < node.key:", "        return self._get(key, node.left)", "    return self._get(key, node.right)"];
+  var LOOP = ["def search(self, key):", "    node = self.root", "    while node is not None and node.key != key:", "        if key < node.key: node = node.left", "        else: node = node.right", "    return node"];
+  function renderCode() {
+    var key = Number($("key3").value), res = search(T, key), steps = res.path, k3 = $("k3");
+    k3.max = String(steps.length);
+    if (Number(k3.value) > steps.length) k3.value = String(steps.length);
+    var k = Number(k3.value), cur = steps[k - 1], done = k === steps.length;
+    $("k3-out").textContent = k;
+    var recHot = !cur.n ? 1 : cur.dir === "=" ? 2 : cur.dir === "L" ? 4 : 5;
+    var loopHot = done ? 5 : k === 1 ? 1 : steps[k - 2].dir === "L" ? 3 : 4;
+    $("rec-code").innerHTML = REC.map(function (l, i) { return '<span class="' + (i === recHot ? "is-hot" : "") + '">' + l + "</span>"; }).join("\n");
+    $("loop-code").innerHTML = LOOP.map(function (l, i) { return '<span class="' + (i === loopHot ? "is-hot" : "") + '">' + l + "</span>"; }).join("\n");
+    var svg = $("stack-plot"), h = head(svg);
+    steps.slice(0, k).forEach(function (s, i) {
+      var y = 190 - i * 44, top = i === k - 1;
+      h += '<g class="frame' + (top ? " is-top" : "") + (s.n ? "" : " is-none") + '"><rect x="20" y="' + y + '" width="360" height="36" rx="5"/><text x="36" y="' + (y + 18) + '">_get(' + key + ", " + (s.n ? "노드 " + s.n[0] : "None") + ")</text></g>";
+    });
+    h += '<text class="small" x="300" y="16">위: 최근 호출</text>';
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = "쌓인 호출 " + k + "개";
+    var svg2 = $("loop-plot"), h2 = head(svg2);
+    steps.slice(0, k).forEach(function (s, i) {
+      var x = 20 + i * 92, top = i === k - 1;
+      h2 += '<g class="frame' + (top ? " is-top" : "") + (s.n ? "" : " is-none") + '"><rect x="' + x + '" y="60" width="80" height="44" rx="5"/><text x="' + (x + 40) + '" y="82" text-anchor="middle">' + (s.n ? s.n[0] : "None") + "</text></g>";
+      if (i) h2 += '<text class="lbl" x="' + (x - 6) + '" y="86" text-anchor="middle">→</text>';
+    });
+    h2 += '<text class="lbl" x="20" y="40">node 변수의 값</text><text class="small" x="20" y="140">반복문은 호출을 쌓지 않고 변수 하나만 바꾼다.</text>';
+    svg2.innerHTML = h2;
+    svg2.querySelector("desc").textContent = "node 변수 " + steps.slice(0, k).map(function (s) { return s.n ? s.n[0] : "None"; }).join(", ");
+    var note;
+    if (!done) note = k + "단계에서 두 코드 모두 노드 " + pj(cur.n[0], "을") + " 보고 있다. 재귀는 호출이 " + k + "개 쌓였고, 반복문은 node 변수가 노드 " + pj(cur.n[0], "을") + " 가리킨다. " + pj(key, "이") + " " + cur.n[0] + "보다 " + (cur.dir === "L" ? "작아 왼쪽" : "커서 오른쪽") + "으로 내려간다.";
+    else if (res.found) note = (steps.length === 1 ? "두 코드 모두 루트에서 곧바로 노드 " + pj(key, "을") + " 돌려준다." : "두 코드 모두 " + steps.map(function (s) { return s.n[0]; }).join(" → ") + " 경로로 노드 " + pj(key, "을") + " 돌려준다.") + " get은 이 노드의 값인 " + pj("\"v" + key + "\"", "을") + " 돌려주고, " + key + " in tree는 True다.";
+    else note = "두 코드 모두 8 → 12 → 10 다음에 None에 닿아 None을 돌려준다. 재귀는 node is None 줄에서, 반복문은 while 조건이 거짓이 되어 멈춘다. get은 None을, 11 in tree는 False를 돌려준다.";
+    show(3, [["쌓인 _get 호출", k + "개"], ["node 변수", cur.n ? "노드 " + cur.n[0] : "None"], ["get 반환", done ? (res.found ? "\"v" + key + "\"" : "None") : "아직 없음"], ["key in tree", done ? (res.found ? "True" : "False") : "아직 없음"]], note);
+  }
+
+  $("key1").addEventListener("input", renderPath); $("k1").addEventListener("input", renderPath);
+  $("shape").addEventListener("change", renderShape); $("key2").addEventListener("change", renderShape);
+  $("key3").addEventListener("change", renderCode); $("k3").addEventListener("input", renderCode);
+  renderPath(); renderShape(); renderCode();
+}());
+</script>
+</body>
+</html>

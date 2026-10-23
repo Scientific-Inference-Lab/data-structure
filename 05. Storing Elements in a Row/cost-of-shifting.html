@@ -3,10 +3,11 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
-  <title>Cost of Shifting | Data Structure | Pusan National University</title><meta name="description" content="Changing the middle of a contiguous array moves elements to open or close a gap, and the shift direction preserves values not yet read."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/05.%20Storing%20Elements%20in%20a%20Row/cost-of-shifting.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Cost of Shifting | Data Structure | Pusan National University"><meta property="og:description" content="Changing the middle of a contiguous array moves elements to open or close a gap, and the shift direction preserves values not yet read."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/05.%20Storing%20Elements%20in%20a%20Row/cost-of-shifting.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="stylesheet" href="../assets/pnu-theme.css">
+  <title>Cost of Shifting | Data Structure | Pusan National University</title><meta name="description" content="Changing the middle of a contiguous array moves elements to open or close a gap, and the shift direction preserves values not yet read."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/05.%20Storing%20Elements%20in%20a%20Row/cost-of-shifting.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Cost of Shifting | Data Structure | Pusan National University"><meta property="og:description" content="Changing the middle of a contiguous array moves elements to open or close a gap, and the shift direction preserves values not yet read."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/05.%20Storing%20Elements%20in%20a%20Row/cost-of-shifting.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css">
   <link rel="stylesheet" href="../assets/topic-visual-shell.css">
   <style>
-
+    
     .transport-board{padding:1rem;border:1px solid var(--line-200);background:linear-gradient(180deg,var(--surface-050),#fff)}
     .shift-array{display:grid;grid-template-columns:repeat(7,minmax(0,1fr));gap:.35rem}
     .shift-cell{min-width:0;min-height:5.7rem;padding:.55rem .12rem;border:2px solid var(--line-200);background:var(--white);text-align:center}
@@ -20,8 +21,8 @@
     .transfer-box{padding:.8rem;border:1px solid var(--line-200);background:var(--white);text-align:center}
     .transfer-box small{display:block;margin-bottom:.25rem}
     .transfer-arrow{color:var(--pnu-green);font-size:1.35rem;font-weight:900;text-align:center}
-
-
+    
+    
     .progress-track{height:.55rem;margin-top:1rem;border-radius:99px;background:var(--line-200);overflow:hidden}
     .progress-fill{width:var(--progress);height:100%;background:var(--pnu-green);transition:width .25s ease}
     .direction-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:1rem}
@@ -190,7 +191,7 @@
         $('first-step').disabled = state.step === 0;
         $('next-step').disabled = state.step === steps.length - 1;
         $('shift-array').setAttribute('aria-label', (state.operation === 'insert' ? '삽입' : '삭제') + ' 단계 ' + state.step + '. ' + current.label + ' 현재 배열 ' + current.values.map(value => value || '빈 칸').join(', '));
-
+        
         $('shift-live').innerHTML = readout('연산', state.operation === 'insert' ? 'add(' + state.index + ', X)' : 'remove(' + state.index + ')') + readout('단계', state.step + ' / ' + (steps.length - 1)) + readout('누적 이동', current.moves + ' / ' + total) + readout('비용 식', state.operation === 'insert' ? 'n − i = 4 − ' + state.index + ' = ' + total : 'n − i − 1 = 4 − ' + state.index + ' − 1 = ' + total);
         $('step-explanation').innerHTML = '' + current.label + ' ' + (state.operation === 'insert' ? '오른쪽 끝에서 왼쪽으로 진행해 아직 읽지 않은 값을 보호한다.' : '삭제 위치 다음 칸부터 오른쪽으로 진행해 아직 읽지 않은 값을 보호한다.');
         if (state.operation === 'insert') {
