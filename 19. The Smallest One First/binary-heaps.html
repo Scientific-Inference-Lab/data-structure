@@ -1,0 +1,174 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Binary Heaps | Data Structure | Pusan National University</title><meta name="description" content="A binary heap combines a complete-tree shape with heap order, allowing an implicit array representation with logarithmic height."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/19.%20The%20Smallest%20One%20First/binary-heaps.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Binary Heaps | Data Structure | Pusan National University"><meta property="og:description" content="A binary heap combines a complete-tree shape with heap order, allowing an implicit array representation with logarithmic height."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/19.%20The%20Smallest%20One%20First/binary-heaps.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .topic-plot .lbl{font-size:14px;fill:var(--ink-700)}
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .edge.is-bad{stroke:var(--alert-700);stroke-width:4}
+    .topic-plot .edge.is-on{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .node circle{fill:var(--white);stroke:var(--pnu-blue);stroke-width:2}
+    .topic-plot .node text{font-size:16px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-cur circle{fill:var(--pnu-green);stroke:var(--pnu-green)}
+    .topic-plot .node.is-cur text{fill:var(--white)}
+    .topic-plot .node.is-rel circle{fill:var(--pnu-blue-tint);stroke:var(--pnu-green);stroke-width:3}
+    .topic-plot .node.is-leaf circle{fill:var(--line-200);stroke:var(--ink-600)}
+    .topic-plot .node.is-bad circle{fill:var(--alert-050);stroke:var(--alert-700);stroke-width:3}
+    .topic-plot .gap circle{fill:none;stroke:var(--alert-700);stroke-width:2.5;stroke-dasharray:5 4}
+    .topic-plot .gap text{font-size:12px;fill:var(--alert-700);text-anchor:middle;dominant-baseline:central}
+    .topic-plot .idx{font-size:11px;fill:var(--ink-600);text-anchor:middle}
+    .topic-plot .slot rect{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:1.5}
+    .topic-plot .slot.is-cur rect{fill:var(--pnu-green);stroke:var(--pnu-green)}
+    .topic-plot .slot.is-cur text{fill:var(--white)}
+    .topic-plot .slot.is-rel rect{stroke:var(--pnu-green);stroke-width:3}
+    .topic-plot .slot.is-leaf rect{fill:var(--line-200);stroke:var(--ink-600)}
+    .topic-plot .slot.is-gap rect{fill:var(--alert-050);stroke:var(--alert-700);stroke-dasharray:5 4}
+    .topic-plot .slot text{font-size:15px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .arc{fill:none;stroke:var(--pnu-green);stroke-width:2}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-binary-heaps">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">The Smallest One First</span><span class="nav-tag is-current" aria-current="page">Binary Heaps</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/19.%20The%20Smallest%20One%20First.pdf">The Smallest One <span class="publication-lecture-tail">First<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Binary Heaps</h1><hr class="accent-rule"><p class="page-subtitle">binary heap은 완전 이진트리(complete binary tree)라는 모양 조건과, 모든 부모가 자식 노드보다 작거나 같다는 힙 성질(heap-order property)을 함께 지킨다. 모양 조건 덕분에 노드와 참조 없이 배열 인덱스만으로 트리를 담는 implicit tree(노드와 참조 없이 배열 인덱스만으로 표현한 트리)가 되고, 높이는 ⌊log₂ n⌋으로 낮다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>structure property</strong><span>structure property(완전 이진트리여야 한다는 조건)는 마지막 레벨을 뺀 모든 레벨이 차고 마지막 레벨은 왼쪽부터 채우라고 한다.</span></article><article class="summary-card"><strong>힙 성질</strong><span>부모와 자식 노드 사이만 정한다. 형제끼리의 순서는 정하지 않지만 루트에는 최솟값이 온다.</span></article><article class="summary-card"><strong>최소 힙(min-heap)과 최대 힙(max-heap)</strong><span>부등호만 뒤집으면 루트에 최댓값이 오는 최대 힙이 된다.</span></article><article class="summary-card"><strong>인덱스 계산</strong><span>0부터 세면 왼쪽 자식 노드 2i + 1, 오른쪽 자식 노드 2i + 2, 부모 ⌊(i − 1)/2⌋다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">힙은 모양 조건과 힙 성질을 둘 다 지켜야 한다</h2><p class="lead">네 가지 트리를 고르면 두 조건을 각각 검사한 결과와 어긋난 자리가 바뀐다. 가운데가 빈 트리는 여섯 값을, 나머지는 일곱 값을 담았다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="c1">트리</label><select id="c1"><option value="heap">배열 [1, 2, 6, 4, 3, 8, 9]</option><option value="gap">마지막 레벨 가운데가 빈 트리</option><option value="order">4와 2의 자리를 바꾼 트리</option><option value="bst">같은 값으로 만든 BST</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="cond-plot" class="topic-plot" viewBox="0 0 900 330" role="img" aria-labelledby="cd-title cd-desc"><title id="cd-title">힙의 두 조건 검사</title><desc id="cd-desc">트리, 레벨 순서 배열, 어긋난 자리</desc></svg></div><figcaption class="visual-caption">위는 트리, 아래는 같은 트리를 레벨 순서로 담은 배열이다. 빨간 굵은 선은 부모가 자식 노드보다 커서 힙 성질을 어긴 간선이고, 빨간 점선 원과 칸은 모양 조건이 허용하지 않는 빈 자리다. 초록 원은 루트다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">레벨 순서로 담으면 부모와 자식 노드를 인덱스 계산으로 찾는다</h2><p class="lead">힙 [5, 9, 11, 14, 18, 19, 21, 33, 17, 27]에서 인덱스 i를 바꾸면 그 칸의 부모와 두 자식 노드가 트리와 배열에서 함께 표시된다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="i2">인덱스 i <output id="i2-out" class="control-value" for="i2">3</output></label><input id="i2" type="range" min="0" max="9" step="1" value="3"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="idx-plot" class="topic-plot" viewBox="0 0 900 340" role="img" aria-labelledby="ix-title ix-desc"><title id="ix-title">인덱스와 트리 위치</title><desc id="ix-desc">현재 인덱스와 부모, 자식 노드</desc></svg></div><figcaption class="visual-caption">초록으로 채운 원과 칸이 인덱스 i, 초록 테두리가 그 부모와 자식 노드다. 원 아래 작은 수와 칸 아래 수가 인덱스이며, 배열 위 초록 곡선이 계산으로 오가는 칸을 잇는다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">완전 이진트리의 높이는 ⌊log₂ n⌋이고 단말 노드는 배열의 뒤쪽 절반에 모인다</h2><p class="lead">노드 수 n을 바꾸면 완전 이진트리의 모양, 높이, 자식 노드가 없는 단말 노드의 인덱스 범위가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="n3">노드 수 n <output id="n3-out" class="control-value" for="n3">10</output></label><input id="n3" type="range" min="1" max="31" step="1" value="10"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="h-plot" class="topic-plot" viewBox="0 0 900 330" role="img" aria-labelledby="hh-title hh-desc"><title id="hh-title">노드 수와 높이</title><desc id="hh-desc">완전 이진트리와 단말 노드</desc></svg></div><figcaption class="visual-caption">원 안의 수는 인덱스다. 파란 원은 자식 노드가 있는 노드, 회색 원은 단말 노드이고 아래 배열에서도 같은 색으로 칠했다.</figcaption></figure>
+      <div id="read-3" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-3" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../19. The Smallest One First/priority-queue-adt.html">이전 · Priority Queue ADT</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../20. Up and Down One Level/heap-update-operations.html">다음 · Heap Update Operations</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s"]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+  // position of index i in a complete-tree layout with width W starting at x0
+  function tpos(i, x0, W, y0, dy) { var d = Math.floor(Math.log2(i + 1)), first = Math.pow(2, d) - 1, cnt = Math.pow(2, d); return [x0 + (i - first + 0.5) * W / cnt, y0 + d * dy]; }
+  function line(a, b, cls, r) { var dx = b[0] - a[0], dy = b[1] - a[1], L = Math.sqrt(dx * dx + dy * dy); return '<line class="edge' + (cls ? " " + cls : "") + '" x1="' + (a[0] + dx * r / L).toFixed(1) + '" y1="' + (a[1] + dy * r / L).toFixed(1) + '" x2="' + (b[0] - dx * r / L).toFixed(1) + '" y2="' + (b[1] - dy * r / L).toFixed(1) + '"/>'; }
+
+  // trees as arrays in level order; null = missing position; extra: positions beyond
+  var TREES = {
+    heap: { arr: [1, 2, 6, 4, 3, 8, 9] },
+    gap: { arr: [1, 2, 6, 4, null, 8, 9] },
+    order: { arr: [1, 4, 6, 2, 3, 8, 9] },
+    bst: { arr: [4, 2, 8, 1, 3, 6, 9] }
+  };
+  function renderCond() {
+    var key = $("c1").value, arr = TREES[key].arr, svg = $("cond-plot"), h = head(svg), bad = [], gaps = [];
+    arr.forEach(function (v, i) { if (v === null) { if (arr.slice(i + 1).some(function (x) { return x !== null; })) gaps.push(i); return; } if (i > 0) { var p = Math.floor((i - 1) / 2); if (arr[p] !== null && arr[p] > v) bad.push(i); } });
+    for (var i = 1; i < arr.length; i++) { if (arr[i] === null) continue; var pp = Math.floor((i - 1) / 2); h += line(tpos(pp, 60, 780, 40, 80), tpos(i, 60, 780, 40, 80), bad.indexOf(i) >= 0 ? "is-bad" : "", 22); }
+    arr.forEach(function (v, i) {
+      var p = tpos(i, 60, 780, 40, 80);
+      if (v === null) h += '<g class="gap"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="22"/><text x="' + p[0] + '" y="' + p[1] + '">빈 자리</text></g>';
+      else h += '<g class="node' + (i === 0 ? " is-cur" : bad.indexOf(i) >= 0 || bad.some(function (c) { return Math.floor((c - 1) / 2) === i; }) ? " is-bad" : "") + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="22"/><text x="' + p[0] + '" y="' + p[1] + '">' + v + "</text></g>";
+    });
+    h += '<text class="lbl" x="60" y="268">배열</text>';
+    arr.forEach(function (v, i) { var x = 150 + i * 80; h += '<g class="slot' + (v === null ? " is-gap" : i === 0 ? " is-cur" : "") + '"><rect x="' + x + '" y="246" width="70" height="42" rx="5"/><text x="' + (x + 35) + '" y="267">' + (v === null ? "?" : v) + '</text></g><text class="idx" x="' + (x + 35) + '" y="306">' + i + "</text>"; });
+    svg.innerHTML = h;
+    var shapeOk = gaps.length === 0, orderOk = bad.length === 0;
+    svg.querySelector("desc").textContent = "모양 조건 " + (shapeOk ? "지킴" : "어김") + ", 힙 성질 " + (orderOk ? "지킴" : "어김");
+    var pairs = bad.map(function (c) { return arr[Math.floor((c - 1) / 2)] + " > " + arr[c]; });
+    var notes = {
+      heap: "모든 레벨이 왼쪽부터 빈틈없이 차 있고, 모든 부모가 자식 노드보다 작다. 두 조건을 다 지키는 힙이며 루트 1이 최솟값이다. 형제 2와 6, 4와 3의 순서는 정해지지 않았으므로 배열은 정렬되어 있지 않고, 두 번째로 작은 값 2는 루트의 두 자식 노드 가운데 하나에 있다.",
+      gap: "부모와 자식 노드의 대소는 모두 맞지만 마지막 레벨 가운데 인덱스 4 자리가 비어 모양 조건을 어긴다. 배열에 빈칸이 생기면 인덱스 계산이 가리키는 자리에 값이 없을 수 있어 배열 표현이 깨진다.",
+      order: "모양은 완전 이진트리지만 부모 4가 두 자식 노드 2와 3보다 커서 힙 성질을 어긴다. 이 트리의 최솟값 1은 루트에 있어도, 두 번째로 작은 값 2가 루트의 자식 노드 자리에 없다.",
+      bst: "같은 일곱 값으로 만든 BST다. 모양은 완전 이진트리지만 왼쪽은 작게, 오른쪽은 크게 배치하는 규칙이라 루트 4가 자식 노드 2보다, 2가 1보다, 8이 6보다 크다. BST는 전체 순서를, 힙은 최솟값 하나의 위치를 보장한다."
+    };
+    show(1, [["모양 조건", shapeOk ? "지킴" : "어김 (빈 자리 인덱스 " + gaps.join(", ") + ")"], ["힙 성질", orderOk ? "지킴" : "어김 (" + pairs.join(", ") + ")"], ["루트의 값", String(arr[0])], ["힙인가", shapeOk && orderOk ? "힙이다" : "힙이 아니다"]], notes[key]);
+  }
+
+  var H2 = [5, 9, 11, 14, 18, 19, 21, 33, 17, 27];
+  function renderIdx() {
+    var i = Number($("i2").value), svg = $("idx-plot"), h = head(svg), n = H2.length;
+    $("i2-out").textContent = i;
+    var par = i > 0 ? Math.floor((i - 1) / 2) : null, L = 2 * i + 1 < n ? 2 * i + 1 : null, R = 2 * i + 2 < n ? 2 * i + 2 : null, rel = [par, L, R].filter(function (x) { return x !== null; });
+    for (var k = 1; k < n; k++) { var pk = Math.floor((k - 1) / 2); h += line(tpos(pk, 60, 780, 34, 62), tpos(k, 60, 780, 34, 62), (k === i && par !== null) || (pk === i) ? "is-on" : "", 20); }
+    H2.forEach(function (v, k) { var p = tpos(k, 60, 780, 34, 62); h += '<g class="node' + (k === i ? " is-cur" : rel.indexOf(k) >= 0 ? " is-rel" : "") + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="20"/><text x="' + p[0] + '" y="' + p[1] + '">' + v + '</text></g><text class="idx" x="' + p[0] + '" y="' + (p[1] + 32) + '">' + k + "</text>"; });
+    var sx = function (k) { return 70 + k * 78; };
+    H2.forEach(function (v, k) { h += '<g class="slot' + (k === i ? " is-cur" : rel.indexOf(k) >= 0 ? " is-rel" : "") + '"><rect x="' + sx(k) + '" y="270" width="70" height="40" rx="5"/><text x="' + (sx(k) + 35) + '" y="290">' + v + '</text></g><text class="idx" x="' + (sx(k) + 35) + '" y="326">' + k + "</text>"; });
+    rel.forEach(function (k) { var a = sx(i) + 35, b = sx(k) + 35, top = 270 - 12 - Math.min(Math.abs(a - b) / 10, 24); h += '<path class="arc" d="M' + a + " 268 Q" + (a + b) / 2 + " " + top + " " + b + ' 268"/>'; });
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = "인덱스 " + i + ", 부모 " + (par === null ? "없음" : par) + ", 왼쪽 " + (L === null ? "없음" : L) + ", 오른쪽 " + (R === null ? "없음" : R);
+    var note = "인덱스 " + i + "의 값은 " + H2[i] + "이다. " + (par === null ? "루트라 부모가 없다. " : "부모는 ⌊(" + i + " − 1)/2⌋ = " + par + "번 칸의 " + H2[par] + "이다. ") +
+      (L === null ? "2i + 1 = " + pj(2 * i + 1, "이") + " 배열 길이 " + n + " 이상이라 자식 노드가 없는 단말 노드다." : "왼쪽 자식 노드는 2i + 1 = " + L + "번 칸의 " + H2[L] + (R === null ? "이고, 2i + 2 = " + (2 * i + 2) + "번 칸은 배열 밖이라 오른쪽 자식 노드는 없다." : ", 오른쪽은 2i + 2 = " + R + "번 칸의 " + H2[R] + "이다.")) + " 참조를 따라가지 않고 계산 한 번으로 오간다.";
+    show(2, [["i의 값", String(H2[i])], ["부모 ⌊(i − 1)/2⌋", par === null ? "없음" : par + "번 (" + H2[par] + ")"], ["왼쪽 2i + 1", L === null ? "없음" : L + "번 (" + H2[L] + ")"], ["오른쪽 2i + 2", R === null ? "없음" : R + "번 (" + H2[R] + ")"]], note);
+  }
+
+  function renderHeight() {
+    var n = Number($("n3").value), svg = $("h-plot"), h = head(svg), hgt = Math.floor(Math.log2(n)), firstLeaf = Math.floor(n / 2);
+    $("n3-out").textContent = n;
+    var r = n > 15 ? 11 : 16;
+    for (var k = 1; k < n; k++) h += line(tpos(Math.floor((k - 1) / 2), 20, 860, 26, 52), tpos(k, 20, 860, 26, 52), "", r);
+    for (k = 0; k < n; k++) { var p = tpos(k, 20, 860, 26, 52); h += '<g class="node' + (k >= firstLeaf ? " is-leaf" : "") + '"><circle cx="' + p[0].toFixed(1) + '" cy="' + p[1] + '" r="' + r + '"/><text x="' + p[0].toFixed(1) + '" y="' + p[1] + '" style="font-size:' + (n > 15 ? 10 : 13) + 'px">' + k + "</text></g>"; }
+    var cw = Math.min(28, 860 / n);
+    for (k = 0; k < n; k++) h += '<g class="slot' + (k >= firstLeaf ? " is-leaf" : "") + '"><rect x="' + (20 + k * cw).toFixed(1) + '" y="282" width="' + (cw - 2).toFixed(1) + '" height="30" rx="3"/></g>';
+    h += '<text class="small" x="20" y="326">인덱스 0</text><text class="small" x="' + (20 + (n - 1) * cw + cw / 2).toFixed(1) + '" y="326" text-anchor="end">' + (n - 1) + "</text>";
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = "노드 " + n + "개, 높이 " + hgt + ", 단말 노드 인덱스 " + firstLeaf + "부터 " + (n - 1);
+    var note = "노드 " + n + "개인 완전 이진트리의 높이는 ⌊log₂ " + n + "⌋ = " + hgt + "이다. " + (n === Math.pow(2, hgt) ? n + "개는 새 레벨이 막 시작된 크기라 높이가 한 단계 올랐다. " : "") +
+      "마지막 노드 " + (n - 1) + "번의 부모가 " + (firstLeaf - 1) + "번이므로 " + firstLeaf + "번부터 " + (n - 1) + "번까지 " + (n - firstLeaf) + "개가 단말 노드다. n이 두 배가 될 때마다 높이는 1씩만 늘어 n = 1,000이면 9, 1,000,000이면 19다.";
+    if (n === 1) note = "노드 하나뿐이면 루트가 곧 단말 노드이고 높이는 0이다. n이 두 배가 될 때마다 높이는 1씩만 늘어 n = 1,000이면 9, 1,000,000이면 19다.";
+    show(3, [["높이 ⌊log₂ n⌋", String(hgt)], ["자식 노드가 있는 노드", firstLeaf ? firstLeaf + "개 (0 ~ " + (firstLeaf - 1) + "번)" : "없음"], ["단말 노드", (n - firstLeaf) + "개 (" + (n - firstLeaf === 1 ? (n - 1) + "번)" : firstLeaf + " ~ " + (n - 1) + "번)")], ["마지막 레벨의 노드", (n - (Math.pow(2, hgt) - 1)) + "개"]], note);
+  }
+
+  $("c1").addEventListener("change", renderCond); $("i2").addEventListener("input", renderIdx); $("n3").addEventListener("input", renderHeight);
+  renderCond(); renderIdx(); renderHeight();
+}());
+</script>
+</body>
+</html>
