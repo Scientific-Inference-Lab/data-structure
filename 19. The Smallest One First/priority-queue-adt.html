@@ -44,10 +44,10 @@
 <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">The Smallest One First</span><span class="nav-tag is-current" aria-current="page">Priority Queue ADT</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
 <section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/19.%20The%20Smallest%20One%20First.pdf">The Smallest One <span class="publication-lecture-tail">First<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Priority Queue ADT</h1><hr class="accent-rule"><p class="page-subtitle">우선순위 큐(priority queue)는 값을 넣고, 그 가운데 가장 작은 값을 찾고 꺼내는 세 연산을 갖춘 ADT다. 도착한 차례가 아니라 우선순위 규칙이 꺼낼 원소를 정하며, ADT는 연산만 정할 뿐 값을 어떻게 담을지는 정하지 않는다.</p></div></section>
 <main id="main-content" class="page-body container">
-  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>세 연산</strong><span>넣기(add, heappush), 최솟값 보기(find_min, h[0]), 최솟값 꺼내기(remove, heappop)다.</span></article><article class="summary-card"><strong>지정 삭제는 없다</strong><span>사용자가 "7을 꺼내라"고 고를 수 없고, 꺼낼 원소는 우선순위 규칙이 정한다.</span></article><article class="summary-card"><strong>쓰이는 곳</strong><span>작업 스케줄링의 급한 일, 응급실의 위중한 환자, 인쇄 작업 중 쪽수가 적은 것처럼 우선순위가 높은 대상을 먼저 고른다.</span></article><article class="summary-card"><strong>구현의 맞바꿈</strong><span>배열로 만들면 넣기와 꺼내기 가운데 한쪽이 O(n)이 되고, 힙은 두 연산을 모두 O(log n)으로 낮춘다.</span></article></div></section>
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>세 연산</strong><span>넣기(add, heappush), 최솟값 보기(find_min, h[0]), 최솟값 꺼내기(remove, heappop)다.</span></article><article class="summary-card"><strong>지정 삭제는 없다</strong><span>사용자가 "7을 꺼내라"고 고를 수 없고, 꺼낼 원소는 우선순위 규칙이 정한다.</span></article><article class="summary-card"><strong>쓰이는 곳</strong><span>작업 스케줄링의 급한 일, 응급실의 위중한 환자, 인쇄 작업 중 쪽수가 적은 것처럼 우선순위가 높은 대상을 먼저 고른다.</span></article><article class="summary-card"><strong>구현별 연산 비용</strong><span>배열 구현은 삽입이나 최솟값 삭제 중 하나가 O(n)이고, 힙은 두 연산 모두 O(log n)이다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">넣은 순서와 상관없이 꺼낼 때마다 현재 최솟값이 나온다</h2><p class="lead">7, 3, 12, 1, 9를 넣은 뒤 최솟값을 보고 꺼내는 요청을 차례로 처리한다. 처리한 요청 수를 옮기면 담긴 값, 현재 최솟값, 꺼낸 값의 줄이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">넣은 순서와 상관없이 꺼낼 때마다 현재 최솟값이 나온다</h2><p class="lead">7, 3, 12, 1, 9를 넣은 뒤 최솟값을 보고 꺼내는 요청을 차례로 처리한다. 처리한 요청 수를 바꾸면 담긴 값, 현재 최솟값, 꺼낸 값의 줄이 바뀐다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="k1">처리한 요청 수 <output id="k1-out" class="control-value" for="k1">5</output></label><input id="k1" type="range" min="0" max="10" step="1" value="5"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="bag-plot" class="topic-plot" viewBox="0 0 900 330" role="img" aria-labelledby="bg-title bg-desc"><title id="bg-title">우선순위 큐의 요청 처리</title><desc id="bg-desc">요청 목록, 담긴 값, 꺼낸 값</desc></svg></div><figcaption class="visual-caption">왼쪽 목록은 요청의 순서이고 초록 칸이 방금 처리한 요청이다. 가운데 점선 영역은 담긴 값이며 안쪽 순서는 의미가 없다. 초록으로 채운 원이 현재 최솟값, 초록 테두리 원이 방금 넣은 값이다. 아래 초록 칸은 꺼낸 값을 꺼낸 순서대로 적은 것이다.</figcaption></figure>
@@ -57,7 +57,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">배열로 만들면 넣기와 꺼내기 가운데 한쪽이 전체를 훑거나 밀어야 한다</h2><p class="lead">같은 요청을 정렬 안 한 배열과 내림차순으로 정렬한 배열(최솟값이 맨 끝)에서 처리한다. 처리한 요청 수를 옮기면 두 배열의 내용과 이번 요청에서 살펴보거나 옮긴 칸이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">배열로 만들면 넣기와 꺼내기 가운데 한쪽이 전체를 훑거나 밀어야 한다</h2><p class="lead">같은 요청을 정렬 안 한 배열과 내림차순으로 정렬한 배열(최솟값이 맨 끝)에서 처리한다. 처리한 요청 수를 바꾸면 두 배열의 내용과 이번 요청에서 살펴보거나 옮긴 칸이 바뀐다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="k2">처리한 요청 수 <output id="k2-out" class="control-value" for="k2">7</output></label><input id="k2" type="range" min="1" max="10" step="1" value="7"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="arr-plot" class="topic-plot" viewBox="0 0 900 300" role="img" aria-labelledby="ar-title ar-desc"><title id="ar-title">두 배열 구현의 비용</title><desc id="ar-desc">정렬 안 한 배열과 정렬된 배열이 이번 요청에서 다룬 칸</desc></svg></div><figcaption class="visual-caption">두 줄이 두 구현의 배열이다. 초록 칸은 이번 요청에서 값을 비교하려고 살펴보거나 자리를 옮긴 칸이고, 파란 칸은 그대로 있는 값이다. 오른쪽 수는 이번 요청의 칸 수와 지금까지의 합이다.</figcaption></figure>
@@ -67,7 +67,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">원소 수가 커질수록 O(n) 연산 하나가 전체 비용을 좌우한다</h2><p class="lead">원소 수 n을 바꾸면 네 구현에서 넣기 한 번과 최솟값 꺼내기 한 번에 드는 대략의 단계 수가 바뀐다. BST는 모양이 고를 때의 평균이다.</p></header>
+    <header class="example-header"><h2 class="section-title">원소 수가 커질수록 O(n) 연산 하나가 전체 비용을 좌우한다</h2><p class="lead">원소 수 n을 바꾸면 네 구현에서 넣기 한 번과 최솟값 꺼내기 한 번에 드는 대략의 단계 수가 바뀐다. BST는 평균적인 경우의 연산 비용을 표시한다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="e3">원소 수 n <output id="e3-out" class="control-value" for="e3">1,000</output></label><input id="e3" type="range" min="1" max="6" step="1" value="3"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="cost-plot" class="topic-plot" viewBox="0 0 900 330" role="img" aria-labelledby="co-title co-desc"><title id="co-title">구현별 연산 비용</title><desc id="co-desc">넣기와 최솟값 꺼내기의 단계 수</desc></svg></div><figcaption class="visual-caption">가로 막대의 길이는 로그 눈금이라 눈금 하나가 10배다. 위쪽 파란 막대가 넣기, 아래쪽 초록 막대가 최솟값 꺼내기의 단계 수다.</figcaption></figure>
@@ -184,7 +184,7 @@
     });
     svg.innerHTML = h;
     svg.querySelector("desc").textContent = "n = " + n + ", 힙의 넣기와 꺼내기 약 " + lg + "단계";
-    var note = "n = " + n.toLocaleString("en-US") + "이면 정렬 안 한 배열의 꺼내기와 정렬된 배열의 넣기는 " + n.toLocaleString("en-US") + "단계까지 든다. 힙은 두 연산 모두 높이 ⌊log₂ n⌋ = " + lg + "단계 안팎이라 어느 쪽도 O(n)이 되지 않는다. BST도 평균은 같지만 편향 트리가 되면 O(n)으로 커진다.";
+    var note = "n = " + n.toLocaleString("en-US") + "이면 정렬 안 한 배열의 꺼내기와 정렬된 배열의 넣기는 " + n.toLocaleString("en-US") + "단계까지 든다. 힙은 두 연산 모두 높이 ⌊log₂ n⌋ = " + lg + "단계 안팎이 들며 두 연산의 시간 복잡도가 모두 O(log n)이다. BST도 평균은 같지만 편향 트리가 되면 O(n)으로 커진다.";
     show(3, [["n", n.toLocaleString("en-US")], ["배열 구현의 비싼 쪽", n.toLocaleString("en-US") + "단계"], ["힙의 넣기·꺼내기", lg + "단계 안팎"], ["차이", Math.round(n / Math.max(lg, 1)).toLocaleString("en-US") + "배"]], note);
   }
 
