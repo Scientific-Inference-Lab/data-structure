@@ -64,7 +64,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">힙 정렬은 최악 O(n log n)과 제자리를 함께 보장하지만 안정적이지 않다</h2><p class="lead">강의에서 다룬 세 정렬 방법의 최악 시간, 제자리 여부, 안정성을 나란히 놓는다.</p></header>
+    <header class="example-header"><h2 class="section-title">힙 정렬은 최악 시간 복잡도가 O(n log n)인 제자리 정렬이지만 안정적이지 않다</h2><p class="lead">강의에서 다룬 세 정렬 방법의 최악 시간, 제자리 여부, 안정성을 나란히 놓는다.</p></header>
     <div class="visual-lab">
       <figure class="visual-figure"><div class="visual-frame"><table class="topic-table" aria-label="정렬 비교"><thead><tr><th scope="col">정렬 방법</th><th scope="col">최악 시간</th><th scope="col">제자리</th><th scope="col">안정성</th></tr></thead><tbody><tr><th scope="row">정렬된 앞부분에 하나씩 끼워 넣기</th><td>O(n²)</td><td>예</td><td>같은 키 뒤에 넣으면 안정적</td></tr><tr><th scope="row">BST에 넣고 중위 순회</th><td>O(n²)</td><td>아니요</td><td>중복 키 처리 규칙에 따름</td></tr><tr><th scope="row">힙 정렬</th><td class="is-y">O(n log n)</td><td class="is-y">예</td><td class="is-y">불안정</td></tr></tbody></table></div><figcaption class="visual-caption">행 하나가 정렬 방법 하나다. 초록 칸이 힙 정렬의 세 성질이다.</figcaption></figure>
       <p class="visual-note">힙 정렬의 비용은 heapify 한 번 O(n)과 최댓값 꺼내기 n번 O(n log n)을 더한 것이다. 끼워 넣기와 BST 중위 순회는 최악 O(n²)이고 BST는 노드를 따로 만들어야 하지만, 힙 정렬은 최악에도 O(n log n)이면서 추가 배열이 필요 없다. 대신 같은 키의 순서는 보존하지 않으므로 그 순서를 지켜야 하는 문제에는 같은 키 뒤에 끼워 넣는 방법처럼 안정적인 정렬을 고른다.</p>

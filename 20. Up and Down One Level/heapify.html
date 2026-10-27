@@ -65,7 +65,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">노드가 많은 레벨은 내려갈 거리가 짧아 heapify의 총 이동이 n에 비례한다</h2><p class="lead">높이 h인 가득 찬 완전 이진트리를 생각한다. 높이를 바꾸면 레벨마다의 노드 수, heapify에서 내려갈 수 있는 최대 거리, n번 삽입에서 올라갈 수 있는 최대 거리의 합이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">노드가 많은 레벨은 내려갈 거리가 짧아 heapify의 총이동 횟수 상한이 n에 비례한다</h2><p class="lead">높이 h인 가득 찬 완전 이진트리를 생각한다. 높이를 바꾸면 레벨마다의 노드 수, heapify에서 내려갈 수 있는 최대 거리, n번 삽입에서 올라갈 수 있는 최대 거리의 합이 바뀐다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="h3">높이 h <output id="h3-out" class="control-value" for="h3">3</output></label><input id="h3" type="range" min="1" max="9" step="1" value="3"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="lv-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="lv-title lv-desc"><title id="lv-title">레벨별 노드 수와 이동 거리</title><desc id="lv-desc">레벨마다 노드 수, heapify 거리, 삽입 거리</desc></svg></div><figcaption class="visual-caption">한 줄이 레벨 하나다. 파란 막대는 그 레벨의 노드 수, 초록 막대는 heapify에서 그 레벨 노드들이 내려갈 수 있는 거리의 합(노드 수 × 아래 레벨 수), 회색 막대는 n번 삽입에서 올라갈 수 있는 거리의 합(노드 수 × 깊이)이다. 막대 길이는 모든 레벨의 세 값 가운데 가장 큰 값을 기준으로 맞췄다.</figcaption></figure>
