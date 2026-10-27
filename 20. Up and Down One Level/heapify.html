@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Heapify | Data Structure | Pusan National University</title><meta name="description" content="Heapify sifts down from the last parent toward the root, using already valid subheaps to build the whole heap in linear time."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/20.%20Up%20and%20Down%20One%20Level/heapify.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Heapify | Data Structure | Pusan National University"><meta property="og:description" content="Heapify sifts down from the last parent toward the root, using already valid subheaps to build the whole heap in linear time."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/20.%20Up%20and%20Down%20One%20Level/heapify.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .topic-plot .lbl{font-size:14px;fill:var(--ink-700)}
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .edge.is-bad{stroke:var(--alert-700);stroke-width:3.5}
+    .topic-plot .node circle{fill:var(--white);stroke:var(--line-300);stroke-width:2}
+    .topic-plot .node text{font-size:15px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-heap circle{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue)}
+    .topic-plot .node.is-cur circle{fill:var(--pnu-green);stroke:var(--pnu-green)}
+    .topic-plot .node.is-cur text{fill:var(--white)}
+    .topic-plot .node.is-cmp circle{stroke:var(--pnu-green);stroke-width:3.5}
+    .topic-plot .idx{font-size:11px;fill:var(--ink-600);text-anchor:middle}
+    .topic-plot .slot rect{fill:var(--white);stroke:var(--line-300);stroke-width:1.5}
+    .topic-plot .slot.is-heap rect{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue)}
+    .topic-plot .slot.is-cur rect{fill:var(--pnu-green);stroke:var(--pnu-green)}
+    .topic-plot .slot.is-cur text{fill:var(--white)}
+    .topic-plot .slot.is-cmp rect{stroke:var(--pnu-green);stroke-width:3}
+    .topic-plot .slot text{font-size:14px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .bar-n{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:1.2}
+    .topic-plot .bar-a{fill:color-mix(in srgb,var(--pnu-green) 35%,var(--white));stroke:var(--pnu-green);stroke-width:1.2}
+    .topic-plot .bar-b{fill:var(--line-200);stroke:var(--ink-600);stroke-width:1.2}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-heapify">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Up and Down One Level</span><span class="nav-tag is-current" aria-current="page">Heapify</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/20.%20Up%20and%20Down%20One%20Level.pdf">Up and Down One <span class="publication-lecture-tail">Level<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Heapify</h1><hr class="accent-rule"><p class="page-subtitle">heapify(임의의 배열을 힙으로 만들기)는 단말 노드를 그대로 두고, 마지막 부모부터 루트까지 거꾸로 가며 각 자리에서 sift down을 한 번씩 한다. 아래쪽 부분 트리가 이미 힙이므로 한 번의 sift down으로 충분하고, 노드가 많은 아래 레벨일수록 내려갈 거리가 짧아 전체 비용이 O(n)이다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>시작 위치</strong><span>인덱스 ⌊n/2⌋ − 1이 마지막 부모이고, 그 뒤는 모두 단말 노드라 이미 힙이다.</span></article><article class="summary-card"><strong>아래에서 위로</strong><span>i에서 sift down할 때 i의 두 부분 트리는 이미 힙이므로 i 자리의 값 하나만 제자리로 보내면 된다.</span></article><article class="summary-card"><strong>n번 삽입과의 차이</strong><span>값을 하나씩 heappush하면 O(n log n), heapify는 O(n)이다. 결과 배열은 다를 수 있지만 둘 다 힙이다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">마지막 부모부터 거꾸로 sift down하면 아래쪽부터 힙이 되어 올라간다</h2><p class="lead">배열 [9, 5, 6, 2, 3, 8, 1, 7, 4]를 heapify한다. 진행한 단계를 옮기면 sift down 중인 자리, 비교하는 자식 노드, 이미 힙이 된 부분이 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="k1">진행한 단계 <output id="k1-out" class="control-value" for="k1">0</output></label><input id="k1" type="range" min="0" max="10" step="1" value="0"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="hf-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="hf-title hf-desc"><title id="hf-title">heapify 단계</title><desc id="hf-desc">sift down 중인 자리와 이미 힙이 된 부분</desc></svg></div><figcaption class="visual-caption">초록으로 채운 원과 칸이 sift down 중인 값, 초록 테두리가 비교하는 자식 노드다. 옅은 파란 원과 칸은 그 자리를 루트로 하는 부분 트리가 이미 힙이 된 곳이고, 흰 원은 아직 처리하지 않은 부모다. 빨간 선은 아직 힙 성질을 어긴 간선이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">같은 값으로 만들어도 방법에 따라 배열이 달라지고 둘 다 힙이다</h2><p class="lead">같은 9개 값을 하나씩 heappush하는 방법과 heapify로 한꺼번에 만드는 방법을 비교한다. 방법을 바꾸면 결과 트리와 배열, 교환 횟수가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="m2">방법</label><select id="m2"><option value="push">n번 삽입 (heappush 9번)</option><option value="heapify">heapify</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="cmp-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="cm-title cm-desc"><title id="cm-title">두 방법의 결과 힙</title><desc id="cm-desc">결과 트리와 배열</desc></svg></div><figcaption class="visual-caption">위는 결과 힙의 트리, 아래는 배열이다. 옅은 파란 칸은 두 방법의 결과가 같은 인덱스, 흰 칸은 다른 인덱스다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">노드가 많은 레벨은 내려갈 거리가 짧아 heapify의 총 이동이 n에 비례한다</h2><p class="lead">높이 h인 가득 찬 완전 이진트리를 생각한다. 높이를 바꾸면 레벨마다의 노드 수, heapify에서 내려갈 수 있는 최대 거리, n번 삽입에서 올라갈 수 있는 최대 거리의 합이 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="h3">높이 h <output id="h3-out" class="control-value" for="h3">3</output></label><input id="h3" type="range" min="1" max="9" step="1" value="3"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="lv-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="lv-title lv-desc"><title id="lv-title">레벨별 노드 수와 이동 거리</title><desc id="lv-desc">레벨마다 노드 수, heapify 거리, 삽입 거리</desc></svg></div><figcaption class="visual-caption">한 줄이 레벨 하나다. 파란 막대는 그 레벨의 노드 수, 초록 막대는 heapify에서 그 레벨 노드들이 내려갈 수 있는 거리의 합(노드 수 × 아래 레벨 수), 회색 막대는 n번 삽입에서 올라갈 수 있는 거리의 합(노드 수 × 깊이)이다. 막대 길이는 모든 레벨의 세 값 가운데 가장 큰 값을 기준으로 맞췄다.</figcaption></figure>
+      <div id="read-3" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-3" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../20. Up and Down One Level/heap-update-operations.html">이전 · Heap Update Operations</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../20. Up and Down One Level/heap-sort.html">다음 · Heap Sort</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s"]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+  function tpos(i, x0, W, y0, dy) { var d = Math.floor(Math.log2(i + 1)), first = Math.pow(2, d) - 1, cnt = Math.pow(2, d); return [x0 + (i - first + 0.5) * W / cnt, y0 + d * dy]; }
+  function line(a, b, cls, r) { var dx = b[0] - a[0], dy = b[1] - a[1], L = Math.sqrt(dx * dx + dy * dy); return '<line class="edge' + (cls ? " " + cls : "") + '" x1="' + (a[0] + dx * r / L).toFixed(1) + '" y1="' + (a[1] + dy * r / L).toFixed(1) + '" x2="' + (b[0] - dx * r / L).toFixed(1) + '" y2="' + (b[1] - dy * r / L).toFixed(1) + '"/>'; }
+  function par(i) { return Math.floor((i - 1) / 2); }
+  function sub(i, n) { var out = [], q = [i]; while (q.length) { var x = q.shift(); if (x < n) { out.push(x); q.push(2 * x + 1, 2 * x + 2); } } return out; }
+  function drawHeap(a, opt) {
+    var h = "";
+    for (var i = 1; i < a.length; i++) h += line(tpos(par(i), 40, 820, 34, 70), tpos(i, 40, 820, 34, 70), opt.showBad && a[par(i)] > a[i] ? "is-bad" : "", 19);
+    a.forEach(function (v, i) {
+      var p = tpos(i, 40, 820, 34, 70), cls = i === opt.cur ? " is-cur" : (opt.heap || []).indexOf(i) >= 0 ? " is-heap" : "";
+      if ((opt.cmp || []).indexOf(i) >= 0) cls += " is-cmp";
+      h += '<g class="node' + cls + '"><circle cx="' + p[0].toFixed(1) + '" cy="' + p[1] + '" r="19"/><text x="' + p[0].toFixed(1) + '" y="' + p[1] + '">' + v + '</text></g><text class="idx" x="' + p[0].toFixed(1) + '" y="' + (p[1] + 31) + '">' + i + "</text>";
+    });
+    a.forEach(function (v, i) {
+      var x = 40 + i * 80, cls = i === opt.cur ? " is-cur" : (opt.heap || []).indexOf(i) >= 0 ? " is-heap" : "";
+      if ((opt.cmp || []).indexOf(i) >= 0) cls += " is-cmp";
+      h += '<g class="slot' + cls + '"><rect x="' + x + '" y="290" width="72" height="38" rx="4"/><text x="' + (x + 36) + '" y="309">' + v + '</text></g><text class="idx" x="' + (x + 36) + '" y="344">' + i + "</text>";
+    });
+    return h;
+  }
+
+  var INPUT = [9, 5, 6, 2, 3, 8, 1, 7, 4];
+  function heapifySteps(src) {
+    var a = src.slice(), n = a.length, steps = [], swaps = 0, done = [];
+    for (var j = Math.floor(n / 2); j < n; j++) done.push(j);
+    steps.push({ a: a.slice(), cur: null, cmp: [], heap: done.slice(), text: "start", swaps: 0 });
+    for (var i = Math.floor(n / 2) - 1; i >= 0; i--) {
+      var c = i, first = true;
+      while (true) {
+        var kids = [2 * c + 1, 2 * c + 2].filter(function (x) { return x < n; });
+        var m = kids.length ? kids.reduce(function (b, x) { return a[x] < a[b] ? x : b; }) : null;
+        if (m === null || a[c] <= a[m]) { steps.push({ a: a.slice(), cur: c, cmp: kids, heap: done.slice(), text: first ? "nomove" : "stop", root: i, swaps: swaps }); break; }
+        if (first) steps.push({ a: a.slice(), cur: c, cmp: kids, heap: done.slice(), text: "begin", root: i, swaps: swaps, pick: m });
+        var t = a[c]; a[c] = a[m]; a[m] = t; swaps++; c = m; first = false;
+        steps.push({ a: a.slice(), cur: c, cmp: [], heap: done.slice(), text: "swap", root: i, swaps: swaps });
+      }
+      done = sub(i, n).concat(done).filter(function (x, k, arr) { return arr.indexOf(x) === k; });
+    }
+    steps.push({ a: a.slice(), cur: null, cmp: [], heap: done.slice(), text: "end", swaps: swaps });
+    // compress: drop "stop" states that directly follow a swap to keep the slider short
+    return steps.filter(function (s, k) { return !(s.text === "stop" && steps[k - 1] && steps[k - 1].text === "swap"); });
+  }
+  var STEPS = heapifySteps(INPUT);
+  function renderHf() {
+    var el = $("k1"); el.max = String(STEPS.length - 1);
+    var k = Number(el.value), st = STEPS[k], svg = $("hf-plot"), h = head(svg);
+    $("k1-out").textContent = k;
+    h += drawHeap(st.a, { cur: st.cur, cmp: st.cmp, heap: st.heap, showBad: true });
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = "단계 " + k + ", 배열 " + st.a.join(", ");
+    var note, n = st.a.length;
+    if (st.text === "start") note = "n = 9이므로 인덱스 ⌊9/2⌋ = 4부터 8까지 다섯 칸은 자식 노드가 없는 단말 노드이고 그 자체로 힙이다. 마지막 부모인 인덱스 3부터 거꾸로 sift down한다.";
+    else if (st.text === "begin") note = "인덱스 " + st.root + "의 " + st.a[st.cur] + "에서 sift down을 시작한다. 두 부분 트리는 이미 힙이고, 자식 노드 " + st.cmp.map(function (x) { return st.a[x]; }).join(", ") + " 가운데 더 작은 " + st.a[st.pick] + "보다 커서 바꾼다.";
+    else if (st.text === "swap") { var kids = [2 * st.cur + 1, 2 * st.cur + 2].filter(function (x) { return x < n; }); note = "교환 뒤 값 " + st.a[st.cur] + "이 인덱스 " + st.cur + "에 내려왔다. " + (kids.length && Math.min.apply(null, kids.map(function (x) { return st.a[x]; })) < st.a[st.cur] ? "아직 자식 노드보다 커서 한 번 더 내려간다." : "더 내려갈 필요가 없어 인덱스 " + pj(st.root, "을") + " 루트로 하는 부분 트리가 힙이 되었다."); note = note.replace("값 " + st.a[st.cur] + "이", "값 " + pj(st.a[st.cur], "이")); }
+    else if (st.text === "nomove") note = "인덱스 " + st.root + "의 " + pj(st.a[st.cur], "은") + " 자식 노드 " + st.cmp.map(function (x) { return st.a[x]; }).join(", ") + "보다 크지 않아 교환 없이 그 부분 트리가 힙이다.";
+    else note = "루트까지 마쳐 [" + st.a.join(", ") + "]가 되었다. 교환은 모두 " + st.swaps + "번이며, 모든 부모가 자식 노드보다 작은 힙이다.";
+    if (st.text === "end") note = "루트까지 마쳐 결과 " + pj("[" + st.a.join(", ") + "]", "이") + " 되었다. 교환은 모두 " + st.swaps + "번이며, 모든 부모가 자식 노드보다 작은 힙이다.";
+    var bad = 0; for (var i = 1; i < n; i++) if (st.a[par(i)] > st.a[i]) bad++;
+    show(1, [["sift down 중인 부분 트리의 루트", st.root === undefined ? "없음" : "인덱스 " + st.root], ["누적 교환", st.swaps + "번"], ["이미 힙인 부분", st.heap.length + "칸"], ["힙 성질을 어긴 간선", bad + "곳"]], note);
+  }
+
+  function pushAll(src) { var a = [], swaps = 0; src.forEach(function (v) { a.push(v); var i = a.length - 1; while (i > 0 && a[par(i)] > a[i]) { var p = par(i), t = a[p]; a[p] = a[i]; a[i] = t; i = p; swaps++; } }); return { a: a, swaps: swaps }; }
+  var RES = { push: pushAll(INPUT), heapify: { a: STEPS[STEPS.length - 1].a, swaps: STEPS[STEPS.length - 1].swaps } };
+  function renderCmp() {
+    var m = $("m2").value, r = RES[m], other = RES[m === "push" ? "heapify" : "push"], svg = $("cmp-plot"), h = head(svg);
+    var same = r.a.map(function (v, i) { return v === other.a[i] ? i : -1; }).filter(function (i) { return i >= 0; });
+    h += drawHeap(r.a, { heap: same });
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = (m === "push" ? "n번 삽입" : "heapify") + " 결과 " + r.a.join(", ");
+    var note = (m === "push" ? "9번 heappush하면 매번 끝에 붙이고 sift up해 " : "heapify는 마지막 부모부터 sift down해 ") + pj("[" + r.a.join(", ") + "]", "을") + " 만들고 교환은 " + r.swaps + "번이다. 다른 방법의 결과 " + pj("[" + other.a.join(", ") + "]", "과") + "는 " + (r.a.length - same.length) + "칸이 다르지만 두 배열 모두 루트가 1이고 모든 부모가 자식 노드보다 작아 힙이다. 같은 값 집합의 힙은 하나로 정해지지 않는다.";
+    show(2, [["결과 배열", "[" + r.a.join(", ") + "]"], ["교환 횟수", r.swaps + "번"], ["다른 방법과 다른 칸", (r.a.length - same.length) + "칸"], ["최악 비용", m === "push" ? "O(n log n)" : "O(n)"]], note);
+  }
+
+  function renderLv() {
+    var H = Number($("h3").value), svg = $("lv-plot"), h = head(svg), n = Math.pow(2, H + 1) - 1, rows = [], sa = 0, sb = 0;
+    $("h3-out").textContent = H;
+    for (var d = 0; d <= H; d++) { var cnt = Math.pow(2, d), a = cnt * (H - d), b = cnt * d; rows.push([d, cnt, a, b]); sa += a; sb += b; }
+    var show1 = rows.length > 6 ? rows.slice(0, 3).concat([null]).concat(rows.slice(-3)) : rows;
+    var maxv = Math.max.apply(null, rows.map(function (r) { return Math.max(r[1], r[2], r[3]); }));
+    show1.forEach(function (r, j) {
+      var y = 20 + j * 50;
+      if (!r) { h += '<text class="lbl" x="120" y="' + (y + 24) + '">⋮</text>'; return; }
+      h += '<text class="lbl" x="20" y="' + (y + 24) + '">레벨 ' + r[0] + "</text>";
+      [[r[1], "bar-n"], [r[2], "bar-a"], [r[3], "bar-b"]].forEach(function (q, t) { var w = q[0] / maxv * 520; h += '<rect class="' + q[1] + '" x="120" y="' + (y + t * 13) + '" width="' + Math.max(w, 1) + '" height="11"/>'; });
+      h += '<text class="small" x="660" y="' + (y + 22) + '">노드 ' + r[1].toLocaleString("en-US") + " · heapify " + r[2].toLocaleString("en-US") + " · 삽입 " + r[3].toLocaleString("en-US") + "</text>";
+    });
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = "높이 " + H + ", n = " + n + ", heapify 거리 합 " + sa + ", 삽입 거리 합 " + sb;
+    var note = "높이 " + H + "이면 n = " + n.toLocaleString("en-US") + "이다. 맨 아래 레벨에 노드가 절반 가까이(" + rows[H][1].toLocaleString("en-US") + "개) 있지만 heapify에서는 내려갈 거리가 0이고, 거리가 " + H + "인 루트는 하나뿐이다. 그래서 heapify의 최대 이동 합은 " + sa.toLocaleString("en-US") + "으로 n보다 작다. 반대로 하나씩 넣으면 많은 아래 레벨 노드가 긴 거리를 올라갈 수 있어 합이 " + sb.toLocaleString("en-US") + "까지 커진다.";
+    note = note.replace(sa.toLocaleString("en-US") + "으로", pj(sa.toLocaleString("en-US"), "으로"));
+    show(3, [["n", n.toLocaleString("en-US")], ["heapify 최대 이동 합", sa.toLocaleString("en-US") + " (n 이하)"], ["n번 삽입 최대 이동 합", sb.toLocaleString("en-US")], ["삽입 합 ÷ heapify 합", (sb / sa).toFixed(1) + "배"]], note);
+  }
+
+  $("k1").addEventListener("input", renderHf); $("m2").addEventListener("change", renderCmp); $("h3").addEventListener("input", renderLv);
+  renderHf(); renderCmp(); renderLv();
+}());
+</script>
+</body>
+</html>

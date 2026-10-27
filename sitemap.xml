@@ -57,6 +57,11 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/18.%20Keeping%20the%20Order/bst-deletion.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/18.%20Keeping%20the%20Order/bst-height.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/18.%20Keeping%20the%20Order/bst-insertion.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/19.%20The%20Smallest%20One%20First/binary-heaps.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/19.%20The%20Smallest%20One%20First/priority-queue-adt.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/20.%20Up%20and%20Down%20One%20Level/heap-sort.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/20.%20Up%20and%20Down%20One%20Level/heap-update-operations.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/20.%20Up%20and%20Down%20One%20Level/heapify.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/00.%20Intro.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/01.%20Data%20Abstraction.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/02.%20Interfaces.pdf</loc></url>
@@ -76,6 +81,8 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/16.%20When%20Do%20We%20Visit%20the%20Root.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/17.%20Choose%20One%20Subtree.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/18.%20Keeping%20the%20Order.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/19.%20The%20Smallest%20One%20First.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/20.%20Up%20and%20Down%20One%20Level.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/arrays-and-linked-lists.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/arrays.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/asymptotic-growth.html</loc></url>
@@ -85,6 +92,8 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/doubly-linked-lists.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/dynamic-arrays.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/hash-tables-and-chaining.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/heap-operations.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/heaps-and-priority-queues.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/interfaces-and-implementations.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/linked-list-operations.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/linked-lists.html</loc></url>
