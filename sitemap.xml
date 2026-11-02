@@ -62,6 +62,12 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/20.%20Up%20and%20Down%20One%20Level/heap-sort.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/20.%20Up%20and%20Down%20One%20Level/heap-update-operations.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/20.%20Up%20and%20Down%20One%20Level/heapify.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/avl-balance.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/avl-imbalance-detection.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/skewed-bsts.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/avl-insertion-rebalancing.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/red-black-trees.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/tree-rotations.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/00.%20Intro.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/01.%20Data%20Abstraction.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/02.%20Interfaces.pdf</loc></url>
@@ -83,9 +89,13 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/18.%20Keeping%20the%20Order.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/19.%20The%20Smallest%20One%20First.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/20.%20Up%20and%20Down%20One%20Level.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/21.%20Keeping%20the%20Tree%20Short.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/22.%20Standing%20the%20Tree%20Back%20Up.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/arrays-and-linked-lists.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/arrays.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/asymptotic-growth.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/avl-balance.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/avl-rotations.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/binary-search-trees.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/bst-insertion-and-deletion.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/data-abstraction-and-adts.html</loc></url>
