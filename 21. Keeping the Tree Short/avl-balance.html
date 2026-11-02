@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>AVL Balance | Data Structure | Pusan National University</title><meta name="description" content="An AVL tree adds height balance to binary-search-tree order: every node has a left-minus-right subtree height difference of -1, 0, or 1, bounding tree height by O(log n)."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/avl-balance.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="AVL Balance | Data Structure | Pusan National University"><meta property="og:description" content="An AVL tree adds height balance to binary-search-tree order: every node has a left-minus-right subtree height difference of -1, 0, or 1, bounding tree height by O(log n)."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/avl-balance.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .topic-plot .lbl{font-size:14px;fill:var(--ink-700)}
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .node circle{fill:var(--white);stroke:var(--pnu-blue);stroke-width:2}
+    .topic-plot .node text{font-size:14px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-bad circle{fill:var(--alert-050);stroke:var(--alert-700);stroke-width:3.5}
+    .topic-plot .node.is-lean circle{fill:var(--pnu-blue-tint)}
+    .topic-plot .bf{font-size:12px;font-weight:700;fill:var(--pnu-blue-dark);text-anchor:middle;paint-order:stroke;stroke:var(--white);stroke-width:4px}
+    .topic-plot .bf.is-bad{fill:var(--alert-700)}
+    .topic-plot .bar{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:1.2}
+    .topic-plot .bar.is-on{fill:var(--pnu-green);stroke:var(--pnu-green)}
+    .topic-plot .grid{stroke:var(--line-200);stroke-width:1}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-avl-balance">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Keeping the Tree Short</span><span class="nav-tag is-current" aria-current="page">AVL Balance</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/21.%20Keeping%20the%20Tree%20Short.pdf">Keeping the Tree <span class="publication-lecture-tail">Short<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">AVL Balance</h1><hr class="accent-rule"><p class="page-subtitle">균형 인수(balance factor) bf(v)는 노드 v의 왼쪽 부분 트리 높이에서 오른쪽 부분 트리 높이를 뺀 값이다. AVL 트리(모든 노드의 균형 인수가 −1·0·1인 BST)는 BST의 ordering invariant(순서 불변식)에 이 높이 균형(height balance) 조건을 더한 것이며, 조건 덕분에 높이가 O(log n)으로 묶인다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>bf(v) = h(왼쪽) − h(오른쪽)</strong><span>빈 부분 트리의 높이는 −1이다. 양수면 왼쪽이, 음수면 오른쪽이 더 높다.</span></article><article class="summary-card"><strong>ordering invariant와 높이 균형</strong><span>ordering invariant는 키의 자리를, 높이 균형은 트리의 모양을 정한다. 둘 다 지켜야 한다.</span></article><article class="summary-card"><strong>정확히 같을 필요는 없다</strong><span>모든 노드의 차이가 0이면 2^(h+1) − 1개만 담을 수 있지만, 1 이하를 허용하면 임의의 n을 담는다.</span></article><article class="summary-card"><strong>저장해 두기</strong><span>노드마다 높이나 균형 인수를 저장하면 균형 확인이 O(1)이다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">모든 노드의 균형 인수가 −1, 0, 1 가운데 하나여야 AVL 트리다</h2><p class="lead">네 BST 가운데 하나를 고르면 노드마다의 부분 트리 높이, 균형 인수, 조건을 어긴 노드가 표시된다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="t1">트리</label><select id="t1"><option value="chain">10, 20, 30을 차례로 넣은 BST</option><option value="avl">30, 20, 40, 10, 25, 50으로 만든 BST</option><option value="perfect">20, 10, 30으로 만든 BST</option><option value="deep">50, 30, 70, 20, 40, 10으로 만든 BST</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="bf-plot" class="topic-plot" viewBox="0 0 900 300" role="img" aria-labelledby="bf-title bf-desc"><title id="bf-title">노드마다의 균형 인수</title><desc id="bf-desc">트리와 각 노드의 균형 인수</desc></svg></div><figcaption class="visual-caption">원 안의 수가 키, 원 아래 수가 균형 인수 bf다. 빨간 원과 빨간 수는 |bf| = 2 이상이라 AVL 조건을 어긴 노드이고, 옅은 파란 원은 한쪽으로 1만큼 기운 노드다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">높이 h인 AVL 트리의 최소 노드 수는 지수적으로 늘어 높이가 로그로 묶인다</h2><p class="lead">높이 h를 바꾸면 그 높이에서 노드를 가장 적게 담은 AVL 트리와 N(h) = N(h − 1) + N(h − 2) + 1의 값이 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="h2">높이 h <output id="h2-out" class="control-value" for="h2">3</output></label><input id="h2" type="range" min="0" max="5" step="1" value="3"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="fib-plot" class="topic-plot" viewBox="0 0 900 440" role="img" aria-labelledby="fib-title fib-desc"><title id="fib-title">가장 성긴 AVL 트리</title><desc id="fib-desc">높이 h에서 노드가 가장 적은 AVL 트리와 N(h)</desc></svg></div><figcaption class="visual-caption">위는 높이 h에서 노드 수가 가장 적은 AVL 트리이며 왼쪽은 높이 h − 1, 오른쪽은 높이 h − 2인 가장 성긴 트리다. 원 아래 수가 균형 인수다. 아래 막대는 h = 0부터 7까지의 N(h)이고 초록 막대가 현재 h다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../21. Keeping the Tree Short/skewed-bsts.html">이전 · Skewed Bsts</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../21. Keeping the Tree Short/avl-imbalance-detection.html">다음 · AVL Imbalance Detection</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s"]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+  function sgn(v) { return v > 0 ? "+" + v : String(v).replace("-", "−"); }
+
+  function insert(root, k) { if (!root) return { k: k, l: null, r: null }; if (k < root.k) root.l = insert(root.l, k); else root.r = insert(root.r, k); return root; }
+  function ht(n) { return n ? 1 + Math.max(ht(n.l), ht(n.r)) : -1; }
+  function layout(root, x0, W, y0, dy) { var list = [], i = 0; (function go(n, d, p) { if (!n) return; go(n.l, d + 1, n); n.i = i++; n.d = d; n.p = p; list.push(n); go(n.r, d + 1, n); }(root, 0, null)); var cnt = list.length; list.forEach(function (n) { n.x = x0 + (cnt === 1 ? W / 2 : n.i * W / (cnt - 1)); n.y = y0 + n.d * dy; }); return list; }
+  function drawTree(list, r) { var h = ""; list.forEach(function (n) { if (n.p) h += '<line class="edge" x1="' + n.p.x.toFixed(1) + '" y1="' + n.p.y + '" x2="' + n.x.toFixed(1) + '" y2="' + n.y + '"/>'; }); list.forEach(function (n) { var bf = ht(n.l) - ht(n.r), cls = Math.abs(bf) >= 2 ? " is-bad" : Math.abs(bf) === 1 ? " is-lean" : ""; h += '<g class="node' + cls + '"><circle cx="' + n.x.toFixed(1) + '" cy="' + n.y + '" r="' + r + '"/><text x="' + n.x.toFixed(1) + '" y="' + n.y + '">' + (n.label === undefined ? n.k : n.label) + '</text></g><text class="bf' + (Math.abs(bf) >= 2 ? " is-bad" : "") + '" x="' + n.x.toFixed(1) + '" y="' + (n.y + r + 15) + '">' + sgn(bf) + "</text>"; }); return h; }
+
+  var TREES = { chain: [10, 20, 30], avl: [30, 20, 40, 10, 25, 50], perfect: [20, 10, 30], deep: [50, 30, 70, 20, 40, 10] };
+  function renderBf() {
+    var key = $("t1").value, root = null; TREES[key].forEach(function (k) { root = insert(root, k); });
+    var list = layout(root, 150, 600, 40, 80), svg = $("bf-plot"), h = head(svg);
+    h += drawTree(list, 22);
+    svg.innerHTML = h;
+    var bfs = list.map(function (n) { return { k: n.k, bf: ht(n.l) - ht(n.r) }; }), bad = bfs.filter(function (b) { return Math.abs(b.bf) >= 2; }), H = ht(root);
+    svg.querySelector("desc").textContent = "균형 인수 " + bfs.map(function (b) { return b.k + ":" + sgn(b.bf); }).join(", ");
+    var notes = {
+      chain: "10은 왼쪽이 비어 높이 −1, 20과 30으로 된 오른쪽 부분 트리의 높이가 1이라 bf = −1 − 1 = −2다. 20은 −1, 단말 노드 30은 두 부분 트리가 모두 비어 0이다. 루트의 −2가 조건을 어긴 자리이며 오른쪽이 무겁다.",
+      avl: "20과 30은 좌우 높이가 같아 0이고, 40은 오른쪽에만 50이 있어 −1이다. 좌우 높이가 정확히 같지는 않아도 모든 노드의 |bf|가 1 이하라 AVL 트리다.",
+      perfect: "세 노드가 모두 가득 찬 트리라 모든 균형 인수가 0이다. 이런 모양은 노드 수가 2^(h+1) − 1일 때만 가능하므로, AVL 조건은 차이 1까지 허용한다.",
+      deep: "20은 왼쪽에만 10이 있어 +1, 30은 왼쪽 높이 1과 오른쪽 높이 0으로 +1이다. 루트 50은 왼쪽 높이 2와 오른쪽 높이 0으로 +2가 되어 조건을 어긴다. 자식 노드들이 괜찮아도 조상에서 차이가 쌓일 수 있으므로 모든 노드를 확인한다."
+    };
+    show(1, [["노드 수", list.length + "개"], ["높이", String(H)], ["|bf| ≥ 2인 노드", bad.length ? bad.map(function (b) { return b.k + " (" + sgn(b.bf) + ")"; }).join(", ") : "없음"], ["AVL 트리인가", bad.length ? "아니다" : "그렇다"]], notes[key]);
+  }
+
+  function fibTree(h) { if (h < 0) return null; if (h === 0) return { l: null, r: null }; return { l: fibTree(h - 1), r: fibTree(h - 2) }; }
+  var N = [1, 2]; for (var q = 2; q <= 7; q++) N.push(N[q - 1] + N[q - 2] + 1);
+  function renderFib() {
+    var h = Number($("h2").value), root = fibTree(h), list = layout(root, 60, 780, 30, 44), svg = $("fib-plot"), s = head(svg);
+    $("h2-out").textContent = h;
+    list.forEach(function (n, i) { n.label = ""; });
+    s += drawTree(list, 11);
+    N.forEach(function (v, i) { var x = 120 + i * 90, bh = v / 55 * 90; s += '<rect class="bar' + (i === h ? " is-on" : "") + '" x="' + x + '" y="' + (420 - bh).toFixed(1) + '" width="60" height="' + bh.toFixed(1) + '"/><text class="small" x="' + (x + 30) + '" y="' + (414 - bh).toFixed(1) + '" text-anchor="middle">' + v + '</text><text class="small" x="' + (x + 30) + '" y="436" text-anchor="middle">h=' + i + "</text>"; });
+    svg.innerHTML = s;
+    svg.querySelector("desc").textContent = "높이 " + h + ", 최소 노드 수 " + N[h];
+    var note = h === 0 ? "높이 0인 AVL 트리는 노드 하나다. N(0) = 1이다."
+      : h === 1 ? "높이 1이면 루트와 자식 노드 하나로 N(1) = 2다. 루트의 균형 인수는 +1이다."
+      : "높이 " + h + "인 가장 성긴 AVL 트리는 루트 아래에 높이 " + (h - 1) + "와 " + (h - 2) + "인 가장 성긴 트리를 붙인 모양이라 N(" + h + ") = N(" + (h - 1) + ") + N(" + (h - 2) + ") + 1 = " + N[h - 1] + " + " + N[h - 2] + " + 1 = " + N[h] + "이다. N(h) + 1 = " + (N[h] + 1) + "은 피보나치 수처럼 커지므로 노드 수가 높이에 대해 지수적으로 늘고, 뒤집어 말하면 n개를 담은 AVL 트리의 높이는 약 1.44 log₂ n을 넘지 않는다.";
+    note = note.replace("높이 " + (h - 1) + "와 ", "높이 " + pj(h - 1, "과") + " ").replace("N(h) + 1 = " + (N[h] + 1) + "은", "N(h) + 1 = " + pj(N[h] + 1, "은"));
+    show(2, [["높이 h", String(h)], ["최소 노드 수 N(h)", String(N[h])], ["N(h) + 1", String(N[h] + 1)], ["모든 층이 가득 찬 트리의 노드 수", String(Math.pow(2, h + 1) - 1)]], note);
+  }
+
+  $("t1").addEventListener("change", renderBf); $("h2").addEventListener("input", renderFib);
+  renderBf(); renderFib();
+}());
+</script>
+</body>
+</html>

@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Skewed Bsts | Data Structure | Pusan National University</title><meta name="description" content="A binary search tree can grow to height n - 1 under sorted insertion, while balanced trees maintain logarithmic height and operation costs independently of insertion order."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/skewed-bsts.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Skewed Bsts | Data Structure | Pusan National University"><meta property="og:description" content="A binary search tree can grow to height n - 1 under sorted insertion, while balanced trees maintain logarithmic height and operation costs independently of insertion order."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/skewed-bsts.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .topic-plot .lbl{font-size:14px;fill:var(--ink-700);paint-order:stroke;stroke:var(--white);stroke-width:4px}
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .node circle{fill:var(--white);stroke:var(--pnu-blue);stroke-width:2}
+    .topic-plot .node text{font-size:13px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-deep circle{fill:var(--pnu-green);stroke:var(--pnu-green)}
+    .topic-plot .node.is-deep text{fill:var(--white)}
+    .topic-plot .grid{stroke:var(--line-200);stroke-width:1}
+    .topic-plot .axis{stroke:var(--ink-600);stroke-width:1.2}
+    .topic-plot .c-bst{fill:none;stroke:var(--alert-700);stroke-width:3}
+    .topic-plot .c-avl{fill:none;stroke:var(--pnu-green);stroke-width:3;stroke-dasharray:9 5}
+    .topic-plot .c-opt{fill:none;stroke:var(--pnu-blue);stroke-width:3}
+    .topic-plot .guide{stroke:var(--ink-600);stroke-width:1;stroke-dasharray:3 3}
+    .topic-plot .dot{stroke:var(--white);stroke-width:2}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-skewed-bsts">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Keeping the Tree Short</span><span class="nav-tag is-current" aria-current="page">Skewed Bsts</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/21.%20Keeping%20the%20Tree%20Short.pdf">Keeping the Tree <span class="publication-lecture-tail">Short<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Skewed Bsts</h1><hr class="accent-rule"><p class="page-subtitle">BST의 탐색·삽입·삭제 비용은 높이가 정한다. 삽입 순서는 사용하는 쪽이 정하지 못하므로 정렬된 값이 들어오면 한쪽으로만 자란 편향 트리(skewed tree)가 되어 높이가 n − 1까지 커진다. 균형 트리(balanced tree)는 삽입·삭제 뒤에도 높이를 O(log n)으로 유지해 입력 순서와 무관한 보장을 준다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>높이와 비용</strong><span>고르게 퍼진 트리는 높이가 약 log₂ n이라 O(log n), 한쪽으로 기운 트리는 n − 1이라 O(n)이다.</span></article><article class="summary-card"><strong>통제할 수 없는 입력</strong><span>입력을 미리 섞을 수 없다면 삽입할 때 트리가 스스로 균형을 유지해야 한다.</span></article><article class="summary-card"><strong>균형 유지의 값</strong><span>노드마다 균형 정보를 저장하고, 삽입에서 자리를 찾은 뒤 재균형까지 한다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">같은 키도 정렬된 순서로 넣으면 한 줄로 늘어선다</h2><p class="lead">1부터 15까지의 키를 삽입 순서를 바꿔 BST에 넣는다. 순서와 넣은 키 수를 바꾸면 트리 모양, 높이, 가장 깊은 키를 찾을 때 방문하는 노드 수가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="o1">삽입 순서</label><select id="o1"><option value="sorted">1, 2, 3, …, 15 (정렬됨)</option><option value="mid">8, 4, 12, 2, 6, 10, 14, … (가운데부터)</option><option value="mixed">7, 3, 11, 1, 13, 5, 9, … (섞임)</option></select></div><div class="control-field"><label for="k1">넣은 키 수 <output id="k1-out" class="control-value" for="k1">7</output></label><input id="k1" type="range" min="1" max="15" step="1" value="7"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="sk-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="sk-title sk-desc"><title id="sk-title">삽입 순서와 BST 모양</title><desc id="sk-desc">넣은 키로 만든 BST</desc></svg></div><figcaption class="visual-caption">원 안의 수가 키이고 가로 위치는 키 크기, 세로 위치는 깊이다. 초록 원이 가장 깊은 노드다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">편향 BST의 높이는 n에 비례하지만 균형 트리는 로그로 묶인다</h2><p class="lead">원소 수 n을 바꾸면 편향 BST의 높이 n − 1, 가장 낮은 트리의 높이 ⌊log₂ n⌋, AVL 트리 높이의 상계 약 1.44 log₂ n이 함께 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="e2">원소 수 n (로그 눈금) <output id="e2-out" class="control-value" for="e2">1,000</output></label><input id="e2" type="range" min="1" max="6" step="0.5" value="3"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="hb-plot" class="topic-plot" viewBox="0 0 900 340" role="img" aria-labelledby="hb-title hb-desc"><title id="hb-title">원소 수와 높이</title><desc id="hb-desc">편향 BST, AVL 상계, 가장 낮은 트리의 높이</desc></svg></div><figcaption class="visual-caption">가로축은 로그 눈금의 n, 세로축은 로그 눈금의 높이다. 빨간 실선이 편향 BST, 초록 점선이 AVL 트리 높이의 상계, 파란 실선이 가장 낮은 트리이고 세 점이 현재 n이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../20. Up and Down One Level/heap-sort.html">이전 · Heap Sort</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../21. Keeping the Tree Short/avl-balance.html">다음 · AVL Balance</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s"]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+
+  var ORD = { sorted: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15], mid: [8, 4, 12, 2, 6, 10, 14, 1, 3, 5, 7, 9, 11, 13, 15], mixed: [7, 3, 11, 1, 13, 5, 9, 15, 2, 8, 12, 4, 14, 6, 10] };
+  function build(keys) { var info = {}, root = null; keys.forEach(function (k) { if (root === null) { root = k; info[k] = { d: 0, p: null, l: null, r: null }; return; } var n = root, d = 0; while (true) { d++; var side = k < n ? "l" : "r"; if (info[n][side] === null) { info[n][side] = k; info[k] = { d: d, p: n, l: null, r: null }; break; } n = info[n][side]; } }); return info; }
+  function renderSk() {
+    var o = $("o1").value, k = Number($("k1").value), keys = ORD[o].slice(0, k), info = build(keys), svg = $("sk-plot"), h = head(svg);
+    $("k1-out").textContent = k;
+    var H = Math.max.apply(null, keys.map(function (x) { return info[x].d; })), dy = Math.min(60, 300 / Math.max(H, 1));
+    var pos = function (x) { return [30 + (x - 1) * 60, 30 + info[x].d * dy]; };
+    keys.forEach(function (x) { if (info[x].p !== null) { var a = pos(info[x].p), b = pos(x); h += '<line class="edge" x1="' + a[0] + '" y1="' + a[1] + '" x2="' + b[0] + '" y2="' + b[1] + '"/>'; } });
+    keys.forEach(function (x) { var p = pos(x); h += '<g class="node' + (info[x].d === H ? " is-deep" : "") + '"><circle cx="' + p[0] + '" cy="' + p[1] + '" r="15"/><text x="' + p[0] + '" y="' + p[1] + '">' + x + "</text></g>"; });
+    svg.innerHTML = h;
+    var deep = keys.filter(function (x) { return info[x].d === H; }), minH = Math.floor(Math.log2(k));
+    svg.querySelector("desc").textContent = "키 " + k + "개, 높이 " + H;
+    var note = o === "sorted"
+      ? "정렬된 순서로 넣으면 새 키가 매번 지금까지의 모든 키보다 커서 오른쪽 끝에만 붙는다. 키 " + k + "개의 높이가 " + pj(H, "이") + " 되어 가장 깊은 키 " + pj(deep[0], "을") + " 찾는 데 " + (H + 1) + "개 노드를 본다. 연결리스트를 따라가는 것과 같은 O(n) 비용이다."
+      : "같은 키를 " + (o === "mid" ? "가운데 값부터" : "섞인 순서로") + " 넣으면 키 " + k + "개의 높이가 " + H + "이고, 가장 깊은 키도 " + (H + 1) + "개 노드를 보고 찾는다. 같은 개수에서 가능한 가장 낮은 높이는 " + minH + "이다." + (o === "mixed" ? " 섞인 순서가 늘 이만큼 낮게 나온다는 보장은 없다." : "");
+    if (k <= 2) note = "키가 " + k + "개뿐이라 어떤 순서로 넣어도 높이가 " + H + "이다. 키를 더 넣으면 삽입 순서에 따라 모양이 갈린다.";
+    show(1, [["넣은 키", k + "개"], ["높이", String(H)], ["가장 깊은 키까지 방문 노드 수", (H + 1) + "개"], ["가능한 가장 낮은 높이", String(minH)]], note);
+  }
+
+  function renderHb() {
+    var e = Number($("e2").value), n = Math.round(Math.pow(10, e)), svg = $("hb-plot"), h = head(svg);
+    $("e2-out").textContent = n.toLocaleString("en-US");
+    var X = function (le) { return 80 + (le - 1) / 5 * 760; }, Y = function (v) { return 300 - Math.log10(Math.max(v, 1)) / 6 * 270; };
+    [1, 10, 100, 1000, 10000, 100000, 1000000].forEach(function (v) { h += '<line class="grid" x1="80" y1="' + Y(v) + '" x2="840" y2="' + Y(v) + '"/><text class="small" x="72" y="' + (Y(v) + 4) + '" text-anchor="end">' + v.toLocaleString("en-US") + "</text>"; });
+    [1, 2, 3, 4, 5, 6].forEach(function (le) { h += '<text class="small" x="' + X(le) + '" y="320" text-anchor="middle">' + Math.pow(10, le).toLocaleString("en-US") + "</text>"; });
+    var skew = function (m) { return m - 1; }, avl = function (m) { return Math.floor(1.44 * Math.log2(m)); }, opt = function (m) { return Math.floor(Math.log2(m)); };
+    var p1 = "", p2 = "", p3 = "";
+    for (var i = 0; i <= 100; i++) { var le = 1 + i * 0.05, m = Math.round(Math.pow(10, le)); p1 += (i ? "L" : "M") + X(le).toFixed(1) + " " + Y(skew(m)).toFixed(1); p2 += (i ? "L" : "M") + X(le).toFixed(1) + " " + Y(avl(m)).toFixed(1); p3 += (i ? "L" : "M") + X(le).toFixed(1) + " " + Y(opt(m)).toFixed(1); }
+    h += '<path class="c-bst" d="' + p1 + '"/><path class="c-avl" d="' + p2 + '"/><path class="c-opt" d="' + p3 + '"/><line class="guide" x1="' + X(e) + '" y1="30" x2="' + X(e) + '" y2="300"/>';
+    h += '<circle class="dot" cx="' + X(e) + '" cy="' + Y(skew(n)) + '" r="6" style="fill:var(--alert-700)"/><circle class="dot" cx="' + X(e) + '" cy="' + Y(avl(n)) + '" r="6" style="fill:var(--pnu-green)"/><circle class="dot" cx="' + X(e) + '" cy="' + Y(opt(n)) + '" r="6" style="fill:var(--pnu-blue)"/>';
+    h += '<text class="lbl" x="' + X(4.6) + '" y="' + (Y(skew(Math.pow(10, 4.6))) - 10) + '">편향 BST</text><text class="lbl" x="' + X(5.2) + '" y="' + (Y(1.44 * Math.log2(Math.pow(10, 5.2))) - 12) + '">AVL 상계</text><text class="lbl" x="' + X(5.2) + '" y="' + (Y(Math.log2(Math.pow(10, 5.2))) + 22) + '">가장 낮은 트리</text>';
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = "n = " + n + ", 편향 BST " + skew(n) + ", AVL 상계 " + avl(n) + ", 가장 낮은 트리 " + opt(n);
+    var note = "n = " + n.toLocaleString("en-US") + "이면 편향 BST의 높이는 " + skew(n).toLocaleString("en-US") + "이지만 AVL 트리는 높이가 약 " + avl(n) + "을 넘지 않고, 가장 낮은 트리는 " + opt(n) + "이다." + (n === 1000 || n === 1000000 ? " 강의 표의 " + (n === 1000 ? "14 대 999" : "28 대 999,999") + "가 이 경우다." : "") + " 균형 트리는 가장 낮은 높이의 상수 배 안쪽에 머물러, 어떤 순서로 넣어도 탐색·삽입·삭제가 O(log n)이다.";
+    note = note.replace("약 " + avl(n) + "을", "약 " + pj(avl(n), "을"));
+    show(2, [["n", n.toLocaleString("en-US")], ["편향 BST의 높이", skew(n).toLocaleString("en-US")], ["AVL 높이 상계", "약 " + avl(n)], ["가장 낮은 높이", String(opt(n))]], note);
+  }
+
+  $("o1").addEventListener("change", renderSk); $("k1").addEventListener("input", renderSk); $("e2").addEventListener("input", renderHb);
+  renderSk(); renderHb();
+}());
+</script>
+</body>
+</html>

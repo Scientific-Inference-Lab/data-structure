@@ -1,0 +1,142 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Tree Rotations | Data Structure | Pusan National University</title><meta name="description" content="A tree rotation changes a local parent-child relationship in constant time while preserving inorder key order and helping restore AVL height balance."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/tree-rotations.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Tree Rotations | Data Structure | Pusan National University"><meta property="og:description" content="A tree rotation changes a local parent-child relationship in constant time while preserving inorder key order and helping restore AVL height balance."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/tree-rotations.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .topic-plot .lbl{font-size:14px;fill:var(--ink-700);paint-order:stroke;stroke:var(--white);stroke-width:4px}
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .edge.is-on{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .node circle{fill:var(--white);stroke:var(--pnu-blue);stroke-width:2}
+    .topic-plot .node text{font-size:15px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-up circle{fill:var(--pnu-green);stroke:var(--pnu-green)}
+    .topic-plot .node.is-up text{fill:var(--white)}
+    .topic-plot .node.is-bad circle{fill:var(--alert-050);stroke:var(--alert-700);stroke-width:3.5}
+    .topic-plot .node.is-new circle{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .sub path{fill:var(--pnu-blue-tint);stroke:var(--pnu-blue);stroke-width:1.5}
+    .topic-plot .sub.is-move path{fill:color-mix(in srgb,var(--pnu-green) 22%,var(--white));stroke:var(--pnu-green);stroke-width:3}
+    .topic-plot .sub text{font-size:15px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .ord rect{fill:var(--white);stroke:var(--line-300)}
+    .topic-plot .ord text{font-size:14px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .bf{font-size:12px;font-weight:700;fill:var(--pnu-blue-dark);text-anchor:middle;paint-order:stroke;stroke:var(--white);stroke-width:4px}
+    .topic-plot .bf.is-bad{fill:var(--alert-700)}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-tree-rotations">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Standing the Tree Back Up</span><span class="nav-tag is-current" aria-current="page">Tree Rotations</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/22.%20Standing%20the%20Tree%20Back%20Up.pdf">Standing the Tree Back <span class="publication-lecture-tail">Up<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Tree Rotations</h1><hr class="accent-rule"><p class="page-subtitle">회전(rotation)은 부모와 자식 노드의 관계를 국소적으로 바꾸되 중위 순서를 보존하는 연산이다. 참조 몇 개만 옮기므로 담긴 값의 수와 상관없이 O(1)이고, AVL 트리에서는 불균형 부분 트리의 높이를 삽입 전 수준으로 되돌리는 데 쓴다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>오른쪽 회전(right rotation)</strong><span>왼쪽이 무거울 때 왼쪽 자식 노드를 올린다. 코드 이름은 rotate_right다.</span></article><article class="summary-card"><strong>왼쪽 회전(left rotation)</strong><span>오른쪽이 무거울 때 오른쪽 자식 노드를 올린다. 두 회전은 서로의 거울상이다.</span></article><article class="summary-card"><strong>보존하는 것</strong><span>A &lt; X &lt; B &lt; S &lt; C의 순서가 그대로라 회전 뒤에도 BST 조건을 만족한다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">회전은 부모와 자식을 바꾸고 가운데 부분 트리 하나만 옮기며 중위 순서를 지킨다</h2><p class="lead">노드 S의 왼쪽 자식 노드가 X이고 A, B, C가 부분 트리다. 회전 방향과 상태를 바꾸면 루트, 가운데 부분 트리 B의 부모, 바뀐 참조, 중위 순서 줄이 함께 표시된다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="d1">회전</label><select id="d1"><option value="right">S에서 오른쪽 회전</option><option value="left">X에서 왼쪽 회전 (되돌리기)</option></select></div><div class="control-field"><label for="s1">상태</label><select id="s1"><option value="before">회전 전</option><option value="after" selected>회전 후</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="rot-plot" class="topic-plot" viewBox="0 0 900 340" role="img" aria-labelledby="rot-title rot-desc"><title id="rot-title">회전 전후의 구조</title><desc id="rot-desc">노드 X, S와 부분 트리 A, B, C</desc></svg></div><figcaption class="visual-caption">원이 노드, 삼각형이 부분 트리다. 초록 원이 회전으로 올라가는 노드, 초록 삼각형이 부모가 바뀌는 부분 트리 B, 굵은 초록 선이 새로 바뀐 참조다. 아래 줄은 중위 순서이며 회전 전후에 같다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">바깥으로 기운 불균형은 불균형 노드를 축으로 한 번 돌리면 풀린다</h2><p class="lead">빈 AVL 트리에 값 세 개를 넣는다. 삽입 순서와 진행 단계를 바꾸면 트리 모양, 균형 인수, 회전의 축과 방향이 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="o2">삽입 순서</label><select id="o2"><option value="ll">30, 20, 10 (left-left)</option><option value="rr">10, 20, 30 (right-right)</option></select></div><div class="control-field"><label for="k2">진행 단계 <output id="k2-out" class="control-value" for="k2">3</output></label><input id="k2" type="range" min="1" max="4" step="1" value="3"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="sg-plot" class="topic-plot" viewBox="0 0 900 290" role="img" aria-labelledby="sg-title sg-desc"><title id="sg-title">한 번의 회전으로 균형 회복</title><desc id="sg-desc">세 값을 넣은 트리와 회전</desc></svg></div><figcaption class="visual-caption">1~3단계는 값을 하나씩 넣은 트리, 4단계는 회전 뒤다. 원 아래 수가 균형 인수이고 빨간 원이 |bf| = 2인 불균형 노드, 초록 테두리 원이 방금 넣은 값, 초록 원이 회전으로 올라온 노드다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../21. Keeping the Tree Short/avl-imbalance-detection.html">이전 · AVL Imbalance Detection</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../22. Standing the Tree Back Up/avl-insertion-rebalancing.html">다음 · AVL Insertion Rebalancing</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s"]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+  function sgn(v) { return v > 0 ? "+" + v : String(v).replace("-", "−"); }
+
+  function renderRot() {
+    var dir = $("d1").value, st = $("s1").value, svg = $("rot-plot"), h = head(svg);
+    // shape "S-top": S root, X left child (A,B), C right. shape "X-top": X root, A left, S right (B,C)
+    var xTop = (dir === "right" && st === "after") || (dir === "left" && st === "before");
+    var up = dir === "right" ? "X" : "S";
+    function node(x, y, k) { h += '<g class="node' + (k === up && st === "after" ? " is-up" : "") + '"><circle cx="' + x + '" cy="' + y + '" r="24"/><text x="' + x + '" y="' + y + '">' + k + "</text></g>"; }
+    function sub(x, y, k) { h += '<g class="sub' + (k === "B" ? " is-move" : "") + '"><path d="M' + x + " " + y + " l-34 60 h68 z" + '"/><text x="' + x + '" y="' + (y + 40) + '">' + k + "</text></g>"; }
+    function edge(x1, y1, x2, y2, on) { h += '<line class="edge' + (on ? " is-on" : "") + '" x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"/>'; }
+    var changed = st === "after";
+    if (!xTop) {
+      edge(450, 60, 330, 130, changed && dir === "left"); edge(450, 60, 570, 170, false); edge(330, 130, 250, 190, false); edge(330, 130, 410, 190, changed && dir === "left");
+      node(450, 60, "S"); node(330, 130, "X"); sub(250, 190, "A"); sub(410, 190, "B"); sub(570, 170, "C");
+    } else {
+      edge(450, 60, 330, 170, false); edge(450, 60, 570, 130, changed && dir === "right"); edge(570, 130, 490, 190, changed && dir === "right"); edge(570, 130, 650, 190, false);
+      node(450, 60, "X"); node(570, 130, "S"); sub(330, 170, "A"); sub(490, 190, "B"); sub(650, 190, "C");
+    }
+    ["A", "X", "B", "S", "C"].forEach(function (k, i) { var x = 230 + i * 90; h += '<g class="ord"><rect x="' + (x - 34) + '" y="290" width="68" height="36" rx="5"/><text x="' + x + '" y="308">' + k + "</text></g>"; if (i < 4) h += '<text class="lbl" x="' + (x + 45) + '" y="313" text-anchor="middle">&lt;</text>'; });
+    svg.innerHTML = h;
+    var root = xTop ? "X" : "S", bParent = xTop ? "S" : "X";
+    svg.querySelector("desc").textContent = (dir === "right" ? "오른쪽" : "왼쪽") + " 회전 " + (st === "after" ? "후" : "전") + ", 루트 " + root + ", B의 부모 " + bParent;
+    var note;
+    if (st === "before") note = dir === "right" ? "S가 루트이고 왼쪽 자식 노드 X 아래에 A와 B가 있다. S의 왼쪽이 무거우면 X를 올리는 오른쪽 회전을 한다." : "오른쪽 회전을 마친 모양이다. X의 오른쪽 자식 노드 S를 다시 올리면 왼쪽 회전이 되어 처음 모양으로 돌아간다.";
+    else note = dir === "right" ? "X가 올라가 루트가 되고 S는 X의 오른쪽 자식 노드가 되었다. X의 오른쪽에 있던 B는 S의 왼쪽으로 옮겨졌다. 자식 참조 세 개와 부모 참조를 두는 구현의 부모 참조 세 개가 바뀐다. 바뀌는 참조 수가 원소 수와 무관하므로 O(1)이다. 중위 순서 A < X < B < S < C는 그대로다." : "S가 다시 루트로 올라가고 B는 X의 오른쪽으로 돌아왔다. 왼쪽 회전은 오른쪽 회전의 거울상이라 자식 참조와 부모 참조를 같은 수만큼 반대로 바꾸며, 중위 순서는 여전히 A < X < B < S < C다.";
+    show(1, [["부분 트리의 루트", root], ["B의 부모", bParent], ["바뀐 참조", st === "after" ? "자식 3개 · 부모 3개" : "없음"], ["중위 순서", "A, X, B, S, C"]], note);
+  }
+
+  function ins(n, k) { if (!n) return { k: k, l: null, r: null }; if (k < n.k) n.l = ins(n.l, k); else n.r = ins(n.r, k); return n; }
+  function ht(n) { return n ? 1 + Math.max(ht(n.l), ht(n.r)) : -1; }
+  function list(root) { var out = []; (function go(n, d, p) { if (!n) return; go(n.l, d + 1, n); n.d = d; n.p = p; out.push(n); go(n.r, d + 1, n); }(root, 0, null)); return out; }
+  function renderSg() {
+    var o = $("o2").value, k = Number($("k2").value), keys = o === "ll" ? [30, 20, 10] : [10, 20, 30], svg = $("sg-plot"), h = head(svg), root = null;
+    $("k2-out").textContent = k;
+    keys.slice(0, Math.min(k, 3)).forEach(function (v) { root = ins(root, v); });
+    if (k === 4) root = { k: 20, l: { k: 10, l: null, r: null }, r: { k: 30, l: null, r: null } };
+    var L = list(root), newKey = k <= 3 ? keys[k - 1] : null;
+    L.forEach(function (n) { n.x = 150 + (n.k - 10) / 20 * 600; n.y = 50 + n.d * 90; });
+    L.forEach(function (n) { if (n.p) h += '<line class="edge' + (k === 4 ? " is-on" : "") + '" x1="' + n.p.x + '" y1="' + n.p.y + '" x2="' + n.x + '" y2="' + n.y + '"/>'; });
+    L.forEach(function (n) { var b = ht(n.l) - ht(n.r), cls = Math.abs(b) >= 2 ? " is-bad" : k === 4 && n.k === 20 ? " is-up" : n.k === newKey ? " is-new" : ""; h += '<g class="node' + cls + '"><circle cx="' + n.x + '" cy="' + n.y + '" r="24"/><text x="' + n.x + '" y="' + n.y + '">' + n.k + '</text></g><text class="bf' + (Math.abs(b) >= 2 ? " is-bad" : "") + '" x="' + n.x + '" y="' + (n.y + 40) + '">' + sgn(b) + "</text>"; });
+    svg.innerHTML = h;
+    var bad = L.filter(function (n) { return Math.abs(ht(n.l) - ht(n.r)) >= 2; })[0];
+    svg.querySelector("desc").textContent = "단계 " + k + ", 루트 " + root.k + ", 높이 " + ht(root);
+    var pivot = o === "ll" ? 30 : 10, rotName = o === "ll" ? "오른쪽 회전" : "왼쪽 회전";
+    var note;
+    if (k < 3) note = pj(keys[k - 1], "을") + " 넣었다. 모든 노드의 |bf|가 1 이하라 균형이다.";
+    else if (k === 3) note = pj(keys[2], "을") + " 넣자 " + (o === "ll" ? "왼쪽으로" : "오른쪽으로") + " 세 개가 줄지어 " + pivot + "에서 bf = " + sgn(ht(bad.l) - ht(bad.r)) + "가 되었다. 불균형 노드와 무거운 자식 노드 20이 같은 방향으로 기운 바깥 경우(" + (o === "ll" ? "left-left" : "right-right") + ")이므로 " + pivot + "을 축으로 " + rotName + " 한 번이면 된다.";
+    else note = pivot + "을 축으로 " + rotName + "하자 20이 루트로 올라가 10과 30을 자식 노드로 두었다. 모든 균형 인수가 0이고 높이가 2에서 1로 줄었으며, 중위 순서 10, 20, 30은 그대로다.";
+    note = note.replace(pivot + "을 축으로", pj(pivot, "을") + " 축으로").replace(pivot + "을 축으로", pj(pivot, "을") + " 축으로");
+    show(2, [["단계", k === 4 ? "회전 후" : "값 " + keys[k - 1] + " 삽입"], ["루트", String(root.k)], ["높이", String(ht(root))], ["불균형 노드", bad ? bad.k + " (bf " + sgn(ht(bad.l) - ht(bad.r)) + ")" : "없음"]], note);
+  }
+
+  $("d1").addEventListener("change", renderRot); $("s1").addEventListener("change", renderRot);
+  $("o2").addEventListener("change", renderSg); $("k2").addEventListener("input", renderSg);
+  renderRot(); renderSg();
+}());
+</script>
+</body>
+</html>

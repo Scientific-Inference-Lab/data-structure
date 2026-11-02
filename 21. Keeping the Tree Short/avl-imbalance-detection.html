@@ -1,0 +1,155 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>AVL Imbalance Detection | Data Structure | Pusan National University</title><meta name="description" content="After an AVL insertion, update balance factors along the path to the root, stopping when the height no longer changes or rebalancing at the first node with an absolute balance factor of 2."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/avl-imbalance-detection.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="AVL Imbalance Detection | Data Structure | Pusan National University"><meta property="og:description" content="After an AVL insertion, update balance factors along the path to the root, stopping when the height no longer changes or rebalancing at the first node with an absolute balance factor of 2."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/avl-imbalance-detection.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .topic-plot .lbl{font-size:14px;fill:var(--ink-700);paint-order:stroke;stroke:var(--white);stroke-width:4px}
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .edge.is-on{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .node circle{fill:var(--white);stroke:var(--pnu-blue);stroke-width:2}
+    .topic-plot .node text{font-size:15px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-new circle{fill:var(--pnu-green);stroke:var(--pnu-green)}
+    .topic-plot .node.is-new text{fill:var(--white)}
+    .topic-plot .node.is-done circle{fill:var(--pnu-blue-tint)}
+    .topic-plot .node.is-cur circle{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .node.is-bad circle{fill:var(--alert-050);stroke:var(--alert-700);stroke-width:4}
+    .topic-plot .node.is-fixed circle{stroke:var(--pnu-green);stroke-width:4;stroke-dasharray:5 3}
+    .topic-plot .bf{font-size:12px;font-weight:700;fill:var(--pnu-blue-dark);text-anchor:middle;paint-order:stroke;stroke:var(--white);stroke-width:4px}
+    .topic-plot .bf.is-bad{fill:var(--alert-700)}
+    .topic-plot .bf.is-old{fill:var(--ink-600);font-weight:400}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-avl-imbalance-detection">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Keeping the Tree Short</span><span class="nav-tag is-current" aria-current="page">AVL Imbalance Detection</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/21.%20Keeping%20the%20Tree%20Short.pdf">Keeping the Tree <span class="publication-lecture-tail">Short<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">AVL Imbalance Detection</h1><hr class="accent-rule"><p class="page-subtitle">AVL 트리에 새 단말 노드가 생기면 높이가 바뀔 수 있는 노드는 새 노드에서 루트까지의 경로 위에만 있다. 부모부터 올라가며 균형 인수를 고치다가 값이 0이 되면 위로는 바뀌지 않으므로 멈추고, |bf| = 2인 노드를 처음 만나면 그 자리에서 재균형한다. 확인하는 노드는 높이만큼, 즉 O(log n)개다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>경로 위만 본다</strong><span>새 단말 노드의 조상이 아닌 노드는 부분 트리 높이가 바뀌지 않는다.</span></article><article class="summary-card"><strong>0이 되면 멈춘다</strong><span>갱신 뒤 bf가 0이면 그 부분 트리의 높이는 늘지 않았으므로 그 위 조상은 그대로다.</span></article><article class="summary-card"><strong>가장 가까운 불균형 노드</strong><span>|bf| = 2인 조상이 여럿이면 새 값에서 가장 가까운 노드를 고친다. 그 아래는 아직 AVL 조건을 지킨다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">새 단말 노드에서 올라가며 bf를 고치다가 0이나 ±2에서 멈춘다</h2><p class="lead">AVL 트리 30(20(10), 40)에 값 하나를 넣는다. 넣을 값과 확인한 조상 수를 바꾸면 새 단말 노드의 자리, 갱신한 균형 인수, 멈추는 이유가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="v1">넣을 값</label><select id="v1"><option value="5">5</option><option value="15">15</option><option value="25">25</option><option value="35">35</option><option value="45">45</option></select></div><div class="control-field"><label for="k1">확인한 조상 수 <output id="k1-out" class="control-value" for="k1">0</output></label><input id="k1" type="range" min="0" max="3" step="1" value="0"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="up-plot" class="topic-plot" viewBox="0 0 900 350" role="img" aria-labelledby="up-title up-desc"><title id="up-title">삽입 뒤 균형 인수 갱신</title><desc id="up-desc">새 단말 노드와 경로 위 조상의 균형 인수</desc></svg></div><figcaption class="visual-caption">초록 원이 새 단말 노드, 초록 선이 루트까지의 경로다. 초록 테두리 원이 지금 확인한 조상, 옅은 파란 원이 이미 확인한 조상이며, 빨간 원은 |bf| = 2가 된 조상이다. 원 아래 수는 균형 인수이고 회색 수는 아직 고치지 않은 삽입 전 값이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">가장 가까운 불균형 노드의 높이를 되돌리면 그 위의 불균형도 함께 사라진다</h2><p class="lead">5를 넣은 뒤 높이로 다시 세면 20과 30이 모두 +2다. 삽입 직후와 첫 불균형 조상 20의 부분 트리 높이를 되돌린 뒤를 비교한다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="c2">확인할 상태</label><select id="c2"><option value="20">20의 부분 트리 높이를 되돌린 뒤</option><option value="30">삽입 직후 (아직 재균형하지 않음)</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="fx-plot" class="topic-plot" viewBox="0 0 900 300" role="img" aria-labelledby="fx-title fx-desc"><title id="fx-title">첫 불균형 조상에서 재균형 전후</title><desc id="fx-desc">삽입 직후와 20의 부분 트리를 고친 뒤의 트리와 균형 인수</desc></svg></div><figcaption class="visual-caption">왼쪽은 5를 넣은 직후, 오른쪽은 고른 상태다. 초록 점선 테두리는 고친 부분 트리의 루트이며 재균형 전에는 없다. 빨간 원은 |bf| = 2인 노드다. 균형 인수는 높이로 다시 센 값이며, 강의의 update_balance는 20에서 처음 |bf| = 2를 만나 재균형하고 멈추므로 30에 저장된 값은 다시 계산하지 않는다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../21. Keeping the Tree Short/avl-balance.html">이전 · AVL Balance</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../22. Standing the Tree Back Up/tree-rotations.html">다음 · Tree Rotations</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s"]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+  function sgn(v) { return v > 0 ? "+" + v : String(v).replace("-", "−"); }
+  function insert(root, k) { if (!root) return { k: k, l: null, r: null }; if (k < root.k) root.l = insert(root.l, k); else root.r = insert(root.r, k); return root; }
+  function build(keys) { var r = null; keys.forEach(function (k) { r = insert(r, k); }); return r; }
+  function ht(n) { return n ? 1 + Math.max(ht(n.l), ht(n.r)) : -1; }
+  function bf(n) { return ht(n.l) - ht(n.r); }
+  function find(n, k) { while (n && n.k !== k) n = k < n.k ? n.l : n.r; return n; }
+  function layout(root, x0, W, y0, dy, xs) { var list = []; (function go(n, d, p) { if (!n) return; go(n.l, d + 1, n); n.d = d; n.p = p; list.push(n); go(n.r, d + 1, n); }(root, 0, null)); list.forEach(function (n) { n.x = x0 + xs(n.k) * W; n.y = y0 + n.d * dy; }); return list; }
+
+  var BASE = [30, 20, 40, 10];
+  function renderUp() {
+    var v = Number($("v1").value), before = build(BASE), after = build(BASE.concat([v]));
+    var path = []; (function () { var n = after; while (n.k !== v) { path.push(n.k); n = v < n.k ? n.l : n.r; } }()); path.reverse();
+    // walk up: stop rule
+    var steps = [], stop = null;
+    for (var i = 0; i < path.length; i++) { var k = path[i], nb = bf(find(after, k)); steps.push({ k: k, bf: nb }); if (nb === 0) { stop = "zero"; break; } if (Math.abs(nb) === 2) { stop = "two"; break; } }
+    if (!stop) stop = "root";
+    var el = $("k1"); el.max = String(steps.length); if (Number(el.value) > steps.length) el.value = String(steps.length);
+    var kk = Number(el.value), svg = $("up-plot"), h = head(svg);
+    $("k1-out").textContent = kk;
+    var xs = function (key) { return (key - 5) / 40; }, list = layout(after, 100, 700, 40, 85, xs);
+    var checked = steps.slice(0, kk).map(function (s) { return s.k; }), cur = kk ? steps[kk - 1] : null;
+    list.forEach(function (n) { if (n.p) { var on = (path.indexOf(n.k) >= 0 || n.k === v) && path.indexOf(n.p.k) >= 0; h += '<line class="edge' + (on ? " is-on" : "") + '" x1="' + n.p.x + '" y1="' + n.p.y + '" x2="' + n.x + '" y2="' + n.y + '"/>'; } });
+    list.forEach(function (n) {
+      var isNew = n.k === v, idx = checked.indexOf(n.k), newBf = bf(n), oldNode = find(before, n.k), oldBf = oldNode ? bf(oldNode) : 0;
+      var cls = isNew ? " is-new" : idx >= 0 ? (Math.abs(newBf) === 2 ? " is-bad" : idx === kk - 1 ? " is-cur is-done" : " is-done") : "";
+      var showNew = isNew || idx >= 0 || path.indexOf(n.k) < 0;
+      h += '<g class="node' + cls + '"><circle cx="' + n.x + '" cy="' + n.y + '" r="22"/><text x="' + n.x + '" y="' + n.y + '">' + n.k + '</text></g><text class="bf' + (showNew ? (Math.abs(newBf) === 2 ? " is-bad" : "") : " is-old") + '" x="' + n.x + '" y="' + (n.y + 38) + '">' + (showNew ? sgn(newBf) : sgn(oldBf)) + "</text>";
+    });
+    svg.innerHTML = h;
+    svg.querySelector("desc").textContent = v + " 삽입, 확인한 조상 " + (checked.join(", ") || "없음");
+    var result = kk < steps.length ? "계속 올라감" : stop === "zero" ? "bf 0에서 멈춤" : stop === "two" ? "재균형 필요" : "루트까지 확인";
+    var note;
+    if (kk === 0) note = pj(v, "은") + " " + (find(after, v).p.k) + "의 " + (v < find(after, v).p.k ? "왼쪽" : "오른쪽") + "에 새 단말 노드로 붙었다. 새 노드의 bf는 0이고, 높이가 바뀔 수 있는 노드는 경로 " + path.join(" → ") + "뿐이다. 경로 밖의 노드는 볼 필요가 없다.";
+    else {
+      var c = cur, childSide = kk === 1 ? v : steps[kk - 2].k, side = childSide < c.k ? "왼쪽" : "오른쪽";
+      note = pj(c.k, "은") + " " + side + "에서 올라왔으므로 bf를 고치면 " + sgn(c.bf) + "이다. ";
+      if (kk < steps.length) note += "|bf| = 1이라 이 부분 트리의 높이가 1 늘었고, 그 위 조상도 확인해야 한다.";
+      else if (stop === "zero") note += "0이 되었다는 것은 짧던 쪽이 채워져 이 부분 트리의 높이가 그대로라는 뜻이므로, 위의 조상은 바뀌지 않아 여기서 멈춘다.";
+      else if (stop === "two") note += "처음 만난 |bf| = 2이므로 여기서 재균형한다." + (c.k === 20 ? " 높이로 다시 세면 30도 +2지만 update_balance는 여기서 멈추므로 30에 저장된 값은 다시 계산하지 않고, 새 값에서 가장 가까운 20을 고친다." : "");
+      else note += "루트까지 올라왔고 |bf|가 모두 1 이하라 재균형이 필요 없다.";
+    }
+    note = note.replace(sgn(cur ? cur.bf : 0) + "이다.", sgn(cur ? cur.bf : 0) + (cur && Math.abs(cur.bf) === 2 ? "다." : "이다."));
+    show(1, [["새 단말 노드", v + " (" + (find(after, v).p.k) + "의 " + (v < find(after, v).p.k ? "왼쪽" : "오른쪽") + ")"], ["확인한 조상", checked.join(" → ") || "없음"], ["방금 고친 bf", cur ? cur.k + ": " + sgn(cur.bf) : "없음"], ["상태", result]], note);
+  }
+
+  function renderFix() {
+    var c = $("c2").value, svg = $("fx-plot"), h = head(svg);
+    var left = build([30, 20, 40, 10, 5]);
+    var right = c === "20" ? build([30, 10, 40, 5, 20]) : build([30, 20, 40, 10, 5]);
+    var xs = function (key) { return (key - 5) / 35; };
+    function draw(root, x0, W, marks) {
+      var list = layout(root, x0, W, 40, 70, xs), s = "";
+      list.forEach(function (n) { if (n.p) s += '<line class="edge" x1="' + n.p.x.toFixed(1) + '" y1="' + n.p.y + '" x2="' + n.x.toFixed(1) + '" y2="' + n.y + '"/>'; });
+      list.forEach(function (n) { var b = bf(n), cls = Math.abs(b) >= 2 ? " is-bad" : ""; if (marks.fixed === n.k) cls += " is-fixed"; if (n.k === 5) cls += " is-new"; s += '<g class="node' + cls + '"><circle cx="' + n.x.toFixed(1) + '" cy="' + n.y + '" r="20"/><text x="' + n.x.toFixed(1) + '" y="' + n.y + '">' + n.k + '</text></g><text class="bf' + (Math.abs(b) >= 2 ? " is-bad" : "") + '" x="' + n.x.toFixed(1) + '" y="' + (n.y + 35) + '">' + sgn(b) + "</text>"; });
+      return s;
+    }
+    h += '<text class="lbl" x="40" y="22">5를 넣은 직후</text><text class="lbl" x="480" y="22">' + (c === "20" ? '20의 부분 트리를 고친 뒤' : '아직 재균형하지 않음') + '</text><line x1="455" y1="10" x2="455" y2="290" style="stroke:var(--line-200);stroke-width:1.5"/>';
+    h += draw(left, 60, 360, {});
+    h += draw(right, 500, 360, { fixed: c === "20" ? 10 : null });
+    svg.innerHTML = h;
+    var badR = []; (function go(n) { if (!n) return; if (Math.abs(bf(n)) >= 2) badR.push(n.k); go(n.l); go(n.r); }(right));
+    svg.querySelector("desc").textContent = (c === "20" ? "20의 부분 트리를 고친 뒤" : "재균형 전") + ", 남은 불균형 " + (badR.join(", ") || "없음");
+    var note = c === "20"
+      ? "20을 루트로 하는 부분 트리 20(10(5))는 높이 2가 되어 불균형이었다. 이를 10(5, 20)으로 고치면 높이가 삽입 전과 같은 1로 돌아가, 그 위 30의 왼쪽 높이도 1이 되어 bf가 +1로 돌아온다. 가장 가까운 불균형 노드 하나만 고쳐도 위쪽 조상의 불균형이 함께 사라진다."
+      : "아직 재균형하지 않아 20과 30은 높이로 다시 세면 모두 +2다. 새 단말 노드 5에서 올라가면 10의 +1을 거쳐 20에서 처음 +2를 만나므로 update_balance는 20에서 재균형한다. 이 화면은 루트에서 재균형한 결과가 아니라 삽입 직후 상태다.";
+    show(2, [["확인할 상태", c === "20" ? "20의 부분 트리를 고친 뒤" : "재균형 전"], ["20의 부분 트리 높이", c === "20" ? "2 → 1 (삽입 전과 같음)" : "2 (아직 고치지 않음)"], ["30의 bf", sgn(bf(right))], ["남은 |bf| = 2 노드", badR.join(", ") || "없음"]], note);
+  }
+
+  $("v1").addEventListener("change", renderUp); $("k1").addEventListener("input", renderUp); $("c2").addEventListener("change", renderFix);
+  renderUp(); renderFix();
+}());
+</script>
+</body>
+</html>

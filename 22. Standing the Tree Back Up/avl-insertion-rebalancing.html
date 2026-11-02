@@ -1,0 +1,162 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>AVL Insertion Rebalancing | Data Structure | Pusan National University</title><meta name="description" content="AVL insertion updates heights upward and restores balance at the first unbalanced ancestor using a single or double rotation, keeping the total cost logarithmic."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/avl-insertion-rebalancing.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="AVL Insertion Rebalancing | Data Structure | Pusan National University"><meta property="og:description" content="AVL insertion updates heights upward and restores balance at the first unbalanced ancestor using a single or double rotation, keeping the total cost logarithmic."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/avl-insertion-rebalancing.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <style>
+    .topic-plot .small{font-size:12px;fill:var(--ink-600)}
+    .topic-plot .lbl{font-size:14px;fill:var(--ink-700);paint-order:stroke;stroke:var(--white);stroke-width:4px}
+    .topic-plot .edge{stroke:var(--ink-500);stroke-width:2}
+    .topic-plot .node circle{fill:var(--white);stroke:var(--pnu-blue);stroke-width:2}
+    .topic-plot .node text{font-size:14px;font-weight:700;text-anchor:middle;dominant-baseline:central}
+    .topic-plot .node.is-bad circle{fill:var(--alert-050);stroke:var(--alert-700);stroke-width:3.5}
+    .topic-plot .node.is-pivot circle{stroke:var(--pnu-green);stroke-width:4}
+    .topic-plot .node.is-new circle{fill:var(--pnu-green);stroke:var(--pnu-green)}
+    .topic-plot .node.is-new text{fill:var(--white)}
+    .topic-plot .bf{font-size:12px;font-weight:700;fill:var(--pnu-blue-dark);text-anchor:middle;paint-order:stroke;stroke:var(--white);stroke-width:4px}
+    .topic-plot .bf.is-bad{fill:var(--alert-700)}
+    .topic-plot .panel{fill:var(--surface-050);stroke:var(--line-200)}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic topic-avl-insertion-rebalancing">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Standing the Tree Back Up</span><span class="nav-tag is-current" aria-current="page">AVL Insertion Rebalancing</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/22.%20Standing%20the%20Tree%20Back%20Up.pdf">Standing the Tree Back <span class="publication-lecture-tail">Up<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">AVL Insertion Rebalancing</h1><hr class="accent-rule"><p class="page-subtitle">AVL 삽입은 BST처럼 값을 넣고, 올라오며 높이를 고치다가 처음 만난 |bf| = 2인 노드에서 회전하고 멈춘다. 불균형 노드와 무거운 자식 노드가 같은 방향으로 기울면 single rotation으로 균형을 회복하며 회전은 한 번만 필요하다. 반대로 꺾이면 자식 노드를 먼저 회전한 뒤 부모를 회전하는 double rotation을 한다. 전체 비용은 O(log n)이다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>두 방향으로 판정</strong><span>노드 bf가 +2이고 자식 bf ≥ 0이면 left-left, &lt; 0이면 left-right다. −2이고 자식 bf ≤ 0이면 right-right, &gt; 0이면 right-left다.</span></article><article class="summary-card"><strong>두 회전의 축</strong><span>이중 회전의 첫 회전은 무거운 자식 노드, 둘째 회전은 불균형 노드가 축이다. 같은 자리에서 반대로 돌리면 원래대로 돌아온다.</span></article><article class="summary-card"><strong>한 자리에서 끝난다</strong><span>회전 뒤 그 부분 트리의 높이가 삽입 전으로 돌아가므로 위쪽 조상은 더 볼 필요가 없다.</span></article></div></section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">안쪽으로 꺾인 경우에는 자식 노드를 먼저 돌려 바깥 경우로 만든 뒤 한 번 더 돌린다</h2><p class="lead">빈 AVL 트리에 세 값을 넣어 네 가지 불균형을 만든다. 경우, 절차, 진행한 회전 수를 바꾸면 트리 모양과 균형 인수가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--triple"><div class="control-field"><label for="c1">경우</label><select id="c1"><option value="lr">30, 10, 20 (left-right)</option><option value="rl">10, 30, 20 (right-left)</option><option value="ll">30, 20, 10 (left-left)</option><option value="rr">10, 20, 30 (right-right)</option></select></div><div class="control-field"><label for="p1">절차</label><select id="p1"><option value="right">판정에 맞는 회전</option><option value="wrong">불균형 노드에서 한 번만 회전</option></select></div><div class="control-field"><label for="k1">진행한 회전 수 <output id="k1-out" class="control-value" for="k1">0</output></label><input id="k1" type="range" min="0" max="2" step="1" value="0"></div></div>
+      <p id="reason-1" class="control-reason" hidden></p>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="case-plot" class="topic-plot" viewBox="0 0 900 290" role="img" aria-labelledby="ca-title ca-desc"><title id="ca-title">네 가지 불균형과 회전</title><desc id="ca-desc">세 노드 트리의 회전 단계</desc></svg></div><figcaption class="visual-caption">원 안의 수가 키, 원 아래 수가 균형 인수다. 빨간 원은 |bf| = 2인 노드이고 초록 테두리 원은 다음 회전의 축이다. 초록으로 채운 원이 마지막에 넣은 값이다.</figcaption></figure>
+      <div id="read-1" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-1" class="visual-note"></p>
+    </div>
+  </section>
+
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">삽입을 이어가도 회전은 가끔만 일어나고 높이는 로그 수준에 머문다</h2><p class="lead">삽입 순서와 넣은 값 수를 바꾸면 AVL 트리의 모양, 지금까지의 회전, 같은 순서로 만든 보통 BST의 높이가 바뀐다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="o2">삽입 순서</label><select id="o2"><option value="lec">50, 30, 70, 20, 40, 10</option><option value="sorted">1, 2, 3, 4, 5, 6, 7</option></select></div><div class="control-field"><label for="k2">넣은 값 수 <output id="k2-out" class="control-value" for="k2">6</output></label><input id="k2" type="range" min="1" max="7" step="1" value="6"></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="seq-plot" class="topic-plot" viewBox="0 0 900 300" role="img" aria-labelledby="sq-title sq-desc"><title id="sq-title">연속 삽입과 회전</title><desc id="sq-desc">AVL 트리와 회전 기록</desc></svg></div><figcaption class="visual-caption">왼쪽은 AVL 트리이며 원 아래 수가 균형 인수, 초록 원이 방금 넣은 값이다. 오른쪽 목록은 넣을 때마다 일어난 회전이다.</figcaption></figure>
+      <div id="read-2" class="visual-readouts" aria-live="polite"></div>
+      <p id="note-2" class="visual-note"></p>
+    </div>
+  </section>
+
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../22. Standing the Tree Back Up/tree-rotations.html">이전 · Tree Rotations</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../22. Standing the Tree Back Up/red-black-trees.html">다음 · Red Black Trees</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function () {
+  "use strict";
+  function pj(w, t) { var s = String(w), c = s.replace(/[\])\s"]+$/, "").slice(-1), P = { "을": ["을", "를"], "이": ["이", "가"], "은": ["은", "는"], "과": ["과", "와"], "으로": ["으로", "로"] }, f = false, l = false; if (/[가-힣]/.test(c)) { var k = (c.charCodeAt(0) - 44032) % 28; f = k > 0; l = k === 8; } else if (/[0-9]/.test(c)) { f = "013678".indexOf(c) >= 0; l = "178".indexOf(c) >= 0; } else if (/[a-z]/i.test(c)) { f = "lmnr".indexOf(c.toLowerCase()) >= 0; l = "lr".indexOf(c.toLowerCase()) >= 0; } var p = P[t]; return s + (t === "으로" ? (f && !l ? p[0] : p[1]) : (f ? p[0] : p[1])); }
+  var $ = function (id) { return document.getElementById(id); };
+  function rd(l, v) { return '<div class="visual-readout"><span class="visual-readout-label">' + l + '</span><strong class="visual-readout-value">' + v + '</strong></div>'; }
+  function show(n, rows, note) { $("read-" + n).innerHTML = rows.map(function (r) { return rd(r[0], r[1]); }).join(""); $("note-" + n).textContent = note; }
+  function head(svg) { return svg.querySelector("title").outerHTML + svg.querySelector("desc").outerHTML; }
+  function sgn(v) { return v > 0 ? "+" + v : String(v).replace("-", "−"); }
+  function N(k, l, r) { return { k: k, l: l || null, r: r || null }; }
+  function ht(n) { return n ? 1 + Math.max(ht(n.l), ht(n.r)) : -1; }
+  function bf(n) { return ht(n.l) - ht(n.r); }
+  function rotR(y) { var x = y.l; y.l = x.r; x.r = y; return x; }
+  function rotL(x) { var y = x.r; x.r = y.l; y.l = x; return y; }
+  function clone(n) { return n ? N(n.k, clone(n.l), clone(n.r)) : null; }
+  function draw(root, x0, W, y0, dy, marks, kmin, kmax) {
+    var list = []; (function go(n, d, p) { if (!n) return; go(n.l, d + 1, n); n.d = d; n.p = p; list.push(n); go(n.r, d + 1, n); }(root, 0, null));
+    var s = ""; list.forEach(function (n) { n.x = x0 + (n.k - kmin) / (kmax - kmin) * W; n.y = y0 + n.d * dy; });
+    list.forEach(function (n) { if (n.p) s += '<line class="edge" x1="' + n.p.x.toFixed(1) + '" y1="' + n.p.y + '" x2="' + n.x.toFixed(1) + '" y2="' + n.y + '"/>'; });
+    list.forEach(function (n) { var b = bf(n), cls = Math.abs(b) >= 2 ? " is-bad" : n.k === marks.newK ? " is-new" : ""; if (n.k === marks.pivot) cls += " is-pivot"; s += '<g class="node' + cls + '"><circle cx="' + n.x.toFixed(1) + '" cy="' + n.y + '" r="21"/><text x="' + n.x.toFixed(1) + '" y="' + n.y + '">' + n.k + '</text></g><text class="bf' + (Math.abs(b) >= 2 ? " is-bad" : "") + '" x="' + n.x.toFixed(1) + '" y="' + (n.y + 36) + '">' + sgn(b) + "</text>"; });
+    return s;
+  }
+
+  var CASES = {
+    ll: { t: function () { return N(30, N(20, N(10))); }, name: "left-left", kind: "바깥", seq: ["R@30"] },
+    rr: { t: function () { return N(10, null, N(20, null, N(30))); }, name: "right-right", kind: "바깥", seq: ["L@10"] },
+    lr: { t: function () { return N(30, N(10, null, N(20))); }, name: "left-right", kind: "안쪽", seq: ["L@10", "R@30"] },
+    rl: { t: function () { return N(10, null, N(30, N(20))); }, name: "right-left", kind: "안쪽", seq: ["R@30", "L@10"] }
+  };
+  function applyRot(root, code) { var dir = code[0], at = Number(code.slice(2)); if (root.k === at) return dir === "R" ? rotR(root) : rotL(root); (function go(n) { if (!n) return; if (n.l && n.l.k === at) { n.l = dir === "R" ? rotR(n.l) : rotL(n.l); return; } if (n.r && n.r.k === at) { n.r = dir === "R" ? rotR(n.r) : rotL(n.r); return; } go(n.l); go(n.r); }(root)); return root; }
+  function renderCase() {
+    var c = $("c1").value, proc = $("p1").value, C = CASES[c], reason = $("reason-1"), pSel = $("p1");
+    var outer = C.kind === "바깥";
+    pSel.disabled = outer;
+    if (outer) { reason.hidden = false; reason.textContent = "바깥 경우는 판정에 맞는 회전이 곧 불균형 노드에서의 한 번 회전이라 절차를 따로 고를 수 없다."; proc = "right"; } else reason.hidden = true;
+    var seq = proc === "right" ? C.seq : [(c === "lr" ? "R" : "L") + "@" + (c === "lr" ? 30 : 10)];
+    var el = $("k1"); el.max = String(seq.length); if (Number(el.value) > seq.length) el.value = String(seq.length);
+    var k = Number(el.value), root = C.t(), newK = 20;
+    if (c === "ll") newK = 10; if (c === "rr") newK = 30;
+    for (var i = 0; i < k; i++) root = applyRot(root, seq[i]);
+    $("k1-out").textContent = k;
+    var svg = $("case-plot"), h = head(svg), next = k < seq.length ? Number(seq[k].slice(2)) : null;
+    h += draw(root, 250, 400, 50, 90, { newK: newK, pivot: next }, 10, 30);
+    svg.innerHTML = h;
+    var badList = []; (function go(n) { if (!n) return; if (Math.abs(bf(n)) >= 2) badList.push(n.k + "(" + sgn(bf(n)) + ")"); go(n.l); go(n.r); }(root));
+    var top = C.t(), imb = top, child = top.l || top.r;
+    svg.querySelector("desc").textContent = C.name + ", 회전 " + k + "번, 루트 " + root.k + ", 불균형 " + (badList.join(", ") || "없음");
+    var note, rName = function (code) { return (code[0] === "R" ? "오른쪽 회전" : "왼쪽 회전") + "(축 " + code.slice(2) + ")"; };
+    if (k === 0) note = "마지막 값 " + pj(newK, "을") + " 넣자 " + imb.k + "의 bf가 " + sgn(bf(imb)) + ", 무거운 자식 노드 " + child.k + "의 bf가 " + pj(sgn(bf(child)), "이") + " 되었다. " + (outer ? "부호가 같은 방향이라 " + C.name + ", 바깥 경우다. " + rName(C.seq[0]) + " 한 번이면 된다." : "부호가 반대 방향이라 " + C.name + ", 안쪽 경우다. " + (proc === "right" ? "먼저 " + rName(C.seq[0]) + "으로 안쪽 값을 바깥으로 낸 뒤 " + rName(C.seq[1]) + "을 한다." : "이 절차는 불균형 노드에서 " + rName(seq[0]) + "만 해 본다."));
+    else if (badList.length === 0) note = (seq.length === 2 ? "두 번째 " : "") + rName(seq[k - 1]) + " 뒤 20이 루트로 올라와 10과 30을 자식 노드로 두었다. 모든 균형 인수가 0이고 중위 순서 10, 20, 30은 그대로다.";
+    else if (proc === "wrong") note = rName(seq[0]) + "만 하자 " + root.k + "이 루트가 되었지만 bf가 " + sgn(bf(root)) + "로 반대쪽이 무거워졌다. 안쪽에 있던 20이 회전을 따라 반대편 안쪽으로 옮겨 갔을 뿐이라 불균형이 풀리지 않는다.";
+    else note = "첫 " + rName(seq[0]) + "으로 20이 올라와 " + root.k + " 아래가 " + (c === "lr" ? "왼쪽" : "오른쪽") + "으로만 줄지은 바깥 경우가 되었다. 루트 " + root.k + "의 bf는 아직 " + sgn(bf(root)) + "라 이제 " + rName(C.seq[1]) + "을 한다.";
+    note = note.replace(/(회전\(축 \d+\))으로/g, "$1으로").replace(root.k + "이 루트가", pj(root.k, "이") + " 루트가").replace("bf가 " + sgn(bf(root)) + "로", "bf가 " + pj(sgn(bf(root)), "으로")).replace("bf는 아직 " + sgn(bf(root)) + "라", "bf는 아직 " + sgn(bf(root)) + "여서");
+    show(1, [["경우", C.name + " (" + C.kind + ")"], ["진행한 회전", k ? seq.slice(0, k).map(rName).join(", ") : "없음"], ["루트", String(root.k)], ["|bf| = 2인 노드", badList.join(", ") || "없음"]], note);
+  }
+
+  function avlInsert(n, k, log) {
+    if (!n) return N(k);
+    if (k < n.k) n.l = avlInsert(n.l, k, log); else n.r = avlInsert(n.r, k, log);
+    var b = bf(n);
+    if (b > 1) { if (bf(n.l) >= 0) { log.push("오른쪽 회전(축 " + n.k + ")"); return rotR(n); } log.push("왼쪽 회전(축 " + n.l.k + ") 뒤 오른쪽 회전(축 " + n.k + ")"); n.l = rotL(n.l); return rotR(n); }
+    if (b < -1) { if (bf(n.r) <= 0) { log.push("왼쪽 회전(축 " + n.k + ")"); return rotL(n); } log.push("오른쪽 회전(축 " + n.r.k + ") 뒤 왼쪽 회전(축 " + n.k + ")"); n.r = rotR(n.r); return rotL(n); }
+    return n;
+  }
+  function bstInsert(n, k) { if (!n) return N(k); if (k < n.k) n.l = bstInsert(n.l, k); else n.r = bstInsert(n.r, k); return n; }
+  var ORD = { lec: [50, 30, 70, 20, 40, 10], sorted: [1, 2, 3, 4, 5, 6, 7] };
+  function renderSeq() {
+    var o = $("o2").value, keys = ORD[o], el = $("k2"); el.max = String(keys.length); if (Number(el.value) > keys.length) el.value = String(keys.length);
+    var k = Number(el.value), avl = null, bst = null, rows = [];
+    $("k2-out").textContent = k;
+    keys.slice(0, k).forEach(function (v) { var log = []; avl = avlInsert(avl, v, log); bst = bstInsert(bst, v); rows.push([v, log.join(", ") || "회전 없음"]); });
+    var svg = $("seq-plot"), h = head(svg), kmin = Math.min.apply(null, keys), kmax = Math.max.apply(null, keys);
+    h += draw(avl, 60, 460, 40, 80, { newK: keys[k - 1] }, kmin, kmax);
+    rows.forEach(function (r, i) { h += '<text class="small" x="600" y="' + (40 + i * 34) + '"' + (i === k - 1 ? ' style="font-weight:700;fill:var(--ink-900)"' : "") + ">" + r[0] + " 삽입: " + r[1] + "</text>"; });
+    svg.innerHTML = h;
+    var rotCount = rows.filter(function (r) { return r[1] !== "회전 없음"; }).length;
+    svg.querySelector("desc").textContent = keys.slice(0, k).join(", ") + " 삽입, AVL 높이 " + ht(avl) + ", BST 높이 " + ht(bst) + ", 회전 " + rotCount + "번";
+    var last = rows[k - 1];
+    var note = pj(keys[k - 1], "을") + " 넣었을 때 " + (last[1] === "회전 없음" ? "균형 인수가 모두 1 이하라 회전이 없었다. " : last[1] + "을 했다. ") + "지금까지 " + k + "번 삽입에 회전은 " + rotCount + "번이고 AVL 트리의 높이는 " + ht(avl) + ", 같은 순서로 만든 보통 BST의 높이는 " + ht(bst) + "이다." +
+      (o === "lec" && k === 6 ? " 강의 예제처럼 10을 넣을 때 50에서 bf = +2가 되어 한 번 회전했고 루트가 30이 되었다." : "") + (o === "sorted" && k === 7 ? " 정렬된 1부터 7까지를 넣어도 AVL 트리는 높이 2를 지키지만 보통 BST는 6이 된다." : "");
+    note = note.replace(last[1] + "을 했다", last[1] + "을 했다");
+    show(2, [["AVL 높이", String(ht(avl))], ["보통 BST 높이", String(ht(bst))], ["회전한 삽입 수", rotCount + "번"], ["AVL 루트", String(avl.k)]], note);
+  }
+
+  $("c1").addEventListener("change", renderCase); $("p1").addEventListener("change", renderCase); $("k1").addEventListener("input", renderCase);
+  $("o2").addEventListener("change", renderSeq); $("k2").addEventListener("input", renderSeq);
+  renderCase(); renderSeq();
+}());
+</script>
+</body>
+</html>
