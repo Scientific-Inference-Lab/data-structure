@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
   <title>Circular Arrays | Data Structure | Pusan National University</title><meta name="description" content="A circular array wraps indices past the end back to cell 0, so the cells freed by front deletions are reused without moving elements."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/06.%20When%20the%20Array%20Fills%20Up/circular-arrays.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Circular Arrays | Data Structure | Pusan National University"><meta property="og:description" content="A circular array wraps indices past the end back to cell 0, so the cells freed by front deletions are reused without moving elements."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/06.%20When%20the%20Array%20Fills%20Up/circular-arrays.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
   <link rel="stylesheet" href="../assets/pnu-theme.css">
-  <link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script>
   <style>
     .actions,.strip{display:flex;gap:.5rem;flex-wrap:wrap}
     .box,.cell{padding:.7rem;border:2px solid var(--line-200);background:#fff}
@@ -43,7 +43,7 @@
       <header class="example-header"><h2 class="section-title">뒤에 추가(enqueue)와 앞에서 삭제(dequeue)는 원소를 옮기지 않고 j와 n만 바꾼다</h2><p class="lead">추가와 삭제가 일어날 때마다 j, 다음 추가 칸, 원소 수가 바뀌지만 남은 원소는 제자리에 있다.</p></header>
       <div class="visual-lab">
         <div class="visual-controls visual-controls--single"><div class="action-row"><button class="btn" id="enq" type="button">enqueue(H)</button><button class="btn btn-outline" id="deq" type="button">dequeue</button><button class="btn btn-outline" id="reset" type="button">0번 칸으로 넘어간 상태</button><button class="btn btn-outline" id="empty" type="button">빈 상태</button><button class="btn btn-outline" id="full" type="button">가득 찬 상태</button></div></div>
-        <p id="full-note" class="control-reason" hidden>용량 6이 모두 찼다. 이 도식은 용량을 6으로 고정해 추가를 멈춘다. 실제 원형 배열은 더 큰 배열을 만들어 j부터 읽은 순서대로 0번 칸부터 옮기고 j를 0으로 되돌린다.</p>
+        <p id="full-note" class="control-reason" hidden>용량 6이 모두 찼다. 실제 원형 배열은 더 큰 배열을 만들어 j부터 읽은 순서대로 0번 칸부터 옮기고 j를 0으로 되돌린다.</p>
         <figure class="visual-figure"><div class="visual-frame"><div class="visual-board views"><div id="ring" class="ring" role="img"></div><div><h3>물리 배열</h3><div id="strip" class="strip" role="img"></div></div></div></div><figcaption class="visual-caption">원형 도식과 물리 배열은 같은 칸을 두 번 그린 것이다. 초록 실선은 첫 원소 칸 j, 초록 점선은 다음에 추가할 칸, 짙은 파랑 테두리는 아래 절에서 고른 논리 원소다.</figcaption></figure>
         <div id="state" class="visual-readouts" aria-live="polite"></div>
         <p id="live" class="visual-note"></p>

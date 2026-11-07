@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
   <title>Contiguous Storage | Data Structure | Pusan National University</title><meta name="description" content="With equal-sized contiguous cells, an element's address follows from the first address and the index; an out-of-range address is computable but not an element."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/05.%20Storing%20Elements%20in%20a%20Row/contiguous-storage.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Contiguous Storage | Data Structure | Pusan National University"><meta property="og:description" content="With equal-sized contiguous cells, an element's address follows from the first address and the index; an out-of-range address is computable but not an element."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/05.%20Storing%20Elements%20in%20a%20Row/contiguous-storage.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
   <link rel="stylesheet" href="../assets/pnu-theme.css">
-  <link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script>
   <style>
     
     .memory-stage{position:relative;padding:3.8rem .75rem 1rem;border:1px solid var(--line-200);background:linear-gradient(180deg,var(--surface-050) 0,#fff 72%)}
@@ -58,7 +58,7 @@
           <div class="visual-frame">
             <div id="memory-stage" class="memory-stage">
               <button id="index-marker" class="index-marker" type="button" role="slider" aria-label="주소 자의 인덱스 마커" aria-valuemin="-1" aria-valuemax="6" aria-valuenow="3"><span id="marker-label">i=3</span><span class="marker-stem" aria-hidden="true"></span></button>
-              <div id="address-ruler" class="address-ruler" aria-label="클릭하거나 드래그할 수 있는 주소 자"></div>
+              <div id="address-ruler" class="address-ruler" aria-label="주소 자"></div>
             </div>
             <div class="formula-strip">
               <div class="equation-card"><strong>주소 식</strong><p id="formula" class="equation">1000 + 3 × 8 = 1024</p><p id="distance" class="eq-detail">첫 칸에서 3칸, 24바이트 떨어져 있다.</p></div>

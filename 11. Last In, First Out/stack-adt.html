@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
   <title>Stack ADT | Data Structure | Pusan National University</title><meta name="description" content="A stack inserts and removes only at its top, and LIFO order follows from the sequence of push and pop calls, not from the values."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/11.%20Last%20In%2C%20First%20Out/stack-adt.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Stack ADT | Data Structure | Pusan National University"><meta property="og:description" content="A stack inserts and removes only at its top, and LIFO order follows from the sequence of push and pop calls, not from the values."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/11.%20Last%20In%2C%20First%20Out/stack-adt.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script><link rel="stylesheet" href="../assets/ds-structures.css">
   <style>
 
   </style>
@@ -26,7 +26,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>push(x)</strong><span>x를 맨 위에 추가하고 반환값이 없다.</span></article><article class="summary-card"><strong>pop()과 peek()</strong><span>둘 다 맨 위 값을 반환하지만 pop만 그 값을 삭제한다.</span></article><article class="summary-card"><strong>구현의 끝 선택</strong><span>Python list는 오른쪽 끝, SLList는 머리(head)를 맨 위로 둔다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">push와 pop이 같은 끝에서 일어나 넣은 순서가 뒤집힌다</h2><p class="lead">단계를 옮기면 연산 하나가 실행되고, 스택의 맨 위, 반환값, 원소 수가 바뀐다. 4, dog, True, 8.4를 차례로 넣은 뒤 꺼낸다.</p></header>
+    <header class="example-header"><h2 class="section-title">push와 pop이 같은 끝에서 일어나 넣은 순서가 뒤집힌다</h2><p class="lead">단계마다 연산 하나가 실행되고, 스택의 맨 위, 반환값, 원소 수가 바뀐다. 4, dog, True, 8.4를 차례로 넣은 뒤 꺼낸다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="action-row"><button id="st-first" class="btn btn-outline" type="button">처음으로</button><button id="st-prev" class="btn btn-outline" type="button">이전</button><button id="st-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-1" class="control-reason" hidden></p>
@@ -75,8 +75,6 @@
     function go(v) {
       var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
       $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
-      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
-      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
     }
     $(sid + "-first").addEventListener("click", function () { go(0); });
     $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });

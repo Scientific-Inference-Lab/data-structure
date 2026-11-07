@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
   <title>Open Addressing Probes | Data Structure | Pusan National University</title><meta name="description" content="Open addressing stores one entry per slot and follows the same probe sequence when inserting and searching after a collision."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/open-addressing-probes.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Open Addressing Probes | Data Structure | Pusan National University"><meta property="og:description" content="Open addressing stores one entry per slot and follows the same probe sequence when inserting and searching after a collision."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/14.%20Finding%20the%20Next%20Open%20Slot/open-addressing-probes.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script><link rel="stylesheet" href="../assets/ds-structures.css">
   <style>
 
   </style>
@@ -26,7 +26,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>linear probing</strong><span>h(k), h(k) + 1, h(k) + 2, … 순서로 한 칸씩 본다.</span></article><article class="summary-card"><strong>탐색의 멈춤</strong><span>같은 키를 만나면 성공, 처음부터 빈 칸을 만나면 실패다.</span></article><article class="summary-card"><strong>조사 방식</strong><span>quadratic probing은 i², double hashing은 키별 간격 h₂(k)만큼 떨어진 칸을 본다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">linear probing은 충돌하면 다음 칸으로 한 칸씩 이동한다</h2><p class="lead">단계를 옮기면 키 31, 54, 77, 44, 55, 20을 차례로 m = 11인 표에 넣고, 시작 인덱스에서 빈 칸을 찾을 때까지 확인한 인덱스가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">linear probing은 충돌하면 다음 칸으로 한 칸씩 이동한다</h2><p class="lead">키 31, 54, 77, 44, 55, 20을 차례로 m = 11인 표에 넣는다. 단계마다 시작 인덱스에서 빈 칸을 찾을 때까지 확인한 인덱스가 바뀐다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="action-row"><button id="lp-first" class="btn btn-outline" type="button">처음으로</button><button id="lp-prev" class="btn btn-outline" type="button">이전</button><button id="lp-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-1" class="control-reason" hidden></p>
@@ -75,8 +75,6 @@
     function go(v) {
       var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
       $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
-      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
-      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
     }
     $(sid + "-first").addEventListener("click", function () { go(0); });
     $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });

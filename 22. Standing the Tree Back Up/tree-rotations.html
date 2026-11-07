@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
   <title>Tree Rotations | Data Structure | Pusan National University</title><meta name="description" content="A tree rotation changes a local parent-child relationship in constant time while preserving inorder key order and helping restore AVL height balance."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/tree-rotations.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Tree Rotations | Data Structure | Pusan National University"><meta property="og:description" content="A tree rotation changes a local parent-child relationship in constant time while preserving inorder key order and helping restore AVL height balance."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/tree-rotations.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script><link rel="stylesheet" href="../assets/ds-structures.css">
   <style>
     .topic-plot .small{font-size:12px;fill:var(--ink-600)}
     .topic-plot .lbl{font-size:14px;fill:var(--ink-700);paint-order:stroke;stroke:var(--white);stroke-width:4px}
@@ -52,7 +52,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">바깥으로 기운 불균형은 불균형 노드를 축으로 한 번 돌리면 풀린다</h2><p class="lead">빈 AVL 트리에 값 세 개를 넣는다. 삽입 순서와 진행 단계를 바꾸면 트리 모양, 균형 인수, 회전의 축과 방향이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">바깥으로 기운 불균형은 불균형 노드를 축으로 한 번 돌리면 풀린다</h2><p class="lead">빈 AVL 트리에 값 세 개를 넣는다. 삽입 순서와 진행 단계에 따라 트리 모양, 균형 인수, 회전의 축과 방향이 바뀐다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="o2">삽입 순서</label><select id="o2"><option value="ll">30, 20, 10 (left-left)</option><option value="rr">10, 20, 30 (right-right)</option></select></div><div class="control-field"><label for="k2">진행 단계 <output id="k2-out" class="control-value" for="k2">3</output></label><input id="k2" type="range" min="1" max="4" step="1" value="3"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="sg-plot" class="topic-plot" viewBox="0 0 900 290" role="img" aria-labelledby="sg-title sg-desc"><title id="sg-title">한 번의 회전으로 균형 회복</title><desc id="sg-desc">세 값을 넣은 트리와 회전</desc></svg></div><figcaption class="visual-caption">1~3단계는 값을 하나씩 넣은 트리, 4단계는 회전 뒤다. 원 아래 수가 균형 인수이고 빨간 원이 |bf| = 2인 불균형 노드, 초록 테두리 원이 방금 넣은 값, 초록 원이 회전으로 올라온 노드다.</figcaption></figure>

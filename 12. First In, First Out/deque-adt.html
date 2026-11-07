@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
   <title>Deque ADT | Data Structure | Pusan National University</title><meta name="description" content="A deque adds and removes at both ends, acting as a stack or a queue by choice of ends; Python's deque makes end operations O(1)."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/12.%20First%20In%2C%20First%20Out/deque-adt.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Deque ADT | Data Structure | Pusan National University"><meta property="og:description" content="A deque adds and removes at both ends, acting as a stack or a queue by choice of ends; Python's deque makes end operations O(1)."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/12.%20First%20In%2C%20First%20Out/deque-adt.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script><link rel="stylesheet" href="../assets/ds-structures.css">
   <style>
 
   </style>
@@ -26,7 +26,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>양 끝 연산</strong><span>add_front, remove_front, add_rear, remove_rear가 있다.</span></article><article class="summary-card"><strong>스택과 큐 표현</strong><span>넣고 빼는 끝이 같으면 LIFO, 다르면 FIFO가 된다.</span></article><article class="summary-card"><strong>collections.deque</strong><span>append와 popleft로 큐를 만들며 양 끝이 O(1)이다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">넣고 빼는 끝을 고르면 덱이 스택도 큐도 된다</h2><p class="lead">사용 방식과 단계를 바꾸면 A, B, C를 넣고 모두 꺼낼 때 쓰는 연산, 덱의 모양, 꺼낸 순서가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">넣고 빼는 끝을 고르면 덱이 스택도 큐도 된다</h2><p class="lead">사용 방식에 따라 A, B, C를 넣고 모두 꺼낼 때 쓰는 연산, 덱의 모양, 꺼낸 순서가 바뀐다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="dmode">사용 방식</label><select id="dmode"><option value="stack">스택처럼: add_rear · remove_rear</option><option value="queue">큐처럼: add_rear · remove_front</option></select></div><div class="action-row"><button id="dq-first" class="btn btn-outline" type="button">처음으로</button><button id="dq-prev" class="btn btn-outline" type="button">이전</button><button id="dq-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-1" class="control-reason" hidden></p>
@@ -76,8 +76,6 @@
     function go(v) {
       var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
       $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
-      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
-      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
     }
     $(sid + "-first").addEventListener("click", function () { go(0); });
     $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });

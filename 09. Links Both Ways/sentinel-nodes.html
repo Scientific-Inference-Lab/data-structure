@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
   <title>Sentinel Nodes | Data Structure | Pusan National University</title><meta name="description" content="A sentinel is a value-free node handling the links at both ends, so prev and next point to valid nodes even in an empty list."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/09.%20Links%20Both%20Ways/sentinel-nodes.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Sentinel Nodes | Data Structure | Pusan National University"><meta property="og:description" content="A sentinel is a value-free node handling the links at both ends, so prev and next point to valid nodes even in an empty list."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/09.%20Links%20Both%20Ways/sentinel-nodes.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-linked-lists.css">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script><link rel="stylesheet" href="../assets/ds-linked-lists.css">
   <style>
 
   </style>
@@ -89,16 +89,6 @@ q('#size').onchange=state;q('#case').onchange=()=>{q('#boundaryStep').value=0;bo
     var mirrors = ["boundaryValue", "indexValue"];
     function sync() {
       mirrors.forEach(function (m) { var a = document.getElementById(m), b = document.getElementById(m + "-echo"); if (a && b) b.textContent = a.textContent; });
-      Array.prototype.forEach.call(document.querySelectorAll(".topic-example"), function (sec) {
-        var r = sec.querySelector(".control-reason"); if (!r) return;
-        var msgs = [];
-        Array.prototype.forEach.call(sec.querySelectorAll(".visual-controls button:disabled"), function (b) {
-          var t = b.textContent.trim();
-          msgs.push(t === "이전" ? "첫 단계라 이전 단계가 없다." : t === "다음" ? "마지막 단계라 다음 단계가 없다." : "현재 조건에서는 이 조작을 할 수 없다.");
-        });
-        Array.prototype.forEach.call(sec.querySelectorAll('.visual-controls input[type="range"]'), function (i) { if (Number(i.max) === 0) msgs.push("이 조건에서는 옮길 단계가 없다."); });
-        r.textContent = msgs.filter(function (m, k) { return msgs.indexOf(m) === k; }).join(" "); r.hidden = !msgs.length;
-      });
     }
     ["input", "change", "click"].forEach(function (ev) { document.addEventListener(ev, function () { setTimeout(sync, 0); }); });
     sync();

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
   <title>Doubly Linked Lists | Data Structure | Pusan National University</title><meta name="description" content="A doubly linked list stores both next and prev references in each node, allowing backward movement at the price of one extra reference per node."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/09.%20Links%20Both%20Ways/doubly-linked-lists.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Doubly Linked Lists | Data Structure | Pusan National University"><meta property="og:description" content="A doubly linked list stores both next and prev references in each node, allowing backward movement at the price of one extra reference per node."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/09.%20Links%20Both%20Ways/doubly-linked-lists.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-linked-lists.css">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script><link rel="stylesheet" href="../assets/ds-linked-lists.css">
   <style>
 
   </style>
@@ -37,7 +37,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">노드 참조를 알고 있을 때 연결 바꾸기</h2><p class="lead">B와 C 사이에 X를 삽입하거나 C를 삭제한다. 단계를 옮기면 바뀐 필드와 아직 보존된 기존 참조를 함께 볼 수 있다.</p></header>
+    <header class="example-header"><h2 class="section-title">노드 참조를 알고 있을 때 연결 바꾸기</h2><p class="lead">B와 C 사이에 X를 삽입하거나 C를 삭제한다. 각 단계에서 일부 필드는 바뀌고 나머지 기존 참조는 그대로 남는다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="operation">연산</label><select id="operation"><option value="insert">C 앞에 X 삽입</option><option value="remove">C 삭제</option></select></div><div class="control-field"><label for="updateStep">참조 변경 단계 <output id="updateValue" class="control-value" for="updateStep"></output></label><input id="updateStep" type="range" min="0" max="4" value="0"></div><div class="action-row"><button id="updatePrev" class="btn btn-outline" type="button">이전</button><button id="updateNext" class="btn" type="button">다음</button></div></div>
       <p id="reason-2" class="control-reason" hidden></p>
@@ -79,16 +79,6 @@ const states=op==='insert'?['변경 전','X.prev = B','X.next = C','C.prev = X',
     var mirrors = [];
     function sync() {
       mirrors.forEach(function (m) { var a = document.getElementById(m), b = document.getElementById(m + "-echo"); if (a && b) b.textContent = a.textContent; });
-      Array.prototype.forEach.call(document.querySelectorAll(".topic-example"), function (sec) {
-        var r = sec.querySelector(".control-reason"); if (!r) return;
-        var msgs = [];
-        Array.prototype.forEach.call(sec.querySelectorAll(".visual-controls button:disabled"), function (b) {
-          var t = b.textContent.trim();
-          msgs.push(t === "이전" ? "첫 단계라 이전 단계가 없다." : t === "다음" ? "마지막 단계라 다음 단계가 없다." : "현재 조건에서는 이 조작을 할 수 없다.");
-        });
-        Array.prototype.forEach.call(sec.querySelectorAll('.visual-controls input[type="range"]'), function (i) { if (Number(i.max) === 0) msgs.push("이 조건에서는 옮길 단계가 없다."); });
-        r.textContent = msgs.filter(function (m, k) { return msgs.indexOf(m) === k; }).join(" "); r.hidden = !msgs.length;
-      });
     }
     ["input", "change", "click"].forEach(function (ev) { document.addEventListener(ev, function () { setTimeout(sync, 0); }); });
     sync();

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
   <title>Tree Representations | Data Structure | Pusan National University</title><meta name="description" content="Nested Python lists and linked nodes represent the same recursive binary-tree structure using different memory layouts."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/15.%20From%20Links%20to%20Hierarchies/tree-representations.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Tree Representations | Data Structure | Pusan National University"><meta property="og:description" content="Nested Python lists and linked nodes represent the same recursive binary-tree structure using different memory layouts."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/15.%20From%20Links%20to%20Hierarchies/tree-representations.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script><link rel="stylesheet" href="../assets/ds-structures.css">
   <style>
     .rep-wrap{display:grid;gap:12px;min-width:560px;padding:10px}
     .list-code{font-family:var(--mono);font-size:15px;line-height:1.9;padding:12px 14px;border-radius:8px;background:var(--surface-050);border:1px solid var(--line-200);word-break:break-all}
@@ -58,7 +58,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">insert_left는 기존 왼쪽 부분 트리를 새 노드 아래로 내린다</h2><p class="lead">root = ["a", ["b", [], []], ["c", [], []]]에 insert_left(root, "x")를 실행한다. 단계를 옮기면 리스트와 트리가 한 줄씩 실행한 결과로 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">insert_left는 기존 왼쪽 부분 트리를 새 노드 아래로 내린다</h2><p class="lead">root = ["a", ["b", [], []], ["c", [], []]]에 insert_left(root, "x")를 실행한다. 단계마다 리스트와 트리가 한 줄씩 실행한 결과로 바뀐다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="step">실행 단계 <output id="step-out" class="control-value" for="step">0</output></label><input id="step" type="range" min="0" max="3" step="1" value="0"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="rep-wrap"><div id="list-2" class="list-code" aria-label="insert_left 실행 중인 리스트"></div><svg id="ins-plot" class="topic-plot" viewBox="0 0 900 250" role="img" aria-labelledby="ins-title ins-desc"><title id="ins-title">insert_left 단계</title><desc id="ins-desc">단계별 리스트와 트리</desc></svg></div></div><figcaption class="visual-caption">위는 root의 현재 값과 그 단계에서 만든 변수, 아래는 root가 나타내는 트리다. 파란 점선 부분이 새로 만든 리스트, 초록 부분이 old_left다.</figcaption></figure>

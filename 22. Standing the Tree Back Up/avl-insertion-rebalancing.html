@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
   <title>AVL Insertion Rebalancing | Data Structure | Pusan National University</title><meta name="description" content="AVL insertion updates heights upward and restores balance at the first unbalanced ancestor using a single or double rotation, keeping the total cost logarithmic."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/avl-insertion-rebalancing.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="AVL Insertion Rebalancing | Data Structure | Pusan National University"><meta property="og:description" content="AVL insertion updates heights upward and restores balance at the first unbalanced ancestor using a single or double rotation, keeping the total cost logarithmic."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/avl-insertion-rebalancing.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script><link rel="stylesheet" href="../assets/ds-structures.css">
   <style>
     .topic-plot .small{font-size:12px;fill:var(--ink-600)}
     .topic-plot .lbl{font-size:14px;fill:var(--ink-700);paint-order:stroke;stroke:var(--white);stroke-width:4px}
@@ -103,7 +103,7 @@
     var c = $("c1").value, proc = $("p1").value, C = CASES[c], reason = $("reason-1"), pSel = $("p1");
     var outer = C.kind === "바깥";
     pSel.disabled = outer;
-    if (outer) { reason.hidden = false; reason.textContent = "바깥 경우는 판정에 맞는 회전이 곧 불균형 노드에서의 한 번 회전이라 절차를 따로 고를 수 없다."; proc = "right"; } else reason.hidden = true;
+    if (outer) { reason.hidden = false; reason.textContent = "바깥 경우는 판정에 맞는 회전이 곧 불균형 노드에서의 한 번 회전이다."; proc = "right"; } else reason.hidden = true;
     var seq = proc === "right" ? C.seq : [(c === "lr" ? "R" : "L") + "@" + (c === "lr" ? 30 : 10)];
     var el = $("k1"); el.max = String(seq.length); if (Number(el.value) > seq.length) el.value = String(seq.length);
     var k = Number(el.value), root = C.t(), newK = 20;
