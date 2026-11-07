@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light"><title>Singly Linked Nodes | Data Structure | Pusan National University</title><meta name="description" content="A linked list chains nodes that each hold a value and a reference to the next node; the references, not memory adjacency, determine the order."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/07.%20Giving%20Up%20Contiguity/singly-linked-nodes.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Singly Linked Nodes | Data Structure | Pusan National University"><meta property="og:description" content="A linked list chains nodes that each hold a value and a reference to the next node; the references, not memory adjacency, determine the order."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/07.%20Giving%20Up%20Contiguity/singly-linked-nodes.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script>
   <style>
     .node-board{min-width:760px;padding:1.25rem;background:var(--surface-050);border:1px solid var(--line-200)}.name-row{display:flex;align-items:center;justify-content:center;gap:.6rem;margin-bottom:1rem}.ref-pill{padding:.45rem .8rem;border:2px solid var(--pnu-blue);border-radius:999px;background:var(--white);color:var(--pnu-blue-dark);font-weight:850}.arrow{color:var(--pnu-green);font-size:1.45rem;font-weight:900}
     .chain{display:flex;align-items:center;justify-content:center;gap:.6rem}.node{display:grid;grid-template-columns:82px 96px;border:2px solid var(--pnu-blue);border-radius:.65rem;overflow:hidden;background:var(--white)}.node span{padding:.9rem .55rem;text-align:center;font:750 .9rem/1.35 var(--mono)}.node .next{border-left:1px solid var(--line-200)}.node.is-node{border-color:var(--pnu-green);box-shadow:0 0 0 4px color-mix(in srgb,var(--pnu-green) 18%,transparent)}.node .is-part{background:var(--callout-bg);box-shadow:inset 0 -4px var(--pnu-green)}.nil{padding:.55rem .8rem;border:1px dashed var(--ink-500);border-radius:.5rem;background:var(--white)}
@@ -83,7 +83,7 @@
     const names = states[$('list-state').value], placement = $('placement').value;
     const activePlacement = names.length > 1;
     $('placement').disabled = !activePlacement;
-    $('placement-note').textContent = activePlacement ? '' : '노드가 하나 이하라 배치를 바꿔도 연결 모양이 같으므로 배치 선택을 막았다.';
+    $('placement-note').textContent = activePlacement ? '' : '노드가 하나 이하라 배치를 바꿔도 연결 모양이 같다.';
     $('placement-note').hidden = activePlacement;
     const head = names[0] || 'None', tail = names.at(-1) || 'None';
     $('head-value').textContent = head;

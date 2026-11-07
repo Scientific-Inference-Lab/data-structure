@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
   <title>Hash Tables | Data Structure | Pusan National University</title><meta name="description" content="A hash table computes an array index from a key and checks only the selected bucket, giving expected cost near O(1) when keys spread evenly."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/13.%20Keys%20to%20Indices/hash-tables.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Hash Tables | Data Structure | Pusan National University"><meta property="og:description" content="A hash table computes an array index from a key and checks only the selected bucket, giving expected cost near O(1) when keys spread evenly."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/13.%20Keys%20to%20Indices/hash-tables.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script><link rel="stylesheet" href="../assets/ds-structures.css">
   <style>
     .topic-hash-tables .ds-split .topic-table{min-width:240px}
   </style>
@@ -36,7 +36,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">Map은 정수 위치가 아니라 키로 값을 저장하고 찾는다</h2><p class="lead">단계를 옮기면 dict 연산 하나가 실행되고, 저장된 키와 값 쌍, 반환값이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">Map은 정수 위치가 아니라 키로 값을 저장하고 찾는다</h2><p class="lead">단계마다 dict 연산 하나가 실행되고, 저장된 키와 값 쌍, 반환값이 바뀐다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="action-row"><button id="mp-first" class="btn btn-outline" type="button">처음으로</button><button id="mp-prev" class="btn btn-outline" type="button">이전</button><button id="mp-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-2" class="control-reason" hidden></p>
@@ -75,8 +75,6 @@
     function go(v) {
       var mx = getMax(); st.i = Math.max(0, Math.min(mx, v)); render(st.i, mx);
       $(sid + "-first").disabled = st.i === 0; $(sid + "-prev").disabled = st.i === 0; $(sid + "-next").disabled = st.i === mx;
-      var msg = st.i === 0 && st.i === mx ? "진행할 단계가 없다." : st.i === 0 ? "처음 단계라 이전 단계가 없다." : st.i === mx ? "마지막 단계라 다음 단계가 없다." : "";
-      $("reason-" + n).textContent = msg; $("reason-" + n).hidden = !msg;
     }
     $(sid + "-first").addEventListener("click", function () { go(0); });
     $(sid + "-prev").addEventListener("click", function () { go(st.i - 1); });

@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
   <title>AVL Imbalance Detection | Data Structure | Pusan National University</title><meta name="description" content="After an AVL insertion, update balance factors along the path to the root, stopping when the height no longer changes or rebalancing at the first node with an absolute balance factor of 2."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/avl-imbalance-detection.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="AVL Imbalance Detection | Data Structure | Pusan National University"><meta property="og:description" content="After an AVL insertion, update balance factors along the path to the root, stopping when the height no longer changes or rebalancing at the first node with an absolute balance factor of 2."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/avl-imbalance-detection.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-structures.css">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script><link rel="stylesheet" href="../assets/ds-structures.css">
   <style>
     .topic-plot .small{font-size:12px;fill:var(--ink-600)}
     .topic-plot .lbl{font-size:14px;fill:var(--ink-700);paint-order:stroke;stroke:var(--white);stroke-width:4px}
@@ -143,7 +143,7 @@
     svg.querySelector("desc").textContent = (c === "20" ? "20의 부분 트리를 고친 뒤" : "재균형 전") + ", 남은 불균형 " + (badR.join(", ") || "없음");
     var note = c === "20"
       ? "20을 루트로 하는 부분 트리 20(10(5))는 높이 2가 되어 불균형이었다. 이를 10(5, 20)으로 고치면 높이가 삽입 전과 같은 1로 돌아가, 그 위 30의 왼쪽 높이도 1이 되어 bf가 +1로 돌아온다. 가장 가까운 불균형 노드 하나만 고쳐도 위쪽 조상의 불균형이 함께 사라진다."
-      : "아직 재균형하지 않아 20과 30은 높이로 다시 세면 모두 +2다. 새 단말 노드 5에서 올라가면 10의 +1을 거쳐 20에서 처음 +2를 만나므로 update_balance는 20에서 재균형한다. 이 화면은 루트에서 재균형한 결과가 아니라 삽입 직후 상태다.";
+      : "아직 재균형하지 않아 20과 30은 높이로 다시 세면 모두 +2다. 새 단말 노드 5에서 올라가면 10의 +1을 거쳐 20에서 처음 +2를 만나므로 update_balance는 20에서 재균형한다. 삽입 직후이며 아직 재균형하지 않았다.";
     show(2, [["확인할 상태", c === "20" ? "20의 부분 트리를 고친 뒤" : "재균형 전"], ["20의 부분 트리 높이", c === "20" ? "2 → 1 (삽입 전과 같음)" : "2 (아직 고치지 않음)"], ["30의 bf", sgn(bf(right))], ["남은 |bf| = 2 노드", badR.join(", ") || "없음"]], note);
   }
 

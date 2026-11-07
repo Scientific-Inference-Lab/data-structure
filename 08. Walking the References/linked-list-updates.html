@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
   <title>Linked List Updates | Data Structure | Pusan National University</title><meta name="description" content="Updating a linked list changes only links without moving nodes, but the cost of finding the position is separate from the cost of changing references."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/08.%20Walking%20the%20References/linked-list-updates.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Linked List Updates | Data Structure | Pusan National University"><meta property="og:description" content="Updating a linked list changes only links without moving nodes, but the cost of finding the position is separate from the cost of changing references."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/08.%20Walking%20the%20References/linked-list-updates.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
-  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><link rel="stylesheet" href="../assets/ds-linked-lists.css">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script><link rel="stylesheet" href="../assets/ds-linked-lists.css">
   <style>
     .topic-linked-list-updates #removeCode{grid-template-columns:none;grid-auto-flow:column;grid-auto-columns:minmax(0,1fr)}
   </style>
@@ -21,7 +21,7 @@
 <body class="visual-topic topic-linked-list-updates">
 <a class="skip-link" href="#main-content">본문으로 이동</a>
 <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Walking the References</span><span class="nav-tag is-current" aria-current="page">Linked List Updates</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/08.%20Walking%20the%20References.pdf">Walking the <span class="publication-lecture-tail">References<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Linked List Updates</h1><hr class="accent-rule"><p class="page-subtitle">노드 자체를 옮기지 않고 연결만 바꾸는 것이 핵심이다. 다만 위치를 찾는 비용과 참조를 바꾸는 비용은 구분해야 한다.</p></div></section>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/08.%20Walking%20the%20References.pdf">Walking the <span class="publication-lecture-tail">References<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Linked List Updates</h1><hr class="accent-rule"><p class="page-subtitle">노드 자체는 옮기지 않고 연결만 바꾼다. 다만 위치를 찾는 비용과 참조를 바꾸는 비용은 구분해야 한다.</p></div></section>
 <main id="main-content" class="page-body container">
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>연결만 바꾸기</strong><span>노드를 옮기지 않고 next 참조를 바꾼다.</span></article><article class="summary-card"><strong>대입 순서</strong><span>맨 앞 삽입은 X.next = head를 먼저 해야 기존 노드를 잃지 않는다.</span></article><article class="summary-card"><strong>비용 나누기</strong><span>위치를 찾는 Θ(1+i)와 참조를 바꾸는 Θ(1)을 구분한다.</span></article></div></section>
 
@@ -108,16 +108,6 @@ q('#order').onchange=()=>{q('#insertStep').value=0;insert()};q('#insertStep').on
     var mirrors = ["insertStepValue"];
     function sync() {
       mirrors.forEach(function (m) { var a = document.getElementById(m), b = document.getElementById(m + "-echo"); if (a && b) b.textContent = a.textContent; });
-      Array.prototype.forEach.call(document.querySelectorAll(".topic-example"), function (sec) {
-        var r = sec.querySelector(".control-reason"); if (!r) return;
-        var msgs = [];
-        Array.prototype.forEach.call(sec.querySelectorAll(".visual-controls button:disabled"), function (b) {
-          var t = b.textContent.trim();
-          msgs.push(t === "이전" ? "첫 단계라 이전 단계가 없다." : t === "다음" ? "마지막 단계라 다음 단계가 없다." : "현재 조건에서는 이 조작을 할 수 없다.");
-        });
-        Array.prototype.forEach.call(sec.querySelectorAll('.visual-controls input[type="range"]'), function (i) { if (Number(i.max) === 0) msgs.push("이 조건에서는 옮길 단계가 없다."); });
-        r.textContent = msgs.filter(function (m, k) { return msgs.indexOf(m) === k; }).join(" "); r.hidden = !msgs.length;
-      });
     }
     ["input", "change", "click"].forEach(function (ev) { document.addEventListener(ev, function () { setTimeout(sync, 0); }); });
     sync();
