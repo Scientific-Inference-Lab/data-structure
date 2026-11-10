@@ -45,7 +45,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>세 연산의 비용</strong><span>탐색은 찾았는지 답하고, 삽입은 단말 노드를 붙이고, 삭제는 경우에 따라 잇는다. 내려가는 길이는 모두 높이로 제한된다.</span></article><article class="summary-card"><strong>삽입 순서</strong><span>같은 키 집합이라도 먼저 넣은 키가 위에 자리 잡으므로 순서가 모양과 높이를 바꾼다.</span></article><article class="summary-card"><strong>편향 트리</strong><span>어느 노드에서도 갈림길이 없어 연결리스트처럼 한 줄이 된다.</span></article><article class="summary-card"><strong>순서가 필요한 연산</strong><span>해시테이블은 키 하나 찾기가 기대 O(1)이지만 순서대로 출력하거나 범위로 찾으려면 모든 키를 보아야 한다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">같은 일곱 키도 넣는 순서에 따라 높이가 2에서 6까지 달라진다</h2><p class="lead">20부터 80까지 10 간격의 일곱 키를 넣는 순서를 고르고 넣은 키 수를 옮기면 트리 모양, 높이, 삽입 때 지나온 노드 수가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">같은 일곱 키도 넣는 순서에 따라 높이가 2에서 6까지 달라진다</h2><p class="lead">20부터 80까지 10 간격의 일곱 키라도 넣는 순서가 트리 모양과 높이, 삽입할 때 지나는 노드 수를 정한다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="ord">삽입 순서</label><select id="ord"><option value="mid">50, 30, 70, 20, 40, 60, 80</option><option value="mix">50, 20, 30, 80, 70, 40, 60</option><option value="asc">20, 30, 40, 50, 60, 70, 80 (오름차순)</option><option value="desc">80, 70, 60, 50, 40, 30, 20 (내림차순)</option></select></div><div class="control-field"><label for="n1">넣은 키 수 <output id="n1-out" class="control-value" for="n1">7</output></label><input id="n1" type="range" min="1" max="7" step="1" value="7"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="ord-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="or-title or-desc"><title id="or-title">삽입 순서와 BST 모양</title><desc id="or-desc">넣은 순서대로 만든 BST</desc></svg></div><figcaption class="visual-caption">가로 띠 하나가 깊이 하나다. 노드의 가로 위치는 키의 크기 순서로 고정했다. 초록 원이 방금 넣은 키이고, 초록 선이 그 키까지 내려온 길이다.</figcaption></figure>
@@ -55,7 +55,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">노드 수가 늘수록 편향 트리와 낮은 트리의 비용 차이는 벌어진다</h2><p class="lead">노드 수 n을 바꾸면 두 모양에서 가장 깊은 노드까지 내려갈 때 방문하는 노드 수가 바뀐다. 탐색, 삽입, 삭제 모두 이 길이 안에서 내려간다.</p></header>
+    <header class="example-header"><h2 class="section-title">노드 수가 늘수록 편향 트리와 낮은 트리의 비용 차이는 벌어진다</h2><p class="lead">n이 커질수록 편향 트리와 가장 낮은 트리에서 가장 깊은 노드까지 방문하는 노드 수의 차이가 벌어진다. 탐색, 삽입, 삭제 모두 이 길이 안에서 내려간다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="n2">노드 수 n <output id="n2-out" class="control-value" for="n2">15</output></label><input id="n2" type="range" min="1" max="100" step="1" value="15"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="cost-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="co-title co-desc"><title id="co-title">노드 수와 최대 방문 노드 수</title><desc id="co-desc">편향 트리는 n, 가장 낮게 만든 트리는 log n에 따라 늘어난다</desc></svg></div><figcaption class="visual-caption">가로축은 노드 수 n, 세로축은 루트에서 가장 깊은 노드까지 방문하는 노드 수(높이 + 1)다. 파란 실선은 정렬된 순서로 넣은 편향 트리, 초록 점선은 같은 n으로 만들 수 있는 가장 낮은 BST이고 두 점이 현재 n이다.</figcaption></figure>
@@ -65,7 +65,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">범위로 찾을 때 BST는 범위와 겹치는 갈래만 내려간다</h2><p class="lead">15개 키를 가진 높이 3의 BST에서 하한과 상한을 바꾸면 방문하는 노드와 출력되는 키가 바뀐다. 같은 키를 해시테이블에 담았다면 15개 키를 모두 확인한 뒤 정렬해야 한다.</p></header>
+    <header class="example-header"><h2 class="section-title">범위로 찾을 때 BST는 범위와 겹치는 갈래만 내려간다</h2><p class="lead">15개 키를 가진 높이 3의 BST에서는 하한과 상한이 방문할 노드와 출력할 키를 정한다. 같은 키를 해시테이블에 담았다면 15개 키를 모두 확인한 뒤 정렬해야 한다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="lo">하한 <output id="lo-out" class="control-value" for="lo">45</output></label><input id="lo" type="range" min="0" max="160" step="5" value="45"></div><div class="control-field"><label for="hi">상한 <output id="hi-out" class="control-value" for="hi">95</output></label><input id="hi" type="range" min="0" max="160" step="5" value="95"></div></div>
       <p id="reason-3" class="control-reason" hidden></p>

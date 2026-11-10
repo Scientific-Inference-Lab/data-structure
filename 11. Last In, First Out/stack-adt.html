@@ -26,7 +26,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>push(x)</strong><span>x를 맨 위에 추가하고 반환값이 없다.</span></article><article class="summary-card"><strong>pop()과 peek()</strong><span>둘 다 맨 위 값을 반환하지만 pop만 그 값을 삭제한다.</span></article><article class="summary-card"><strong>구현의 끝 선택</strong><span>Python list는 오른쪽 끝, SLList는 머리(head)를 맨 위로 둔다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">push와 pop이 같은 끝에서 일어나 넣은 순서가 뒤집힌다</h2><p class="lead">단계마다 연산 하나가 실행되고, 스택의 맨 위, 반환값, 원소 수가 바뀐다. 4, dog, True, 8.4를 차례로 넣은 뒤 꺼낸다.</p></header>
+    <header class="example-header"><h2 class="section-title">push와 pop이 같은 끝에서 일어나 넣은 순서가 뒤집힌다</h2><p class="lead">4, dog, True, 8.4를 차례로 넣은 뒤 꺼내면 넣은 순서와 반대로 나온다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="action-row"><button id="st-first" class="btn btn-outline" type="button">처음으로</button><button id="st-prev" class="btn btn-outline" type="button">이전</button><button id="st-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-1" class="control-reason" hidden></p>
@@ -37,7 +37,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">어느 끝을 맨 위로 두는지에 따라 같은 LIFO도 비용이 다르다</h2><p class="lead">구현 방식과 원소 수 n을 바꾸면 push 한 번에 옮기는 원소 수와 비용이 바뀐다. 세 구현 모두 LIFO 결과는 같다.</p></header>
+    <header class="example-header"><h2 class="section-title">어느 끝을 맨 위로 두는지에 따라 같은 LIFO도 비용이 다르다</h2><p class="lead">push 한 번에 옮기는 원소 수와 비용은 구현 방식과 원소 수 n에 따라 다르지만 세 구현의 LIFO 결과는 같다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="impl">구현</label><select id="impl"><option value="right">list 오른쪽 끝: append · pop()</option><option value="left">list 왼쪽 앞: insert(0, x) · pop(0)</option><option value="sll">SLList: 머리 앞에 연결 · 머리 삭제</option></select></div><div class="control-field"><label for="sn">원소 수 n <output id="sn-out" class="control-value" for="sn">5</output></label><input id="sn" type="range" min="1" max="8" step="1" value="5"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div id="impl-board" class="ds-board" role="img" aria-label="push 한 번의 작업"></div></div><figcaption class="visual-caption">칸 하나가 저장된 원소다. 초록 칸은 새로 push한 값, 파란 칸은 그 push 때문에 한 칸씩 옮겨진 원소다.</figcaption></figure>

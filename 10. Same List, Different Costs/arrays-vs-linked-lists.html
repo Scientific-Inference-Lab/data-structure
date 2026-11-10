@@ -21,12 +21,12 @@
 <body class="visual-topic topic-arrays-vs-linked-lists">
 <a class="skip-link" href="#main-content">본문으로 이동</a>
 <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Same List, Different Costs</span><span class="nav-tag is-current" aria-current="page">Arrays vs Linked Lists</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/10.%20Same%20List,%20Different%20Costs.pdf">Same List, Different <span class="publication-lecture-tail">Costs<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Arrays vs Linked Lists</h1><hr class="accent-rule"><p class="page-subtitle">같은 List 인터페이스의 get, add, remove도 내부 표현이 배열인지 연결리스트인지에 따라 실행하는 일과 연산 비용(operation cost)이 달라진다. 배열은 원소 이동이, 연결리스트는 위치를 찾는 순회가 비용을 지배한다.</p></div></section>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/10.%20Same%20List,%20Different%20Costs.pdf">Same List, Different <span class="publication-lecture-tail">Costs<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Arrays vs Linked Lists</h1><hr class="accent-rule"><p class="page-subtitle">같은 List 인터페이스의 get, add, remove도 내부 표현이 배열인지 연결리스트인지에 따라 실행하는 일과 연산 비용(operation cost)이 달라진다. 배열은 원소 이동이, 연결리스트는 위치를 찾는 순회가 비용을 좌우한다.</p></div></section>
 <main id="main-content" class="page-body container">
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>ArrayStack</strong><span>내부 배열에 원소를 연속으로 두고 n과 용량을 따로 센다.</span></article><article class="summary-card"><strong>SLList · DLList</strong><span>노드마다 next, 또는 prev와 next를 두어 순서를 연결한다.</span></article><article class="summary-card"><strong>비용을 읽는 순서</strong><span>어떤 연산인지, 내부에서 무엇을 하는지, 몇 번 반복하는지 센다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">get(i)는 배열에서 계산 한 번, 연결리스트에서 순회다</h2><p class="lead">표현과 위치 i를 바꾸면 i번째 값에 닿기 위해 거치는 칸과 반복 횟수가 바뀐다. 원소는 n = 8개다.</p></header>
+    <header class="example-header"><h2 class="section-title">get(i)는 배열에서 계산 한 번, 연결리스트에서 순회다</h2><p class="lead">원소 n = 8개에서 i번째 값에 닿기까지 거치는 칸과 반복 횟수는 내부 표현과 i에 따라 다르다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="rep">내부 표현</label><select id="rep"><option value="array">ArrayStack</option><option value="sl">SLList</option><option value="dl">DLList</option></select></div><div class="control-field"><label for="gi">위치 i <output id="gi-out" class="control-value" for="gi">5</output></label><input id="gi" type="range" min="0" max="7" step="1" value="5"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div id="get-board" class="ds-board" role="img" aria-label="get(i) 접근 경로"></div></div><figcaption class="visual-caption">칸 하나가 원소 하나다. 파란 칸은 접근하면서 거친 원소, 초록 테두리 칸은 목표 i번째 원소다. 연결리스트의 화살표는 따라간 참조의 방향이다.</figcaption></figure>
@@ -36,7 +36,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">add(i, x)는 배열에서 원소 이동이, 연결리스트에서 순회가 비용을 정한다</h2><p class="lead">삽입 위치 i를 바꾸면 ArrayStack이 옮기는 원소 수와 SLList·DLList가 위치를 찾기 위해 지나는 노드 수가 바뀐다. 원소는 n = 8개이고 용량은 충분하다.</p></header>
+    <header class="example-header"><h2 class="section-title">add(i, x)는 배열에서 원소 이동이, 연결리스트에서 순회가 비용을 정한다</h2><p class="lead">원소 n = 8개이고 용량이 충분할 때 삽입 위치 i가 ArrayStack이 옮기는 원소 수와 SLList·DLList가 위치를 찾으며 지나는 노드 수를 정한다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="ai">삽입 위치 i <output id="ai-out" class="control-value" for="ai">2</output></label><input id="ai" type="range" min="0" max="8" step="1" value="2"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div id="add-bars" class="ds-bars" role="img" aria-label="표현별 삽입 작업량"></div></div><figcaption class="visual-caption">막대 길이는 표현별 주된 반복 횟수다. ArrayStack은 옮기는 원소 수, SLList는 i − 1번째까지 따라가는 노드 수(끝 삽입은 tail로 바로 접근), DLList는 가까운 끝에서 따라가는 노드 수이며, 초록 막대가 가장 적다.</figcaption></figure>

@@ -26,7 +26,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>dummy</strong><span>값을 담지 않고 양끝의 연결을 맡는 센티널 노드다.</span></article><article class="summary-card"><strong>빈 목록</strong><span>dummy.next와 dummy.prev가 모두 dummy 자신을 가리킨다.</span></article><article class="summary-card"><strong>가까운 끝</strong><span>i번째 노드는 Θ(1 + min{i, n − i})로 찾는다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">dummy가 닫는 양방향 고리</h2><p class="lead">노드 수를 바꾸면 <code>dummy.next</code>와 <code>dummy.prev</code>가 가리키는 대상이 달라진다. 빈 목록에서는 두 참조가 모두 dummy 자신을 가리킨다.</p></header>
+    <header class="example-header"><h2 class="section-title">dummy가 닫는 양방향 고리</h2><p class="lead"><code>dummy.next</code>는 첫 노드를, <code>dummy.prev</code>는 마지막 노드를 가리킨다. 빈 목록에서는 두 참조가 모두 dummy 자신을 가리킨다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="size">실제 노드 수</label><select id="size"><option value="0">0개 · 빈 목록</option><option value="1">1개</option><option value="3">3개</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="ll-diagram"><svg id="stateSvg" viewBox="0 0 780 230" role="img" aria-labelledby="stateTitle stateDesc"><title id="stateTitle">센티널이 포함된 이중 연결리스트</title><desc id="stateDesc">dummy와 실제 노드가 양방향 고리를 이루는 상태</desc></svg></div></div><figcaption class="visual-caption">초록 테두리 원이 dummy다. 위쪽 화살표는 next, 아래쪽은 prev이며, 바깥 곡선은 마지막 노드와 dummy를 잇는 참조다.</figcaption></figure>
@@ -36,7 +36,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">경계에서도 같은 연결 규칙 쓰기</h2><p class="lead">연산 위치를 바꾸어도 삽입은 새 노드와 양옆 노드의 참조 네 개를, 삭제는 양옆 노드의 참조 두 개를 바꾼다. dummy가 실제 노드의 자리를 대신할 수 있다.</p></header>
+    <header class="example-header"><h2 class="section-title">경계에서도 같은 연결 규칙 쓰기</h2><p class="lead">연산 위치와 상관없이 삽입은 새 노드와 양옆 노드의 참조 네 개를, 삭제는 양옆 노드의 참조 두 개를 바꾼다. dummy가 실제 노드의 자리를 대신할 수 있다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="case">경계 연산</label><select id="case"><option value="front">첫 자리에 X 삽입</option><option value="empty">빈 목록에 X 삽입</option><option value="tail">마지막 노드 삭제</option></select></div><div class="control-field"><label for="boundaryStep">참조 변경 단계 <output id="boundaryValue" class="control-value" for="boundaryStep"></output></label><input id="boundaryStep" type="range" min="0" max="4" value="0"></div><div class="action-row"><button id="boundaryPrev" class="btn btn-outline" type="button">이전</button><button id="boundaryNext" class="btn" type="button">다음</button></div></div>
       <p id="reason-2" class="control-reason" hidden></p>

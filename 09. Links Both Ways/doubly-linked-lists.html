@@ -26,7 +26,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>prev와 next</strong><span>각 노드가 앞 노드와 뒤 노드의 참조를 함께 저장한다.</span></article><article class="summary-card"><strong>공간 비용</strong><span>노드마다 참조 하나를 더 저장한다.</span></article><article class="summary-card"><strong>참조를 알 때</strong><span>삽입은 참조 네 개, 삭제는 두 개를 바꾸므로 Θ(1)이다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">next와 prev로 이동하기</h2><p class="lead">출발 노드와 이동 방향을 바꾸면 current가 따라가는 참조가 달라진다. <code>prev</code>가 없으면 현재 노드에서 바로 뒤로 갈 수 없다.</p></header>
+    <header class="example-header"><h2 class="section-title">next와 prev로 이동하기</h2><p class="lead">출발 노드와 이동 방향에 따라 current가 따라가는 참조가 달라진다. <code>prev</code>가 없으면 현재 노드에서 바로 뒤로 갈 수 없다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--wrap"><div class="control-field"><label for="links">노드가 가진 참조</label><select id="links"><option value="double">next와 prev</option><option value="single">next만</option></select></div><div class="control-field"><label for="start">출발 노드</label><select id="start"><option value="1">B</option><option value="2" selected>C</option></select></div><div class="control-field"><label for="direction">이동 방향</label><select id="direction"><option value="next">next · 뒤따르는 노드</option><option value="prev">prev · 앞서는 노드</option></select></div><div class="control-field"><label for="moveStep">참조 이동 횟수 <output id="moveValue" class="control-value" for="moveStep"></output></label><input id="moveStep" type="range" min="0" max="1" value="0"></div></div>
       <p id="reason-1" class="control-reason" hidden></p>
@@ -37,7 +37,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">노드 참조를 알고 있을 때 연결 바꾸기</h2><p class="lead">B와 C 사이에 X를 삽입하거나 C를 삭제한다. 각 단계에서 일부 필드는 바뀌고 나머지 기존 참조는 그대로 남는다.</p></header>
+    <header class="example-header"><h2 class="section-title">노드 참조를 알고 있을 때 연결 바꾸기</h2><p class="lead">B와 C 사이에 X를 삽입하거나 C를 삭제할 때 바뀌는 필드는 일부이고 나머지 기존 참조는 그대로 남는다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="operation">연산</label><select id="operation"><option value="insert">C 앞에 X 삽입</option><option value="remove">C 삭제</option></select></div><div class="control-field"><label for="updateStep">참조 변경 단계 <output id="updateValue" class="control-value" for="updateStep"></output></label><input id="updateStep" type="range" min="0" max="4" value="0"></div><div class="action-row"><button id="updatePrev" class="btn btn-outline" type="button">이전</button><button id="updateNext" class="btn" type="button">다음</button></div></div>
       <p id="reason-2" class="control-reason" hidden></p>

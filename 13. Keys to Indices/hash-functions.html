@@ -26,7 +26,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>h(k) = k mod m</strong><span>나머지 연산은 결과를 항상 0부터 m − 1 사이로 만든다.</span></article><article class="summary-card"><strong>문자열 키</strong><span>문자별 ord 값을 합쳐 정수로 바꾼 뒤 나머지를 취한다.</span></article><article class="summary-card"><strong>원래 키도 저장</strong><span>해시 값이 같아도 키를 비교해 서로 구분한다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">나머지 연산은 어떤 정수 키도 유효한 인덱스로 바꾼다</h2><p class="lead">키 k와 표 길이 m을 바꾸면 k mod m으로 계산한 버킷 인덱스와 같은 버킷에 모이는 키가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">나머지 연산은 어떤 정수 키도 유효한 인덱스로 바꾼다</h2><p class="lead">키 k와 표 길이 m이 버킷 인덱스 k mod m을 정하고 나머지가 같은 키는 한 버킷에 모인다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="hk">키 k <output id="hk-out" class="control-value" for="hk">77</output></label><input id="hk" type="range" min="0" max="99" step="1" value="77"></div><div class="control-field"><label for="hm">표 길이 m</label><select id="hm"><option value="7">7</option><option value="10">10</option><option value="11" selected>11</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="mod-row"></div><div id="mod-keys" class="ds-row"></div></div></div><figcaption class="visual-caption">위 줄은 버킷 인덱스 0부터 m − 1이며 초록 테두리 칸이 k가 가는 버킷이다. 아래 줄은 예시 키 10, 20, 30, 40, 50, 60의 버킷이며 파란 칸이 k와 같은 버킷에 모인 키다.</figcaption></figure>
@@ -36,7 +36,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">단순 합은 글자 순서를 무시하고, 위치 가중치가 순서를 반영한다</h2><p class="lead">해시 방식을 바꾸면 cat과 act의 문자별 기여, 합계, 11로 나눈 버킷이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">단순 합은 글자 순서를 무시하고, 위치 가중치가 순서를 반영한다</h2><p class="lead">해시 방식에 따라 cat과 act의 문자별 기여와 합계, 11로 나눈 버킷이 달라진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="hmode">해시 방식</label><select id="hmode"><option value="sum">단순 합: Σ ord(c)</option><option value="weight">위치 가중치: Σ (i + 1) · ord(c)</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><table id="str-table" class="topic-table" aria-label="문자별 ord 값과 해시 계산"></table></div><figcaption class="visual-caption">행은 단어다. 칸마다 문자와 그 문자가 합계에 더하는 값이며, 마지막 열이 11로 나눈 버킷이다. 빨간 글자는 두 단어의 버킷이 같을 때다.</figcaption></figure>

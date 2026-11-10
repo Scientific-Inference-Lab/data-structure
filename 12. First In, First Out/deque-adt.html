@@ -26,7 +26,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>양 끝 연산</strong><span>add_front, remove_front, add_rear, remove_rear가 있다.</span></article><article class="summary-card"><strong>스택과 큐 표현</strong><span>넣고 빼는 끝이 같으면 LIFO, 다르면 FIFO가 된다.</span></article><article class="summary-card"><strong>collections.deque</strong><span>append와 popleft로 큐를 만들며 양 끝이 O(1)이다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">넣고 빼는 끝을 고르면 덱이 스택도 큐도 된다</h2><p class="lead">사용 방식에 따라 A, B, C를 넣고 모두 꺼낼 때 쓰는 연산, 덱의 모양, 꺼낸 순서가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">넣고 빼는 끝을 고르면 덱이 스택도 큐도 된다</h2><p class="lead">덱을 스택처럼 쓰는지 큐처럼 쓰는지에 따라 A, B, C를 넣고 모두 꺼낼 때 쓰는 연산과 꺼낸 순서가 달라진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="dmode">사용 방식</label><select id="dmode"><option value="stack">스택처럼: add_rear · remove_rear</option><option value="queue">큐처럼: add_rear · remove_front</option></select></div><div class="action-row"><button id="dq-first" class="btn btn-outline" type="button">처음으로</button><button id="dq-prev" class="btn btn-outline" type="button">이전</button><button id="dq-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-1" class="control-reason" hidden></p>
@@ -37,7 +37,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">회문 검사는 앞쪽과 뒤쪽에서 하나씩 꺼내 비교한다</h2><p class="lead">단어와 비교 횟수를 바꾸면 양 끝에서 꺼낸 문자 쌍, 덱에 남은 문자, 판정이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">회문 검사는 앞쪽과 뒤쪽에서 하나씩 꺼내 비교한다</h2><p class="lead">단어에 따라 양 끝에서 꺼낸 문자 쌍과 판정이 다르고 비교를 거듭할수록 덱에 남은 문자가 줄어든다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="word">단어</label><select id="word"><option value="radar">radar</option><option value="level">level</option><option value="toast">toast</option><option value="noon">noon</option></select></div><div class="action-row"><button id="pal-first" class="btn btn-outline" type="button">처음으로</button><button id="pal-prev" class="btn btn-outline" type="button">이전</button><button id="pal-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-2" class="control-reason" hidden></p>

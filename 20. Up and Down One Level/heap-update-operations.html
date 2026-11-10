@@ -38,12 +38,12 @@
 <body class="visual-topic topic-heap-update-operations">
 <a class="skip-link" href="#main-content">본문으로 이동</a>
 <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Up and Down One Level</span><span class="nav-tag is-current" aria-current="page">Heap Update Operations</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/20.%20Up%20and%20Down%20One%20Level.pdf">Up and Down One <span class="publication-lecture-tail">Level<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Heap Update Operations</h1><hr class="accent-rule"><p class="page-subtitle">힙에 값을 넣으면 배열 끝에 붙인 뒤 sift up(새 값을 부모와 바꾸며 위로 올리기)으로, 최솟값을 빼면 마지막 값을 루트로 옮긴 뒤 sift down(루트 값을 더 작은 자식 노드와 바꾸며 내리기)으로 힙 성질을 되찾는다. 두 절차 모두 한 번에 한 레벨씩 움직이므로 교환은 많아야 높이만큼, 즉 O(log n)이다.</p></div></section>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/20.%20Up%20and%20Down%20One%20Level.pdf">Up and Down One <span class="publication-lecture-tail">Level<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Heap Update Operations</h1><hr class="accent-rule"><p class="page-subtitle">힙에 값을 넣으면 배열 끝에 붙인 뒤 새 값을 부모와 바꾸며 올리는 상향 이동(sift up)으로, 최솟값을 빼면 마지막 값을 루트로 옮긴 뒤 루트 값을 더 작은 자식 노드와 바꾸며 내리는 하향 이동(sift down)으로 힙 성질을 되찾는다. 두 절차 모두 한 번에 한 레벨씩 움직이므로 교환은 많아야 높이만큼, 즉 O(log n)이다.</p></div></section>
 <main id="main-content" class="page-body container">
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>넣는 자리는 하나</strong><span>모양 조건을 지키려면 새 값은 마지막 레벨의 다음 빈 자리, 곧 배열의 끝에 붙인다.</span></article><article class="summary-card"><strong>sift up의 종료</strong><span>루트에 도달했거나 현재 값이 부모의 값 이상이면 멈춘다.</span></article><article class="summary-card"><strong>sift down의 교환 대상</strong><span>존재하는 자식 노드 가운데 더 작은 쪽과 바꾼다. 큰 쪽과 바꾸면 새 부모가 다른 자식 노드보다 커질 수 있다.</span></article><article class="summary-card"><strong>heapq</strong><span>heappush는 끝에 붙이고 sift up, heappop은 마지막 값을 올리고 sift down하는 절차다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">새 값은 배열 끝에 붙은 뒤 부모보다 작은 동안 한 레벨씩 올라간다</h2><p class="lead">힙 [5, 9, 11, 14, 18, 19, 21, 33, 17, 27]에 값을 하나 넣는다. 넣을 값과 단계에 따라 비교하는 두 칸, 교환 횟수, 배열이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">새 값은 배열 끝에 붙은 뒤 부모보다 작은 동안 한 레벨씩 올라간다</h2><p class="lead">힙 [5, 9, 11, 14, 18, 19, 21, 33, 17, 27]에 값을 하나 넣는다. 넣을 값에 따라 부모와 바꾸며 올라가는 횟수가 달라진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="v1">넣을 값 <output id="v1-out" class="control-value" for="v1">7</output></label><input id="v1" type="range" min="1" max="40" step="1" value="7"></div><div class="control-field"><label for="k1">진행한 단계 <output id="k1-out" class="control-value" for="k1">0</output></label><input id="k1" type="range" min="0" max="3" step="1" value="0"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="up-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="up-title up-desc"><title id="up-title">sift up 단계</title><desc id="up-desc">새 값의 위치와 부모 비교</desc></svg></div><figcaption class="visual-caption">초록으로 채운 원과 칸이 넣은 값의 현재 위치, 초록 테두리가 비교할 부모다. 빨간 굵은 선은 아직 힙 성질을 어긴 부모와 자식 노드 사이이고, 초록 선은 새 값이 올라온 길이다. 원과 칸 아래 작은 수가 인덱스다.</figcaption></figure>
@@ -53,7 +53,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">최솟값을 빼면 마지막 값이 루트로 올라와 더 작은 자식 노드와 바꾸며 내려간다</h2><p class="lead">같은 힙에서 루트 5를 꺼낸다. 교환 대상을 고르는 규칙과 단계에 따라 27이 내려가는 길과 끝난 뒤 힙 성질을 지키는지가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">최솟값을 빼면 마지막 값이 루트로 올라와 더 작은 자식 노드와 바꾸며 내려간다</h2><p class="lead">같은 힙에서 루트 5를 꺼내면 마지막 값 27을 루트로 옮겨 아래로 내린다. 더 작은 자식 노드와 바꾸면 힙 성질을 지키고 더 큰 자식 노드와 바꾸면 어길 수 있다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="r2">교환 대상</label><select id="r2"><option value="small">두 자식 노드 가운데 더 작은 쪽</option><option value="large">두 자식 노드 가운데 더 큰 쪽</option></select></div><div class="control-field"><label for="k2">진행한 단계 <output id="k2-out" class="control-value" for="k2">0</output></label><input id="k2" type="range" min="0" max="3" step="1" value="0"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="down-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="dn-title dn-desc"><title id="dn-title">sift down 단계</title><desc id="dn-desc">내려가는 값과 자식 노드 비교</desc></svg></div><figcaption class="visual-caption">초록으로 채운 원과 칸이 내려가는 값의 현재 위치, 초록 테두리가 비교할 자식 노드다. 빨간 굵은 선과 빨간 원은 힙 성질을 어긴 부모와 자식 노드다. 배열 오른쪽의 점선 칸은 꺼낸 뒤 비게 된 마지막 칸이다.</figcaption></figure>
@@ -63,7 +63,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">heappush로 넣은 리스트는 정렬되어 있지 않아도 힙 성질은 지킨다</h2><p class="lead">빈 리스트에 4, 9, 3, 7, 5, 1, 6, 8, 2를 차례로 heappush한다. 넣은 개수를 바꾸면 내부 list, 트리 모양, 이번 삽입의 sift up 교환 횟수가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">heappush로 넣은 리스트는 정렬되어 있지 않아도 힙 성질은 지킨다</h2><p class="lead">빈 리스트에 4, 9, 3, 7, 5, 1, 6, 8, 2를 차례로 heappush한다. 값마다 list 끝에 붙은 뒤 sift up으로 제자리를 찾는다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="k3">heappush한 개수 <output id="k3-out" class="control-value" for="k3">9</output></label><input id="k3" type="range" min="1" max="9" step="1" value="9"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="hq-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="hq-title hq-desc"><title id="hq-title">heappush 결과</title><desc id="hq-desc">내부 list와 트리</desc></svg></div><figcaption class="visual-caption">위는 내부 list를 레벨 순서로 읽은 트리, 아래는 list 자체다. 초록 원과 칸은 이번에 넣은 값이 sift up을 마친 자리다.</figcaption></figure>

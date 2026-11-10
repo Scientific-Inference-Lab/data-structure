@@ -26,7 +26,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>원형 이동</strong><span>enqueue(dequeue())는 앞쪽 값을 뒤쪽으로 보낸다.</span></article><article class="summary-card"><strong>도착과 시작</strong><span>작업이 도착하면 enqueue, 처리를 시작하면 dequeue한다.</span></article><article class="summary-card"><strong>대기 시간</strong><span>wₖ = sₖ − aₖ이며 처리 시작 시각에서 도착 시각을 뺀 값이다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">큐를 돌려 발표 차례를 정한다</h2><p class="lead">이동 횟수에 따라 앞 사람이 뒤로 옮겨지는 과정, 차례를 배정받는 사람, 대기 명단이 바뀐다. 처음 순서는 A, B, C, D다. 정해진 횟수만큼 이동한 뒤 다음 앞 사람을 선택하므로 무작위 추첨은 아니다.</p></header>
+    <header class="example-header"><h2 class="section-title">큐를 돌려 발표 차례를 정한다</h2><p class="lead">처음 순서 A, B, C, D에서 앞 사람을 정해진 횟수만큼 뒤로 보낸 뒤 맨 앞 사람에게 차례를 준다. 이동 횟수가 차례를 받는 사람과 남은 대기 명단을 정하므로 무작위 추첨이 아니다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="pass">차례 배정 전 이동 횟수 <output id="pass-out" class="control-value" for="pass">3</output></label><input id="pass" type="range" min="1" max="5" step="1" value="3"></div><div class="action-row"><button id="hp-first" class="btn btn-outline" type="button">처음으로</button><button id="hp-prev" class="btn btn-outline" type="button">이전</button><button id="hp-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-1" class="control-reason" hidden></p>
@@ -37,7 +37,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">대기 시간은 처리를 시작한 시각에서 도착 시각을 뺀 값이다</h2><p class="lead">현재 시각을 옮기면 도착한 작업의 enqueue, 프린터가 비었을 때의 dequeue, 큐에 남은 작업과 대기 시간이 바뀐다. 작업은 한 번에 하나만 처리한다.</p></header>
+    <header class="example-header"><h2 class="section-title">대기 시간은 처리를 시작한 시각에서 도착 시각을 뺀 값이다</h2><p class="lead">작업이 도착하면 enqueue하고 프린터가 비면 dequeue하므로 시각에 따라 큐에 남은 작업과 대기 시간이 달라진다. 프린터는 작업을 한 번에 하나만 처리한다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="tt">현재 시각 t <output id="tt-out" class="control-value" for="tt">0</output></label><input id="tt" type="range" min="0" max="20" step="1" value="0"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="pr-queue" class="ds-row has-labels"></div><table id="pr-table" class="topic-table" aria-label="작업별 도착, 시작, 대기 시간"></table></div></div><figcaption class="visual-caption">위 줄은 대기 큐이며 왼쪽이 앞쪽이다. 표의 초록 칸은 지금 처리 중인 작업, 파란 칸은 처리를 마친 작업이며 대기 시간은 처리를 시작한 작업에만 있다.</figcaption></figure>

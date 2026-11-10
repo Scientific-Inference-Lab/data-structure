@@ -28,11 +28,11 @@
 <body class="visual-topic">
   <a class="skip-link" href="#main-content">본문으로 이동</a>
   <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">When the Array Fills Up</span><span class="nav-tag is-current" aria-current="page">Amortized Cost</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-  <section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/06.%20When%20the%20Array%20Fills%20Up.pdf">When the Array Fills <span class="publication-lecture-tail">Up<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Amortized Cost</h1><hr class="accent-rule"><p class="page-subtitle">늘리는 규칙에 따라 재할당 간격과 누적 복사량이 달라진다. 연속한 추가의 쓰기와 복사를 모두 더한 뒤 호출 수로 나누어 한 번당 비용을 구한다.</p></div></section>
+  <section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/06.%20When%20the%20Array%20Fills%20Up.pdf">When the Array Fills <span class="publication-lecture-tail">Up<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Amortized Cost</h1><hr class="accent-rule"><p class="page-subtitle">늘리는 규칙에 따라 재할당 간격과 누적 복사량이 달라진다. 추가를 연달아 할 때 쓰기와 복사를 모두 더해 호출 수로 나누면 한 번당 비용이 나온다.</p></div></section>
   <main id="main-content" class="page-body container">
     <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>누적 복사</strong><span>재할당이 일어날 때 기존 원소를 옮긴 횟수를 모두 더한다.</span></article><article class="summary-card"><strong>상각 비용(amortized cost)</strong><span>어떤 순서로 m번 호출해도 총비용이 m×c를 넘지 않게 하는 한 번당 비용의 상한 c다.</span></article><article class="summary-card"><strong>평균 경우와의 차이</strong><span>상각 비용은 입력 분포를 가정하지 않고, 평균 경우(average case)는 입력의 확률 분포로 기대 비용을 구한다.</span></article></div></section>
     <section class="topic-example">
-      <header class="example-header"><h2 class="section-title">쓰기와 복사를 더한 총비용을 호출 수로 나누면 한 번당 비용이 된다</h2><p class="lead">늘리는 규칙과 호출 수 m을 바꾸면 호출마다의 비용 막대와 총비용, 한 번당 비용이 함께 바뀐다.</p></header>
+      <header class="example-header"><h2 class="section-title">쓰기와 복사를 더한 총비용을 호출 수로 나누면 한 번당 비용이 된다</h2><p class="lead">늘리는 규칙이 재할당이 일어나는 호출을 정하고 그때의 복사 비용이 m번 호출의 총비용에 더해지므로 한 번당 비용도 규칙마다 다르다.</p></header>
       <div class="visual-lab">
         <div class="visual-controls visual-controls--double"><div class="control-field"><label for="strategy">늘리는 규칙</label><select id="strategy"><option value="d">두 배로 늘리기</option><option value="p">두 칸씩 늘리기</option></select></div><div class="control-field"><label for="m">현재 호출 수 m <output id="mo" class="control-value" for="m">17</output></label><input id="m" type="range" min="1" max="20" value="17"></div></div>
         <figure class="visual-figure"><div class="visual-frame"><div id="chart" class="chart" role="img"></div></div><figcaption class="visual-caption">막대 하나가 호출 한 번의 비용(쓰기 1회와 그 호출의 복사)이다. 초록 윗선 막대는 재할당이 일어난 호출이다.</figcaption></figure>
@@ -41,7 +41,7 @@
       </div>
     </section>
     <section class="topic-example">
-      <header class="example-header"><h2 class="section-title">두 배로 늘리면 한 번당 비용이 3 아래에 머문다</h2><p class="lead">위 막대와 별도로 호출 수 m을 정해 두 규칙의 총비용과 한 번당 비용을 비교한다.</p></header>
+      <header class="example-header"><h2 class="section-title">두 배로 늘리면 한 번당 비용이 3 아래에 머문다</h2><p class="lead">두 규칙의 총비용과 한 번당 비용을 같은 호출 수 m에서 비교한다. 이 m은 위 절의 m과 별개다.</p></header>
       <div class="visual-lab">
         <div class="visual-controls visual-controls--single"><div class="control-field"><label for="compare-m">비교할 호출 수 m <output id="compare-mo" class="control-value" for="compare-m">17</output></label><input id="compare-m" type="range" min="1" max="20" value="17"></div></div>
         <figure class="visual-figure"><div class="visual-frame"><div id="compare" class="compare"></div></div><figcaption class="visual-caption">두 카드는 같은 m에서 쓰기·복사·총비용과 한 번당 비용이다.</figcaption></figure>

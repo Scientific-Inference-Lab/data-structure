@@ -26,7 +26,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>충돌</strong><span>가능한 키가 버킷보다 많으면 적어도 한 버킷은 여러 키를 받는다.</span></article><article class="summary-card"><strong>저장과 탐색</strong><span>h(k)로 버킷을 고른 뒤 그 안에서 같은 키를 찾는다.</span></article><article class="summary-card"><strong>비용</strong><span>버킷 길이를 b라 하면 O(1 + b)이며 한 버킷에 몰리면 O(n)이다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">충돌한 키는 같은 버킷의 목록에 차례로 붙는다</h2><p class="lead">단계마다 키 하나를 h(k) = k mod 11로 넣고, 그 버킷의 길이와 충돌 여부가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">충돌한 키는 같은 버킷의 목록에 차례로 붙는다</h2><p class="lead">키를 h(k) = k mod 11로 하나씩 넣다가 이미 키가 있는 버킷에 들어가면 충돌이 일어나고 그 버킷의 목록이 하나 길어진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="action-row"><button id="ch-first" class="btn btn-outline" type="button">처음으로</button><button id="ch-prev" class="btn btn-outline" type="button">이전</button><button id="ch-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-1" class="control-reason" hidden></p>
@@ -37,7 +37,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">get(k)는 선택된 버킷 안의 키만 비교한다</h2><p class="lead">찾을 키를 바꾸면 h(k) = k mod 4로 고른 버킷과 그 안에서 비교하는 키, 비교 횟수, 결과가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">get(k)는 선택된 버킷 안의 키만 비교한다</h2><p class="lead">찾을 키마다 h(k) = k mod 4가 고르는 버킷이 다르고 비교 횟수와 탐색 결과는 그 버킷 안의 키만으로 정해진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="gk">찾을 키</label><select id="gk"><option value="10">10</option><option value="6">6</option><option value="12">12</option><option value="14">14 · 없음</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div id="get-board" class="ds-board" role="img" aria-label="버킷 4개"></div></div><figcaption class="visual-caption">행 하나가 버킷이다. 초록 테두리 칸은 찾은 키, 파란 칸은 비교했지만 다른 키, 흐린 행은 보지 않은 버킷이다.</figcaption></figure>

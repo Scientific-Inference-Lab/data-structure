@@ -40,7 +40,7 @@
   <main id="main-content" class="page-body container">
     <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>첫 원소 칸 j</strong><span>논리 순서에서 첫 원소가 들어 있는 물리 칸이다.</span></article><article class="summary-card"><strong>(j + i) mod 용량</strong><span>i번째 원소가 들어 있는 실제 칸이다.</span></article><article class="summary-card"><strong>다음 추가 칸</strong><span>(j + n) mod 용량 칸에 새 원소를 쓴다.</span></article></div></section>
     <section class="topic-example">
-      <header class="example-header"><h2 class="section-title">뒤에 추가(enqueue)와 앞에서 삭제(dequeue)는 원소를 옮기지 않고 j와 n만 바꾼다</h2><p class="lead">추가와 삭제가 일어날 때마다 j, 다음 추가 칸, 원소 수가 바뀌지만 남은 원소는 제자리에 있다.</p></header>
+      <header class="example-header"><h2 class="section-title">뒤에 추가(enqueue)와 앞에서 삭제(dequeue)는 원소를 옮기지 않고 j와 n만 바꾼다</h2><p class="lead">enqueue는 다음 추가 칸에 쓰고 원소 수 n을 늘리며 dequeue는 j를 다음 칸으로 옮기고 n을 줄일 뿐 남은 원소는 제자리에 있다.</p></header>
       <div class="visual-lab">
         <div class="visual-controls visual-controls--single"><div class="action-row"><button class="btn" id="enq" type="button">enqueue(H)</button><button class="btn btn-outline" id="deq" type="button">dequeue</button><button class="btn btn-outline" id="reset" type="button">0번 칸으로 넘어간 상태</button><button class="btn btn-outline" id="empty" type="button">빈 상태</button><button class="btn btn-outline" id="full" type="button">가득 찬 상태</button></div></div>
         <p id="full-note" class="control-reason" hidden>용량 6이 모두 찼다. 실제 원형 배열은 더 큰 배열을 만들어 j부터 읽은 순서대로 0번 칸부터 옮기고 j를 0으로 되돌린다.</p>
@@ -50,7 +50,7 @@
       </div>
     </section>
     <section class="topic-example">
-      <header class="example-header"><h2 class="section-title">논리 인덱스(logical index) i는 물리 인덱스(physical index) (j + i) mod 용량에 있다</h2><p class="lead">위 절의 j와 원소 수 n을 그대로 쓴다. 같은 상태에서도 논리 인덱스 i가 달라지면 대응하는 물리 칸이 달라진다.</p></header>
+      <header class="example-header"><h2 class="section-title">논리 인덱스(logical index) i는 물리 인덱스(physical index) (j + i) mod 용량에 있다</h2><p class="lead">위 절과 같은 j와 n에서도 논리 인덱스 i가 달라지면 대응하는 물리 칸이 달라진다.</p></header>
       <div class="visual-lab">
         <div class="visual-controls visual-controls--single"><div class="control-field"><label for="i">논리 인덱스 i <output id="io" class="control-value" for="i">0</output></label><input id="i" type="range" min="0" max="3" value="0"></div></div>
         <figure class="visual-figure"><div class="visual-frame"><div class="mapping"><article class="box"><strong>(j + i) mod 용량</strong><p id="formula"></p></article><table><thead><tr><th>논리 i</th><th>물리 인덱스</th><th>값</th></tr></thead><tbody id="map"></tbody></table></div></div><figcaption class="visual-caption">표의 강조 행이 고른 논리 인덱스다.</figcaption></figure>

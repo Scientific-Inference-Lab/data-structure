@@ -54,7 +54,7 @@
     <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>a.length</strong><span>메모리에 확보한 전체 칸 수다.</span></article><article class="summary-card"><strong>n</strong><span>현재 List에 들어 있는 원소 수다.</span></article><article class="summary-card"><strong>유효한 i</strong><span>a.length(확보한 칸 수)가 아니라 0 ≤ i &lt; n으로 정한다.</span></article></div></section>
 
     <section class="topic-example">
-      <header class="example-header"><h2 class="section-title">n은 List의 경계이고 a.length는 저장 공간의 경계다</h2><p class="lead">a.length와 n을 따로 바꾸면 확보된 칸, 원소가 있는 칸, 아직 쓰지 않는 칸의 경계가 분리되어 보인다.</p></header>
+      <header class="example-header"><h2 class="section-title">n은 List의 경계이고 a.length는 저장 공간의 경계다</h2><p class="lead">a.length는 확보한 칸의 경계를, n은 원소가 있는 칸의 경계를 정하며 두 값 사이의 칸은 아직 쓰지 않는 칸이다.</p></header>
       <div class="visual-lab">
         <div class="visual-controls visual-controls--double">
           <div class="control-field"><label for="capacity">내부 배열 길이 a.length <output id="capacity-out" class="control-value" for="capacity">6</output></label><input id="capacity" type="range" min="4" max="10" value="6"></div>

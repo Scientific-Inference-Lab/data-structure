@@ -21,12 +21,12 @@
 <body class="visual-topic topic-stack-expression-processing">
 <a class="skip-link" href="#main-content">본문으로 이동</a>
 <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Last In, First Out</span><span class="nav-tag is-current" aria-current="page">Stack Expression Processing</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/11.%20Last%20In,%20First%20Out.pdf">Last In, First <span class="publication-lecture-tail">Out<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Stack Expression Processing</h1><hr class="accent-rule"><p class="page-subtitle">스택은 나중에 필요할 값을 보관했다가 필요한 순간에 맨 위부터 꺼낸다. 괄호 검사(balanced parentheses)는 짝을 찾지 못한 여는 괄호를, 후위식(postfix expression) 평가는 피연산자와 중간 결과를 스택에 둔다.</p></div></section>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/11.%20Last%20In,%20First%20Out.pdf">Last In, First <span class="publication-lecture-tail">Out<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Stack Expression Processing</h1><hr class="accent-rule"><p class="page-subtitle">스택은 나중에 쓸 값을 보관했다가 필요할 때 맨 위부터 꺼낸다. 괄호 검사(balanced parentheses)는 짝을 찾지 못한 여는 괄호를, 후위식(postfix expression) 평가는 피연산자와 중간 결과를 스택에 둔다.</p></div></section>
 <main id="main-content" class="page-body container">
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>괄호 검사</strong><span>여는 괄호는 push, 닫는 괄호는 맨 위와 짝이 맞을 때 pop한다.</span></article><article class="summary-card"><strong>실패하는 세 경우</strong><span>빈 스택에서 닫는 괄호, 종류가 어긋난 짝, 입력 끝에 남은 여는 괄호다.</span></article><article class="summary-card"><strong>후위식 평가</strong><span>연산자를 만나면 오른쪽 값, 왼쪽 값 순서로 두 번 pop해 계산한다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">괄호 검사는 짝을 찾지 못한 여는 괄호만 스택에 남긴다</h2><p class="lead">입력과 읽은 기호 수를 바꾸면 현재 기호, 스택에 하는 일, 남은 여는 괄호, 판정이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">괄호 검사는 짝을 찾지 못한 여는 괄호만 스택에 남긴다</h2><p class="lead">여는 괄호는 스택에 넣고 닫는 괄호는 맨 위의 여는 괄호와 짝이 맞을 때만 꺼내므로 입력에 따라 남는 여는 괄호와 판정이 달라진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="pin">입력</label><select id="pin"><option value="(()())">(()())</option><option value=")(">)(</option><option value="(()">(()</option><option value="([)]">([)]</option><option value="{[()]}">{[()]}</option></select></div><div class="action-row"><button id="pc-first" class="btn btn-outline" type="button">처음으로</button><button id="pc-prev" class="btn btn-outline" type="button">이전</button><button id="pc-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-1" class="control-reason" hidden></p>
@@ -37,7 +37,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">후위식은 연산자를 만날 때 가장 최근 두 값을 꺼내 계산한다</h2><p class="lead">식과 읽은 토큰 수를 바꾸면 값 스택, 방금 한 계산, 중간 결과가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">후위식은 연산자를 만날 때 가장 최근 두 값을 꺼내 계산한다</h2><p class="lead">피연산자는 값 스택에 push하고 연산자를 만나면 두 값을 pop해 계산한 중간 결과를 다시 push한다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="pf">후위식</label><select id="pf"><option value="4 5 6 * +">4 5 6 * +</option><option value="7 8 + 3 2 + /">7 8 + 3 2 + /</option><option value="9 3 -">9 3 −</option></select></div><div class="action-row"><button id="pe-first" class="btn btn-outline" type="button">처음으로</button><button id="pe-prev" class="btn btn-outline" type="button">이전</button><button id="pe-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-2" class="control-reason" hidden></p>
