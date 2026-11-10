@@ -68,6 +68,12 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/avl-insertion-rebalancing.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/red-black-trees.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/22.%20Standing%20the%20Tree%20Back%20Up/tree-rotations.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/23.%20Any%20Pair%20Can%20Be%20Linked/graph-adt.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/23.%20Any%20Pair%20Can%20Be%20Linked/graph-fundamentals.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/23.%20Any%20Pair%20Can%20Be%20Linked/paths-and-reachability.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/24.%20A%20Matrix%20or%20a%20List/adjacency-lists.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/24.%20A%20Matrix%20or%20a%20List/adjacency-matrices.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/24.%20A%20Matrix%20or%20a%20List/graph-density-and-representation.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/00.%20Intro.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/01.%20Data%20Abstraction.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/02.%20Interfaces.pdf</loc></url>
@@ -91,6 +97,8 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/20.%20Up%20and%20Down%20One%20Level.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/21.%20Keeping%20the%20Tree%20Short.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/22.%20Standing%20the%20Tree%20Back%20Up.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/23.%20Any%20Pair%20Can%20Be%20Linked.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/24.%20A%20Matrix%20or%20a%20List.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/arrays-and-linked-lists.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/arrays.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/asymptotic-growth.html</loc></url>
@@ -101,6 +109,8 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/data-abstraction-and-adts.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/doubly-linked-lists.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/dynamic-arrays.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/graph-representations.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/graphs-and-edges.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/hash-tables-and-chaining.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/heap-operations.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/heaps-and-priority-queues.html</loc></url>

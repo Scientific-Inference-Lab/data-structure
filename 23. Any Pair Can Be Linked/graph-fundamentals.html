@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Graph Fundamentals | Data Structure | Pusan National University</title><meta name="description" content="A graph consists of vertices representing objects and edges representing relationships, with edge direction and weights changing the meaning of those relationships."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/23.%20Any%20Pair%20Can%20Be%20Linked/graph-fundamentals.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Graph Fundamentals | Data Structure | Pusan National University"><meta property="og:description" content="A graph consists of vertices representing objects and edges representing relationships, with edge direction and weights changing the meaning of those relationships."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/23.%20Any%20Pair%20Can%20Be%20Linked/graph-fundamentals.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script>
+  <style>
+    .graph-svg .edge{stroke:var(--pnu-blue);stroke-width:4;fill:none}.graph-svg .edge.is-weighted{stroke:var(--pnu-green)}
+    .graph-svg .node{fill:var(--white);stroke:var(--pnu-blue);stroke-width:3}.graph-svg .node-label{font-weight:800;fill:var(--ink-900)}
+    .graph-svg .weight{font-weight:800;fill:var(--pnu-green-text);paint-order:stroke;stroke:var(--white);stroke-width:7px;stroke-linejoin:round}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Any Pair Can Be Linked</span><span class="nav-tag is-current" aria-current="page">Graph Fundamentals</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/23.%20Any%20Pair%20Can%20Be%20Linked.pdf">Any Pair Can Be <span class="publication-lecture-tail">Linked<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Graph Fundamentals</h1><hr class="accent-rule"><p class="page-subtitle">그래프(graph)는 대상을 나타내는 정점(vertex)과 두 정점의 관계를 나타내는 간선(edge)으로 이루어진다. 간선의 방향과 가중치는 관계에 담긴 뜻을 바꾼다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>그래프</strong><span>정점 집합 V와 간선 집합 E를 묶어 G = (V, E)로 적는다.</span></article><article class="summary-card"><strong>인접</strong><span>두 정점이 간선으로 직접 이어져 있으면 인접한다.</span></article><article class="summary-card"><strong>방향과 가중치</strong><span>화살표는 갈 수 있는 방향을, 수치는 거리·비용·시간을 나타낸다.</span></article></div></section>
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">같은 정점도 간선의 종류에 따라 다른 관계를 나타낸다</h2><p class="lead">간선에 방향이 있으면 출발과 도착이 구분되고 가중치가 있으면 거리·비용·시간 같은 수치를 담는다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="kind">간선 종류</label><select id="kind"><option value="undirected">방향 없음</option><option value="directed">방향 있음</option><option value="weighted">방향과 가중치 있음</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="graph" class="visual-svg graph-svg" viewBox="0 0 720 300" role="img" aria-labelledby="graph-title graph-desc"><title id="graph-title">네 정점의 그래프</title><desc id="graph-desc">A, B, C, D 네 정점과 간선의 종류를 보여 준다.</desc><defs><marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path d="M0 0 L10 5 L0 10 Z" fill="#005baa"></path></marker></defs><g id="edges"></g><g><circle class="node" cx="130" cy="150" r="38"></circle><text class="node-label" x="130" y="156" text-anchor="middle">A</text><circle class="node" cx="310" cy="75" r="38"></circle><text class="node-label" x="310" y="81" text-anchor="middle">B</text><circle class="node" cx="310" cy="225" r="38"></circle><text class="node-label" x="310" y="231" text-anchor="middle">C</text><circle class="node" cx="535" cy="150" r="38"></circle><text class="node-label" x="535" y="156" text-anchor="middle">D</text></g></svg></div><figcaption class="visual-caption">파란 원은 정점, 선은 간선이다. 화살표가 있으면 출발과 도착이 구분되고 초록 선의 숫자는 가중치다.</figcaption></figure>
+      <div id="readouts" class="visual-readouts" aria-live="polite"></div><p id="note" class="visual-note"></p>
+    </div>
+  </section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../22. Standing the Tree Back Up/red-black-trees.html">이전 · Red Black Trees</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="paths-and-reachability.html">다음 · Paths and Reachability</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function(){"use strict";var kind=document.getElementById("kind"),edges=document.getElementById("edges"),readouts=document.getElementById("readouts"),note=document.getElementById("note"),desc=document.getElementById("graph-desc");var lines=[[164,136,276,89],[164,164,276,211],[344,89,501,136],[344,211,501,164]];function rd(l,v){return '<div class="visual-readout"><span class="visual-readout-label">'+l+'</span><strong class="visual-readout-value">'+v+'</strong></div>'}function render(){var k=kind.value,arrow=k==="undirected"?"":' marker-end="url(#arrow)"',weighted=k==="weighted";edges.innerHTML=lines.map(function(p,i){return '<line class="edge'+(weighted?' is-weighted':'')+'" x1="'+p[0]+'" y1="'+p[1]+'" x2="'+p[2]+'" y2="'+p[3]+'"'+arrow+'></line>'+(weighted?'<text class="weight" x="'+((p[0]+p[2])/2)+'" y="'+(((p[1]+p[3])/2)-10)+'" text-anchor="middle">'+[4,7,3,6][i]+'</text>':'')}).join("");var title=k==="undirected"?"무향 그래프":k==="directed"?"유향 그래프":"가중치 그래프";var relation=k==="undirected"?"한 간선으로 양쪽 이동":"화살표 방향으로만 이동";readouts.innerHTML=rd("그래프 종류",title)+rd("정점 수 n","4")+rd("간선 수 m","4")+rd("관계",relation);note.textContent=k==="undirected"?"A와 B를 잇는 간선 하나로 A에서 B와 B에서 A 모두 갈 수 있다.":k==="directed"?"A에서 B로 가는 간선이 있어도 B에서 A로 가려면 반대 방향 간선이 따로 필요하다.":"방향은 이동 가능성을 정하고 가중치는 그 이동의 거리·비용·시간을 함께 담는다.";desc.textContent=title+"이며 정점 4개와 간선 4개가 있다."}kind.addEventListener("change",render);render()}());
+</script>
+</body></html>
