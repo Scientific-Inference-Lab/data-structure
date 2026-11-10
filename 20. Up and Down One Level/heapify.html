@@ -40,15 +40,15 @@
 <body class="visual-topic topic-heapify">
 <a class="skip-link" href="#main-content">본문으로 이동</a>
 <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Up and Down One Level</span><span class="nav-tag is-current" aria-current="page">Heapify</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/20.%20Up%20and%20Down%20One%20Level.pdf">Up and Down One <span class="publication-lecture-tail">Level<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Heapify</h1><hr class="accent-rule"><p class="page-subtitle">heapify(임의의 배열을 힙으로 만들기)는 단말 노드를 그대로 두고, 마지막 부모부터 루트까지 거꾸로 가며 각 자리에서 sift down을 한 번씩 한다. 아래쪽 부분 트리가 이미 힙이므로 한 번의 sift down으로 충분하고, 노드가 많은 아래 레벨일수록 내려갈 거리가 짧아 전체 비용이 O(n)이다.</p></div></section>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/20.%20Up%20and%20Down%20One%20Level.pdf">Up and Down One <span class="publication-lecture-tail">Level<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Heapify</h1><hr class="accent-rule"><p class="page-subtitle">heapify(임의의 배열을 힙으로 만들기)는 단말 노드를 그대로 두고, 마지막 부모부터 루트까지 거꾸로 가며 각 자리에서 하향 이동(sift down)을 한 번씩 한다. 아래쪽 부분 트리가 이미 힙이므로 한 번의 하향 이동으로 충분하고, 노드가 많은 아래 레벨일수록 내려갈 거리가 짧아 전체 비용이 O(n)이다.</p></div></section>
 <main id="main-content" class="page-body container">
-  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>시작 위치</strong><span>인덱스 ⌊n/2⌋ − 1이 마지막 부모이고, 그 뒤는 모두 단말 노드라 이미 힙이다.</span></article><article class="summary-card"><strong>아래에서 위로</strong><span>i에서 sift down할 때 i의 두 부분 트리는 이미 힙이므로 i 자리의 값 하나만 제자리로 보내면 된다.</span></article><article class="summary-card"><strong>n번 삽입과의 차이</strong><span>값을 하나씩 heappush하면 O(n log n), heapify는 O(n)이다. 결과 배열은 다를 수 있지만 둘 다 힙이다.</span></article></div></section>
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>시작 위치</strong><span>인덱스 ⌊n/2⌋ − 1이 마지막 부모이고, 그 뒤는 모두 단말 노드라 이미 힙이다.</span></article><article class="summary-card"><strong>아래에서 위로</strong><span>i에서 하향 이동할 때 i의 두 부분 트리는 이미 힙이므로 i 자리의 값 하나만 제자리로 보내면 된다.</span></article><article class="summary-card"><strong>n번 삽입과의 차이</strong><span>값을 하나씩 heappush하면 O(n log n), heapify는 O(n)이다. 결과 배열은 다를 수 있지만 둘 다 힙이다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">마지막 부모부터 거꾸로 sift down하면 아래쪽부터 힙이 되어 올라간다</h2><p class="lead">배열 [9, 5, 6, 2, 3, 8, 1, 7, 4]를 heapify한다. 마지막 부모부터 루트 쪽으로 sift down해 갈수록 이미 힙이 된 부분이 아래에서 위로 넓어진다.</p></header>
+    <header class="example-header"><h2 class="section-title">마지막 부모부터 거꾸로 하향 이동하면 아래쪽부터 힙이 되어 올라간다</h2><p class="lead">배열 [9, 5, 6, 2, 3, 8, 1, 7, 4]를 heapify한다. 마지막 부모부터 루트 쪽으로 하향 이동해 갈수록 이미 힙이 된 부분이 아래에서 위로 넓어진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="k1">진행한 단계 <output id="k1-out" class="control-value" for="k1">0</output></label><input id="k1" type="range" min="0" max="10" step="1" value="0"></div></div>
-      <figure class="visual-figure"><div class="visual-frame"><svg id="hf-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="hf-title hf-desc"><title id="hf-title">heapify 단계</title><desc id="hf-desc">sift down 중인 자리와 이미 힙이 된 부분</desc></svg></div><figcaption class="visual-caption">초록으로 채운 원과 칸이 sift down 중인 값, 초록 테두리가 비교하는 자식 노드다. 옅은 파란 원과 칸은 그 자리를 루트로 하는 부분 트리가 이미 힙이 된 곳이고, 흰 원은 아직 처리하지 않은 부모다. 빨간 선은 아직 힙 성질을 어긴 간선이다.</figcaption></figure>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="hf-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="hf-title hf-desc"><title id="hf-title">heapify 단계</title><desc id="hf-desc">하향 이동 중인 자리와 이미 힙이 된 부분</desc></svg></div><figcaption class="visual-caption">초록으로 채운 원과 칸이 하향 이동 중인 값, 초록 테두리가 비교하는 자식 노드다. 옅은 파란 원과 칸은 그 자리를 루트로 하는 부분 트리가 이미 힙이 된 곳이고, 흰 원은 아직 처리하지 않은 부모다. 빨간 선은 아직 힙 성질을 어긴 간선이다.</figcaption></figure>
       <div id="read-1" class="visual-readouts" aria-live="polite"></div>
       <p id="note-1" class="visual-note"></p>
     </div>
@@ -144,14 +144,14 @@
     svg.innerHTML = h;
     svg.querySelector("desc").textContent = "단계 " + k + ", 배열 " + st.a.join(", ");
     var note, n = st.a.length;
-    if (st.text === "start") note = "n = 9이므로 인덱스 ⌊9/2⌋ = 4부터 8까지 다섯 칸은 자식 노드가 없는 단말 노드이고 그 자체로 힙이다. 마지막 부모인 인덱스 3부터 거꾸로 sift down한다.";
-    else if (st.text === "begin") note = "인덱스 " + st.root + "의 " + st.a[st.cur] + "에서 sift down을 시작한다. 두 부분 트리는 이미 힙이고, 자식 노드 " + st.cmp.map(function (x) { return st.a[x]; }).join(", ") + " 가운데 더 작은 " + st.a[st.pick] + "보다 커서 바꾼다.";
+    if (st.text === "start") note = "n = 9이므로 인덱스 ⌊9/2⌋ = 4부터 8까지 다섯 칸은 자식 노드가 없는 단말 노드이고 그 자체로 힙이다. 마지막 부모인 인덱스 3부터 거꾸로 하향 이동한다.";
+    else if (st.text === "begin") note = "인덱스 " + st.root + "의 " + st.a[st.cur] + "에서 하향 이동을 시작한다. 두 부분 트리는 이미 힙이고, 자식 노드 " + st.cmp.map(function (x) { return st.a[x]; }).join(", ") + " 가운데 더 작은 " + st.a[st.pick] + "보다 커서 바꾼다.";
     else if (st.text === "swap") { var kids = [2 * st.cur + 1, 2 * st.cur + 2].filter(function (x) { return x < n; }); note = "교환 뒤 값 " + st.a[st.cur] + "이 인덱스 " + st.cur + "에 내려왔다. " + (kids.length && Math.min.apply(null, kids.map(function (x) { return st.a[x]; })) < st.a[st.cur] ? "아직 자식 노드보다 커서 한 번 더 내려간다." : "더 내려갈 필요가 없어 인덱스 " + pj(st.root, "을") + " 루트로 하는 부분 트리가 힙이 되었다."); note = note.replace("값 " + st.a[st.cur] + "이", "값 " + pj(st.a[st.cur], "이")); }
     else if (st.text === "nomove") note = "인덱스 " + st.root + "의 " + pj(st.a[st.cur], "은") + " 자식 노드 " + st.cmp.map(function (x) { return st.a[x]; }).join(", ") + "보다 크지 않아 교환 없이 그 부분 트리가 힙이다.";
     else note = "루트까지 마쳐 [" + st.a.join(", ") + "]가 되었다. 교환은 모두 " + st.swaps + "번이며, 모든 부모가 자식 노드보다 작은 힙이다.";
     if (st.text === "end") note = "루트까지 마쳐 결과 " + pj("[" + st.a.join(", ") + "]", "이") + " 되었다. 교환은 모두 " + st.swaps + "번이며, 모든 부모가 자식 노드보다 작은 힙이다.";
     var bad = 0; for (var i = 1; i < n; i++) if (st.a[par(i)] > st.a[i]) bad++;
-    show(1, [["sift down 중인 부분 트리의 루트", st.root === undefined ? "없음" : "인덱스 " + st.root], ["누적 교환", st.swaps + "번"], ["이미 힙인 부분", st.heap.length + "칸"], ["힙 성질을 어긴 간선", bad + "곳"]], note);
+    show(1, [["하향 이동 중인 부분 트리의 루트", st.root === undefined ? "없음" : "인덱스 " + st.root], ["누적 교환", st.swaps + "번"], ["이미 힙인 부분", st.heap.length + "칸"], ["힙 성질을 어긴 간선", bad + "곳"]], note);
   }
 
   function pushAll(src) { var a = [], swaps = 0; src.forEach(function (v) { a.push(v); var i = a.length - 1; while (i > 0 && a[par(i)] > a[i]) { var p = par(i), t = a[p]; a[p] = a[i]; a[i] = t; i = p; swaps++; } }); return { a: a, swaps: swaps }; }
@@ -162,7 +162,7 @@
     h += drawHeap(r.a, { heap: same });
     svg.innerHTML = h;
     svg.querySelector("desc").textContent = (m === "push" ? "n번 삽입" : "heapify") + " 결과 " + r.a.join(", ");
-    var note = (m === "push" ? "9번 heappush하면 매번 끝에 붙이고 sift up해 " : "heapify는 마지막 부모부터 sift down해 ") + pj("[" + r.a.join(", ") + "]", "을") + " 만들고 교환은 " + r.swaps + "번이다. 다른 방법의 결과 " + pj("[" + other.a.join(", ") + "]", "과") + "는 " + (r.a.length - same.length) + "칸이 다르지만 두 배열 모두 루트가 1이고 모든 부모가 자식 노드보다 작아 힙이다. 같은 값 집합의 힙은 하나로 정해지지 않는다.";
+    var note = (m === "push" ? "9번 heappush하면 매번 끝에 붙이고 상향 이동해 " : "heapify는 마지막 부모부터 하향 이동해 ") + pj("[" + r.a.join(", ") + "]", "을") + " 만들고 교환은 " + r.swaps + "번이다. 다른 방법의 결과 " + pj("[" + other.a.join(", ") + "]", "과") + "는 " + (r.a.length - same.length) + "칸이 다르지만 두 배열 모두 루트가 1이고 모든 부모가 자식 노드보다 작아 힙이다. 같은 값 집합의 힙은 하나로 정해지지 않는다.";
     show(2, [["결과 배열", "[" + r.a.join(", ") + "]"], ["교환 횟수", r.swaps + "번"], ["다른 방법과 다른 칸", (r.a.length - same.length) + "칸"], ["최악 비용", m === "push" ? "O(n log n)" : "O(n)"]], note);
   }
 
