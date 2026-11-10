@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Graph ADT | Data Structure | Pusan National University</title><meta name="description" content="A graph ADT defines the meaning of operations that update vertices and edges and query their relationships, while the implementation determines storage and operation costs."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/23.%20Any%20Pair%20Can%20Be%20Linked/graph-adt.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Graph ADT | Data Structure | Pusan National University"><meta property="og:description" content="A graph ADT defines the meaning of operations that update vertices and edges and query their relationships, while the implementation determines storage and operation costs."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/23.%20Any%20Pair%20Can%20Be%20Linked/graph-adt.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script>
+  <style>
+    .adt-svg [hidden]{display:none}.adt-svg .edge{stroke:var(--pnu-blue);stroke-width:5}.adt-svg .edge.is-change{stroke:var(--pnu-green);stroke-width:8}.adt-svg .node{fill:var(--white);stroke:var(--pnu-blue);stroke-width:3}.adt-svg .node.is-change{fill:var(--pnu-blue-tint);stroke:var(--pnu-green);stroke-width:5}.adt-svg text{font-weight:800;fill:var(--ink-900)}
+    .operation-code{font-family:var(--mono);color:var(--pnu-blue-dark)}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Any Pair Can Be Linked</span><span class="nav-tag is-current" aria-current="page">Graph ADT</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/23.%20Any%20Pair%20Can%20Be%20Linked.pdf">Any Pair Can Be <span class="publication-lecture-tail">Linked<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Graph ADT</h1><hr class="accent-rule"><p class="page-subtitle">그래프 ADT는 정점과 간선을 갱신하고 관계를 질의하는 연산의 뜻을 정한다. 저장 방법과 연산 비용은 구현이 정한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>갱신</strong><span>정점이나 간선을 추가·삭제해 그래프를 바꾼다.</span></article><article class="summary-card"><strong>질의</strong><span>간선 존재 여부와 한 정점의 이웃 목록을 돌려준다.</span></article><article class="summary-card"><strong>ADT와 구현</strong><span>연산의 뜻을 먼저 정하고 저장 위치와 비용은 구현이 정한다.</span></article></div></section>
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">같은 그래프에서 갱신과 질의는 서로 다른 결과를 만든다</h2><p class="lead">기준 그래프 G = ({A, B, C}, {A→B, A→C})에 연산을 한 번 적용하면 갱신 연산은 그래프를 바꾸고 질의 연산은 그래프를 그대로 둔 채 값을 돌려준다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--single"><div class="control-field"><label for="operation">그래프 연산</label><select id="operation"><option value="add">addEdge(B, C)</option><option value="remove">removeEdge(A, C)</option><option value="has">hasEdge(A, B)</option><option value="neighbors">outEdges(A)</option><option value="vertex">removeVertex(C)</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg class="visual-svg adt-svg" viewBox="0 0 720 300" role="img" aria-labelledby="adt-title adt-desc"><title id="adt-title">그래프 ADT 연산 결과</title><desc id="adt-desc">세 정점 그래프에 선택한 연산을 한 번 적용한 상태다.</desc><defs><marker id="adt-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#005baa"></path></marker></defs><line id="edge-AB" class="edge" x1="195" y1="142" x2="326" y2="86" marker-end="url(#adt-arrow)"></line><line id="edge-AC" class="edge" x1="195" y1="158" x2="326" y2="214" marker-end="url(#adt-arrow)"></line><line id="edge-BC" class="edge" x1="376" y1="104" x2="376" y2="196" marker-end="url(#adt-arrow)" hidden></line><g id="group-A"><circle id="node-A" class="node" cx="155" cy="150" r="40"></circle><text x="155" y="156" text-anchor="middle">A</text></g><g id="group-B"><circle id="node-B" class="node" cx="360" cy="65" r="40"></circle><text x="360" y="71" text-anchor="middle">B</text></g><g id="group-C"><circle id="node-C" class="node" cx="360" cy="235" r="40"></circle><text x="360" y="241" text-anchor="middle">C</text></g><text id="result-label" x="550" y="145" text-anchor="middle"></text><text id="result-value" x="550" y="177" text-anchor="middle"></text></svg></div><figcaption class="visual-caption">초록색은 선택한 연산이 직접 바꾸거나 읽는 정점·간선이다. 오른쪽에는 질의가 돌려주는 값을 표시한다.</figcaption></figure>
+      <div id="readouts" class="visual-readouts" aria-live="polite"></div><p id="note" class="visual-note"></p>
+    </div>
+  </section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="paths-and-reachability.html">이전 · Paths and Reachability</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../24. A Matrix or a List/adjacency-matrices.html">다음 · Adjacency Matrices</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function(){"use strict";var select=document.getElementById("operation"),readouts=document.getElementById("readouts"),note=document.getElementById("note"),resultLabel=document.getElementById("result-label"),resultValue=document.getElementById("result-value");var states={add:{kind:"갱신",result:"반환값 없음",v:"{A, B, C}",e:"{A→B, A→C, B→C}",note:"간선 추가는 정점 집합을 그대로 두고 간선 집합에 B→C를 더한다."},remove:{kind:"갱신",result:"반환값 없음",v:"{A, B, C}",e:"{A→B}",note:"간선 삭제는 두 정점을 남겨 두고 A→C만 간선 집합에서 없앤다."},has:{kind:"질의",result:"참",v:"{A, B, C}",e:"{A→B, A→C}",note:"간선 확인은 그래프를 바꾸지 않고 A→B가 존재하는지만 돌려준다."},neighbors:{kind:"질의",result:"[B, C]",v:"{A, B, C}",e:"{A→B, A→C}",note:"이웃 목록 질의는 A에서 나가는 간선의 도착 정점 B와 C를 돌려준다."},vertex:{kind:"갱신",result:"반환값 없음",v:"{A, B}",e:"{A→B}",note:"정점 C를 지울 때 C에 붙은 A→C도 함께 지워야 없는 정점을 가리키는 간선이 남지 않는다."}};function rd(l,v){return '<div class="visual-readout"><span class="visual-readout-label">'+l+'</span><strong class="visual-readout-value">'+v+'</strong></div>'}function render(){var key=select.value,s=states[key];["A","B","C"].forEach(function(x){document.getElementById("node-"+x).classList.remove("is-change")});["AB","AC","BC"].forEach(function(x){document.getElementById("edge-"+x).classList.remove("is-change")});document.getElementById("edge-AB").toggleAttribute("hidden",false);document.getElementById("edge-AC").toggleAttribute("hidden",key==="remove"||key==="vertex");document.getElementById("edge-BC").toggleAttribute("hidden",key!=="add");document.getElementById("group-C").toggleAttribute("hidden",key==="vertex");if(key==="add")document.getElementById("edge-BC").classList.add("is-change");if(key==="remove")document.getElementById("node-C").classList.add("is-change");if(key==="has")document.getElementById("edge-AB").classList.add("is-change");if(key==="neighbors"){document.getElementById("node-A").classList.add("is-change");document.getElementById("edge-AB").classList.add("is-change");document.getElementById("edge-AC").classList.add("is-change")}resultLabel.textContent=s.kind==="질의"?"반환값":"";resultValue.textContent=s.kind==="질의"?s.result:"";readouts.innerHTML=rd("연산 종류",s.kind)+rd("정점 집합 V",s.v)+rd("간선 집합 E",s.e)+rd("결과",s.result);note.textContent=s.note}select.addEventListener("change",render);render()}());
+</script>
+</body></html>

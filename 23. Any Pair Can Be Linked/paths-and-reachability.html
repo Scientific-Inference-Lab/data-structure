@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+  <title>Paths and Reachability | Data Structure | Pusan National University</title><meta name="description" content="A path follows edge directions through a sequence of vertices, and a destination is reachable from a starting vertex when such a path exists."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/23.%20Any%20Pair%20Can%20Be%20Linked/paths-and-reachability.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Paths and Reachability | Data Structure | Pusan National University"><meta property="og:description" content="A path follows edge directions through a sequence of vertices, and a destination is reachable from a starting vertex when such a path exists."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/23.%20Any%20Pair%20Can%20Be%20Linked/paths-and-reachability.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script>
+  <style>
+    .path-svg .edge{stroke:var(--line-300);stroke-width:4;fill:none;marker-end:url(#path-arrow)}.path-svg .edge.is-path{stroke:var(--pnu-green);stroke-width:7}.path-svg .edge.is-removed{stroke:var(--alert-700);stroke-dasharray:10 8;opacity:.42}
+    .path-svg .node{fill:var(--white);stroke:var(--pnu-blue);stroke-width:3}.path-svg .node.is-reached{fill:var(--pnu-blue-tint)}.path-svg .node-label{font-weight:800;fill:var(--ink-900)}
+  </style>
+<script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic">
+<a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Any Pair Can Be Linked</span><span class="nav-tag is-current" aria-current="page">Paths and Reachability</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/23.%20Any%20Pair%20Can%20Be%20Linked.pdf">Any Pair Can Be <span class="publication-lecture-tail">Linked<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Paths and Reachability</h1><hr class="accent-rule"><p class="page-subtitle">경로(path)는 화살표 방향에 맞게 이어지는 정점의 나열이다. 시작 정점에서 도착 정점으로 가는 경로가 있으면 도착 정점에 도달할 수 있다고 한다.</p></div></section>
+<main id="main-content" class="page-body container">
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>경로</strong><span>연속한 두 정점 사이마다 방향에 맞는 간선이 있다.</span></article><article class="summary-card"><strong>단순 경로</strong><span>같은 정점을 두 번 지나지 않는 경로다.</span></article><article class="summary-card"><strong>도달 가능성</strong><span>직접 인접하지 않아도 이어지는 경로가 있으면 도달할 수 있다.</span></article></div></section>
+  <section class="topic-example">
+    <header class="example-header"><h2 class="section-title">간선 하나가 경로와 도달 가능한 집합을 함께 바꾼다</h2><p class="lead">질의와 D→E 간선의 유무에 따라 답이 되는 경로와 그 길이, A에서 도달할 수 있는 정점이 달라진다.</p></header>
+    <div class="visual-lab">
+      <div class="visual-controls visual-controls--double"><div class="control-field"><label for="query">경로 질의</label><select id="query"><option value="AD">A에서 D</option><option value="AE">A에서 E</option><option value="EA">E에서 A</option></select></div><div class="control-field"><label for="bridge">D→E 간선</label><select id="bridge"><option value="on">있음</option><option value="off">없음</option></select></div></div>
+      <figure class="visual-figure"><div class="visual-frame"><svg class="visual-svg path-svg" viewBox="0 0 760 320" role="img" aria-labelledby="path-title path-desc"><title id="path-title">유향 그래프의 경로</title><desc id="path-desc">A부터 E까지 다섯 정점의 간선과 선택한 경로를 보여 준다.</desc><defs><marker id="path-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#5c6c7c"></path></marker></defs><g><line id="AB" class="edge" x1="130" y1="150" x2="278" y2="82"></line><line id="AC" class="edge" x1="130" y1="170" x2="278" y2="238"></line><line id="BD" class="edge" x1="340" y1="82" x2="493" y2="150"></line><line id="CD" class="edge" x1="340" y1="238" x2="493" y2="170"></line><line id="DE" class="edge" x1="555" y1="160" x2="674" y2="160"></line></g><g><circle id="node-A" class="node" cx="95" cy="160" r="36"></circle><text class="node-label" x="95" y="166" text-anchor="middle">A</text><circle id="node-B" class="node" cx="310" cy="68" r="36"></circle><text class="node-label" x="310" y="74" text-anchor="middle">B</text><circle id="node-C" class="node" cx="310" cy="252" r="36"></circle><text class="node-label" x="310" y="258" text-anchor="middle">C</text><circle id="node-D" class="node" cx="525" cy="160" r="36"></circle><text class="node-label" x="525" y="166" text-anchor="middle">D</text><circle id="node-E" class="node" cx="710" cy="160" r="36"></circle><text class="node-label" x="710" y="166" text-anchor="middle">E</text></g></svg></div><figcaption class="visual-caption">초록 선은 질의에 답하는 경로다. 파란 바탕의 정점은 A에서 도달할 수 있고, 빨간 점선은 삭제한 간선의 자리다.</figcaption></figure>
+      <div id="readouts" class="visual-readouts" aria-live="polite"></div><p id="note" class="visual-note"></p>
+    </div>
+  </section>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="graph-fundamentals.html">이전 · Graph Fundamentals</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="graph-adt.html">다음 · Graph ADT</a></nav>
+</main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function(){"use strict";var query=document.getElementById("query"),bridge=document.getElementById("bridge"),readouts=document.getElementById("readouts"),note=document.getElementById("note");var edgeIds=["AB","AC","BD","CD","DE"],nodeIds=["A","B","C","D","E"];function rd(l,v){return '<div class="visual-readout"><span class="visual-readout-label">'+l+'</span><strong class="visual-readout-value">'+v+'</strong></div>'}function render(){var on=bridge.value==="on",q=query.value,path=[],text="경로 없음";if(q==="AD"){path=["AB","BD"];text="A → B → D"}else if(q==="AE"&&on){path=["AB","BD","DE"];text="A → B → D → E"}edgeIds.forEach(function(id){var el=document.getElementById(id);el.classList.toggle("is-path",path.indexOf(id)>=0);el.classList.toggle("is-removed",id==="DE"&&!on)});var reached=on?nodeIds:["A","B","C","D"];nodeIds.forEach(function(id){document.getElementById("node-"+id).classList.toggle("is-reached",reached.indexOf(id)>=0)});var possible=path.length>0,steps=possible?String(path.length):"해당 없음";readouts.innerHTML=rd("선택한 경로",text)+rd("경로 길이",steps)+rd("A에서 도달 가능한 정점",reached.join(", "));if(q==="EA"&&on){note.textContent="A에서 E로는 갈 수 있지만 E에서 나가는 화살표가 없으므로 E에서 A로는 도달할 수 없다."}else if(q==="EA"){note.textContent="D→E를 지우면 A에서 E로도 갈 수 없고, E에서 나가는 화살표도 없으므로 E에서 A로 도달할 수 없다."}else if(q==="AE"&&!on){note.textContent="D→E를 지우면 E로 들어가는 경로가 끊겨 A에서 E에 도달할 수 없다."}else{note.textContent="직접 이어지지 않은 두 정점도 방향에 맞는 간선을 연속해서 따르면 도달할 수 있다."}}query.addEventListener("change",render);bridge.addEventListener("change",render);render()}());
+</script>
+</body></html>

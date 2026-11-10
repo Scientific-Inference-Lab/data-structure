@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+<title>Adjacency Matrices | Data Structure | Pusan National University</title><meta name="description" content="An adjacency matrix assigns one row and one column to each vertex, recording the existence of an edge from i to j in the cell at row i and column j."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/24.%20A%20Matrix%20or%20a%20List/adjacency-matrices.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Adjacency Matrices | Data Structure | Pusan National University"><meta property="og:description" content="An adjacency matrix assigns one row and one column to each vertex, recording the existence of an edge from i to j in the cell at row i and column j."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/24.%20A%20Matrix%20or%20a%20List/adjacency-matrices.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script>
+<style>
+  .matrix-board{display:grid;grid-template-columns:minmax(260px,.8fr) minmax(360px,1.2fr);gap:28px;align-items:center;min-width:720px;padding:14px}
+  .mini-graph{width:100%;height:auto}.mini-graph .edge{stroke:var(--pnu-blue);stroke-width:4}.mini-graph .edge.is-active{stroke:var(--pnu-green);stroke-width:8}.mini-graph .node{fill:var(--white);stroke:var(--pnu-blue);stroke-width:3}.mini-graph text{font-weight:800;fill:var(--ink-900)}
+  .matrix{display:grid;grid-template-columns:42px repeat(5,48px);grid-auto-rows:44px;justify-content:center}.matrix span{display:grid;place-items:center;border-right:1px solid var(--line-200);border-bottom:1px solid var(--line-200);font-family:var(--mono);font-weight:800}.matrix .head{color:var(--pnu-blue-dark);background:var(--surface-050)}.matrix .cell{background:var(--white)}.matrix .cell.is-one{color:var(--pnu-blue)}.matrix .cell.is-active{color:var(--white);background:var(--pnu-green)}.matrix .row-active{background:var(--pnu-blue-tint)}
+  @media(max-width:700px){.matrix-board{grid-template-columns:300px 340px}}
+</style><script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">A Matrix or a List</span><span class="nav-tag is-current" aria-current="page">Adjacency Matrices</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/24.%20A%20Matrix%20or%20a%20List.pdf">A Matrix or a <span class="publication-lecture-tail">List<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">Adjacency Matrices</h1><hr class="accent-rule"><p class="page-subtitle">인접행렬(adjacency matrix)은 정점마다 행과 열을 하나씩 두고, i에서 j로 가는 간선의 존재를 i행 j열 한 칸에 저장한다.</p></div></section>
+<main id="main-content" class="page-body container">
+<section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>한 칸</strong><span>i행 j열은 i→j 간선 하나에 대응한다.</span></article><article class="summary-card"><strong>공간</strong><span>간선 수와 관계없이 n²칸을 사용한다.</span></article><article class="summary-card"><strong>연산</strong><span>간선 확인은 O(1), 이웃 전체 확인은 한 행을 훑어 O(n)이다.</span></article></div></section>
+<section class="topic-example"><header class="example-header"><h2 class="section-title">간선 하나는 행렬의 한 칸으로 바로 연결된다</h2><p class="lead">강의에서 이어 쓰는 다섯 정점 그래프다. 간선 i→j는 i행 j열 한 칸에 대응하고 방향이 없으면 j행 i열에도 저장해 행렬이 대칭이 된다.</p></header>
+<div class="visual-lab"><div class="visual-controls visual-controls--double"><div class="control-field"><label for="mode">그래프 방향</label><select id="mode"><option value="directed">방향 있음</option><option value="undirected">방향 없음</option></select></div><div class="control-field"><label for="query">확인할 간선</label><select id="query"><option value="AB">A→B</option><option value="BA">B→A</option><option value="AC">A→C</option><option value="BD">B→D</option><option value="CD">C→D</option><option value="DE">D→E</option><option value="EB">E→B</option></select></div></div>
+<figure class="visual-figure"><div class="visual-frame"><div class="matrix-board"><svg class="mini-graph" viewBox="0 0 460 260" role="img" aria-labelledby="matrix-graph-title matrix-graph-desc"><title id="matrix-graph-title">행렬과 대응하는 그래프</title><desc id="matrix-graph-desc">A부터 E까지 다섯 정점의 간선과 현재 확인하는 간선을 나타낸다.</desc><defs><marker id="matrix-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="#005baa"></path></marker></defs><g id="graph-edges"></g><g><circle class="node" cx="60" cy="130" r="32"></circle><text x="60" y="136" text-anchor="middle">A</text><circle class="node" cx="170" cy="55" r="32"></circle><text x="170" y="61" text-anchor="middle">B</text><circle class="node" cx="170" cy="205" r="32"></circle><text x="170" y="211" text-anchor="middle">C</text><circle class="node" cx="290" cy="130" r="32"></circle><text x="290" y="136" text-anchor="middle">D</text><circle class="node" cx="410" cy="130" r="32"></circle><text x="410" y="136" text-anchor="middle">E</text></g></svg><div id="matrix" class="matrix" aria-label="5 곱하기 5 인접행렬"></div></div></div><figcaption class="visual-caption">그래프의 초록 간선과 행렬의 초록 칸이 같은 정점 쌍을 나타낸다. 파란 행은 이웃을 모두 찾을 때 훑는 범위다.</figcaption></figure>
+<div id="readouts" class="visual-readouts" aria-live="polite"></div><p id="note" class="visual-note"></p></div></section>
+<nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../23. Any Pair Can Be Linked/graph-adt.html">이전 · Graph ADT</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="adjacency-lists.html">다음 · Adjacency Lists</a></nav></main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function(){"use strict";
+  var labels=["A","B","C","D","E"];
+  var base=[["A","B"],["A","C"],["B","D"],["C","D"],["D","E"]];
+  var pos={A:[60,130],B:[170,55],C:[170,205],D:[290,130],E:[410,130]};
+  var mode=document.getElementById("mode"),query=document.getElementById("query");
+  var matrix=document.getElementById("matrix"),edges=document.getElementById("graph-edges");
+  var readouts=document.getElementById("readouts"),note=document.getElementById("note");
+  function rd(l,v){return '<div class="visual-readout"><span class="visual-readout-label">'+l+'</span><strong class="visual-readout-value">'+v+'</strong></div>'}
+  function allEdges(){var e=base.slice();if(mode.value==="undirected")base.forEach(function(x){e.push([x[1],x[0]])});return e}
+  function render(){
+    var es=allEdges(),q=[query.value[0],query.value[1]];
+    var exists=es.some(function(e){return e[0]===q[0]&&e[1]===q[1]});
+    matrix.innerHTML='<span class="head"></span>'+labels.map(function(x){return '<span class="head">'+x+'</span>'}).join("")+labels.map(function(r){return '<span class="head">'+r+'</span>'+labels.map(function(c){var one=es.some(function(e){return e[0]===r&&e[1]===c}),active=r===q[0]&&c===q[1];return '<span class="cell '+(one?'is-one ':'')+(active?'is-active ':'')+(r===q[0]&&!active?'row-active':'')+'">'+(one?1:0)+'</span>'}).join("")}).join("");
+    edges.innerHTML=es.map(function(e){var a=pos[e[0]],b=pos[e[1]],active=e[0]===q[0]&&e[1]===q[1];return '<line class="edge '+(active?'is-active':'')+'" x1="'+a[0]+'" y1="'+a[1]+'" x2="'+b[0]+'" y2="'+b[1]+'" marker-end="'+(mode.value==="directed"?'url(#matrix-arrow)':'')+'"></line>'}).join("");
+    readouts.innerHTML=rd("확인한 칸",q[0]+"행 "+q[1]+"열")+rd("저장값",exists?"1":"0")+rd("간선 존재",exists?"참":"거짓")+rd("전체 공간","5² = 25칸");
+    note.textContent=mode.value==="undirected"?"방향 없는 간선은 두 방향을 함께 저장하므로 행렬이 대각선을 기준으로 대칭이다.":"간선 하나는 한 칸만 읽어 O(1)에 확인하지만, "+q[0]+"의 이웃을 모두 찾으려면 그 행의 5칸을 모두 읽는다.";
+  }
+  mode.addEventListener("change",render);query.addEventListener("change",render);render();
+}());
+</script></body></html>
