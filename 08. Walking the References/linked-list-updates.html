@@ -37,7 +37,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">삭제는 앞 노드의 next를 삭제할 노드의 다음 노드로 바꾼다</h2><p class="lead">중간 노드를 삭제할 때는 앞 노드의 <code>next</code>가 삭제할 노드의 다음 노드를 가리키게 한다. 첫 노드는 앞 노드가 없으므로 <code>head</code>를 직접 바꾼다. 끝 노드를 지우면 <code>tail</code>도 앞 노드로 옮기고, 어느 경우든 <code>n</code>을 1 줄인다.</p></header>
+    <header class="example-header"><h2 class="section-title">삭제는 앞 노드의 next를 삭제할 노드의 다음 노드로 바꾼다</h2><p class="lead">중간 노드를 삭제할 때는 앞 노드의 <code>next</code>가 삭제할 노드의 다음 노드를 가리키게 하고, 앞 노드가 없는 첫 노드는 <code>head</code>를 직접 바꾼다. 끝 노드를 지우면 <code>tail</code>도 앞 노드로 옮기며 어느 경우든 <code>n</code>을 1 줄인다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="removeCase">삭제할 위치</label><select id="removeCase"><option value="middle">가운데 B 삭제</option><option value="head">첫 노드 A 삭제</option><option value="tail">마지막 C 삭제</option><option value="only">하나뿐인 노드 A 삭제</option><option value="empty">빈 리스트에서 삭제</option></select></div><div class="control-field"><label for="removeStep">실행 단계 <output id="removeStepValue" class="control-value" for="removeStep"></output></label><input id="removeStep" type="range" min="0" max="2" value="0"></div><div class="action-row"><button id="removePrev" class="btn btn-outline" type="button">이전</button><button id="removeNext" class="btn" type="button">다음</button></div></div>
       <p id="reason-2" class="control-reason" hidden></p>

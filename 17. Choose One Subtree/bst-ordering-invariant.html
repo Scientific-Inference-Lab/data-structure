@@ -56,7 +56,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>부분 트리 전체</strong><span>조건은 부모와 자식 한 쌍이 아니라 그 노드 아래의 모든 키에 걸린다.</span></article><article class="summary-card"><strong>허용 범위</strong><span>루트에서 내려오며 지나온 노드들이 하한과 상한을 하나씩 좁힌다.</span></article><article class="summary-card"><strong>중복 키</strong><span>Map 방식은 같은 키를 다시 넣으면 기존 값을 갱신하므로 트리에 같은 키가 두 번 나오지 않는다.</span></article><article class="summary-card"><strong>중위 순회(inorder traversal)</strong><span>ordering invariant를 지키는 트리를 중위 순회로 읽으면 키가 오름차순으로 나온다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">부모보다 크기만 하면 되는 것이 아니라 조상 모두와의 대소가 맞아야 한다</h2><p class="lead">3의 오른쪽 자식 노드 자리에 넣을 키를 바꾸면 부모 3과의 비교, 루트 8과의 비교, 그리고 그 자리에 허용되는 범위 안에 있는지가 함께 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">부모보다 크기만 하면 되는 것이 아니라 조상 모두와의 대소가 맞아야 한다</h2><p class="lead">3의 오른쪽 자식 노드 자리에 올 키는 부모 3보다 크고 루트 8보다 작아야 하므로 그 자리에 허용되는 범위는 3과 8 사이다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="x">3의 오른쪽 자식 노드 키 <output id="x-out" class="control-value" for="x">10</output></label><input id="x" type="range" min="0" max="15" step="1" value="10"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="slot-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="sl-title sl-desc"><title id="sl-title">한 자리에 허용되는 키 범위</title><desc id="sl-desc">루트 8, 왼쪽 자식 3, 3의 오른쪽 자식 자리의 키와 허용 범위</desc></svg></div><figcaption class="visual-caption">점선 영역은 루트 8의 왼쪽 부분 트리다. 초록 원이 바꾸는 자리이고, 빨간 원은 ordering invariant를 어긴 키다. 아래 수직선의 초록 띠는 그 자리에 올 수 있는 열린 범위이고 점이 현재 키다.</figcaption></figure>
@@ -66,7 +66,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">is_bst는 허용 범위를 내려보내며 노드마다 한 번씩 검사한다</h2><p class="lead">트리를 고르고 호출 수를 옮기면 지금 검사하는 노드, 그 노드가 받은 (low, high) 범위, 코드에서 실행 중인 줄이 바뀐다. 두 트리 모두 부모와 자식 한 쌍씩만 보면 대소가 맞다.</p></header>
+    <header class="example-header"><h2 class="section-title">is_bst는 허용 범위를 내려보내며 노드마다 한 번씩 검사한다</h2><p class="lead">is_bst는 노드마다 위에서 내려온 (low, high) 범위로 키를 검사한다. 두 트리 모두 부모와 자식 한 쌍씩만 보면 대소가 맞다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="tree2">트리</label><select id="tree2"><option value="A">3의 자식 노드가 1과 6인 트리</option><option value="B">3의 자식 노드가 1과 10인 트리</option></select></div><div class="control-field"><label for="k2">검사한 노드 수 <output id="k2-out" class="control-value" for="k2">0</output></label><input id="k2" type="range" min="0" max="6" step="1" value="0"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="trav-grid"><svg id="chk-plot" class="topic-plot" viewBox="0 0 520 320" role="img" aria-labelledby="ck-title ck-desc"><title id="ck-title">is_bst의 범위 검사</title><desc id="ck-desc">노드마다 받은 허용 범위와 판정</desc></svg><pre id="chk-code" class="code-lines" aria-label="is_bst 함수"></pre></div></div><figcaption class="visual-caption">초록 원이 지금 검사하는 노드, 옅은 파란 원이 통과한 노드, 빨간 원이 범위를 벗어난 노드, 점선 원이 검사하지 않은 노드다. 원 아래 괄호가 그 노드가 받은 (low, high)이고 원 위 수가 검사 순서다. 코드의 초록 줄은 방금 실행한 판정, 빨간 줄은 False를 돌려준 줄이다.</figcaption></figure>
@@ -76,7 +76,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">ordering invariant를 지키면 중위 순회의 출력이 오름차순이 된다</h2><p class="lead">같은 두 트리를 중위 순회로 읽는다. 출력한 키 수를 옮기면 방문 순서와 출력 칸이 늘어나고, 앞 키보다 작은 키가 나오는 곳이 드러난다.</p></header>
+    <header class="example-header"><h2 class="section-title">ordering invariant를 지키면 중위 순회의 출력이 오름차순이 된다</h2><p class="lead">같은 두 트리를 중위 순회로 읽으면 ordering invariant를 어긴 트리에서만 앞 키보다 작은 키가 나온다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="tree3">트리</label><select id="tree3"><option value="A">3의 자식 노드가 1과 6인 트리</option><option value="B">3의 자식 노드가 1과 10인 트리</option></select></div><div class="control-field"><label for="k3">출력한 키 수 <output id="k3-out" class="control-value" for="k3">6</output></label><input id="k3" type="range" min="0" max="6" step="1" value="6"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="in-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="in-title in-desc"><title id="in-title">중위 순회의 출력</title><desc id="in-desc">방문 순서와 출력한 키</desc></svg></div><figcaption class="visual-caption">원 위 수가 중위 순회의 방문 순서이고 초록 원이 마지막으로 출력한 노드다. 아래 칸은 왼쪽부터 출력 순서이며 빨간 칸은 바로 앞 키보다 작은 키다.</figcaption></figure>

@@ -38,7 +38,7 @@
   <main id="main-content" class="page-body container">
     <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>원소 수 n</strong><span>현재 담긴 원소의 수다.</span></article><article class="summary-card"><strong>용량(capacity)</strong><span>내부 배열에 확보한 칸 수다.</span></article><article class="summary-card"><strong>재할당</strong><span>더 큰 배열을 할당하고 기존 원소를 옮긴 뒤 새 배열로 바꾸는 일이다.</span></article></div></section>
     <section class="topic-example">
-      <header class="example-header"><h2 class="section-title">가득 찬 배열에 추가하면 새 배열로 원소를 모두 복사한다</h2><p class="lead">가득 찬 배열에 추가하면 새 배열 할당, 원소 복사, 새 값 쓰기, 활성 배열 전환이 차례로 일어난다.</p></header>
+      <header class="example-header"><h2 class="section-title">가득 찬 배열에 추가하면 새 배열로 원소를 모두 복사한다</h2><p class="lead">가득 찬 배열에 추가하면 새 배열을 할당하고 원소를 복사한 뒤 새 값을 쓰고 활성 배열을 새 배열로 바꾼다.</p></header>
       <div class="visual-lab">
         <div class="visual-controls visual-controls--single"><div class="action-row"><button class="btn btn-outline" id="first" type="button">처음으로</button><button class="btn btn-outline" id="prev" type="button">이전</button><button class="btn" id="play" type="button">재생</button><button class="btn btn-outline" id="next" type="button">다음</button></div></div>
         <figure class="visual-figure"><div class="visual-frame"><div class="visual-board"><div id="steps" class="steps"></div><div class="banks"><div id="ob" class="bank"><strong>기존 내부 배열(backing array)</strong><div id="old" class="row"></div></div><div id="nb" class="bank"><strong>새 내부 배열</strong><div id="new" class="row"></div></div></div></div></div><figcaption class="visual-caption">초록 칸은 값이 들어 있는 칸, 점선이 아닌 굵은 테두리 배열이 지금 활성 배열이다. 위 단계 표시에서 초록 칸이 현재 단계다.</figcaption></figure>
@@ -47,7 +47,7 @@
       </div>
     </section>
     <section class="topic-example">
-      <header class="example-header"><h2 class="section-title">빈 칸이 있으면 재할당 없이 쓴다</h2><p class="lead">추가 직전에 빈 칸이 있는지에 따라 할당과 복사가 필요한지가 달라진다.</p></header>
+      <header class="example-header"><h2 class="section-title">빈 칸이 있으면 재할당 없이 쓴다</h2><p class="lead">추가 직전에 빈 칸이 없을 때만 할당과 복사가 필요하다.</p></header>
       <div class="visual-lab">
         <div class="visual-controls visual-controls--single"><div class="control-field"><label for="case">끝에 추가하기 직전의 배열 상태</label><select id="case"><option value="3">n = 3, 용량 = 4</option><option value="4" selected>n = 4, 용량 = 4</option></select></div></div>
         <figure class="visual-figure"><div class="visual-frame"><div id="compare" class="compare"></div></div><figcaption class="visual-caption">왼쪽은 추가 전 조건, 초록 카드는 E를 추가한 뒤의 원소 수와 용량이다.</figcaption></figure>

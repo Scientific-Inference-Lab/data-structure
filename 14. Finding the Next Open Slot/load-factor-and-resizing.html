@@ -26,7 +26,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>load factor α</strong><span>n / m이며 표가 찬 비율이다.</span></article><article class="summary-card"><strong>재할당 기준</strong><span>구현마다 다르므로 하나의 숫자를 모든 해시테이블의 규칙으로 쓰지 않는다.</span></article><article class="summary-card"><strong>재배치</strong><span>기존 칸 위치를 복사하지 않고 모든 키를 새 표에 다시 넣는다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">load factor가 커질수록 빈 칸이 줄고 다음 저장 위치를 찾기 어려워진다</h2><p class="lead">넣은 키 수와 예시 기준을 바꾸면 α, 빈 칸 수, 재할당이 필요한지가 바뀐다. 표 길이는 m = 8이다.</p></header>
+    <header class="example-header"><h2 class="section-title">load factor가 커질수록 빈 칸이 줄고 다음 저장 위치를 찾기 어려워진다</h2><p class="lead">표 길이 m = 8에서 키를 넣을수록 α가 커지고 빈 칸이 줄며, α가 예시 기준을 넘으면 재할당이 필요하다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="ln">넣은 키 수 n <output id="ln-out" class="control-value" for="ln">3</output></label><input id="ln" type="range" min="0" max="8" step="1" value="3"></div><div class="control-field"><label for="lth">예시 기준</label><select id="lth"><option value="0.5">α > 1/2이면 재할당</option><option value="0.75">α > 3/4이면 재할당</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="lf-row"></div></div></div><figcaption class="visual-caption">칸 위 숫자는 인덱스다. 파란 칸은 키가 든 칸, 점선 칸은 빈 칸이며, 빨간 점선 칸은 기준을 넘긴 뒤에 넣은 키다.</figcaption></figure>
@@ -36,7 +36,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">표 길이가 바뀌면 모든 키의 인덱스를 다시 계산한다</h2><p class="lead">표 길이를 바꾸면 키 6, 10, 14의 k mod m과, 앞 칸이 차 있으면 다음 칸으로 넘어가는 저장 위치가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">표 길이가 바뀌면 모든 키의 인덱스를 다시 계산한다</h2><p class="lead">표 길이 m이 달라지면 키 6, 10, 14의 시작 인덱스 k mod m과 저장 위치가 모두 다시 정해진다. 시작 칸이 차 있으면 다음 칸으로 넘어간다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="rm">표 길이 m</label><select id="rm"><option value="4">m = 4 · 재할당 전</option><option value="8">m = 8 · 재할당 후</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="rh-row"></div><table id="rh-table" class="topic-table" aria-label="키별 인덱스 계산"></table></div></div><figcaption class="visual-caption">위 줄은 표이며 파란 칸이 저장된 키다. 아래 표는 키마다 시작 인덱스 k mod m과 실제 저장 인덱스이며, 두 값이 다르면 앞 칸이 차 있어 다음 칸으로 넘어간 것이다.</figcaption></figure>

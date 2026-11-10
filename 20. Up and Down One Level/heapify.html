@@ -45,7 +45,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>시작 위치</strong><span>인덱스 ⌊n/2⌋ − 1이 마지막 부모이고, 그 뒤는 모두 단말 노드라 이미 힙이다.</span></article><article class="summary-card"><strong>아래에서 위로</strong><span>i에서 sift down할 때 i의 두 부분 트리는 이미 힙이므로 i 자리의 값 하나만 제자리로 보내면 된다.</span></article><article class="summary-card"><strong>n번 삽입과의 차이</strong><span>값을 하나씩 heappush하면 O(n log n), heapify는 O(n)이다. 결과 배열은 다를 수 있지만 둘 다 힙이다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">마지막 부모부터 거꾸로 sift down하면 아래쪽부터 힙이 되어 올라간다</h2><p class="lead">배열 [9, 5, 6, 2, 3, 8, 1, 7, 4]를 heapify한다. 단계마다 sift down 중인 자리, 비교하는 자식 노드, 이미 힙이 된 부분이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">마지막 부모부터 거꾸로 sift down하면 아래쪽부터 힙이 되어 올라간다</h2><p class="lead">배열 [9, 5, 6, 2, 3, 8, 1, 7, 4]를 heapify한다. 마지막 부모부터 루트 쪽으로 sift down해 갈수록 이미 힙이 된 부분이 아래에서 위로 넓어진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="k1">진행한 단계 <output id="k1-out" class="control-value" for="k1">0</output></label><input id="k1" type="range" min="0" max="10" step="1" value="0"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="hf-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="hf-title hf-desc"><title id="hf-title">heapify 단계</title><desc id="hf-desc">sift down 중인 자리와 이미 힙이 된 부분</desc></svg></div><figcaption class="visual-caption">초록으로 채운 원과 칸이 sift down 중인 값, 초록 테두리가 비교하는 자식 노드다. 옅은 파란 원과 칸은 그 자리를 루트로 하는 부분 트리가 이미 힙이 된 곳이고, 흰 원은 아직 처리하지 않은 부모다. 빨간 선은 아직 힙 성질을 어긴 간선이다.</figcaption></figure>
@@ -55,7 +55,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">같은 값으로 만들어도 방법에 따라 배열이 달라지고 둘 다 힙이다</h2><p class="lead">같은 9개 값을 하나씩 heappush하는 방법과 heapify로 한꺼번에 만드는 방법을 비교한다. 방법을 바꾸면 결과 트리와 배열, 교환 횟수가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">같은 값으로 만들어도 방법에 따라 배열이 달라지고 둘 다 힙이다</h2><p class="lead">같은 9개 값을 하나씩 heappush하는 방법과 heapify로 한꺼번에 만드는 방법은 결과 트리와 배열, 교환 횟수가 다르지만 둘 다 힙이다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="m2">방법</label><select id="m2"><option value="push">n번 삽입 (heappush 9번)</option><option value="heapify">heapify</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="cmp-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="cm-title cm-desc"><title id="cm-title">두 방법의 결과 힙</title><desc id="cm-desc">결과 트리와 배열</desc></svg></div><figcaption class="visual-caption">위는 결과 힙의 트리, 아래는 배열이다. 옅은 파란 칸은 두 방법의 결과가 같은 인덱스, 흰 칸은 다른 인덱스다.</figcaption></figure>
@@ -65,7 +65,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">노드가 많은 레벨은 내려갈 거리가 짧아 heapify의 총이동 횟수 상한이 n에 비례한다</h2><p class="lead">높이 h인 가득 찬 완전 이진트리를 생각한다. 높이를 바꾸면 레벨마다의 노드 수, heapify에서 내려갈 수 있는 최대 거리, n번 삽입에서 올라갈 수 있는 최대 거리의 합이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">노드가 많은 레벨은 내려갈 거리가 짧아 heapify의 총이동 횟수 상한이 n에 비례한다</h2><p class="lead">높이 h인 가득 찬 완전 이진트리에서 노드가 많은 아래 레벨일수록 heapify에서 내려갈 수 있는 거리는 짧고 n번 삽입에서 올라갈 수 있는 거리는 길다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="h3">높이 h <output id="h3-out" class="control-value" for="h3">3</output></label><input id="h3" type="range" min="1" max="9" step="1" value="3"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="lv-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="lv-title lv-desc"><title id="lv-title">레벨별 노드 수와 이동 거리</title><desc id="lv-desc">레벨마다 노드 수, heapify 거리, 삽입 거리</desc></svg></div><figcaption class="visual-caption">한 줄이 레벨 하나다. 파란 막대는 그 레벨의 노드 수, 초록 막대는 heapify에서 그 레벨 노드들이 내려갈 수 있는 거리의 합(노드 수 × 아래 레벨 수), 회색 막대는 n번 삽입에서 올라갈 수 있는 거리의 합(노드 수 × 깊이)이다. 막대 길이는 모든 레벨의 세 값 가운데 가장 큰 값을 기준으로 맞췄다.</figcaption></figure>

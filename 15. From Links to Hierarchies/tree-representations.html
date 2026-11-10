@@ -48,7 +48,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>중첩 리스트</strong><span>인덱스 0은 루트 값, 1은 왼쪽 부분 트리, 2는 오른쪽 부분 트리이며 빈 트리는 []다.</span></article><article class="summary-card"><strong>insert_left</strong><span>기존 왼쪽 부분 트리를 버리지 않고 새 노드의 왼쪽 부분 트리로 내린다.</span></article><article class="summary-card"><strong>노드와 참조</strong><span>각 노드가 key와 두 자식 노드의 참조를 가지며 빈 자식 노드는 None이다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">인덱스를 이어 붙이면 부분 트리를 차례로 내려간다</h2><p class="lead">트리 a 아래에 b(d, e)와 c(f)가 있는 중첩 리스트에서 식을 바꾸면 리스트의 어느 부분을 꺼내는지와 그 부분이 나타내는 부분 트리가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">인덱스를 이어 붙이면 부분 트리를 차례로 내려간다</h2><p class="lead">a 아래에 b(d, e)와 c(f)가 있는 트리를 나타낸 중첩 리스트에서 인덱스 식마다 꺼내는 부분과 그 부분이 나타내는 부분 트리가 다르다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="expr">식</label><select id="expr"><option value="">tree</option><option value="0">tree[0]</option><option value="1" selected>tree[1]</option><option value="2">tree[2]</option><option value="11">tree[1][1]</option><option value="12">tree[1][2]</option><option value="21">tree[2][1]</option><option value="22">tree[2][2]</option><option value="110">tree[1][1][0]</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="rep-wrap"><div id="list-1" class="list-code" aria-label="중첩 리스트"></div><svg id="nl-plot" class="topic-plot" viewBox="0 0 900 250" role="img" aria-labelledby="nl-title nl-desc"><title id="nl-title">중첩 리스트가 나타내는 트리</title><desc id="nl-desc">식이 가리키는 부분 트리</desc></svg></div></div><figcaption class="visual-caption">위는 중첩 리스트, 아래는 같은 트리 그림이다. 초록으로 감싼 부분이 식의 결과이고, 그림에서 초록으로 채운 원이 그 부분 트리의 루트, 옅은 초록 원이 나머지 노드다.</figcaption></figure>
@@ -58,7 +58,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">insert_left는 기존 왼쪽 부분 트리를 새 노드 아래로 내린다</h2><p class="lead">root = ["a", ["b", [], []], ["c", [], []]]에 insert_left(root, "x")를 실행한다. 단계마다 리스트와 트리가 한 줄씩 실행한 결과로 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">insert_left는 기존 왼쪽 부분 트리를 새 노드 아래로 내린다</h2><p class="lead">root = ["a", ["b", [], []], ["c", [], []]]에 insert_left(root, "x")를 실행하면 기존 왼쪽 부분 트리 b가 새 노드 x의 왼쪽 부분 트리가 된다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="step">실행 단계 <output id="step-out" class="control-value" for="step">0</output></label><input id="step" type="range" min="0" max="3" step="1" value="0"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="rep-wrap"><div id="list-2" class="list-code" aria-label="insert_left 실행 중인 리스트"></div><svg id="ins-plot" class="topic-plot" viewBox="0 0 900 250" role="img" aria-labelledby="ins-title ins-desc"><title id="ins-title">insert_left 단계</title><desc id="ins-desc">단계별 리스트와 트리</desc></svg></div></div><figcaption class="visual-caption">위는 root의 현재 값과 그 단계에서 만든 변수, 아래는 root가 나타내는 트리다. 파란 점선 부분이 새로 만든 리스트, 초록 부분이 old_left다.</figcaption></figure>
@@ -68,7 +68,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">노드와 참조 표현에서는 참조를 따라 부분 트리에 접근한다</h2><p class="lead">같은 트리를 BinaryTree 노드로 만들었다. 표현식을 바꾸면 루트에서 따라가는 참조와 도달한 노드, 결과가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">노드와 참조 표현에서는 참조를 따라 부분 트리에 접근한다</h2><p class="lead">같은 트리를 BinaryTree 노드로 만들면 표현식마다 루트에서 따라가는 참조가 달라 도달하는 노드와 결과가 다르다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="ref">표현식</label><select id="ref"><option value="key">tree.key</option><option value="L" selected>tree.left_child</option><option value="R">tree.right_child</option><option value="L.key">tree.left_child.key</option><option value="L.R.key">tree.left_child.right_child.key</option><option value="R.R">tree.right_child.right_child</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="ref-plot" class="topic-plot" viewBox="0 0 900 330" role="img" aria-labelledby="rf-title rf-desc"><title id="rf-title">노드와 참조</title><desc id="rf-desc">BinaryTree 노드의 key와 두 참조</desc></svg></div><figcaption class="visual-caption">상자 하나가 노드이며 세 칸은 차례로 key와 두 자식 노드의 참조다. 화살표가 참조이고, None은 참조할 자식 노드가 없다는 뜻이다. 초록 화살표와 초록 테두리 상자가 표현식이 따라간 경로와 도달한 노드다.</figcaption></figure>

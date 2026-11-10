@@ -40,7 +40,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>경로 위만 본다</strong><span>새 단말 노드의 조상이 아닌 노드는 부분 트리 높이가 바뀌지 않는다.</span></article><article class="summary-card"><strong>0이 되면 멈춘다</strong><span>갱신 뒤 bf가 0이면 그 부분 트리의 높이는 늘지 않았으므로 그 위 조상은 그대로다.</span></article><article class="summary-card"><strong>가장 가까운 불균형 노드</strong><span>|bf| = 2인 조상이 여럿이면 새 값에서 가장 가까운 노드를 고친다. 그 아래는 아직 AVL 조건을 지킨다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">새 단말 노드에서 올라가며 bf를 고치다가 0이나 ±2에서 멈춘다</h2><p class="lead">AVL 트리 30(20(10), 40)에 값 하나를 넣는다. 넣을 값과 확인한 조상 수를 바꾸면 새 단말 노드의 자리, 갱신한 균형 인수, 멈추는 이유가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">새 단말 노드에서 올라가며 bf를 고치다가 0이나 ±2에서 멈춘다</h2><p class="lead">AVL 트리 30(20(10), 40)에 값 하나를 넣는다. 넣을 값에 따라 새 단말 노드의 자리가 달라지고 조상을 따라 올라가며 고치는 균형 인수와 멈추는 이유도 달라진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="v1">넣을 값</label><select id="v1"><option value="5">5</option><option value="15">15</option><option value="25">25</option><option value="35">35</option><option value="45">45</option></select></div><div class="control-field"><label for="k1">확인한 조상 수 <output id="k1-out" class="control-value" for="k1">0</output></label><input id="k1" type="range" min="0" max="3" step="1" value="0"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="up-plot" class="topic-plot" viewBox="0 0 900 350" role="img" aria-labelledby="up-title up-desc"><title id="up-title">삽입 뒤 균형 인수 갱신</title><desc id="up-desc">새 단말 노드와 경로 위 조상의 균형 인수</desc></svg></div><figcaption class="visual-caption">초록 원이 새 단말 노드, 초록 선이 루트까지의 경로다. 초록 테두리 원이 지금 확인한 조상, 옅은 파란 원이 이미 확인한 조상이며, 빨간 원은 |bf| = 2가 된 조상이다. 원 아래 수는 균형 인수이고 회색 수는 아직 고치지 않은 삽입 전 값이다.</figcaption></figure>
@@ -50,7 +50,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">가장 가까운 불균형 노드의 높이를 되돌리면 그 위의 불균형도 함께 사라진다</h2><p class="lead">5를 넣은 뒤 높이로 다시 세면 20과 30이 모두 +2다. 삽입 직후와 첫 불균형 조상 20의 부분 트리 높이를 되돌린 뒤를 비교한다.</p></header>
+    <header class="example-header"><h2 class="section-title">가장 가까운 불균형 노드의 높이를 되돌리면 그 위의 불균형도 함께 사라진다</h2><p class="lead">5를 넣은 뒤 높이로 다시 세면 20과 30이 모두 +2다. 첫 불균형 조상 20의 부분 트리 높이를 되돌리면 30의 불균형도 사라진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="c2">확인할 상태</label><select id="c2"><option value="20">20의 부분 트리 높이를 되돌린 뒤</option><option value="30">삽입 직후 (아직 재균형하지 않음)</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="fx-plot" class="topic-plot" viewBox="0 0 900 300" role="img" aria-labelledby="fx-title fx-desc"><title id="fx-title">첫 불균형 조상에서 재균형 전후</title><desc id="fx-desc">삽입 직후와 20의 부분 트리를 고친 뒤의 트리와 균형 인수</desc></svg></div><figcaption class="visual-caption">왼쪽은 5를 넣은 직후, 오른쪽은 고른 상태다. 초록 점선 테두리는 고친 부분 트리의 루트이며 재균형 전에는 없다. 빨간 원은 |bf| = 2인 노드다. 균형 인수는 높이로 다시 센 값이며, 강의의 update_balance는 20에서 처음 |bf| = 2를 만나 재균형하고 멈추므로 30에 저장된 값은 다시 계산하지 않는다.</figcaption></figure>

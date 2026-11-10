@@ -52,7 +52,7 @@
 <main id="main-content" class="page-body container">
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>자료형(data type)</strong><span>가능한 값의 집합과 그 값에 적용할 수 있는 연산의 묶음이다.</span></article><article class="summary-card"><strong>추상 자료형(abstract data type, ADT)</strong><span>값과 연산의 의미로 정의하고 저장 방식은 정하지 않는다.</span></article><article class="summary-card"><strong>데이터 추상화</strong><span>연산의 의미를 알면 내부 저장 방식을 몰라도 자료를 다룰 수 있다.</span></article></div></section>
 
-  <section class="topic-example"><header class="example-header"><h2 class="section-title">같은 + 기호도 자료형이 결과를 정한다</h2><p class="lead">두 피연산자에 같은 숫자 모양을 넣고 자료형만 바꾼다. 자료형이 허용하는 값과 + 연산의 의미가 바뀌면 결과도 바뀐다.</p></header>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">같은 + 기호도 자료형이 결과를 정한다</h2><p class="lead">두 피연산자의 숫자 모양이 같아도 자료형이 다르면 허용하는 값과 + 연산의 의미가 달라 결과도 달라진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--triple">
         <div class="control-field"><label for="dtype">자료형</label><select id="dtype"><option value="int">정수</option><option value="str">문자열</option></select></div>
@@ -83,7 +83,7 @@
     </div>
   </section>
 
-  <section class="topic-example"><header class="example-header"><h2 class="section-title">요구사항에서 ADT를 고르고 구현에서 비용을 따진다</h2><p class="lead">요구사항이 필요한 결과를 정하면 그 결과를 만드는 ADT와 연산의 의미가 정해진다. 작업량은 그 뒤에 고르는 구현이 정한다.</p></header>
+  <section class="topic-example"><header class="example-header"><h2 class="section-title">요구사항에서 ADT를 고르고 구현에서 비용을 따진다</h2><p class="lead">요구사항에 필요한 결과가 ADT와 연산의 의미를 정하고 작업량은 그 뒤에 고르는 구현이 정한다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="need">요구사항</label><select id="need"><option value="stack">가장 최근 방문 기록부터 되돌린다</option><option value="queue">가장 먼저 온 요청부터 처리한다</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div id="flow" class="flow" role="list" aria-label="요구사항에서 구현까지"></div></div><figcaption class="visual-caption">왼쪽에서 오른쪽으로 결정 순서를 따른다. 초록 테두리 칸이 요구사항이 고른 ADT다.</figcaption></figure>

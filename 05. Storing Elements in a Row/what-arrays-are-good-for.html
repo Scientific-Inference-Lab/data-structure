@@ -50,12 +50,12 @@
 <body class="visual-topic">
   <a class="skip-link" href="#main-content">본문으로 이동</a>
   <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="현재 주제"><span class="nav-tag">Storing Elements in a Row</span><span class="nav-tag is-current" aria-current="page">What Arrays Are Good For</span></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-  <section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/05.%20Storing%20Elements%20in%20a%20Row.pdf">Storing Elements in a <span class="publication-lecture-tail">Row<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">What Arrays Are Good For</h1><hr class="accent-rule"><p class="page-subtitle">한 배열에 서로 다른 작업을 차례로 쌓으면 인덱스 접근과 끝 추가의 작은 비용, 가운데 삽입과 삭제의 이동 비용이 같은 기록에서 드러난다.</p></div></section>
+  <section class="hero topic-hero"><div class="container"><p class="eyebrow"><a class="eyebrow-link" href="../lecture/05.%20Storing%20Elements%20in%20a%20Row.pdf">Storing Elements in a <span class="publication-lecture-tail">Row<span aria-hidden="true">↗</span></span></a></p><h1 class="page-title">What Arrays Are Good For</h1><hr class="accent-rule"><p class="page-subtitle">한 배열에서 연산을 차례로 실행해 기록하면 인덱스 접근과 끝 추가는 비용이 작고 가운데 삽입과 삭제는 원소 이동 때문에 비용이 크다.</p></div></section>
   <main id="main-content" class="page-body container">
     <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>인덱스 접근</strong><span>주소 계산 뒤 한 칸을 읽어 Θ(1)이다.</span></article><article class="summary-card"><strong>끝 추가</strong><span>내부 배열에 빈 칸이 있으면 이동 없이 한 칸을 쓴다.</span></article><article class="summary-card"><strong>가운데 변경</strong><span>위치 i부터 뒤쪽 원소를 옮기므로 최악의 경우 Θ(n)이다.</span></article></div></section>
 
     <section class="topic-example">
-      <header class="example-header"><h2 class="section-title">get은 한 칸에 도달하고 삽입·삭제는 뒤쪽 원소 수만큼 옮긴다</h2><p class="lead">모든 연산은 같은 배열 상태에서 이어진다. 실행 직후 바뀐 칸과 이동한 칸, 정확한 작업 수가 함께 기록된다.</p></header>
+      <header class="example-header"><h2 class="section-title">get은 한 칸에 도달하고 삽입·삭제는 뒤쪽 원소 수만큼 옮긴다</h2><p class="lead">모든 연산은 직전 연산이 남긴 배열 상태에서 실행되고 기록에는 연산마다 정확한 작업 수가 남는다.</p></header>
       <div class="visual-lab">
         <div class="visual-controls visual-controls--double">
           <div class="control-field"><label for="work-index">인덱스 i <output id="work-index-out" class="control-value" for="work-index">2</output></label><input id="work-index" type="range" min="0" max="4" value="2"></div>
@@ -73,7 +73,7 @@
     </section>
 
     <section class="topic-example">
-      <header class="example-header"><h2 class="section-title">연산마다 작업 수가 실행 당시의 n과 i로 정해진다</h2><p class="lead">위 절의 배열 상태와 실행 기록을 그대로 쓴다. 각 행은 실행 당시 n과 i로 계산한 작업 수를 보존한다.</p></header>
+      <header class="example-header"><h2 class="section-title">연산마다 작업 수가 실행 당시의 n과 i로 정해진다</h2><p class="lead">위 절의 실행 기록에서 작업 수는 연산마다 실행 당시의 n과 i로 계산한 값이다.</p></header>
       <div class="visual-lab">
         
         <div class="ledger-card table-wrap" role="region" aria-label="연산 기록표" tabindex="0">

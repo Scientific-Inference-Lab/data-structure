@@ -47,7 +47,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>탐색이 멈춘 자리</strong><span>루트에서 비교하며 내려가다 가야 할 자식 노드 자리가 비어 있으면 거기에 붙인다.</span></article><article class="summary-card"><strong>자리는 하나뿐</strong><span>빈 자리마다 허용 범위가 겹치지 않으므로 새 키가 들어갈 수 있는 빈 자리는 정확히 하나다.</span></article><article class="summary-card"><strong>같은 키</strong><span>이미 있는 키를 넣으면 새 노드를 만들지 않고 기존 노드의 값만 새 값으로 바꾼다.</span></article><article class="summary-card"><strong>지나온 노드 수</strong><span>한 번의 삽입은 지나온 노드마다 키를 한두 번 비교하므로 비교 횟수는 지나온 노드 수에 비례한다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">일곱 키를 차례로 넣으면 각 키는 탐색이 멈춘 자리에 단말 노드로 붙는다</h2><p class="lead">50, 30, 70, 20, 40, 60, 80을 순서대로 넣는다. 넣은 키 수를 옮기면 방금 넣은 키가 지나온 길, 붙은 자리, 그리고 지금까지의 삽입 기록이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">일곱 키를 차례로 넣으면 각 키는 탐색이 멈춘 자리에 단말 노드로 붙는다</h2><p class="lead">50, 30, 70, 20, 40, 60, 80을 순서대로 넣는다. 키마다 루트에서 비교하며 내려가다 탐색이 멈춘 빈 자리에 단말 노드로 붙는다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="n1">넣은 키 수 <output id="n1-out" class="control-value" for="n1">4</output></label><input id="n1" type="range" min="0" max="7" step="1" value="4"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="ins-grid"><svg id="build-plot" class="topic-plot" viewBox="0 0 540 290" role="img" aria-labelledby="bu-title bu-desc"><title id="bu-title">차례로 넣어 만든 BST</title><desc id="bu-desc">넣은 키와 지나온 길</desc></svg><table id="build-table" class="topic-table" aria-label="삽입 기록"></table></div></div><figcaption class="visual-caption">초록 원이 방금 넣은 키, 옅은 파란 원이 그 키가 지나온 노드, 굵은 초록 선이 지나온 길이다. 오른쪽 표는 넣은 순서대로 지나온 길과 붙은 자리를 적은 것이며 초록 행이 방금 넣은 키다.</figcaption></figure>
@@ -57,7 +57,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">빈 자리마다 허용 범위가 달라 새 키가 갈 수 있는 곳은 하나뿐이다</h2><p class="lead">위에서 만든 일곱 노드 트리에 키 하나를 더 넣는다. 넣을 키를 바꾸면 탐색 경로, 멈추는 빈 자리, _put에서 실행하는 줄이 바뀐다. 이미 있는 키를 고르면 노드 수는 그대로다.</p></header>
+    <header class="example-header"><h2 class="section-title">빈 자리마다 허용 범위가 달라 새 키가 갈 수 있는 곳은 하나뿐이다</h2><p class="lead">위에서 만든 일곱 노드 트리에 키 하나를 더 넣으면 넣을 키에 따라 탐색 경로와 멈추는 빈 자리, _put에서 실행하는 줄이 달라진다. 이미 있는 키를 넣으면 노드 수는 그대로다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="key2">넣을 키 <output id="key2-out" class="control-value" for="key2">45</output></label><input id="key2" type="range" min="5" max="95" step="1" value="45"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="ins-stack"><svg id="gap-plot" class="topic-plot" viewBox="0 0 560 350" role="img" aria-labelledby="gp-title gp-desc"><title id="gp-title">빈 자리와 허용 범위</title><desc id="gp-desc">여덟 개의 빈 자리와 새 키가 멈추는 자리</desc></svg><pre id="put-code" class="code-lines" aria-label="_put 메서드"></pre></div></div><figcaption class="visual-caption">점선 상자는 단말 노드 아래의 빈 자식 노드 자리이고 상자 안 괄호는 그 자리에 올 수 있는 키의 열린 범위다. 초록 선과 초록 상자가 넣을 키의 탐색 경로와 멈춘 자리이고, 초록 원은 같은 키를 가진 노드다. 아래 코드의 초록 줄은 마지막에 실행한 줄이다.</figcaption></figure>

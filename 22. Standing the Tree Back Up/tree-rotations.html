@@ -42,7 +42,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>오른쪽 회전(right rotation)</strong><span>왼쪽이 무거울 때 왼쪽 자식 노드를 올린다. 코드 이름은 rotate_right다.</span></article><article class="summary-card"><strong>왼쪽 회전(left rotation)</strong><span>오른쪽이 무거울 때 오른쪽 자식 노드를 올린다. 두 회전은 서로의 거울상이다.</span></article><article class="summary-card"><strong>보존하는 것</strong><span>A &lt; X &lt; B &lt; S &lt; C의 순서가 그대로라 회전 뒤에도 BST 조건을 만족한다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">회전은 부모와 자식을 바꾸고 가운데 부분 트리 하나만 옮기며 중위 순서를 지킨다</h2><p class="lead">노드 S의 왼쪽 자식 노드가 X이고 A, B, C가 부분 트리다. 회전 방향과 상태를 바꾸면 루트, 가운데 부분 트리 B의 부모, 바뀐 참조, 중위 순서 줄이 함께 표시된다.</p></header>
+    <header class="example-header"><h2 class="section-title">회전은 부모와 자식을 바꾸고 가운데 부분 트리 하나만 옮기며 중위 순서를 지킨다</h2><p class="lead">노드 S의 왼쪽 자식 노드가 X이고 A, B, C가 부분 트리다. 회전하면 루트와 가운데 부분 트리 B의 부모가 바뀌지만 중위 순서는 그대로다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="d1">회전</label><select id="d1"><option value="right">S에서 오른쪽 회전</option><option value="left">X에서 왼쪽 회전 (되돌리기)</option></select></div><div class="control-field"><label for="s1">상태</label><select id="s1"><option value="before">회전 전</option><option value="after" selected>회전 후</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="rot-plot" class="topic-plot" viewBox="0 0 900 340" role="img" aria-labelledby="rot-title rot-desc"><title id="rot-title">회전 전후의 구조</title><desc id="rot-desc">노드 X, S와 부분 트리 A, B, C</desc></svg></div><figcaption class="visual-caption">원이 노드, 삼각형이 부분 트리다. 초록 원이 회전으로 올라가는 노드, 초록 삼각형이 부모가 바뀌는 부분 트리 B, 굵은 초록 선이 새로 바뀐 참조다. 아래 줄은 중위 순서이며 회전 전후에 같다.</figcaption></figure>
@@ -52,7 +52,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">바깥으로 기운 불균형은 불균형 노드를 축으로 한 번 돌리면 풀린다</h2><p class="lead">빈 AVL 트리에 값 세 개를 넣는다. 삽입 순서와 진행 단계에 따라 트리 모양, 균형 인수, 회전의 축과 방향이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">바깥으로 기운 불균형은 불균형 노드를 축으로 한 번 돌리면 풀린다</h2><p class="lead">빈 AVL 트리에 값 세 개를 넣는다. 삽입 순서에 따라 트리가 기우는 방향과 회전의 축, 방향이 달라진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="o2">삽입 순서</label><select id="o2"><option value="ll">30, 20, 10 (left-left)</option><option value="rr">10, 20, 30 (right-right)</option></select></div><div class="control-field"><label for="k2">진행 단계 <output id="k2-out" class="control-value" for="k2">3</output></label><input id="k2" type="range" min="1" max="4" step="1" value="3"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="sg-plot" class="topic-plot" viewBox="0 0 900 290" role="img" aria-labelledby="sg-title sg-desc"><title id="sg-title">한 번의 회전으로 균형 회복</title><desc id="sg-desc">세 값을 넣은 트리와 회전</desc></svg></div><figcaption class="visual-caption">1~3단계는 값을 하나씩 넣은 트리, 4단계는 회전 뒤다. 원 아래 수가 균형 인수이고 빨간 원이 |bf| = 2인 불균형 노드, 초록 테두리 원이 방금 넣은 값, 초록 원이 회전으로 올라온 노드다.</figcaption></figure>

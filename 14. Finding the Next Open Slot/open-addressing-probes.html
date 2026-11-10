@@ -26,7 +26,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>linear probing</strong><span>h(k), h(k) + 1, h(k) + 2, … 순서로 한 칸씩 본다.</span></article><article class="summary-card"><strong>탐색의 멈춤</strong><span>같은 키를 만나면 성공, 처음부터 빈 칸을 만나면 실패다.</span></article><article class="summary-card"><strong>조사 방식</strong><span>quadratic probing은 i², double hashing은 키별 간격 h₂(k)만큼 떨어진 칸을 본다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">linear probing은 충돌하면 다음 칸으로 한 칸씩 이동한다</h2><p class="lead">키 31, 54, 77, 44, 55, 20을 차례로 m = 11인 표에 넣는다. 단계마다 시작 인덱스에서 빈 칸을 찾을 때까지 확인한 인덱스가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">linear probing은 충돌하면 다음 칸으로 한 칸씩 이동한다</h2><p class="lead">키 31, 54, 77, 44, 55, 20을 차례로 m = 11인 표에 넣는다. 키마다 시작 인덱스에서 빈 칸을 찾을 때까지 한 칸씩 확인한다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="action-row"><button id="lp-first" class="btn btn-outline" type="button">처음으로</button><button id="lp-prev" class="btn btn-outline" type="button">이전</button><button id="lp-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-1" class="control-reason" hidden></p>
@@ -37,7 +37,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">조사 방식에 따라 다음 후보 칸이 달라진다</h2><p class="lead">조사 방식을 바꾸면 인덱스 0, 1, 4, 5, 9가 차 있는 표에 h(55) = 0인 55를 넣을 때 확인하는 후보 순서와 저장 위치가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">조사 방식에 따라 다음 후보 칸이 달라진다</h2><p class="lead">인덱스 0, 1, 4, 5, 9가 차 있는 표에 h(55) = 0인 55를 넣을 때 확인하는 후보 순서와 저장 위치는 조사 방식이 정한다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="pm">조사 방식</label><select id="pm"><option value="linear">linear probing: h(k) + i</option><option value="quad">quadratic probing: h(k) + i²</option><option value="double">double hashing: h(k) + i · h₂(k), h₂(k) = 5 − (k mod 5)</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="pm-row"></div></div></div><figcaption class="visual-caption">칸 위 숫자는 인덱스다. 파란 칸은 확인했지만 차 있던 후보, 초록 테두리 칸은 55를 저장한 칸이다.</figcaption></figure>

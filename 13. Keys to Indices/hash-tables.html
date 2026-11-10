@@ -26,7 +26,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>Map ADT</strong><span>set(k, v), get(k), contains(k), remove(k)로 키와 값을 다룬다.</span></article><article class="summary-card"><strong>해시테이블의 세 부분</strong><span>해시 함수, 버킷 배열, 충돌 처리가 함께 있어야 한다.</span></article><article class="summary-card"><strong>O(1)의 조건</strong><span>해시 계산이 빠르고 키가 고르게 퍼지며 표가 충분히 커야 한다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">순차 탐색은 최악에 n개를 보지만 해시테이블은 계산한 버킷만 본다</h2><p class="lead">찾을 키를 바꾸면 리스트에서 앞부터 비교하는 횟수와, h(k) = k mod 11로 고른 버킷에서 비교하는 횟수가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">순차 탐색은 최악에 n개를 보지만 해시테이블은 계산한 버킷만 본다</h2><p class="lead">찾을 키에 따라 리스트를 앞부터 비교하는 횟수와 h(k) = k mod 11로 고른 버킷 안에서 비교하는 횟수가 달라진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="hkey">찾을 키</label><select id="hkey"><option value="54">54 · 리스트 첫 원소</option><option value="31">31 · 가운데</option><option value="77">77 · 마지막 원소</option><option value="99">99 · 없음</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="seq-row"></div><div id="hash-row"></div></div></div><figcaption class="visual-caption">위 줄은 앞에서부터 비교하는 리스트, 아래 줄은 길이 11인 버킷 배열이다. 파란 칸은 비교한 원소, 초록 테두리 칸은 찾은 원소 또는 계산한 버킷이다.</figcaption></figure>
@@ -36,7 +36,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">Map은 정수 위치가 아니라 키로 값을 저장하고 찾는다</h2><p class="lead">단계마다 dict 연산 하나가 실행되고, 저장된 키와 값 쌍, 반환값이 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">Map은 정수 위치가 아니라 키로 값을 저장하고 찾는다</h2><p class="lead">set은 새 키면 키와 값 쌍을 추가하고 이미 있는 키면 그 값만 바꾸며 get, contains, remove도 모두 키로 대상을 찾는다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="action-row"><button id="mp-first" class="btn btn-outline" type="button">처음으로</button><button id="mp-prev" class="btn btn-outline" type="button">이전</button><button id="mp-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-2" class="control-reason" hidden></p>

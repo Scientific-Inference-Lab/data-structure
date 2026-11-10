@@ -55,7 +55,7 @@
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>세 가지 비교 결과</strong><span>x &lt; u.key이면 왼쪽, x &gt; u.key이면 오른쪽 자식 노드로 가고, 같으면 현재 노드에서 성공한다.</span></article><article class="summary-card"><strong>버리는 부분 트리</strong><span>한 번 비교할 때마다 현재 노드와 반대쪽 부분 트리 전체를 더 보지 않는다.</span></article><article class="summary-card"><strong>실패 탐색</strong><span>가야 할 자식 노드 자리가 None이면 멈춘다. 마지막 노드와 그 빈 방향이 새 키가 들어갈 위치다.</span></article><article class="summary-card"><strong>O(높이)</strong><span>경로는 루트에서 아래로만 내려가므로 방문 노드 수는 높이 + 1을 넘지 않는다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">한 번 비교할 때마다 부분 트리 하나를 통째로 버린다</h2><p class="lead">찾는 키와 단계에 따라 현재 노드, 지나온 경로, 더 이상 볼 필요가 없어진 노드가 바뀐다. 트리는 8, 3, 12, 1, 6, 10, 14의 일곱 키를 가진 BST다.</p></header>
+    <header class="example-header"><h2 class="section-title">한 번 비교할 때마다 부분 트리 하나를 통째로 버린다</h2><p class="lead">트리는 8, 3, 12, 1, 6, 10, 14의 일곱 키를 가진 BST다. 비교할 때마다 경로가 한 노드씩 내려가고 반대쪽 부분 트리는 더 볼 필요가 없어진다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="key1">찾는 키 <output id="key1-out" class="control-value" for="key1">6</output></label><input id="key1" type="range" min="0" max="15" step="1" value="6"></div><div class="control-field"><label for="k1">진행한 단계 <output id="k1-out" class="control-value" for="k1">0</output></label><input id="k1" type="range" min="0" max="3" step="1" value="0"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="path-plot" class="topic-plot" viewBox="0 0 900 400" role="img" aria-labelledby="pa-title pa-desc"><title id="pa-title">BST의 탐색 경로</title><desc id="pa-desc">찾는 키의 비교 경로와 버린 노드</desc></svg></div><figcaption class="visual-caption">초록 원이 지금 비교하는 노드, 옅은 파란 원과 굵은 초록 선이 지나온 경로다. 흐린 점선 원은 앞선 비교로 더 볼 필요가 없어진 노드이고, 빨간 점선 상자는 가야 할 자식 노드 자리가 비어 있는 곳이다. 원 옆 글자는 그 노드에서의 비교 결과다.</figcaption></figure>
@@ -65,7 +65,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">같은 키를 담아도 트리 모양이 방문 노드 수를 정한다</h2><p class="lead">같은 일곱 키를 두 모양으로 연결했다. 모양과 찾는 키를 바꾸면 그 키까지의 경로와 키마다의 방문 노드 수 막대가 바뀐다.</p></header>
+    <header class="example-header"><h2 class="section-title">같은 키를 담아도 트리 모양이 방문 노드 수를 정한다</h2><p class="lead">같은 일곱 키를 두 모양으로 연결하면 같은 키를 찾아도 모양에 따라 방문하는 노드 수가 다르다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="shape">트리 모양</label><select id="shape"><option value="bal">루트가 8인 높이 2의 트리</option><option value="chain">루트가 1이고 오른쪽으로만 이어진 트리</option></select></div><div class="control-field"><label for="key2">찾는 키</label><select id="key2"><option value="1">1</option><option value="3">3</option><option value="6">6</option><option value="8">8</option><option value="10">10</option><option value="12">12</option><option value="14" selected>14</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="shape-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="sh-title sh-desc"><title id="sh-title">트리 모양과 방문 노드 수</title><desc id="sh-desc">왼쪽은 트리와 경로, 오른쪽은 키마다 성공할 때까지의 방문 노드 수</desc></svg></div><figcaption class="visual-caption">왼쪽은 트리이며 초록 선이 찾는 키까지의 경로다. 오른쪽 막대는 각 키를 찾을 때까지 비교한 노드 수이고 초록 막대가 지금 찾는 키다.</figcaption></figure>
@@ -75,7 +75,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">재귀 _get과 반복문 search는 같은 경로를 방문한다</h2><p class="lead">찾는 키와 단계에 따라 왼쪽에서는 쌓인 _get 호출이, 오른쪽에서는 반복문의 node 변수가 바뀐다. 각 노드에 저장한 값은 "v" 뒤에 키를 붙인 문자열이다.</p></header>
+    <header class="example-header"><h2 class="section-title">재귀 _get과 반복문 search는 같은 경로를 방문한다</h2><p class="lead">재귀 _get은 한 단계 내려갈 때마다 호출이 하나 쌓이고 반복문 search는 node 변수 하나만 옮긴다. 각 노드에 저장한 값은 "v" 뒤에 키를 붙인 문자열이다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="key3">찾는 키</label><select id="key3"><option value="6">6 (있는 키)</option><option value="11">11 (없는 키)</option><option value="8">8 (루트의 키)</option></select></div><div class="control-field"><label for="k3">진행한 단계 <output id="k3-out" class="control-value" for="k3">1</output></label><input id="k3" type="range" min="1" max="3" step="1" value="1"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="pair-grid"><div><h3>재귀 보조 메서드</h3><pre id="rec-code" class="code-lines" aria-label="_get 메서드"></pre><svg id="stack-plot" class="topic-plot" viewBox="0 0 400 230" role="img" aria-labelledby="st-title st-desc"><title id="st-title">_get 호출 스택</title><desc id="st-desc">쌓인 _get 호출</desc></svg></div><div><h3>반복문</h3><pre id="loop-code" class="code-lines" aria-label="search 메서드"></pre><svg id="loop-plot" class="topic-plot" viewBox="0 0 400 230" role="img" aria-labelledby="lp-title lp-desc"><title id="lp-title">search의 node 변수</title><desc id="lp-desc">반복마다 바뀐 node 변수</desc></svg></div></div></div><figcaption class="visual-caption">코드의 초록 줄이 이번 단계에서 실행한 줄이다. 왼쪽 아래 상자는 아래에서 위로 쌓인 _get 호출이고 초록 상자가 맨 위 호출이다. 오른쪽 아래 칸은 node 변수가 가리킨 노드를 차례로 적은 것이며 빨간 상자는 None이다.</figcaption></figure>
