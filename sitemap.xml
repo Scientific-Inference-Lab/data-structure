@@ -74,6 +74,11 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/24.%20A%20Matrix%20or%20a%20List/adjacency-lists.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/24.%20A%20Matrix%20or%20a%20List/adjacency-matrices.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/24.%20A%20Matrix%20or%20a%20List/graph-density-and-representation.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/25.%20Where%20to%20Look%20Next/breadth-first-search.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/25.%20Where%20to%20Look%20Next/depth-first-search.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/26.%20What%20Has%20to%20Come%20First/connected-components.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/26.%20What%20Has%20to%20Come%20First/cycle-detection.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/26.%20What%20Has%20to%20Come%20First/topological-ordering.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/00.%20Course%20Goals%20and%20Structure.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/00.%20Intro.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/01.%20Abstract%20Data%20Types.pdf</loc></url>
@@ -124,6 +129,8 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/23.%20Graphs%20and%20Edges.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/24.%20A%20Matrix%20or%20a%20List.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/24.%20Graph%20Representations.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/25.%20Graph%20Traversal.pdf</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/lecture/26.%20Topological%20Ordering.pdf</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/arrays-and-linked-lists.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/arrays.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/asymptotic-growth.html</loc></url>
@@ -135,6 +142,7 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/doubly-linked-lists.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/dynamic-arrays.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/graph-representations.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/graph-traversal.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/graphs-and-edges.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/hash-tables-and-chaining.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/heap-operations.html</loc></url>
@@ -146,6 +154,7 @@
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/open-addressing.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/queues-and-deques.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/stacks.html</loc></url>
+  <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/topological-ordering.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/tree-terminology.html</loc></url>
   <url><loc>https://scientific-inference-lab.github.io/data-structure/practice/tree-traversals.html</loc></url>
 </urlset>

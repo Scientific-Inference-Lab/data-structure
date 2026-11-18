@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+<title>Depth First Search | Data Structure | Pusan National University</title><meta name="description" content="Depth-first search follows a branch as far as possible and uses the recursive call stack to return to the previous branch point."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/25.%20Where%20to%20Look%20Next/depth-first-search.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Depth First Search | Data Structure | Pusan National University"><meta property="og:description" content="Depth-first search follows a branch as far as possible and uses the recursive call stack to return to the previous branch point."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/25.%20Where%20to%20Look%20Next/depth-first-search.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script>
+<style>
+ .dfs-svg .edge{stroke:var(--line-300);stroke-width:4;marker-end:url(#dfs-arrow)}.dfs-svg .edge.is-stack{stroke:var(--pnu-green);stroke-width:8}.dfs-svg .node{fill:var(--white);stroke:var(--pnu-blue);stroke-width:3}.dfs-svg .node.is-stack{fill:var(--pnu-blue-tint);stroke:var(--pnu-green);stroke-width:5}.dfs-svg .node.is-current{fill:var(--pnu-green)}.dfs-svg .node.is-finished{fill:var(--line-200);stroke:var(--ink-600)}.dfs-svg .label{font-weight:800;fill:var(--ink-900)}.dfs-svg .label.is-current{fill:var(--white)}
+ .stack-strip{display:flex;gap:8px;align-items:center;min-height:58px;margin-top:12px;padding:10px 14px;background:var(--white);border:1px solid var(--line-200);border-radius:var(--radius-sm)}.stack-strip strong{margin-right:8px;color:var(--pnu-blue-dark)}.stack-item{display:grid;place-items:center;min-width:44px;height:38px;font-family:var(--mono);font-weight:800;border:2px solid var(--pnu-green);border-radius:5px;background:var(--pnu-blue-tint)}.stack-item:last-child{color:var(--white);background:var(--pnu-green)}.stack-empty{color:var(--ink-600)}
+</style><script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="강의 자료"><a class="nav-tag lecture-pdf-link" href="../lecture/25.%20Graph%20Traversal.pdf" aria-label="Graph Traversal 강의 PDF">Graph Traversal</a></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><h1 class="page-title">Depth First Search</h1><hr class="accent-rule"><p class="page-subtitle">depth-first search(한 갈래를 끝까지 따라간 뒤 되돌아오는 탐색, DFS)는 더 갈 수 없는 정점에 닿으면 재귀 호출 스택이 기억한 위치로 돌아간다.</p></div></section>
+<main id="main-content" class="page-body container"><section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>들어가기</strong><span>처음 보는 이웃으로 재귀 호출해 한 갈래를 깊게 따른다.</span></article><article class="summary-card"><strong>되돌아오기</strong><span>이웃을 모두 처리하면 호출 스택의 이전 정점으로 돌아간다.</span></article><article class="summary-card"><strong>세 상태</strong><span>아직 안 봄, 처리 중, 끝남으로 진행 상태를 구분한다.</span></article></div></section>
+<section class="topic-example"><header class="example-header"><h2 class="section-title">호출 스택이 현재 갈래와 되돌아갈 자리를 함께 기억한다</h2><p class="lead">정점 A~E와 유향 간선 A→B, A→C, B→D, C→D, D→E에서 A를 출발점으로 탐색하고 이웃을 알파벳순으로 본다. 호출이 깊어질 때마다 현재 호출 경로가 길어지고 이웃을 모두 처리한 정점은 끝나며 경로에서 빠진다.</p></header>
+<div class="visual-lab"><div class="visual-controls visual-controls--single"><div class="control-field"><label for="step">실행 단계 <output id="step-out" class="control-value">0</output></label><input id="step" type="range" min="0" max="10" step="1" value="0"></div><div class="action-row"><button id="reset" class="btn btn-outline" type="button">처음 상태</button></div></div>
+<figure class="visual-figure"><div class="visual-frame"><svg class="visual-svg dfs-svg" viewBox="0 0 760 360" role="img" aria-labelledby="dfs-title dfs-desc"><title id="dfs-title">DFS 재귀 호출 단계</title><desc id="dfs-desc">A에서 시작해 A→B, A→C, B→D, C→D, D→E를 따라가는 DFS의 호출 경로와 끝난 정점을 나타낸다.</desc><defs><marker id="dfs-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="var(--line-300)"></path></marker></defs><g><line id="edge-AB" class="edge" x1="130" y1="163" x2="280" y2="92"></line><line id="edge-AC" class="edge" x1="130" y1="197" x2="280" y2="268"></line><line id="edge-BD" class="edge" x1="350" y1="92" x2="490" y2="163"></line><line id="edge-CD" class="edge" x1="350" y1="268" x2="490" y2="197"></line><line id="edge-DE" class="edge" x1="560" y1="180" x2="650" y2="180"></line></g><g id="nodes"></g></svg><div id="stack" class="stack-strip"></div></div><figcaption class="visual-caption">간선은 왼쪽에서 오른쪽으로 향한다. 초록 테두리는 처리 중인 호출 경로, 초록 원은 현재 정점, 회색 원은 이웃 처리를 마친 정점이다. 아래 칸은 호출 스택의 아래에서 위 순서다.</figcaption></figure>
+<div id="readouts" class="visual-readouts" aria-live="polite"></div><p id="note" class="visual-note"></p></div></section>
+<section class="topic-example"><header class="example-header"><h2 class="section-title">명시적 스택은 마지막에 넣은 이웃부터 꺼낸다</h2><p class="lead">같은 그래프에서 A의 이웃 B, C를 순서대로 스택에 넣는다. C가 먼저 나오므로 재귀 DFS와 방문 순서가 달라진다.</p></header>
+<div class="visual-lab"><div class="visual-controls visual-controls--single"><div class="control-field"><label for="stack-step">스택 처리 단계 <output id="stack-step-out" class="control-value">0</output></label><input id="stack-step" type="range" min="0" max="6" step="1" value="0"></div></div>
+<figure class="visual-figure"><div class="visual-frame"><table class="topic-table" aria-label="명시적 스택 DFS 추적"><thead><tr><th scope="col">꺼낸 정점</th><th scope="col">처리</th><th scope="col">처리 뒤 스택</th></tr></thead><tbody id="stack-trace"></tbody></table></div><figcaption class="visual-caption">스택 표기는 아래에서 위 순서다. A에서 B와 C를 넣으면 C가 먼저 나오며, 이미 방문한 D는 다시 꺼내도 처리하지 않는다.</figcaption></figure>
+<div id="stack-readouts" class="visual-readouts" aria-live="polite"></div><p id="stack-note" class="visual-note"></p></div></section>
+<nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="breadth-first-search.html">이전 · Breadth First Search</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../26. What Has to Come First/cycle-detection.html">다음 · Cycle Detection</a></nav></main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function(){"use strict";
+  var order=["A","B","C","D","E"],positions={A:[95,180],B:[315,75],C:[315,285],D:[525,180],E:[685,180]};
+  var edgeId={"A-B":"AB","A-C":"AC","B-D":"BD","C-D":"CD","D-E":"DE"};
+  var events=[
+    {stack:[],done:[],cur:"없음",action:"시작 전"},
+    {stack:["A"],done:[],cur:"A",action:"A에 들어감"},
+    {stack:["A","B"],done:[],cur:"B",action:"B에 들어감"},
+    {stack:["A","B","D"],done:[],cur:"D",action:"D에 들어감"},
+    {stack:["A","B","D","E"],done:[],cur:"E",action:"E에 들어감"},
+    {stack:["A","B","D"],done:["E"],cur:"D",action:"E에서 되돌아옴"},
+    {stack:["A","B"],done:["E","D"],cur:"B",action:"D에서 되돌아옴"},
+    {stack:["A"],done:["E","D","B"],cur:"A",action:"B에서 되돌아옴"},
+    {stack:["A","C"],done:["E","D","B"],cur:"C",action:"C에 들어감"},
+    {stack:["A"],done:["E","D","B","C"],cur:"A",action:"C에서 되돌아옴"},
+    {stack:[],done:["E","D","B","C","A"],cur:"없음",action:"A의 탐색을 마침"}
+  ];
+  var entered={A:1,B:2,D:3,E:4,C:8};
+  var step=document.getElementById("step"),stack=document.getElementById("stack"),nodes=document.getElementById("nodes"),readouts=document.getElementById("readouts"),note=document.getElementById("note");
+  nodes.innerHTML=order.map(function(x){var p=positions[x];return '<circle id="node-'+x+'" class="node" cx="'+p[0]+'" cy="'+p[1]+'" r="36"></circle><text id="label-'+x+'" class="label" x="'+p[0]+'" y="'+(p[1]+6)+'" text-anchor="middle">'+x+'</text>'}).join("");
+  function rd(l,v){return '<div class="visual-readout"><span class="visual-readout-label">'+l+'</span><strong class="visual-readout-value">'+v+'</strong></div>'}
+  function render(){var index=Number(step.value),e=events[index],visit=order.filter(function(x){return entered[x]<=index}).sort(function(a,b){return entered[a]-entered[b]});
+    order.forEach(function(x){var node=document.getElementById("node-"+x);node.classList.toggle("is-stack",e.stack.indexOf(x)>=0);node.classList.toggle("is-current",x===e.cur);node.classList.toggle("is-finished",e.done.indexOf(x)>=0);document.getElementById("label-"+x).classList.toggle("is-current",x===e.cur)});
+    Object.keys(edgeId).forEach(function(pair){var parts=pair.split("-"),active=false;for(var i=0;i<e.stack.length-1;i++){if(e.stack[i]===parts[0]&&e.stack[i+1]===parts[1])active=true}document.getElementById("edge-"+edgeId[pair]).classList.toggle("is-stack",active)});
+    stack.innerHTML='<strong>호출 스택</strong>'+(e.stack.length?e.stack.map(function(x){return '<span class="stack-item">'+x+'</span>'}).join(""):'<span class="stack-empty">비어 있음</span>');
+    document.getElementById("step-out").value=String(index);
+    readouts.innerHTML=rd("지금 사건",e.action)+rd("현재 정점",e.cur)+rd("처리 중 경로",e.stack.length?e.stack.join(" → "):"없음")+rd("발견 순서",visit.length?visit.join(" → "):"아직 없음");
+    note.textContent=index===0?"A에서 재귀 DFS를 시작하기 전에는 모든 정점이 아직 안 본 상태다.":index===10?"발견 순서는 A, B, D, E, C이며 종료 순서는 E, D, B, C, A다.":e.action.indexOf("되돌아")>=0?"현재 정점의 이웃을 모두 처리해 호출 스택의 이전 정점으로 되돌아간다.":"처음 보는 이웃으로 재귀 호출해 현재 갈래를 한 단계 더 깊게 따른다.";
+  }
+  step.addEventListener("input",render);document.getElementById("reset").addEventListener("click",function(){step.value="0";render()});render();
+  var stackEvents=[
+    {pop:"시작 전",work:"A를 넣음",stack:["A"],order:[]},
+    {pop:"A",work:"표시하고 B, C를 넣음",stack:["B","C"],order:["A"]},
+    {pop:"C",work:"표시하고 D를 넣음",stack:["B","D"],order:["A","C"]},
+    {pop:"D",work:"표시하고 E를 넣음",stack:["B","E"],order:["A","C","D"]},
+    {pop:"E",work:"표시, 이웃 없음",stack:["B"],order:["A","C","D","E"]},
+    {pop:"B",work:"표시하고 D를 넣음",stack:["D"],order:["A","C","D","E","B"]},
+    {pop:"D",work:"이미 표시, 건너뜀",stack:[],order:["A","C","D","E","B"]}
+  ];
+  var stackStep=document.getElementById("stack-step");
+  function renderStack(){var k=Number(stackStep.value),e=stackEvents[k];
+    document.getElementById("stack-step-out").value=String(k);
+    document.getElementById("stack-trace").innerHTML=stackEvents.map(function(s,i){return '<tr'+(i===k?' class="is-on" aria-current="step"':'')+'><th scope="row">'+s.pop+'</th><td>'+s.work+'</td><td>['+s.stack.join(", ")+']</td></tr>';}).join("");
+    document.getElementById("stack-readouts").innerHTML=rd("꺼낸 정점",e.pop)+rd("현재 스택",'['+e.stack.join(", ")+']')+rd("방문 순서",e.order.length?e.order.join(" → "):"아직 없음");
+    document.getElementById("stack-note").textContent=k===6?"D는 C와 B의 이웃이라 두 번 스택에 들어간다. 표시 여부를 꺼낼 때 확인하고, 두 번째 D는 건너뛴다. 최종 방문 순서는 A → C → D → E → B다.":k===1?"B를 먼저 넣고 C를 나중에 넣었으므로 다음에는 C가 나온다.":"스택의 맨 위 정점을 꺼낸 뒤 처음 방문한 경우에만 표시하고 그 이웃을 넣는다.";
+  }
+  stackStep.addEventListener("input",renderStack);renderStack();
+}());
+</script></body></html>

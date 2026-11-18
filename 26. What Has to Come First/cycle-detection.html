@@ -1,0 +1,57 @@
+<!doctype html>
+<html lang="ko"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
+<title>Cycle Detection | Data Structure | Pusan National University</title><meta name="description" content="During depth-first search of a directed graph, an edge back to a vertex on the current path reveals a cycle."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/26.%20What%20Has%20to%20Come%20First/cycle-detection.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Cycle Detection | Data Structure | Pusan National University"><meta property="og:description" content="During depth-first search of a directed graph, an edge back to a vertex on the current path reveals a cycle."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/26.%20What%20Has%20to%20Come%20First/cycle-detection.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png"><link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script>
+<style>
+  .cycle-svg [hidden]{display:none}.cycle-svg .edge{stroke:var(--line-300);stroke-width:4;fill:none;marker-end:url(#arrow)}.cycle-svg .edge.is-path{stroke:var(--pnu-green);stroke-width:7;marker-end:url(#arrow-green)}.cycle-svg .edge.is-test{stroke:var(--pnu-red);stroke-width:7;stroke-dasharray:12 8;marker-end:url(#arrow-red)}.cycle-svg .node{fill:var(--white);stroke:var(--pnu-blue);stroke-width:3}.cycle-svg .node.is-active{fill:var(--pnu-blue-tint);stroke:var(--pnu-green);stroke-width:5}.cycle-svg .node.is-finished{fill:var(--line-200);stroke:var(--ink-600)}.cycle-svg .node.is-cycle{fill:var(--alert-050);stroke:var(--pnu-red);stroke-width:5}.cycle-svg .label{font-weight:800;fill:var(--ink-900)}
+  .path-strip{display:flex;gap:8px;align-items:center;min-height:58px;margin-top:12px;padding:10px 14px;background:var(--white);border:1px solid var(--line-200);border-radius:var(--radius-sm)}.path-strip strong{margin-right:8px;color:var(--pnu-blue-dark)}.path-item{display:grid;place-items:center;min-width:44px;height:38px;font-family:var(--mono);font-weight:800;border:2px solid var(--pnu-green);border-radius:5px;background:var(--pnu-blue-tint)}
+</style><script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
+  window.dataLayer = window.dataLayer || [];
+  window.gtag = function () { window.dataLayer.push(arguments); };
+  window.gtag('js', new Date());
+  window.gtag('config', "G-H8EZQ381WH", { content_group: "data-structure", page_type: "topic" });
+  const tag = document.createElement('script');
+  tag.async = true;
+  tag.src = 'https://www.googletagmanager.com/gtag/js?id=G-H8EZQ381WH';
+  document.head.appendChild(tag);
+}</script>
+</head>
+<body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
+<header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="강의 자료"><a class="nav-tag lecture-pdf-link" href="../lecture/26.%20Topological%20Ordering.pdf" aria-label="Topological Ordering 강의 PDF">Topological Ordering</a></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
+<section class="hero topic-hero"><div class="container"><h1 class="page-title">Cycle Detection</h1><hr class="accent-rule"><p class="page-subtitle">유향 그래프를 DFS로 순회할 때 현재 처리 중인 경로의 정점으로 돌아가는 간선을 만나면 사이클이 있다.</p></div></section>
+<main id="main-content" class="page-body container"><section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>아직 안 봄</strong><span>탐색을 시작하지 않은 정점이다.</span></article><article class="summary-card"><strong>처리 중</strong><span>현재 DFS 호출 경로에 들어 있는 정점이다.</span></article><article class="summary-card"><strong>끝남</strong><span>모든 이웃을 확인하고 호출이 끝난 정점이다.</span></article></div></section>
+<section class="topic-example"><header class="example-header"><h2 class="section-title">간선의 도착점 상태가 사이클 판정의 근거다</h2><p class="lead">유향 간선 A→B, A→C, B→D, C→D, D→E를 가진 그래프에서 DFS가 A→B→D→E에 도달한 상태다. E에서 검사하는 간선의 도착점이 처리 중인 정점이면 그 간선이 사이클을 만든다.</p></header>
+<div class="visual-lab"><div class="visual-controls visual-controls--single"><div class="control-field"><label for="edge-case">E에서 추가해 검사할 간선</label><select id="edge-case"><option value="none">간선 없음</option><option value="unseen">E → C · C는 아직 안 봄</option><option value="active">E → B · B는 처리 중</option></select></div><div class="action-row"><button id="reset" class="btn btn-outline" type="button">처음 상태</button></div></div>
+<figure class="visual-figure"><div class="visual-frame"><svg class="visual-svg cycle-svg" viewBox="0 0 760 350" role="img" aria-labelledby="cycle-title cycle-desc"><title id="cycle-title">DFS 경로와 검사 간선</title><desc id="cycle-desc">다섯 정점 그래프에서 A, B, D, E가 처리 중이고 E→B를 더하면 사이클이 생긴다.</desc><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="var(--line-300)"></path></marker><marker id="arrow-green" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="var(--pnu-green)"></path></marker><marker id="arrow-red" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="var(--pnu-red)"></path></marker></defs><path class="edge is-path" d="M130 165 L280 92"></path><path class="edge" d="M130 205 L280 265"></path><path class="edge is-path" d="M350 92 L490 160"></path><path class="edge" d="M350 265 L490 205"></path><path class="edge is-path" d="M560 180 L650 180"></path><path id="edge-active" class="edge is-test" d="M660 145 Q515 5 340 62"></path><path id="edge-unseen" class="edge is-test" d="M660 218 Q520 345 350 292"></path><g id="nodes"></g></svg><div class="path-strip"><strong>현재 DFS 경로</strong><span class="path-item">A</span><span aria-hidden="true">→</span><span class="path-item">B</span><span aria-hidden="true">→</span><span class="path-item">D</span><span aria-hidden="true">→</span><span class="path-item">E</span></div></div><figcaption class="visual-caption">초록선은 현재 DFS 호출 경로다. 빨간 점선은 추가해 검사하는 간선이며, 처리 중인 정점으로 돌아갈 때 사이클을 만든다.</figcaption></figure>
+<div id="readouts" class="visual-readouts" aria-live="polite"></div><p id="note" class="visual-note"></p></div></section>
+<nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../25. Where to Look Next/depth-first-search.html">이전 · Depth First Search</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="topological-ordering.html">다음 · Topological Ordering</a></nav></main>
+<footer class="site-footer">
+  <div class="container footer-inner">
+    <span class="footer-course-code">DS3600082-140</span>
+    <address class="footer-contact" aria-label="강의자 연락처">
+      <span class="footer-contact-label">Contact:</span>
+      <span class="footer-contact-name">YongKyung Oh</span>
+      <span class="footer-contact-email">(<a class="footer-email" href="mailto:yongkyung.oh@pusan.ac.kr">yongkyung.oh@pusan.ac.kr</a>)</span>
+    </address>
+  </div>
+</footer>
+<script>
+(function(){"use strict";
+  var positions={A:[95,185],B:[315,75],C:[315,285],D:[525,185],E:[685,185]};
+  var select=document.getElementById("edge-case"),nodes=document.getElementById("nodes"),readouts=document.getElementById("readouts"),note=document.getElementById("note");
+  var cases={
+    none:{edge:"없음",target:"없음",state:"해당 없음",result:"추가 간선이 없음"},
+    unseen:{edge:"E → C",target:"C",state:"아직 안 봄",result:"C를 따라 계속 탐색"},
+    active:{edge:"E → B",target:"B",state:"처리 중",result:"사이클 있음"}
+  };
+  nodes.innerHTML=Object.keys(positions).map(function(x){var p=positions[x];return '<circle id="node-'+x+'" class="node '+(x==="C"?'':'is-active')+'" cx="'+p[0]+'" cy="'+p[1]+'" r="36"></circle><text class="label" x="'+p[0]+'" y="'+(p[1]+6)+'" text-anchor="middle">'+x+'</text>'}).join("");
+  function rd(l,v){return '<div class="visual-readout"><span class="visual-readout-label">'+l+'</span><strong class="visual-readout-value">'+v+'</strong></div>'}
+  function render(){var key=select.value,s=cases[key],active=key==="active",unseen=key==="unseen";
+    document.getElementById("edge-active").toggleAttribute("hidden",!active);
+    document.getElementById("edge-unseen").toggleAttribute("hidden",!unseen);
+    document.getElementById("node-B").classList.toggle("is-cycle",active);
+    readouts.innerHTML=rd("검사 간선",s.edge)+rd("도착 정점",s.target)+rd("도착점 상태",s.state)+rd("판정",s.result);
+    note.textContent=active?"현재 경로 B → D → E에 E → B가 더해져 B → D → E → B 사이클이 생긴다.":unseen?"E → C 자체는 아직 안 본 정점으로 향한다. 이어서 C → D를 검사하면 처리 중인 D로 돌아가 사이클이 확인된다.":"원래 그래프에서 E는 나가는 간선이 없으며, B → D → E 경로는 E에서 끝난다.";
+  }
+  select.addEventListener("change",render);document.getElementById("reset").addEventListener("click",function(){select.value="none";render()});render();
+}());
+</script></body></html>
