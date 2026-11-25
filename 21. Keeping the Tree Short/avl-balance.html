@@ -34,7 +34,7 @@
 <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="강의 자료"><a class="nav-tag lecture-pdf-link" href="../lecture/21.%20AVL%20Balance.pdf" aria-label="AVL Balance 강의 PDF">강의 PDF</a></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
 <section class="hero topic-hero"><div class="container"><h1 class="page-title">AVL Balance</h1><hr class="accent-rule"><p class="page-subtitle">균형 인수(balance factor) bf(v)는 노드 v의 왼쪽 부분 트리 높이에서 오른쪽 부분 트리 높이를 뺀 값이다. AVL 트리(모든 노드의 균형 인수가 −1·0·1인 BST)는 BST의 ordering invariant(순서 불변식)에 이 높이 균형(height balance) 조건을 더한 트리이며, 이 조건 덕분에 높이가 O(log n)으로 제한된다.</p></div></section>
 <main id="main-content" class="page-body container">
-  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>bf(v) = h(왼쪽) − h(오른쪽)</strong><span>빈 부분 트리의 높이는 −1이다. 양수면 왼쪽이, 음수면 오른쪽이 더 높다.</span></article><article class="summary-card"><strong>ordering invariant와 높이 균형</strong><span>ordering invariant는 키의 자리를, 높이 균형은 트리의 모양을 정한다. 둘 다 지켜야 한다.</span></article><article class="summary-card"><strong>정확히 같을 필요는 없다</strong><span>모든 노드의 차이가 0이면 2^(h+1) − 1개만 담을 수 있지만, 1 이하를 허용하면 임의의 n을 담는다.</span></article><article class="summary-card"><strong>저장해 두기</strong><span>노드마다 높이나 균형 인수를 저장하면 균형 확인이 O(1)이다.</span></article></div></section>
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>bf(v) = h(왼쪽) − h(오른쪽)</strong><span>빈 부분 트리의 높이는 −1이다. 양수면 왼쪽이, 음수면 오른쪽이 더 높다.</span></article><article class="summary-card"><strong>ordering invariant와 높이 균형</strong><span>ordering invariant는 키의 자리를, 높이 균형은 트리의 모양을 정한다. 둘 다 지켜야 한다.</span></article><article class="summary-card"><strong>정확히 같을 필요는 없다</strong><span>모든 노드의 차이가 0이면 2^(h+1) − 1개만 담을 수 있지만, 1 이하를 허용하면 임의의 n을 담는다.</span></article><article class="summary-card"><strong>저장해 두기</strong><span>높이나 균형 인수를 저장하면 한 노드의 균형을 O(1)에 확인할 수 있다.</span></article></div></section>
 
   <section class="topic-example">
     <header class="example-header"><h2 class="section-title">모든 노드의 균형 인수가 −1, 0, 1 가운데 하나여야 AVL 트리다</h2><p class="lead">네 BST 가운데 균형 인수가 −1, 0, 1을 벗어난 노드가 하나라도 있는 트리는 AVL 트리가 아니다.</p></header>
@@ -56,7 +56,7 @@
     </div>
   </section>
 
-  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../21. Keeping the Tree Short/skewed-bsts.html">이전 · Skewed Bsts</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../21. Keeping the Tree Short/avl-imbalance-detection.html">다음 · AVL Imbalance Detection</a></nav>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../21. Keeping the Tree Short/skewed-bsts.html">이전 · Skewed BSTs</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../21. Keeping the Tree Short/avl-imbalance-detection.html">다음 · AVL Imbalance Detection</a></nav>
 </main>
 <footer class="site-footer">
   <div class="container footer-inner">
@@ -112,7 +112,7 @@
     svg.querySelector("desc").textContent = "높이 " + h + ", 최소 노드 수 " + N[h];
     var note = h === 0 ? "높이 0인 AVL 트리는 노드 하나다. N(0) = 1이다."
       : h === 1 ? "높이 1이면 루트와 자식 노드 하나로 N(1) = 2다. 루트의 균형 인수는 +1이다."
-      : "높이 " + h + "인 가장 성긴 AVL 트리는 루트 아래에 높이 " + (h - 1) + "와 " + (h - 2) + "인 가장 성긴 트리를 붙인 모양이라 N(" + h + ") = N(" + (h - 1) + ") + N(" + (h - 2) + ") + 1 = " + N[h - 1] + " + " + N[h - 2] + " + 1 = " + N[h] + "이다. N(h) + 1 = " + (N[h] + 1) + "은 피보나치 수처럼 커지므로 노드 수가 높이에 대해 지수적으로 늘고, 뒤집어 말하면 n개를 담은 AVL 트리의 높이는 약 1.44 log₂ n을 넘지 않는다.";
+      : "높이 " + h + "인 가장 성긴 AVL 트리는 루트 아래에 높이 " + (h - 1) + "와 " + (h - 2) + "인 가장 성긴 트리를 붙인 모양이라 N(" + h + ") = N(" + (h - 1) + ") + N(" + (h - 2) + ") + 1 = " + N[h - 1] + " + " + N[h - 2] + " + 1 = " + N[h] + "이다. N(h) + 1 = " + (N[h] + 1) + "은 피보나치 수처럼 커지므로 노드 수가 높이에 대해 지수적으로 늘고, 뒤집어 말하면 n개를 담은 AVL 트리의 높이는 O(log n)이다.";
     note = note.replace("높이 " + (h - 1) + "와 ", "높이 " + pj(h - 1, "과") + " ").replace("N(h) + 1 = " + (N[h] + 1) + "은", "N(h) + 1 = " + pj(N[h] + 1, "은"));
     show(2, [["높이 h", String(h)], ["최소 노드 수 N(h)", String(N[h])], ["N(h) + 1", String(N[h] + 1)], ["모든 층이 가득 찬 트리의 노드 수", String(Math.pow(2, h + 1) - 1)]], note);
   }

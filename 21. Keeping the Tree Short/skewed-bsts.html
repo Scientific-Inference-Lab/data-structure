@@ -2,7 +2,7 @@
 <html lang="ko">
 <head>
   <meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="theme-color" content="#ffffff"><meta name="color-scheme" content="light">
-  <title>Skewed Bsts | Data Structure | Pusan National University</title><meta name="description" content="A binary search tree can grow to height n - 1 under sorted insertion, while balanced trees maintain logarithmic height and operation costs independently of insertion order."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/skewed-bsts.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Skewed Bsts | Data Structure | Pusan National University"><meta property="og:description" content="A binary search tree can grow to height n - 1 under sorted insertion, while balanced trees maintain logarithmic height and operation costs independently of insertion order."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/skewed-bsts.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
+  <title>Skewed BSTs | Data Structure | Pusan National University</title><meta name="description" content="A binary search tree can grow to height n - 1 under sorted insertion, while balanced trees maintain logarithmic height and operation costs independently of insertion order."><link rel="canonical" href="https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/skewed-bsts.html"><meta property="og:type" content="website"><meta property="og:site_name" content="Data Structure"><meta property="og:title" content="Skewed BSTs | Data Structure | Pusan National University"><meta property="og:description" content="A binary search tree can grow to height n - 1 under sorted insertion, while balanced trees maintain logarithmic height and operation costs independently of insertion order."><meta property="og:url" content="https://scientific-inference-lab.github.io/data-structure/21.%20Keeping%20the%20Tree%20Short/skewed-bsts.html"><meta name="twitter:card" content="summary"><meta property="og:locale" content="ko_KR"><link rel="icon" type="image/png" href="../assets/favicon.png">
   <link rel="stylesheet" href="../assets/pnu-theme.css"><link rel="stylesheet" href="../assets/topic-visual-shell.css"><script src="../assets/topic-visual-shell.js" defer></script><link rel="stylesheet" href="../assets/ds-structures.css">
   <style>
     .topic-plot .small{font-size:12px;fill:var(--ink-600)}
@@ -34,9 +34,9 @@
 <body class="visual-topic topic-skewed-bsts">
 <a class="skip-link" href="#main-content">본문으로 이동</a>
 <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="강의 자료"><a class="nav-tag lecture-pdf-link" href="../lecture/21.%20AVL%20Balance.pdf" aria-label="AVL Balance 강의 PDF">AVL Balance</a></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-<section class="hero topic-hero"><div class="container"><h1 class="page-title">Skewed Bsts</h1><hr class="accent-rule"><p class="page-subtitle">BST의 탐색·삽입·삭제 비용은 높이가 정하며, 정렬된 값이 차례로 들어오면 편향 트리(skewed tree)가 되어 높이가 n − 1까지 커진다. 삽입 순서를 통제할 수 없는 상황에서도 균형 트리(balanced tree)는 삽입·삭제 뒤 높이를 O(log n)으로 유지해 입력 순서와 무관한 보장을 준다.</p></div></section>
+<section class="hero topic-hero"><div class="container"><h1 class="page-title">Skewed BSTs</h1><hr class="accent-rule"><p class="page-subtitle">BST의 탐색·삽입·삭제 비용은 높이가 정하며, 정렬된 값이 차례로 들어오면 편향 트리(skewed tree)가 되어 높이가 n − 1까지 커진다. 삽입 순서를 통제할 수 없는 상황에서도 균형 트리(balanced tree)는 삽입·삭제 뒤 높이를 O(log n)으로 유지해 입력 순서와 무관한 보장을 준다.</p></div></section>
 <main id="main-content" class="page-body container">
-  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>높이와 비용</strong><span>고르게 퍼진 트리는 높이가 약 log₂ n이라 O(log n), 한쪽으로 기운 트리는 n − 1이라 O(n)이다.</span></article><article class="summary-card"><strong>통제할 수 없는 입력</strong><span>입력을 미리 섞을 수 없다면 삽입할 때 트리가 스스로 균형을 유지해야 한다.</span></article><article class="summary-card"><strong>균형 유지의 값</strong><span>노드마다 균형 정보를 저장하고, 삽입에서 자리를 찾은 뒤 재균형까지 한다.</span></article></div></section>
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>높이와 비용</strong><span>고르게 퍼진 트리는 높이가 약 log₂ n이라 O(log n), 한쪽으로 기운 트리는 n − 1이라 O(n)이다.</span></article><article class="summary-card"><strong>통제할 수 없는 입력</strong><span>입력 순서와 무관하게 탐색의 최악 비용을 O(log n)으로 보장하려면 높이를 O(log n)으로 유지한다.</span></article><article class="summary-card"><strong>균형 유지의 값</strong><span>노드마다 균형 정보를 저장하고, 삽입에서 자리를 찾은 뒤 재균형까지 한다.</span></article></div></section>
 
   <section class="topic-example">
     <header class="example-header"><h2 class="section-title">같은 키도 정렬된 순서로 넣으면 한 줄로 늘어선다</h2><p class="lead">1부터 15까지의 키를 여러 순서로 BST에 넣는다. 삽입 순서에 따라 트리 모양과 높이, 가장 깊은 키를 찾을 때 방문하는 노드 수가 달라진다.</p></header>
@@ -49,10 +49,10 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">편향 BST의 높이는 n에 비례하지만 균형 트리는 로그로 묶인다</h2><p class="lead">원소 수 n에서 편향 BST의 높이는 n − 1, 가장 낮은 트리의 높이는 ⌊log₂ n⌋, AVL 트리 높이의 상계는 약 1.44 log₂ n이다.</p></header>
+    <header class="example-header"><h2 class="section-title">편향 BST의 높이는 n에 비례하지만 균형 트리는 로그로 묶인다</h2><p class="lead">원소 수 n에서 편향 BST의 높이는 n − 1, 가장 낮은 트리의 높이는 ⌊log₂ n⌋, AVL 트리의 최대 높이는 높이별 최소 노드 수 N(h)에서 N(h) ≤ n인 가장 큰 h다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="e2">원소 수 n (로그 눈금) <output id="e2-out" class="control-value" for="e2">1,000</output></label><input id="e2" type="range" min="1" max="6" step="0.5" value="3"></div></div>
-      <figure class="visual-figure"><div class="visual-frame"><svg id="hb-plot" class="topic-plot" viewBox="0 0 900 340" role="img" aria-labelledby="hb-title hb-desc"><title id="hb-title">원소 수와 높이</title><desc id="hb-desc">편향 BST, AVL 상계, 가장 낮은 트리의 높이</desc></svg></div><figcaption class="visual-caption">가로축은 로그 눈금의 n, 세로축은 로그 눈금의 높이다. 빨간 실선이 편향 BST, 초록 점선이 AVL 트리 높이의 상계, 파란 실선이 가장 낮은 트리이고 세 점이 현재 n이다.</figcaption></figure>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="hb-plot" class="topic-plot" viewBox="0 0 900 340" role="img" aria-labelledby="hb-title hb-desc"><title id="hb-title">원소 수와 높이</title><desc id="hb-desc">편향 BST, AVL 최대 높이, 가장 낮은 트리의 높이</desc></svg></div><figcaption class="visual-caption">가로축은 로그 눈금의 n, 세로축은 로그 눈금의 높이다. 빨간 실선이 편향 BST, 초록 점선이 AVL 트리의 최대 높이, 파란 실선이 가장 낮은 트리이고 세 점이 현재 n이다.</figcaption></figure>
       <div id="read-2" class="visual-readouts" aria-live="polite"></div>
       <p id="note-2" class="visual-note"></p>
     </div>
@@ -104,17 +104,26 @@
     var X = function (le) { return 80 + (le - 1) / 5 * 760; }, Y = function (v) { return 300 - Math.log10(Math.max(v, 1)) / 6 * 270; };
     [1, 10, 100, 1000, 10000, 100000, 1000000].forEach(function (v) { h += '<line class="grid" x1="80" y1="' + Y(v) + '" x2="840" y2="' + Y(v) + '"/><text class="small" x="72" y="' + (Y(v) + 4) + '" text-anchor="end">' + v.toLocaleString("en-US") + "</text>"; });
     [1, 2, 3, 4, 5, 6].forEach(function (le) { h += '<text class="small" x="' + X(le) + '" y="320" text-anchor="middle">' + Math.pow(10, le).toLocaleString("en-US") + "</text>"; });
-    var skew = function (m) { return m - 1; }, avl = function (m) { return Math.floor(1.44 * Math.log2(m)); }, opt = function (m) { return Math.floor(Math.log2(m)); };
+    var skew = function (m) { return m - 1; }, opt = function (m) { return Math.floor(Math.log2(m)); };
+    function avl(m) {
+      var height = 0, previous = 0, minimum = 1;
+      while (previous + minimum + 1 <= m) {
+        var next = previous + minimum + 1;
+        previous = minimum;
+        minimum = next;
+        height += 1;
+      }
+      return height;
+    }
     var p1 = "", p2 = "", p3 = "";
     for (var i = 0; i <= 100; i++) { var le = 1 + i * 0.05, m = Math.round(Math.pow(10, le)); p1 += (i ? "L" : "M") + X(le).toFixed(1) + " " + Y(skew(m)).toFixed(1); p2 += (i ? "L" : "M") + X(le).toFixed(1) + " " + Y(avl(m)).toFixed(1); p3 += (i ? "L" : "M") + X(le).toFixed(1) + " " + Y(opt(m)).toFixed(1); }
     h += '<path class="c-bst" d="' + p1 + '"/><path class="c-avl" d="' + p2 + '"/><path class="c-opt" d="' + p3 + '"/><line class="guide" x1="' + X(e) + '" y1="30" x2="' + X(e) + '" y2="300"/>';
     h += '<circle class="dot" cx="' + X(e) + '" cy="' + Y(skew(n)) + '" r="6" style="fill:var(--alert-700)"/><circle class="dot" cx="' + X(e) + '" cy="' + Y(avl(n)) + '" r="6" style="fill:var(--pnu-green)"/><circle class="dot" cx="' + X(e) + '" cy="' + Y(opt(n)) + '" r="6" style="fill:var(--pnu-blue)"/>';
-    h += '<text class="lbl" x="' + X(4.6) + '" y="' + (Y(skew(Math.pow(10, 4.6))) - 10) + '">편향 BST</text><text class="lbl" x="' + X(5.2) + '" y="' + (Y(1.44 * Math.log2(Math.pow(10, 5.2))) - 12) + '">AVL 상계</text><text class="lbl" x="' + X(5.2) + '" y="' + (Y(Math.log2(Math.pow(10, 5.2))) + 22) + '">가장 낮은 트리</text>';
+    h += '<text class="lbl" x="' + X(4.6) + '" y="' + (Y(skew(Math.pow(10, 4.6))) - 10) + '">편향 BST</text><text class="lbl" x="' + X(5.2) + '" y="' + (Y(avl(Math.round(Math.pow(10, 5.2)))) - 12) + '">AVL 최대 높이</text><text class="lbl" x="' + X(5.2) + '" y="' + (Y(Math.log2(Math.pow(10, 5.2))) + 22) + '">가장 낮은 트리</text>';
     svg.innerHTML = h;
-    svg.querySelector("desc").textContent = "n = " + n + ", 편향 BST " + skew(n) + ", AVL 상계 " + avl(n) + ", 가장 낮은 트리 " + opt(n);
-    var note = "n = " + n.toLocaleString("en-US") + "이면 편향 BST의 높이는 " + skew(n).toLocaleString("en-US") + "이지만 AVL 트리는 높이가 약 " + avl(n) + "을 넘지 않고, 가장 낮은 트리는 " + opt(n) + "이다." + (n === 1000 || n === 1000000 ? " 강의 표의 " + (n === 1000 ? "14 대 999" : "28 대 999,999") + "가 이 경우다." : "") + " 균형 트리는 가장 낮은 높이의 상수 배 안쪽에 머물러, 어떤 순서로 넣어도 탐색·삽입·삭제가 O(log n)이다.";
-    note = note.replace("약 " + avl(n) + "을", "약 " + pj(avl(n), "을"));
-    show(2, [["n", n.toLocaleString("en-US")], ["편향 BST의 높이", skew(n).toLocaleString("en-US")], ["AVL 높이 상계", "약 " + avl(n)], ["가장 낮은 높이", String(opt(n))]], note);
+    svg.querySelector("desc").textContent = "n = " + n + ", 편향 BST " + skew(n) + ", AVL 최대 높이 " + avl(n) + ", 가장 낮은 트리 " + opt(n);
+    var note = "n = " + n.toLocaleString("en-US") + "이면 편향 BST의 높이는 " + skew(n).toLocaleString("en-US") + "이지만 AVL 트리의 높이는 최대 " + avl(n) + "이고, 가장 낮은 트리는 " + opt(n) + "이다." + (n === 1000 || n === 1000000 ? " 강의 표의 " + (n === 1000 ? "13 대 999" : "27 대 999,999") + "가 이 경우다." : "") + " 균형 트리는 가장 낮은 높이의 상수 배 안쪽에 머물러, 어떤 순서로 넣어도 탐색·삽입·삭제가 O(log n)이다.";
+    show(2, [["n", n.toLocaleString("en-US")], ["편향 BST의 높이", skew(n).toLocaleString("en-US")], ["AVL 최대 높이", String(avl(n))], ["가장 낮은 높이", String(opt(n))]], note);
   }
 
   $("o1").addEventListener("change", renderSk); $("k1").addEventListener("input", renderSk); $("e2").addEventListener("input", renderHb);

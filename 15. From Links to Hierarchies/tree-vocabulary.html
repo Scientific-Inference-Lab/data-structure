@@ -52,7 +52,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">깊이는 루트에서 아래로, 높이는 가장 먼 단말 노드에서 위로 센다</h2><p class="lead">노드마다 루트에서 내려오는 경로와 가장 먼 단말 노드까지 내려가는 경로가 다르며 두 경로의 연결 수가 각각 깊이와 높이다.</p></header>
+    <header class="example-header"><h2 class="section-title">깊이와 높이는 기준이 되는 경로가 다르다</h2><p class="lead">노드마다 루트에서 내려오는 경로와 가장 먼 단말 노드까지 내려가는 경로가 다르며 두 경로의 연결 수가 각각 깊이와 높이다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="pick2">노드</label><select id="pick2"></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="dh-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="dh-title dh-desc"><title id="dh-title">깊이와 높이</title><desc id="dh-desc">루트에서 노드까지의 경로와 노드에서 가장 먼 단말 노드까지의 경로</desc></svg></div><figcaption class="visual-caption">파란 굵은 연결이 루트에서 고른 노드까지의 경로이고 그 수가 깊이다. 초록 굵은 연결이 고른 노드에서 가장 먼 단말 노드까지의 경로이고 그 수가 높이다. 왼쪽 숫자는 각 층의 깊이다.</figcaption></figure>
@@ -62,7 +62,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">시작점이 하나이고 갈래가 다시 합쳐지지 않아야 트리다</h2><p class="lead">연결 모양이 트리인지는 부모 노드가 없는 시작 노드의 수와 위쪽 연결이 둘인 노드의 유무, 시작점에서 D까지 가는 경로 수로 판정한다.</p></header>
+    <header class="example-header"><h2 class="section-title">시작점이 하나이고 갈래가 다시 합쳐지지 않아야 트리다</h2><p class="lead">아래 네 그림에서 루트 후보가 몇 개인지, 부모가 둘인 노드가 있는지, 시작점에서 D까지 경로가 몇 개인지 비교한다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="shape">연결 모양</label><select id="shape"><option value="tree">여러 갈래로 나뉘는 모양</option><option value="chain">한 줄로 이어진 모양</option><option value="merge">갈래가 D에서 다시 합쳐지는 모양</option><option value="forest">시작점이 둘인 모양</option></select></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="check-plot" class="topic-plot" viewBox="0 0 900 330" role="img" aria-labelledby="ck-title ck-desc"><title id="ck-title">트리인지 확인하기</title><desc id="ck-desc">연결 모양에 따른 시작 노드와 위쪽 연결</desc></svg></div><figcaption class="visual-caption">화살표는 위에서 아래로 가는 연결이다. 빨간 원과 빨간 점선 연결은 트리의 조건을 어기는 노드와 연결이다.</figcaption></figure>
@@ -143,7 +143,7 @@
     svg.querySelector("desc").textContent = u + " 노드의 깊이 " + d + ", 높이 " + ht;
     show(2, [["깊이", d + " (" + up.join(" → ") + ")"], ["높이", ht + " (" + down.join(" → ") + ")"], ["트리의 높이", "루트 A의 높이 " + height("A")]],
       d === 0 ? "A는 루트라 깊이가 0이다. A에서 가장 먼 단말 노드까지 " + down.join(" → ") + "로 연결 " + ht + "개를 지나므로 트리의 높이는 " + ht + "이다."
-        : ht === 0 ? pj(u, "은") + " 단말 노드라 높이가 0이고, 루트에서 " + up.join(" → ") + "로 연결 " + d + "개를 지나므로 깊이는 " + d + "이다. 같은 트리 안에서도 깊이와 높이는 노드마다 다르다."
+        : ht === 0 ? pj(u, "은") + " 단말 노드라 높이가 0이고, 루트에서 " + up.join(" → ") + "로 연결 " + d + "개를 지나므로 깊이는 " + d + "이다. 단말 노드의 깊이는 루트로부터 얼마나 떨어져 있는지에 따라 달라진다."
         : pj(u, "은") + " 루트에서 연결 " + d + "개 아래에 있어 깊이 " + d + ", 가장 먼 단말 노드 " + down[down.length - 1] + "까지 연결 " + ht + "개라 높이 " + ht + "이다. 깊이는 부모 노드의 깊이보다 1 크고, 높이는 자식 노드들의 높이 가운데 가장 큰 값보다 1 크다.");
   }
 

@@ -40,7 +40,7 @@
   <main id="main-content" class="page-body container">
     <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>첫 원소 칸 j</strong><span>논리 순서에서 첫 원소가 들어 있는 물리 칸이다.</span></article><article class="summary-card"><strong>(j + i) mod 용량</strong><span>i번째 원소가 들어 있는 실제 칸이다.</span></article><article class="summary-card"><strong>다음 추가 칸</strong><span>(j + n) mod 용량 칸에 새 원소를 쓴다.</span></article></div></section>
     <section class="topic-example">
-      <header class="example-header"><h2 class="section-title">뒤에 추가(enqueue)와 앞에서 삭제(dequeue)는 원소를 옮기지 않고 j와 n만 바꾼다</h2><p class="lead">enqueue는 다음 추가 칸에 쓰고 원소 수 n을 늘리며 dequeue는 j를 다음 칸으로 옮기고 n을 줄일 뿐 남은 원소는 제자리에 있다.</p></header>
+      <header class="example-header"><h2 class="section-title">여유 칸에 추가하거나 앞에서 삭제할 때 기존 원소는 제자리에 있다</h2><p class="lead">뒤에 추가(enqueue)는 다음 빈 칸에 쓰고 n을 늘린다. 앞에서 삭제(dequeue)는 j를 다음 칸으로 옮기고 n을 줄인다.</p></header>
       <div class="visual-lab">
         <div class="visual-controls visual-controls--single"><div class="action-row"><button class="btn" id="enq" type="button">enqueue(H)</button><button class="btn btn-outline" id="deq" type="button">dequeue</button><button class="btn btn-outline" id="reset" type="button">0번 칸으로 넘어간 상태</button><button class="btn btn-outline" id="empty" type="button">빈 상태</button><button class="btn btn-outline" id="full" type="button">가득 찬 상태</button></div></div>
         <p id="full-note" class="control-reason" hidden>용량 6이 모두 찼다. 실제 원형 배열은 더 큰 배열을 만들어 j부터 읽은 순서대로 0번 칸부터 옮기고 j를 0으로 되돌린다.</p>
@@ -83,14 +83,15 @@
         queue.values.forEach((value, offset) => {
           physical[(queue.front + offset) % capacity] = value;
         });
+        const full = queue.values.length === capacity;
         const logical = Math.min(Number($('i').value), Math.max(0, queue.values.length - 1));
         const focused = queue.values.length ? (queue.front + logical) % capacity : -1;
-        const cell = (value, index) => '<div class="cell ' + (value ? 'on ' : '') + (queue.values.length && index === queue.front ? 'front ' : '') + (index === rear() ? 'rear ' : '') + (index === focused ? 'focus' : '') + '"><small>' + index + '</small><br><strong>' + (value || '빈 칸') + '</strong></div>';
+        const cell = (value, index) => '<div class="cell ' + (value ? 'on ' : '') + (queue.values.length && index === queue.front ? 'front ' : '') + (!full && index === rear() ? 'rear ' : '') + (index === focused ? 'focus' : '') + '"><small>' + index + '</small><br><strong>' + (value || '빈 칸') + '</strong></div>';
         $('ring').innerHTML = physical.map(cell).join('');
         $('strip').innerHTML = physical.map(cell).join('');
         $('ring').setAttribute('aria-label', '원형 배열의 물리 상태 ' + physical.map(value => value || '빈 칸').join(', '));
         $('strip').setAttribute('aria-label', '물리 배열 ' + physical.map(value => value || '빈 칸').join(', '));
-        $('state').innerHTML = RD('첫 원소 칸 j', queue.front) + RD('다음 추가 칸', rear()) + RD('n / 용량', queue.values.length + ' / ' + capacity + (queue.values.length === 0 ? ' · 비어 있음' : queue.values.length === capacity ? ' · 가득 참' : '')) + RD('논리 순서', queue.values.join(' → ') || '비어 있음');
+        $('state').innerHTML = RD(queue.values.length ? '첫 원소 칸 j' : '시작 위치 j', queue.front) + RD('다음 추가 칸', full ? '없음' : rear()) + RD('n / 용량', queue.values.length + ' / ' + capacity + (queue.values.length === 0 ? ' · 비어 있음' : queue.values.length === capacity ? ' · 가득 참' : '')) + RD('논리 순서', queue.values.join(' → ') || '비어 있음');
         $('i').disabled = !queue.values.length;
         $('i').max = Math.max(0, queue.values.length - 1);
         $('i').value = logical;
@@ -98,7 +99,7 @@
         $('map').innerHTML = queue.values.map((value, index) => '<tr class="' + (index === logical ? 'focus' : '') + '"><td>' + index + '</td><td>' + ((queue.front + index) % capacity) + '</td><td>' + value + '</td></tr>').join('');
         $('formula').textContent = queue.values.length ? '(' + queue.front + ' + ' + logical + ') mod ' + capacity + ' = ' + focused : '빈 배열에는 논리 원소가 없다.';
         $('map-read').innerHTML = queue.values.length ? RD('논리 인덱스 i', logical) + RD('물리 칸', focused) + RD('값', queue.values[logical]) : RD('논리 인덱스 i', '없음') + RD('물리 칸', '없음');
-        $('map-live').textContent = queue.values.length ? '논리 인덱스 ' + logical + '의 ' + J(queue.values[logical], '은') + ' (' + queue.front + ' + ' + logical + ') mod ' + capacity + ' = ' + focused + '이므로 물리 인덱스 ' + focused + '에 있다.' : '공유한 원형 배열이 비어 있어 대응하는 물리 인덱스가 없다.';
+        $('map-live').textContent = queue.values.length ? '논리 인덱스 ' + logical + '의 ' + J(queue.values[logical], '은') + ' (' + queue.front + ' + ' + logical + ') mod ' + capacity + ' = ' + focused + '이므로 물리 인덱스 ' + focused + '에 있다.' : '배열이 비어 있어 대응하는 물리 인덱스가 없다.';
         $('enq').disabled = queue.values.length === capacity;
         $('deq').disabled = !queue.values.length;
         $('enq').textContent = queue.values.length === capacity ? 'enqueue 불가' : 'enqueue(' + String.fromCharCode(queue.nextCode) + ')';

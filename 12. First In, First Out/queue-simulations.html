@@ -124,7 +124,7 @@
     $("pr-table").innerHTML = '<thead><tr><th scope="col">작업</th><th scope="col">도착 aₖ</th><th scope="col">처리 시간</th><th scope="col">시작 sₖ</th><th scope="col">대기 wₖ</th></tr></thead><tbody>' + rows + "</tbody>";
     var avg = waits.length ? (waits.reduce(function (a, b) { return a + b; }, 0) / waits.length).toFixed(2) : "·";
     show(2, [["처리 중", r.busy ? r.busy.id : "없음"], ["큐에 남은 작업", r.q.length + "개"], ["시작한 작업의 평균 대기", avg]],
-      "t = " + T + "에서 " + (r.busy ? pj(r.busy.id, "을") + " 처리하고 있고 " : "프린터가 비어 있고 ") + "큐에 " + r.q.length + "개가 기다린다. 먼저 도착한 작업부터 dequeue해 시작하므로 늦게 온 작업일수록 앞 작업이 끝날 때까지 기다린다. 한 번의 결과보다 여러 번 실행한 평균과 큐에 남은 작업 수를 함께 본다.");
+      "t = " + T + "에서 " + (r.busy ? pj(r.busy.id, "을") + " 처리하고 있고 " : "프린터가 비어 있고 ") + "큐에 " + r.q.length + "개가 기다린다. 먼저 도착한 작업부터 꺼낸다. 대기 시간은 도착했을 때 앞에 남은 작업량에 따라 달라진다. 한 번의 결과보다 여러 번 실행한 평균과 큐에 남은 작업 수를 함께 본다.");
   }
   on("pass", function () { hp.reset(); }); on("tt", renderPrint);
   hp.reset(); renderPrint();

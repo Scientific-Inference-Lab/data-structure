@@ -28,7 +28,7 @@
   <section class="topic-example"><header class="example-header"><h2 class="section-title">필요한 연산이 ADT 선택을 가른다</h2><p class="lead">요구사항마다 필요한 연산이 다르고 그 연산을 직접 제공하는 ADT도 다르다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="task">업무 요구</label><select id="task"><option value="list">세 번째 원소를 읽고 둘째 위치에 값을 넣는다</option><option value="uset">회원 번호 7이 등록되어 있는지 확인한다</option><option value="sset">6시 이후(6시 포함) 가장 이른 일정을 찾는다</option><option value="stack">가장 최근 작업을 취소한다</option><option value="queue">가장 먼저 접수한 요청을 처리한다</option><option value="pq">가장 긴급한 요청을 먼저 처리한다</option></select></div></div>
-      
+
       <figure class="visual-figure"><div class="visual-frame" role="region" aria-label="ADT 연산 비교표" tabindex="0"><table class="matrix"><thead><tr><th>필요한 연산</th><th>리스트</th><th>USet</th><th>SSet</th><th>스택</th><th>큐</th><th>우선순위 큐</th></tr></thead><tbody>
         <tr data-row="list"><th>위치 i 조회·삽입</th><td class="supports">get(i), add(i,x)</td><td>해당 없음</td><td>해당 없음</td><td>해당 없음</td><td>해당 없음</td><td>해당 없음</td></tr>
         <tr data-row="uset"><th>같은 값 또는 없음</th><td>해당 없음</td><td class="supports">find(x)</td><td>다른 의미의 find</td><td>해당 없음</td><td>해당 없음</td><td>해당 없음</td></tr>
@@ -49,7 +49,7 @@
       <article class="call-card" data-card="stack"><strong>스택 [3, 7, 10]</strong><code>pop() → 10</code><span>가장 최근 원소</span></article>
       <article class="call-card" data-card="queue"><strong>큐 [3, 7, 10]</strong><code>dequeue() → 3</code><span>가장 먼저 들어온 원소</span></article>
       <article class="call-card" data-card="pq"><strong>우선순위 큐 {3, 7, 10}</strong><code>remove() → 3</code><span>숫자가 작을수록 우선할 때 가장 높은 우선순위</span></article>
-    </div><p class="visual-note">저장된 값보다 필요한 반환값, 위치 조건, 순서 조건이 ADT 선택을 결정한다. Python의 <code>list</code>도 <code>pop()</code>을 부르면 스택처럼, <code>deque</code>의 <code>popleft()</code>를 부르면 큐처럼 쓰인다. 자료형 이름만으로 ADT를 단정할 수 없다.</p></div>
+    </div><p class="visual-note">저장된 값보다 필요한 반환값, 위치 조건, 순서 조건이 ADT 선택을 결정한다. Python의 <code>list</code>에 뒤로만 추가하고 <code>pop()</code>으로 꺼내면 스택 순서다. <code>deque</code>에 뒤로만 추가하고 <code>popleft()</code>로 꺼내면 큐 순서다. 자료형 이름만으로 ADT를 단정할 수 없다.</p></div>
   </section>
   <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="adt-specifications.html">이전 · ADT Specifications</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../02. Interfaces/interface-and-specification.html">다음 · Interface and Specification</a></nav>
 </main><footer class="site-footer">

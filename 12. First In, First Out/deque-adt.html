@@ -104,7 +104,7 @@
       return cell(c, now ? (bad === pairIdx ? "is-alert" : "is-on") : used ? "is-grave" : "is-x", j);
     }).join("") + '<span class="ds-row-label">← 뒤쪽</span>';
     var remain = w.slice(upto, L - upto);
-    var verdict = bad >= 0 ? "회문 아님" : k === mx ? "회문" : "비교 중";
+    var verdict = bad >= 0 ? "회문 아님" : k === mx ? "회문" : k ? "비교 중" : "시작 전";
     show(2, [["방금 비교한 쌍", upto ? w[upto - 1] + " · " + w[L - upto] : "없음"], ["덱에 남은 문자", remain || "없음"], ["판정", verdict]],
       bad >= 0 ? "remove_front의 " + pj(w[bad], "과") + " remove_rear의 " + pj(w[L - 1 - bad], "이") + " 달라 즉시 회문이 아니라고 판정한다."
         : k === mx ? "양 끝에서 꺼낸 쌍이 모두 같았고 남은 문자는 " + (remain ? "가운데 " + remain + " 하나" : "없다") + ". 끝까지 같으므로 회문이다."

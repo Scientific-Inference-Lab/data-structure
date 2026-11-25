@@ -21,9 +21,9 @@
 <body class="visual-topic topic-queue-adt">
 <a class="skip-link" href="#main-content">본문으로 이동</a>
 <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="강의 자료"><a class="nav-tag lecture-pdf-link" href="../lecture/12.%20Queues%20and%20Deques.pdf" aria-label="Queues and Deques 강의 PDF">Queues and Deques</a></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-<section class="hero topic-hero"><div class="container"><h1 class="page-title">Queue ADT</h1><hr class="accent-rule"><p class="page-subtitle">큐(queue)는 뒤쪽(rear)에 넣고 앞쪽(front)에서 꺼내 먼저 넣은 값을 먼저 꺼내는 FIFO ADT다. 원형 큐(circular queue)는 배열의 앞 원소를 옮기지 않고 (j + i) mod m으로 위치를 계산해 두 연산을 O(1)로 만든다.</p></div></section>
+<section class="hero topic-hero"><div class="container"><h1 class="page-title">Queue ADT</h1><hr class="accent-rule"><p class="page-subtitle">큐(queue)는 뒤쪽(rear)에 넣고 앞쪽(front)에서 꺼내 먼저 넣은 값을 먼저 꺼내는 FIFO ADT다. 원형 큐(circular queue)는 배열 크기를 바꾸지 않는 경우, 원소를 옮기지 않고 인덱스만 계산해 두 연산을 O(1)에 처리한다.</p></div></section>
 <main id="main-content" class="page-body container">
-  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>enqueue와 dequeue</strong><span>enqueue(x)는 뒤쪽에 추가하고 dequeue()는 앞쪽 값을 꺼낸다.</span></article><article class="summary-card"><strong>list의 한계</strong><span>pop(0)은 n − 1개를 옮겨 O(n)이다.</span></article><article class="summary-card"><strong>원형 큐</strong><span>배열 a, 앞쪽 인덱스 j, 원소 수 n으로 i번째 값을 (j + i) mod m에 둔다.</span></article></div></section>
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>enqueue와 dequeue</strong><span>enqueue(x)는 뒤쪽에 추가하고 dequeue()는 앞쪽 값을 꺼낸다.</span></article><article class="summary-card"><strong>list의 한계</strong><span>pop(0)은 n − 1개를 옮겨 O(n)이다.</span></article><article class="summary-card"><strong>원형 큐</strong><span>배열 a, 앞쪽 인덱스 j, 원소 수 n으로 논리 인덱스 i의 값은 배열의 (j + i) mod m에 둔다.</span></article></div></section>
 
   <section class="topic-example">
     <header class="example-header"><h2 class="section-title">큐는 먼저 넣은 값을 먼저 꺼낸다</h2><p class="lead">enqueue는 뒤쪽에 값을 넣고 dequeue는 앞쪽 값을 꺼내므로 꺼낸 값은 넣은 순서를 따른다.</p></header>
@@ -37,7 +37,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">원형 큐는 앞쪽 인덱스와 원소 수로 논리 순서를 배열에 감는다</h2><p class="lead">배열 길이 m = 8에서 앞쪽 인덱스 j와 원소 수 n이 A, B, C, …가 놓이는 배열 인덱스와 다음 enqueue 위치를 정한다. n이 0이면 빈 상태, m이면 가득 찬 상태다.</p></header>
+    <header class="example-header"><h2 class="section-title">원형 큐의 논리 순서는 배열 끝에서 0번 칸으로 이어진다</h2><p class="lead">배열 길이 m = 8에서 앞쪽 인덱스 j와 원소 수 n이 A, B, C, …가 놓이는 배열 인덱스와 다음 enqueue 위치를 정한다. n이 0이면 빈 상태, m이면 가득 찬 상태다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="cj">앞쪽 인덱스 j <output id="cj-out" class="control-value" for="cj">5</output></label><input id="cj" type="range" min="0" max="7" step="1" value="5"></div><div class="control-field"><label for="cn">원소 수 n <output id="cn-out" class="control-value" for="cn">4</output></label><input id="cn" type="range" min="0" max="8" step="1" value="4"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><div class="ds-board"><div id="cq-row" class="ds-row has-labels"></div></div></div><figcaption class="visual-caption">칸 위 숫자는 배열 인덱스다. 파란 칸은 큐에 든 값이고 초록 테두리 칸은 앞쪽 j, 점선 칸은 빈 칸이다.</figcaption></figure>
@@ -86,11 +86,11 @@
   function qstate(k) { var q = [], ret = null; for (var t = 0; t < k; t++) { if (qops[t][0] === "enqueue") q.push(qops[t][1]); else ret = q.shift(); } return { q: q, ret: ret }; }
   var qu = stepper("qu", 1, function () { return qops.length; }, function (k) {
     var r = qstate(k), q = r.q, o = k ? qops[k - 1] : null;
-    $("qu-row").innerHTML = '<span class="ds-row-label">앞쪽 →</span>' + (q.length ? q.map(function (v, j) { return cell(v, j === q.length - 1 && o && o[0] === "enqueue" ? "is-on" : "is-x", j === 0 ? "front" : j === q.length - 1 ? "rear" : ""); }).join("") : cell("비어 있음", "is-empty")) + '<span class="ds-row-label">← 뒤쪽</span>';
+    $("qu-row").innerHTML = '<span class="ds-row-label">앞쪽 →</span>' + (q.length ? q.map(function (v, j) { return cell(v, j === q.length - 1 && o && o[0] === "enqueue" ? "is-on" : "is-x", q.length === 1 ? "front·rear" : j === 0 ? "front" : j === q.length - 1 ? "rear" : ""); }).join("") : cell("비어 있음", "is-empty")) + '<span class="ds-row-label">← 뒤쪽</span>';
     $("qu-log").innerHTML = qops.map(function (op, j) { return '<li class="' + (j === k - 1 ? "is-now" : "") + '">' + op[0] + "(" + (op[1] || "") + ")" + (j < k && op[0] === "dequeue" ? " → " + qstate(j + 1).ret : "") + "</li>"; }).join("");
     show(1, [["실행한 연산", o ? o[0] + "(" + (o[1] || "") + ")" : "시작 전"], ["꺼낸 값", o && o[0] === "dequeue" ? r.ret : "없음"], ["앞쪽 · 뒤쪽", q.length ? q[0] + " · " + q[q.length - 1] : "비어 있음"], ["size()", String(q.length)]],
       !o ? "빈 큐에서 시작한다. 두 끝은 이름이 아니라 연산의 방향으로 구분한다."
-        : o[0] === "enqueue" ? pj(o[1], "을") + " 뒤쪽에 넣었다. 앞쪽 값은 그대로다."
+        : o[0] === "enqueue" ? pj(o[1], "을") + " 뒤쪽에 넣었다. " + (q.length === 1 ? "첫 값은 앞쪽 값이기도 하다." : "앞쪽 값은 그대로다.")
         : q.length ? "dequeue()가 앞쪽의 " + pj(r.ret, "을") + " 꺼냈다. 넣은 순서대로 나오므로 가장 먼저 넣은 값이 먼저 나온다."
         : "마지막 값 " + r.ret + "까지 꺼내 큐가 비었다. 꺼낸 순서 4, dog, True, 8.4가 넣은 순서와 같다.");
   });
@@ -101,11 +101,11 @@
     for (var i = 0; i < n; i++) a[(j + i) % m] = String.fromCharCode(65 + i);
     $("cq-row").innerHTML = '<span class="ds-row-label">a</span>' + a.map(function (v, t) { return cell(v === null ? "·" : v, v === null ? "is-empty" : (t === j ? "is-on" : "is-x"), t); }).join("");
     var end = (j + n) % m, stateName = n === 0 ? "비어 있음" : n === m ? "가득 참" : "저장 가능";
-    var map = []; for (var i2 = 0; i2 < Math.min(n, 4); i2++) map.push(String.fromCharCode(65 + i2) + "→" + ((j + i2) % m));
+    var map = []; for (var i2 = 0; i2 < Math.min(n, 4); i2++) map.push(i2 + "→" + ((j + i2) % m));
     show(2, [["논리 인덱스 → 배열 인덱스", n ? map.join(", ") + (n > 4 ? ", …" : "") : "없음"], ["다음 enqueue 위치", n === m ? "배열을 늘려야 함" : "(j + n) mod m = " + end], ["상태", stateName + " (n = " + n + ")"]],
-      n === 0 ? "n = 0이면 비어 있어 dequeue를 할 수 없다. 앞쪽과 뒤쪽 위치만 보면 가득 찬 상태와 모양이 같을 수 있어 n을 따로 저장한다."
+      n === 0 ? "n = 0이면 비어 있어 dequeue를 할 수 없다. 빈 상태와 가득 찬 상태에서 (j + n) mod m은 모두 j와 같으므로 n을 따로 저장한다."
         : n === m ? "n = m이면 가득 차 enqueue 전에 더 큰 배열을 만들고 b[i] ← a[(j + i) mod m]로 앞쪽부터 0번 칸에 다시 복사한 뒤 j ← 0으로 둔다."
-        : (j + n > m ? "뒤쪽이 배열 끝을 넘어 인덱스 0부터 다시 이어진다. " : "") + "dequeue는 a[j]를 꺼내고 j를 (j + 1) mod m으로 옮길 뿐 다른 원소를 옮기지 않아 O(1)이다. list의 pop(0)이 n − 1개를 옮기는 것과 다르다.");
+        : (j + n > m ? "뒤쪽이 배열 끝을 넘어 인덱스 0부터 다시 이어진다. " : "") + "배열을 줄이지 않는 dequeue는 a[j]를 꺼내고 j를 (j + 1) mod m으로, n을 n − 1로 바꾸므로 O(1)이다. list의 pop(0)이 n − 1개를 옮기는 것과 다르다.");
   }
   on("cj", renderCircle); on("cn", renderCircle);
   qu.reset(); renderCircle();

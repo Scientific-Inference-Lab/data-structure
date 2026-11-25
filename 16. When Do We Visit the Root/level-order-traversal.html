@@ -122,7 +122,7 @@
     svg.innerHTML = h;
     svg.querySelector("desc").textContent = "꺼낸 노드 " + (s.take || "없음") + ", 큐 " + (s.box.join(", ") || "비어 있음");
     var note = k === 0 ? "시작할 때 큐에는 루트 A만 있다. 앞쪽에서 꺼내 방문하고 자식 노드를 뒤쪽에 넣는다."
-      : s.take + "를 꺼내 방문하고 " + (s.add.length ? s.add.join(", ") + "를 뒤쪽에 넣었다. 깊이 " + (DEPTH[s.take] + 1) + "인 이 노드들은 큐에 먼저 들어와 있던 노드들이 모두 나간 뒤에 방문된다." : "자식 노드가 없어 넣지 않았다.") + (s.box.length ? "" : " 큐가 비어 순회가 끝났고 출력은 " + s.visited.join(", ") + "다.");
+      : s.take + "를 꺼내 방문하고 " + (s.add.length ? s.add.join(", ") + "를 뒤쪽에 넣었다. 깊이 " + (DEPTH[s.take] + 1) + "인 이 노드들은 큐에 먼저 들어와 있던 노드들이 모두 나간 뒤에 방문된다." : "자식 노드가 없어 넣지 않았다.") + (s.take === "B" ? " 이때 깊이 1의 C와 깊이 2의 D, E가 큐에 함께 있다." : s.box.length ? "" : " 큐가 비어 순회가 끝났다.");
     show(1, [["꺼낸 노드", s.take || "없음"], ["넣은 노드", s.add.join(", ") || "없음"], ["큐 앞쪽에서 뒤쪽", s.box.join(", ") || "비어 있음"], ["방문 순서", s.visited.join(", ") || "없음"]], note);
   }
 

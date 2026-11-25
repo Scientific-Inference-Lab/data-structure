@@ -56,7 +56,7 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">식을 한 기호씩 읽으며 트리를 만들고 스택으로 부모 노드에 돌아간다</h2><p class="lead">(3 + (4 × 5))를 한 기호씩 읽는다. 기호마다 할 동작이 정해져 있고 그 동작에 따라 현재 위치와 스택에 쌓인 부모 노드가 달라진다.</p></header>
+    <header class="example-header"><h2 class="section-title">식을 한 기호씩 읽으며 트리를 만들고 스택으로 부모 노드에 돌아간다</h2><p class="lead">각 이항 연산을 괄호로 감싼 (3 + (4 × 5))를 왼쪽부터 읽으며 현재 위치와 스택을 추적한다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="bt">읽은 기호 수 <output id="bt-out" class="control-value" for="bt">0</output></label><input id="bt" type="range" min="0" max="9" step="1" value="0"></div></div>
       <figure class="visual-figure"><div class="visual-frame"><svg id="bt-plot" class="topic-plot" viewBox="0 0 900 380" role="img" aria-labelledby="bt-title bt-desc"><title id="bt-title">parse tree 만들기</title><desc id="bt-desc">읽은 기호와 트리, 스택</desc></svg></div><figcaption class="visual-caption">맨 위 줄은 입력 기호이며 초록 칸이 방금 읽은 기호, 파란 칸이 이미 읽은 기호다. 트리에서 초록 굵은 테두리가 현재 위치, 점선 원이 아직 값이 없는 노드다. 오른쪽 기둥은 부모 노드를 기억하는 스택이며 위가 맨 위다.</figcaption></figure>
@@ -131,7 +131,7 @@
       if (t === "(") { var id = "n" + cnt++; nodes[id] = { key: null, left: null, right: null }; nodes[cur].left = id; stack.push(cur); cur = id; act = "왼쪽 자식 노드를 만들고 현재 노드를 push한 뒤 내려감"; }
       else if (/[0-9]/.test(t)) { nodes[cur].key = t; cur = stack.pop(); act = "현재 노드에 " + pj(t, "을") + " 저장하고 pop한 부모 노드로 돌아감"; }
       else if (t === ")") { cur = stack.pop(); act = "pop한 부모 노드로 돌아감"; }
-      else { nodes[cur].key = t; var id2 = "n" + cnt++; nodes[id2] = { key: null, left: null, right: null }; nodes[cur].right = id2; stack.push(cur); cur = id2; act = "현재 노드에 " + pj(t, "을") + " 저장하고 오른쪽 자식 노드를 만든 뒤 push하고 내려감"; }
+      else { nodes[cur].key = t; var id2 = "n" + cnt++; nodes[id2] = { key: null, left: null, right: null }; nodes[cur].right = id2; stack.push(cur); cur = id2; act = "현재 노드에 " + pj(t, "을") + " 저장하고 오른쪽 자식 노드를 만들고 현재 노드를 push한 뒤 내려감"; }
       out.push({ nodes: JSON.parse(JSON.stringify(nodes)), stack: stack.slice(), cur: cur, act: act });
     });
     return out;

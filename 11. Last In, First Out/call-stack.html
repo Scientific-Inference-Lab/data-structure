@@ -23,10 +23,10 @@
 <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="강의 자료"><a class="nav-tag lecture-pdf-link" href="../lecture/11.%20Stacks.pdf" aria-label="Stacks 강의 PDF">Stacks</a></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
 <section class="hero topic-hero"><div class="container"><h1 class="page-title">Call Stack</h1><hr class="accent-rule"><p class="page-subtitle">호출 스택(call stack)은 실행 중인 함수 호출을 LIFO 순서로 관리한다. 함수를 호출하면 인자·지역 변수·돌아갈 위치를 담은 호출 프레임(stack frame)을 push하고, 반환하면 pop해 호출한 함수로 돌아간다.</p></div></section>
 <main id="main-content" class="page-body container">
-  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>호출과 반환</strong><span>호출하면 프레임을 push하고 반환하면 pop한다.</span></article><article class="summary-card"><strong>호출 프레임</strong><span>호출마다 지역 변수를 따로 저장해 재귀 호출이 섞이지 않는다.</span></article><article class="summary-card"><strong>명시적 스택</strong><span>코드가 직접 값을 쌓으면 호출 스택 없이 같은 역순을 얻는다.</span></article></div></section>
+  <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>호출과 반환</strong><span>호출하면 프레임을 push하고 반환하면 pop한다.</span></article><article class="summary-card"><strong>호출 프레임</strong><span>호출마다 지역 변수를 따로 저장해 재귀 호출이 섞이지 않는다.</span></article><article class="summary-card"><strong>명시적 스택</strong><span>코드가 직접 값을 쌓으면 재귀 호출 없이 같은 역순을 얻는다.</span></article></div></section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">호출하면 프레임을 쌓고 반환하면 가장 최근 프레임부터 걷어 낸다</h2><p class="lead">함수를 호출하면 새 프레임이 맨 위에 쌓이고 반환하면 맨 위 프레임이 걷히면서 반환값이 바로 아래 프레임의 함수로 돌아간다.</p></header>
+    <header class="example-header"><h2 class="section-title">호출하면 프레임을 쌓고 반환하면 가장 최근 프레임부터 걷어 낸다</h2><p class="lead">호출한 함수의 프레임 위에 새 프레임이 쌓인다. 반환하면 맨 위 프레임이 빠지고 호출한 함수가 실행을 이어 간다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="prog">프로그램</label><select id="prog"><option value="fg">main → f → g</option><option value="tostr">to_str(10, 2) 재귀 호출</option></select></div><div class="action-row"><button id="cs-first" class="btn btn-outline" type="button">처음으로</button><button id="cs-prev" class="btn btn-outline" type="button">이전</button><button id="cs-next" class="btn" type="button">다음</button></div></div>
       <p id="reason-1" class="control-reason" hidden></p>
@@ -102,7 +102,7 @@
     var e = k ? ev[k - 1] : null;
     show(1, [["사건", e ? (e[0] === "call" ? e[1] + " 호출" : e[1] + " 반환") : "시작 전"], ["스택 연산", e ? (e[0] === "call" ? "push" : "pop") : "없음"], ["스택 깊이", String(s.length)], ["반환값", e && e[0] === "ret" && e[2] ? e[2] : "없음"]],
       !e ? "아직 실행 중인 호출이 없다."
-        : e[0] === "call" ? e[1] + "의 프레임을 맨 위에 쌓았다. " + ($("prog").value === "tostr" ? "같은 함수라도 호출마다 n과 rem을 따로 저장하므로 앞선 호출의 지역 변수가 그대로 남아 있다." : "호출한 함수는 아래 프레임에서 돌아갈 위치를 기억한 채 기다린다.")
+        : e[0] === "call" ? e[1] + "의 프레임을 맨 위에 쌓았다. " + ($("prog").value === "tostr" ? "같은 함수라도 호출마다 n과 rem을 따로 저장하므로 앞선 호출의 지역 변수가 그대로 남아 있다." : "아래에 프레임이 있으면 그 함수는 호출한 곳에서 반환을 기다린다.")
         : e[1] + "의 프레임을 걷어 내고 " + (s.length ? "바로 아래 프레임으로 돌아갔다. " : "처음 호출한 곳으로 돌아갔다. ") + (e[2] ? retNote(e[2], s[s.length - 1]) : "가장 최근에 시작한 호출이 가장 먼저 끝난다."));
   });
   function renderDec() {

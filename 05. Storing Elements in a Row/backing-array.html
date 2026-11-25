@@ -25,7 +25,7 @@
     .bracket-line{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:.75rem;margin-top:1rem}
     .measure{padding:.75rem;border-top:4px solid var(--pnu-blue);background:var(--white)}
     .measure strong,.measure span{display:block}
-    
+
     .operation-card,.result-card{padding:1rem;border:1px solid var(--line-200);background:var(--white)}
     .operation-choice{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:.6rem}
     .choice-label{display:flex;align-items:center;gap:.45rem;padding:.75rem;border:1px solid var(--line-200);background:var(--surface-050)}
@@ -70,7 +70,7 @@
     </section>
 
     <section class="topic-example">
-      <header class="example-header"><h2 class="section-title">get과 set은 i &lt; n인 칸 하나만 읽거나 바꾼다</h2><p class="lead">같은 물리적 칸도 i &lt; n일 때만 공개 연산이 허용된다. set은 값을 바꿔도 n과 a.length를 바꾸지 않는다.</p></header>
+      <header class="example-header"><h2 class="section-title">get과 set은 0 ≤ i &lt; n인 칸 하나만 읽거나 바꾼다</h2><p class="lead">실제 칸이 있어도 0 ≤ i &lt; n일 때만 공개 연산이 허용된다. set은 값을 바꿔도 n과 a.length를 바꾸지 않는다.</p></header>
       <div class="visual-lab">
         <div class="visual-controls visual-controls--double">
           <div class="control-field"><span class="control-label">연산</span><div class="choice-row operation-choice" role="radiogroup" aria-label="연산 선택"><label class="choice-label"><input type="radio" name="operation" value="get" checked>get(i)</label><label class="choice-label"><input type="radio" name="operation" value="set">set(i, x)</label></div></div>

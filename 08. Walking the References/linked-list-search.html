@@ -37,13 +37,13 @@
   </section>
 
   <section class="topic-example">
-    <header class="example-header"><h2 class="section-title">목표가 뒤에 있을수록 비교 횟수가 늘고 없으면 항상 n회다</h2><p class="lead">노드 수 n이 커지면 목표가 없을 때의 비교 횟수와 목표가 있을 때의 평균 비교 횟수가 함께 커진다. 평균은 목표가 리스트 안의 각 위치에 같은 확률로 있다고 가정한 값이다.</p></header>
+    <header class="example-header"><h2 class="section-title">목표가 뒤에 있을수록 비교 횟수가 늘고 없으면 항상 n회다</h2><p class="lead">노드 수 n이 커지면 목표가 없을 때의 비교 횟수와 목표가 있을 때의 평균 비교 횟수가 함께 커진다. 평균은 목표가 있고 첫 일치 위치가 리스트 안의 각 위치에 같은 확률로 나타난다고 가정한 값이다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--single"><div class="control-field"><label for="length">노드 수 <output id="lengthValue" class="control-value" for="length"></output></label><input id="length" type="range" min="3" max="9" value="6"></div></div>
       <p id="reason-2" class="control-reason" hidden></p>
-      <figure class="visual-figure"><div class="visual-frame"><div id="bars" class="bars" aria-label="목표 위치별 비교 횟수"></div><div id="costFormula" class="formula"></div></div><figcaption class="visual-caption">막대 높이는 목표가 그 위치에 있을 때의 비교 횟수이며, 오른쪽 회색 막대는 목표가 없을 때다.</figcaption></figure>
+      <figure class="visual-figure"><div class="visual-frame"><div id="bars" class="bars" aria-label="목표 위치별 비교 횟수"></div><div id="costFormula" class="formula"></div></div><figcaption class="visual-caption">막대 높이는 처음 일치한 위치까지의 비교 횟수이며, 오른쪽 회색 막대는 목표가 없을 때다.</figcaption></figure>
       <div id="read-2" class="visual-readouts" aria-live="polite"><div class="visual-readout"><span class="visual-readout-label">목표가 있을 때 평균 비교 횟수</span><strong id="averageState" class="visual-readout-value"></strong></div><div class="visual-readout"><span class="visual-readout-label">노드 수</span><strong id="lengthValue-echo" class="visual-readout-value"></strong></div></div>
-      <p id="note-2" class="visual-note">목표가 있는 경우의 평균 비교 횟수는 <code>(n + 1) / 2</code>이다. 목표가 없으면 항상 n회 비교한다. 첫 노드에서 찾는 최선의 경우는 <code>Θ(1)</code>이다. 마지막 노드나 없는 값을 확인하는 최악의 경우는 <code>Θ(n)</code>이다.</p>
+      <p id="note-2" class="visual-note">첫 일치 위치가 균등할 때 평균 비교 횟수는 <code>(n + 1) / 2</code>이다. 목표가 없으면 항상 n회 비교한다. 첫 노드에서 찾는 최선의 경우는 <code>Θ(1)</code>이다. 마지막 노드나 없는 값을 확인하는 최악의 경우는 <code>Θ(n)</code>이다.</p>
     </div>
   </section>
 

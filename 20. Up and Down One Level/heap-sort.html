@@ -39,7 +39,7 @@
 <body class="visual-topic topic-heap-sort">
 <a class="skip-link" href="#main-content">본문으로 이동</a>
 <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="강의 자료"><a class="nav-tag lecture-pdf-link" href="../lecture/20.%20Heap%20Operations.pdf" aria-label="Heap Operations 강의 PDF">Heap Operations</a></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-<section class="hero topic-hero"><div class="container"><h1 class="page-title">Heap Sort</h1><hr class="accent-rule"><p class="page-subtitle">힙 정렬(heap sort)은 heapify로 힙을 만든 뒤 루트를 꺼내는 연산을 n번 되풀이하며, 꺼낸 값을 배열 뒤쪽의 빈 자리에 쌓는 제자리(in-place) 정렬이다. 비용은 O(n) + n × O(log n) = O(n log n)이고, 멀리 떨어진 자리를 교환하므로 안정성(stability)은 없다.</p></div></section>
+<section class="hero topic-hero"><div class="container"><h1 class="page-title">Heap Sort</h1><hr class="accent-rule"><p class="page-subtitle">제자리(in-place) 힙 정렬(heap sort)은 배열에 힙을 만든 뒤 루트와 힙 구간의 마지막 값을 바꾼다. 힙 구간을 한 칸 줄이고 새 루트를 하향 이동하는 과정을 반복한다. 비용은 O(n) + n × O(log n) = O(n log n)이고, 멀리 떨어진 자리를 교환하므로 안정성(stability)은 없다.</p></div></section>
 <main id="main-content" class="page-body container">
   <section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>두 구간</strong><span>배열 앞쪽은 줄어드는 힙, 뒤쪽은 자라는 정렬 구간이다. 한 번 꺼낼 때마다 경계가 한 칸 앞으로 온다.</span></article><article class="summary-card"><strong>최대 힙과 오름차순</strong><span>루트의 최댓값을 뒤에 쌓으므로 최대 힙이면 오름차순, 최소 힙이면 내림차순이 된다.</span></article><article class="summary-card"><strong>안정성</strong><span>키가 같은 값들의 원래 순서가 정렬 뒤에도 유지되는 성질이다. 힙 정렬은 이를 보장하지 않는다.</span></article></div></section>
 
@@ -47,7 +47,7 @@
     <header class="example-header"><h2 class="section-title">루트를 힙 구간의 끝과 바꾸고 하향 이동하면 정렬 구간이 뒤에서 자란다</h2><p class="lead">[9, 5, 6, 2, 3, 8, 1, 7, 4]를 제자리에서 정렬하고 줄어든 힙은 하향 이동(sift down)으로 복원한다. 루트를 꺼낼 때마다 힙 구간은 한 칸 줄고 정렬 구간은 한 칸 늘며, 최대 힙이면 오름차순, 최소 힙이면 내림차순으로 정렬된다.</p></header>
     <div class="visual-lab">
       <div class="visual-controls visual-controls--double"><div class="control-field"><label for="t1">사용할 힙</label><select id="t1"><option value="max">최대 힙</option><option value="min">최소 힙</option></select></div><div class="control-field"><label for="k1">꺼낸 횟수 <output id="k1-out" class="control-value" for="k1">0</output></label><input id="k1" type="range" min="0" max="8" step="1" value="0"></div></div>
-      <figure class="visual-figure"><div class="visual-frame"><svg id="hs-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="hs-title hs-desc"><title id="hs-title">제자리 힙 정렬</title><desc id="hs-desc">힙 구간과 정렬 구간</desc></svg></div><figcaption class="visual-caption">위 트리는 아직 힙 구간에 남은 값만 그린 것이고 초록 테두리 원이 다음에 꺼낼 루트다. 아래 배열에서 파란 칸이 힙 구간, 옅은 초록 칸이 정렬 구간이며 진한 초록 칸이 방금 뒤로 보낸 값, 검은 점선이 두 구간의 경계다.</figcaption></figure>
+      <figure class="visual-figure"><div class="visual-frame"><svg id="hs-plot" class="topic-plot" viewBox="0 0 900 360" role="img" aria-labelledby="hs-title hs-desc"><title id="hs-title">제자리 힙 정렬</title><desc id="hs-desc">힙 구간과 정렬 구간</desc></svg></div><figcaption class="visual-caption">위 트리는 아직 힙 구간에 남은 값만 그린 것이고 초록 테두리 원은 힙 구간의 루트다. 아래 배열에서 파란 칸이 힙 구간, 옅은 초록 칸이 정렬 구간이며 진한 초록 칸이 방금 뒤로 보낸 값, 검은 점선이 두 구간의 경계다.</figcaption></figure>
       <div id="read-1" class="visual-readouts" aria-live="polite"></div>
       <p id="note-1" class="visual-note"></p>
     </div>
@@ -71,7 +71,7 @@
     </div>
   </section>
 
-  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../20. Up and Down One Level/heapify.html">이전 · Heapify</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../21. Keeping the Tree Short/skewed-bsts.html">다음 · Skewed Bsts</a></nav>
+  <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../20. Up and Down One Level/heapify.html">이전 · Heapify</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="../21. Keeping the Tree Short/skewed-bsts.html">다음 · Skewed BSTs</a></nav>
 </main>
 <footer class="site-footer">
   <div class="container footer-inner">
