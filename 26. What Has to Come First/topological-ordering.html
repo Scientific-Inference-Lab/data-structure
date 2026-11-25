@@ -4,6 +4,8 @@
 <style>
   .topo-svg .edge{stroke:var(--line-300);stroke-width:4;fill:none;marker-end:url(#arrow)}.topo-svg .node{fill:var(--white);stroke:var(--pnu-blue);stroke-width:3}.topo-svg .node.is-closed{fill:var(--pnu-blue-tint);stroke:var(--pnu-green);stroke-width:5}.topo-svg .node.is-current{fill:var(--pnu-green)}.topo-svg .label{font-weight:800;fill:var(--ink-900)}.topo-svg .label.is-current{fill:var(--white)}.topo-svg .time{font-size:13px;font-weight:700;fill:var(--pnu-blue-dark)}
   .order-board{display:grid;gap:10px;margin-top:12px}.order-row{display:flex;gap:8px;align-items:center;min-height:54px;padding:8px 12px;background:var(--white);border:1px solid var(--line-200);border-radius:var(--radius-sm)}.order-row strong{min-width:112px;color:var(--pnu-blue-dark)}.order-item{display:grid;place-items:center;min-width:42px;height:36px;font-family:var(--mono);font-weight:800;border:2px solid var(--pnu-blue);border-radius:5px;background:var(--pnu-blue-tint)}.order-empty{color:var(--ink-600)}
+  #indegree-table{min-width:0}
+  @media(max-width:480px){#indegree-table th,#indegree-table td{padding:8px}}
 </style><script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () { window.dataLayer.push(arguments); };
@@ -17,12 +19,43 @@
 </head>
 <body class="visual-topic"><a class="skip-link" href="#main-content">본문으로 이동</a>
 <header class="site-header"><div class="container header-inner"><a class="brand" href="../index.html" aria-label="자료구조 전체 주제"><img class="brand-signature" src="../assets/logo/pnu_signature.png" alt="부산대학교" width="154" height="39"><span class="brand-text">자료구조</span></a><div class="header-actions"><nav class="course-nav" aria-label="강의 자료"><a class="nav-tag lecture-pdf-link" href="../lecture/26.%20Topological%20Ordering.pdf" aria-label="Topological Ordering 강의 PDF">강의 PDF</a></nav><a class="lab-site-link" href="https://scientific-inference-lab.github.io/">Scientific Inference Lab</a></div></div></header>
-<section class="hero topic-hero"><div class="container"><h1 class="page-title">Topological Ordering</h1><hr class="accent-rule"><p class="page-subtitle">사이클이 없는 유향 그래프(DAG)를 DFS로 순회한 뒤 종료 시각(closing time)이 늦은 정점부터 나열하면 모든 간선의 방향을 지키는 순서인 위상정렬(topological ordering)을 얻는다.</p></div></section>
+<section class="hero topic-hero"><div class="container"><h1 class="page-title">Topological Ordering</h1><hr class="accent-rule"><p class="page-subtitle">사이클이 없는 유향 그래프(DAG)의 모든 정점을 DFS로 방문하고 종료 시각(closing time)이 늦은 정점부터 나열하면 위상정렬(topological ordering)을 얻는다.</p></div></section>
 <main id="main-content" class="page-body container"><section class="topic-summary" aria-label="핵심 개념"><div class="summary-grid"><article class="summary-card"><strong>전제</strong><span>유향 그래프에 사이클이 없어야 한다.</span></article><article class="summary-card"><strong>종료 시각</strong><span>정점의 모든 이웃을 처리한 시점을 기록한다.</span></article><article class="summary-card"><strong>나열 순서</strong><span>종료 시각의 내림차순으로 정점을 놓는다.</span></article></div></section>
 <section class="topic-example"><header class="example-header"><h2 class="section-title">DFS 종료 순서를 뒤집으면 선행 관계를 지킬 수 있다</h2><p class="lead">정점 A~E와 유향 간선 A→B, A→C, B→D, C→D, D→E에서 A부터 DFS를 하고 이웃을 알파벳순으로 본다. 정점이 끝날 때마다 그 정점을 순서의 맨 앞에 붙이므로 종료 순서를 뒤집은 순서가 만들어진다.</p></header>
 <div class="visual-lab"><div class="visual-controls visual-controls--single"><div class="control-field"><label for="step">종료 단계 <output id="step-out" class="control-value">0</output></label><input id="step" type="range" min="0" max="5" step="1" value="0"></div><div class="action-row"><button id="reset" class="btn btn-outline" type="button">처음 상태</button></div></div>
 <figure class="visual-figure"><div class="visual-frame"><svg class="visual-svg topo-svg" viewBox="0 0 760 360" role="img" aria-labelledby="topo-title topo-desc"><title id="topo-title">DAG의 DFS 종료 단계</title><desc id="topo-desc">A→B, A→C, B→D, C→D, D→E의 DFS 종료 순서를 나타낸다.</desc><defs><marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="var(--line-300)"></path></marker></defs><g><path class="edge" d="M130 165 L280 92"></path><path class="edge" d="M130 205 L280 265"></path><path class="edge" d="M350 92 L490 160"></path><path class="edge" d="M350 265 L490 205"></path><path class="edge" d="M560 180 L650 180"></path></g><g id="nodes"></g></svg><div class="order-board"><div id="close-row" class="order-row"></div><div id="topo-row" class="order-row"></div></div></div><figcaption class="visual-caption">간선은 왼쪽에서 오른쪽으로 향한다. 알파벳순 이웃을 따른 DFS는 E, D, B, C, A 순으로 종료한다.</figcaption></figure>
 <div id="readouts" class="visual-readouts" aria-live="polite"></div><p id="note" class="visual-note"></p></div></section>
+<section class="topic-example">
+  <header class="example-header">
+    <h2 class="section-title">진입 차수가 0인 정점부터 꺼낸다</h2>
+    <p class="lead">같은 그래프에서 진입 차수가 0인 정점을 꺼내고, 그 정점에서 나가는 간선을 지운다. A를 꺼낸 뒤 B와 C 중 무엇을 먼저 골라도 되는지, E→B를 더하면 어디서 멈추는지 비교한다.</p>
+  </header>
+  <div class="visual-lab">
+    <div class="visual-controls visual-controls--double">
+      <div class="control-field"><label for="back-edge">간선 E→B</label><select id="back-edge"><option value="off">없음</option><option value="on">있음</option></select></div>
+      <div class="control-field"><label for="ready-vertex">꺼낼 정점</label><select id="ready-vertex"></select></div>
+      <div class="action-row">
+        <button id="remove-vertex" class="btn" type="button">정점 꺼내기</button>
+        <button id="indegree-reset" class="btn btn-outline" type="button">처음 상태</button>
+      </div>
+    </div>
+    <figure class="visual-figure">
+      <div class="visual-frame">
+        <table class="topic-table" id="indegree-table" aria-label="남은 그래프의 진입 차수">
+          <thead><tr><th scope="col">정점</th><th scope="col">A</th><th scope="col">B</th><th scope="col">C</th><th scope="col">D</th><th scope="col">E</th></tr></thead>
+          <tbody><tr><th scope="row">진입 차수</th><td></td><td></td><td></td><td></td><td></td></tr></tbody>
+        </table>
+      </div>
+      <figcaption class="visual-caption">진입 차수는 남은 간선만 센다. 꺼낸 정점의 칸은 비워 둔다.</figcaption>
+    </figure>
+    <div class="visual-readouts" aria-live="polite">
+      <div class="visual-readout"><span class="visual-readout-label">진입 차수 0</span><strong class="visual-readout-value" id="indegree-ready"></strong></div>
+      <div class="visual-readout"><span class="visual-readout-label">꺼낸 순서</span><strong class="visual-readout-value" id="indegree-order"></strong></div>
+      <div class="visual-readout"><span class="visual-readout-label">남은 정점</span><strong class="visual-readout-value" id="indegree-remaining"></strong></div>
+    </div>
+    <p class="visual-note" id="indegree-note"></p>
+  </div>
+</section>
 <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="cycle-detection.html">이전 · Cycle Detection</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="connected-components.html">다음 · Connected Components</a></nav></main>
 <footer class="site-footer">
   <div class="container footer-inner">
@@ -51,4 +84,64 @@
   }
   step.addEventListener("input",render);document.getElementById("reset").addEventListener("click",function(){step.value="0";render()});render();
 }());
+</script>
+<script>
+(() => {
+  const vertices = ["A", "B", "C", "D", "E"];
+  const edgeChoice = document.getElementById("back-edge");
+  const vertexChoice = document.getElementById("ready-vertex");
+  const remove = document.getElementById("remove-vertex");
+  const cells = [...document.querySelectorAll("#indegree-table td")];
+  const put = (id, value) => { document.getElementById(id).textContent = value; };
+  const order = [];
+
+  function renderIndegree() {
+    const remaining = vertices.filter(vertex => !order.includes(vertex));
+    const indegrees = new Map(remaining.map(vertex => [vertex, 0]));
+    const edges = [["A","B"], ["A","C"], ["B","D"], ["C","D"], ["D","E"]];
+    if (edgeChoice.value === "on") edges.push(["E","B"]);
+    for (const [from, to] of edges) {
+      if (indegrees.has(from) && indegrees.has(to)) indegrees.set(to, indegrees.get(to) + 1);
+    }
+    const ready = remaining.filter(vertex => indegrees.get(vertex) === 0);
+
+    vertexChoice.replaceChildren(...ready.map(vertex => new Option(vertex, vertex)));
+    if (!ready.length) vertexChoice.add(new Option("없음", ""));
+    vertexChoice.disabled = remove.disabled = ready.length === 0;
+    vertices.forEach((vertex, index) => {
+      const degree = indegrees.get(vertex);
+      cells[index].textContent = degree ?? "";
+      cells[index].classList.toggle("is-y", degree === 0);
+    });
+    put("indegree-ready", ready.join(", ") || "없음");
+    put("indegree-order", order.join(" → ") || "아직 없음");
+    put("indegree-remaining", remaining.join(", ") || "없음");
+
+    let note = "들어오는 간선이 없는 정점은 남은 정점 가운데 먼저 놓을 수 있다.";
+    if (!remaining.length) {
+      note = "모든 정점을 꺼냈다. 꺼낸 순서가 위상 순서다.";
+    } else if (!ready.length) {
+      note = "B → D → E → B가 남아 모든 정점의 진입 차수가 1이다. 위상 순서를 만들 수 없다.";
+    } else if (ready.length > 1) {
+      note = "A를 지우고 나면 B와 C에 들어오는 간선이 없다. 둘 중 어느 정점을 먼저 꺼내도 된다.";
+    }
+    put("indegree-note", note);
+  }
+
+  remove.addEventListener("click", () => {
+    order.push(vertexChoice.value);
+    renderIndegree();
+    (remove.disabled ? edgeChoice : vertexChoice).focus({preventScroll:true});
+  });
+  edgeChoice.addEventListener("change", () => {
+    order.length = 0;
+    renderIndegree();
+  });
+  document.getElementById("indegree-reset").addEventListener("click", () => {
+    edgeChoice.value = "off";
+    order.length = 0;
+    renderIndegree();
+  });
+  renderIndegree();
+})();
 </script></body></html>

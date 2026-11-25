@@ -4,6 +4,9 @@
 <style>
   .traversal-svg [hidden]{display:none}.traversal-svg .edge{stroke:var(--line-300);stroke-width:4;marker-end:url(#bfs-arrow)}.traversal-svg .edge.is-tree{stroke:var(--pnu-blue)}.traversal-svg .edge.is-path{stroke:var(--pnu-green);stroke-width:8}.traversal-svg .node{fill:var(--white);stroke:var(--pnu-blue);stroke-width:3}.traversal-svg .node.is-seen{fill:var(--pnu-blue-tint)}.traversal-svg .node.is-current{fill:var(--pnu-green);stroke:var(--pnu-green)}.traversal-svg .label{font-weight:800;fill:var(--ink-900)}.traversal-svg .label.is-current{fill:var(--white)}.traversal-svg .distance{font-size:12px;fill:var(--ink-600)}
   .queue-strip{display:flex;gap:8px;align-items:center;min-height:58px;margin-top:12px;padding:10px 14px;background:var(--white);border:1px solid var(--line-200);border-radius:var(--radius-sm)}.queue-strip strong{margin-right:8px;color:var(--pnu-blue-dark)}.queue-item{display:grid;place-items:center;min-width:44px;height:38px;font-family:var(--mono);font-weight:800;border:2px solid var(--pnu-blue);border-radius:5px;background:var(--pnu-blue-tint)}.queue-empty{color:var(--ink-600)}
+  #path-comparison{min-width:0}
+  #path-comparison th,#path-comparison td{text-align:left}
+  @media(max-width:480px){#path-comparison th,#path-comparison td{padding:8px}}
 </style><script data-analytics="ga4">if (location.hostname === "scientific-inference-lab.github.io") {
   window.dataLayer = window.dataLayer || [];
   window.gtag = function () { window.dataLayer.push(arguments); };
@@ -23,6 +26,35 @@
 <div class="visual-lab"><div class="visual-controls visual-controls--double"><div class="control-field"><label for="step">처리 단계 <output id="step-out" class="control-value">0</output></label><input id="step" type="range" min="0" max="5" step="1" value="0"></div><div class="control-field"><label for="target">경로를 볼 정점</label><select id="target"><option>C</option><option>D</option><option selected>E</option></select></div><div class="action-row"><button id="reset" class="btn btn-outline" type="button">처음 상태</button></div></div>
 <figure class="visual-figure"><div class="visual-frame"><svg class="visual-svg traversal-svg" viewBox="0 0 760 360" role="img" aria-labelledby="bfs-title bfs-desc"><title id="bfs-title">BFS 단계별 상태</title><desc id="bfs-desc">A에서 시작해 A→B, A→C, B→D, C→D, D→E 간선을 큐로 탐색한다.</desc><defs><marker id="bfs-arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto"><path d="M0 0 L10 5 L0 10 Z" fill="var(--line-300)"></path></marker></defs><g><line id="edge-AB" class="edge" x1="130" y1="163" x2="280" y2="92"></line><line id="edge-AC" class="edge" x1="130" y1="197" x2="280" y2="268"></line><line id="edge-BD" class="edge" x1="350" y1="92" x2="490" y2="163"></line><line id="edge-CD" class="edge" x1="350" y1="268" x2="490" y2="197"></line><line id="edge-DE" class="edge" x1="560" y1="180" x2="650" y2="180"></line></g><g id="nodes"></g></svg><div id="queue" class="queue-strip"></div></div><figcaption class="visual-caption">간선은 왼쪽에서 오른쪽으로 향한다. 파란 바탕은 발견된 정점, 초록 원은 지금 처리하는 정점, 초록 선은 목표 정점까지의 부모 경로다. 아래 칸은 큐의 앞에서 뒤 순서다.</figcaption></figure>
 <div id="readouts" class="visual-readouts" aria-live="polite"></div><p id="note" class="visual-note"></p></div></section>
+<section class="topic-example">
+  <header class="example-header">
+    <h2 class="section-title">A→E를 더하면 BFS와 DFS의 경로가 달라진다</h2>
+    <p class="lead">두 탐색 모두 A에서 시작해 이웃을 알파벳순으로 확인한다. E를 처음 발견했을 때 각각 어떤 정점을 부모로 기록하는가?</p>
+  </header>
+  <div class="visual-lab">
+    <div class="visual-controls visual-controls--single">
+      <div class="control-field"><label for="shortcut">간선 A→E</label><select id="shortcut"><option value="off">없음</option><option value="on">있음</option></select></div>
+    </div>
+    <figure class="visual-figure">
+      <div class="visual-frame">
+        <table class="topic-table" id="path-comparison" aria-label="E를 처음 발견할 때의 BFS와 재귀 DFS 비교">
+          <thead><tr><th scope="col">비교 항목</th><th scope="col">BFS</th><th scope="col">재귀 DFS</th></tr></thead>
+          <tbody>
+            <tr><th scope="row">E 발견 시점</th><td id="comparison-queue"></td><td id="comparison-stack"></td></tr>
+            <tr><th scope="row">E의 부모 노드</th><td id="bfs-parent"></td><td id="dfs-parent"></td></tr>
+            <tr><th scope="row">부모 경로</th><td id="bfs-path"></td><td id="dfs-path"></td></tr>
+          </tbody>
+        </table>
+      </div>
+      <figcaption class="visual-caption">큐는 맨 앞부터, 호출 스택은 가장 먼저 들어간 정점부터 적었다.</figcaption>
+    </figure>
+    <div class="visual-readouts" aria-live="polite">
+      <div class="visual-readout"><span class="visual-readout-label">BFS 경로의 간선 수</span><strong class="visual-readout-value" id="bfs-length"></strong></div>
+      <div class="visual-readout"><span class="visual-readout-label">재귀 DFS 경로의 간선 수</span><strong class="visual-readout-value" id="dfs-length"></strong></div>
+    </div>
+    <p class="visual-note">BFS의 부모 노드를 E에서 A까지 거슬러 올라가면 간선 수가 가장 적은 경로를 찾는다.</p>
+  </div>
+</section>
 <nav class="topic-pager" aria-label="주제 탐색"><a class="pager-link" rel="prev" href="../24. A Matrix or a List/graph-density-and-representation.html">이전 · Graph Density and Representation</a><a class="pager-link is-all" href="../index.html">전체</a><a class="pager-link" rel="next" href="depth-first-search.html">다음 · Depth First Search</a></nav></main>
 <footer class="site-footer">
   <div class="container footer-inner">
@@ -61,4 +93,63 @@
   }
   step.addEventListener("input",render);target.addEventListener("change",render);document.getElementById("reset").addEventListener("click",function(){step.value="0";target.value="E";render()});render();
 }());
+</script>
+<script>
+(() => {
+  const shortcut = document.getElementById("shortcut");
+  const start = "A";
+  const target = "E";
+  const put = (id, value) => { document.getElementById(id).textContent = value; };
+
+  function findWithQueue(graph) {
+    const parent = new Map([[start, null]]);
+    const queue = [start];
+    while (queue.length && !parent.has(target)) {
+      const current = queue.shift();
+      for (const next of graph[current]) {
+        if (parent.has(next)) continue;
+        parent.set(next, current);
+        queue.push(next);
+      }
+    }
+    const path = [];
+    for (let vertex = target; parent.has(vertex); vertex = parent.get(vertex)) path.unshift(vertex);
+    return {queue, path};
+  }
+
+  function findWithRecursion(graph) {
+    const seen = new Set();
+    const stack = [];
+    function visit(vertex) {
+      seen.add(vertex);
+      stack.push(vertex);
+      if (vertex === target) return true;
+      for (const next of graph[vertex]) {
+        if (!seen.has(next) && visit(next)) return true;
+      }
+      stack.pop();
+      return false;
+    }
+    visit(start);
+    return stack;
+  }
+
+  function renderComparison() {
+    const graph = {A: ["B", "C"], B: ["D"], C: ["D"], D: ["E"], E: []};
+    if (shortcut.value === "on") graph.A.push("E");
+    const {queue, path} = findWithQueue(graph);
+    const stack = findWithRecursion(graph);
+    put("comparison-queue", `큐 [${queue.join(", ")}]`);
+    put("comparison-stack", `호출 스택 [${stack.join(", ")}]`);
+    put("bfs-parent", path.at(-2));
+    put("dfs-parent", stack.at(-2));
+    put("bfs-path", path.join(" → "));
+    put("dfs-path", stack.join(" → "));
+    put("bfs-length", path.length - 1);
+    put("dfs-length", stack.length - 1);
+  }
+
+  shortcut.addEventListener("change", renderComparison);
+  renderComparison();
+})();
 </script></body></html>
